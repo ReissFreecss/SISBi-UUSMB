@@ -1,0 +1,271 @@
+Index: src/java/jpa/entities/BarcodesCons.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/java/jpa/entities/BarcodesCons.java b/src/java/jpa/entities/BarcodesCons.java
+--- a/src/java/jpa/entities/BarcodesCons.java	(revision 664c2b26754aa23d4c08a18eed0413f9b5d74ef3)
++++ b/src/java/jpa/entities/BarcodesCons.java	(revision d7c42f04845d9e2e105bc70d78a2ad0914c06f6b)
+@@ -26,7 +26,7 @@
+ @NamedQueries({
+     @NamedQuery(name = "BarcodesCons.findAll", query = "SELECT b FROM BarcodesCons b"),
+     @NamedQuery(name = "BarcodesCons.findByIdRegistro", query = "SELECT b FROM BarcodesCons b WHERE b.idRegistro = :idRegistro"),
+-    @NamedQuery(name = "BarcodesCons.findByIdLibrary", query = "SELECT b FROM BarcodesCons b WHERE b.idLibrary = :idLibrary"),
++    @NamedQuery(name = "BarcodesCons.findByIdLibrary", query = "SELECT b FROM BarcodesCons b WHERE b.id_library = :idLibrary"),
+     @NamedQuery(name = "BarcodesCons.findByIdBarcode1", query = "SELECT b FROM BarcodesCons b WHERE b.idBarcode1 = :idBarcode1"),
+     @NamedQuery(name = "BarcodesCons.findByIdBarcode2", query = "SELECT b FROM BarcodesCons b WHERE b.idBarcode2 = :idBarcode2")})
+ public class BarcodesCons implements Serializable {
+@@ -36,7 +36,7 @@
+     @Column(name = "id_registro")
+     private BigInteger idRegistro;
+     @Column(name = "id_library")
+-    private Integer idLibrary;
++    private Integer id_library;
+     @Size(max = 2147483647)
+     @Column(name = "id_barcode_1")
+     private String idBarcode1;
+@@ -56,12 +56,13 @@
+     }
+ 
+     public Integer getIdLibrary() {
+-        return idLibrary;
++        return id_library;
+     }
+ 
+     public void setIdLibrary(Integer idLibrary) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+     }
++
+ 
+     public String getIdBarcode1() {
+         return idBarcode1;
+Index: src/java/jpa/entities/Library.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/java/jpa/entities/Library.java b/src/java/jpa/entities/Library.java
+--- a/src/java/jpa/entities/Library.java	(revision 664c2b26754aa23d4c08a18eed0413f9b5d74ef3)
++++ b/src/java/jpa/entities/Library.java	(revision d7c42f04845d9e2e105bc70d78a2ad0914c06f6b)
+@@ -39,7 +39,7 @@
+ @XmlRootElement
+ @NamedQueries({
+     @NamedQuery(name = "Library.findAll", query = "SELECT l FROM Library l"),
+-    @NamedQuery(name = "Library.findByIdLibrary", query = "SELECT l FROM Library l WHERE l.idLibrary = :idLibrary"),
++    @NamedQuery(name = "Library.findByIdLibrary", query = "SELECT l FROM Library l WHERE l.id_library = :idLibrary"),
+     @NamedQuery(name = "Library.findByLibraryName", query = "SELECT l FROM Library l WHERE l.libraryName = :libraryName"),
+     @NamedQuery(name = "Library.findByPreparationStatus", query = "SELECT l FROM Library l WHERE l.preparationStatus = :preparationStatus"),
+     @NamedQuery(name = "Library.findByPreparationDate", query = "SELECT l FROM Library l WHERE l.preparationDate = :preparationDate"),
+@@ -54,8 +54,8 @@
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @Basic(optional = false)
+-    @Column(name = "id_library")
+-    private Integer idLibrary;
++    @JoinColumn(name = "idLibrary", referencedColumnName = "id_library")
++    private Integer id_library;
+     @Basic(optional = false)
+     @NotNull
+     @Size(min = 1, max = 300)
+@@ -111,21 +111,21 @@
+     }
+ 
+     public Library(Integer idLibrary) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+     }
+ 
+     public Library(Integer idLibrary, String libraryName, String preparationStatus) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+         this.libraryName = libraryName;
+         this.preparationStatus = preparationStatus;
+     }
+ 
+     public Integer getIdLibrary() {
+-        return idLibrary;
++        return id_library;
+     }
+ 
+     public void setIdLibrary(Integer idLibrary) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+     }
+ 
+     public String getLibraryName() {
+@@ -228,7 +228,7 @@
+     @Override
+     public int hashCode() {
+         int hash = 0;
+-        hash += (idLibrary != null ? idLibrary.hashCode() : 0);
++        hash += (id_library != null ? id_library.hashCode() : 0);
+         return hash;
+     }
+ 
+@@ -239,7 +239,7 @@
+             return false;
+         }
+         Library other = (Library) object;
+-        if ((this.idLibrary == null && other.idLibrary != null) || (this.idLibrary != null && !this.idLibrary.equals(other.idLibrary))) {
++        if ((this.id_library == null && other.id_library != null) || (this.id_library != null && !this.id_library.equals(other.id_library))) {
+             return false;
+         }
+         return true;
+@@ -247,7 +247,7 @@
+ 
+     @Override
+     public String toString() {
+-        return "jpa.entities.Library[ idLibrary=" + idLibrary + " ]";
++        return "jpa.entities.Library[ id_library=" + id_library + " ]";
+     }
+     
+ }
+Index: src/java/jpa/entities/LibraryRunLink.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/java/jpa/entities/LibraryRunLink.java b/src/java/jpa/entities/LibraryRunLink.java
+--- a/src/java/jpa/entities/LibraryRunLink.java	(revision 664c2b26754aa23d4c08a18eed0413f9b5d74ef3)
++++ b/src/java/jpa/entities/LibraryRunLink.java	(revision d7c42f04845d9e2e105bc70d78a2ad0914c06f6b)
+@@ -26,7 +26,7 @@
+ @XmlRootElement
+ @NamedQueries({
+     @NamedQuery(name = "LibraryRunLink.findAll", query = "SELECT l FROM LibraryRunLink l"),
+-    @NamedQuery(name = "LibraryRunLink.findByIdLibrary", query = "SELECT l FROM LibraryRunLink l WHERE l.libraryRunLinkPK.idLibrary = :idLibrary"),
++    @NamedQuery(name = "LibraryRunLink.findByIdLibrary", query = "SELECT l FROM LibraryRunLink l WHERE l.libraryRunLinkPK.id_library = :idLibrary"),
+     @NamedQuery(name = "LibraryRunLink.findByIdRun", query = "SELECT l FROM LibraryRunLink l WHERE l.libraryRunLinkPK.idRun = :idRun"),
+     @NamedQuery(name = "LibraryRunLink.findByNote", query = "SELECT l FROM LibraryRunLink l WHERE l.note = :note"),
+     @NamedQuery(name = "LibraryRunLink.findByRealPerformance", query = "SELECT l FROM LibraryRunLink l WHERE l.realPerformance = :realPerformance")})
+Index: src/java/jpa/entities/LibraryRunLinkPK.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/java/jpa/entities/LibraryRunLinkPK.java b/src/java/jpa/entities/LibraryRunLinkPK.java
+--- a/src/java/jpa/entities/LibraryRunLinkPK.java	(revision 664c2b26754aa23d4c08a18eed0413f9b5d74ef3)
++++ b/src/java/jpa/entities/LibraryRunLinkPK.java	(revision d7c42f04845d9e2e105bc70d78a2ad0914c06f6b)
+@@ -21,7 +21,7 @@
+     @Basic(optional = false)
+     @NotNull
+     @Column(name = "id_library")
+-    private int idLibrary;
++    private int id_library;
+     @Basic(optional = false)
+     @NotNull
+     @Column(name = "id_run")
+@@ -31,16 +31,16 @@
+     }
+ 
+     public LibraryRunLinkPK(int idLibrary, int idRun) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+         this.idRun = idRun;
+     }
+ 
+     public int getIdLibrary() {
+-        return idLibrary;
++        return id_library;
+     }
+ 
+     public void setIdLibrary(int idLibrary) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+     }
+ 
+     public int getIdRun() {
+@@ -54,7 +54,7 @@
+     @Override
+     public int hashCode() {
+         int hash = 0;
+-        hash += (int) idLibrary;
++        hash += (int) id_library;
+         hash += (int) idRun;
+         return hash;
+     }
+@@ -66,7 +66,7 @@
+             return false;
+         }
+         LibraryRunLinkPK other = (LibraryRunLinkPK) object;
+-        if (this.idLibrary != other.idLibrary) {
++        if (this.id_library != other.id_library) {
+             return false;
+         }
+         if (this.idRun != other.idRun) {
+@@ -77,7 +77,7 @@
+ 
+     @Override
+     public String toString() {
+-        return "jpa.entities.LibraryRunLinkPK[ idLibrary=" + idLibrary + ", idRun=" + idRun + " ]";
++        return "jpa.entities.LibraryRunLinkPK[ id_library=" + id_library + ", idRun=" + idRun + " ]";
+     }
+     
+ }
+Index: src/java/jpa/entities/SampleLibraryLinkPK.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/java/jpa/entities/SampleLibraryLinkPK.java b/src/java/jpa/entities/SampleLibraryLinkPK.java
+--- a/src/java/jpa/entities/SampleLibraryLinkPK.java	(revision 664c2b26754aa23d4c08a18eed0413f9b5d74ef3)
++++ b/src/java/jpa/entities/SampleLibraryLinkPK.java	(revision d7c42f04845d9e2e105bc70d78a2ad0914c06f6b)
+@@ -27,7 +27,7 @@
+     @Basic(optional = false)
+     @NotNull
+     @Column(name = "id_library")
+-    private int idLibrary;
++    private int id_library;
+   
+ 
+     public SampleLibraryLinkPK() {
+@@ -35,7 +35,7 @@
+ 
+     public SampleLibraryLinkPK(int idSample, int idLibrary) {
+         this.idSample = idSample;
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+         
+     }
+ 
+@@ -48,11 +48,11 @@
+     }
+ 
+     public int getIdLibrary() {
+-        return idLibrary;
++        return id_library;
+     }
+ 
+     public void setIdLibrary(int idLibrary) {
+-        this.idLibrary = idLibrary;
++        this.id_library = idLibrary;
+     }
+ 
+ 
+@@ -61,7 +61,7 @@
+     public int hashCode() {
+         int hash = 3;
+         hash = 23 * hash + this.idSample;
+-        hash = 23 * hash + this.idLibrary;
++        hash = 23 * hash + this.id_library;
+       
+         return hash;
+     }
+@@ -81,7 +81,7 @@
+         if (this.idSample != other.idSample) {
+             return false;
+         }
+-        if (this.idLibrary != other.idLibrary) {
++        if (this.id_library != other.id_library) {
+             return false;
+         }
+     
+@@ -90,7 +90,7 @@
+ 
+     @Override
+     public String toString() {
+-        return "SampleLibraryLinkPK{" + "idSample=" + idSample + ", idLibrary=" + idLibrary + '}';
++        return "SampleLibraryLinkPK{" + "idSample=" + idSample + ", id_library=" + id_library + '}';
+     }
+ 
+  

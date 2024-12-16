@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+     >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Contacto"></h:outputText>
+ <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event> 
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form">
+                
+                <div class="ui-g">
+                  <div class="ui-g-12 ui-md-4"> </div>
+                     <div class="ui-g-12 ui-md-4">
+                         <h:panelGrid columns="2" style="text-align: center;">
+                    <h:panelGrid>
+<h2>Páginas Web</h2>
+<p:outputLabel value="Unidad Universitaria de Secuenciación Masiva y Bioinformática"/>
+ <h:outputLink value= "http://www.uusmb.unam.mx/" >http://www.uusmb.unam.mx/</h:outputLink>
+ <p:outputLabel value="Laboratorio Nacional de Apoyo Tecnológico a las Ciencias Genómicas"/>
+ <h:outputLink value= "http://lnatcg.unam.mx/" >http://lnatcg.unam.mx/</h:outputLink>
+
+
+<h2>Servicios:</h2>
+<p:outputLabel value="Para solicitudes o dudas con respecto a nuestros"/>
+<p:outputLabel value="servicios y/o cotizaciones hacerlo via electrónica:"/>
+<p:outputLabel value="uusmb @ibt.unam.mx"/>
+
+<h2>Cursos</h2>
+
+<p:outputLabel value="Para todo lo relacionado a cursos póngase en contacto"/>
+<p:outputLabel value="vía electrónica al siguiente correo electrónico:"/>
+<p:outputLabel value="cursos_uusmb @ibt.unam.mx"/>
+<br/>
+    
+<p:outputLabel value="Si requiere otro tipo de información que no este disponible en nuestra página,"/>
+<p:outputLabel value="o alguna aclaración, puede contactarnos vía telefónica:" />
+
+<h2>Oficina del jefe de la unidad:</h2>
+<p:outputLabel value="Desde la CDMX +52 (55) 56227864"/>
+<p:outputLabel value="Desde Cuernavaca +52 (777) 3291864"/>
+<p:outputLabel value="RED UNAM 27864"/>
+
+
+<h2>Servicio de Secuenciación:</h2>
+<p:outputLabel value="Desde la CDMX +52 (55) 56227719"/>
+<p:outputLabel value="Desde Cuernavaca +52 (777) 3291719"/>
+<p:outputLabel value="RED UNAM 27719"/>
+
+
+<h2>Servicio de Bioinformática:</h2>
+<p:outputLabel value="Desde la CDMX +52 (55) 56227777 ext 38151"/>
+<p:outputLabel value="Desde Cuernavaca +52 (777) 3291777 ext 38151"/>
+
+                   </h:panelGrid>
+                   <h:panelGrid>
+                   </h:panelGrid>
+                    
+                </h:panelGrid>
+             </div>
+             <div class="ui-g-12 ui-md-4"> </div>      
+           </div>
+             </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
+   

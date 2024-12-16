@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+     >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Preguntas Frecuentes"></h:outputText>
+ <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event> 
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form">
+                <h:panelGrid columns="2" style="width: 600px">
+                    <h:panelGrid>
+<h2>¿Qué es secuenciación masiva?</h2>
+
+<p:outputLabel value="La secuenciación masiva es un conjunto de tecnicas para la caracterización de ácidos nucleicos, 
+               la cual nos permite saber el orden de los nucleotidos que conforman una cadena de ADN. Este conjunto de técnicas 
+               también son conocidas con los nombres en inglés de 'next-generation sequencing', 'massive parallel sequencing' o 
+               'second generation sequencing'. Existen varias plataformas en el mercado pero nosotros tenemos las siguientes disponibles:"/>
+<p:outputLabel value="-Illumina (MiSeq, NextSeq 500 y HiSeq2000/2500)"/>
+<p:outputLabel value="-Oxford Nanopore (MINIon)"/>
+<p:outputLabel value="-Pacific Bioscience (RS II y Sequel)"/>
+
+<h2>¿Qué necesito para secuenciar?</h2>
+
+<p:outputLabel value="Una muestra biológica (no patógena) o bien una muestra de ADN o ARN purificado (ver detalles y condiciones en nuestra documentación)"/>
+
+<br/>
+
+<h2>¿Qué costos manejan?</h2>
+  <p:outputLabel value="Puede probar nuestra calculadora de costos la cual le dara un costo aproximado
+                 de su proyecto dando click en el siguiente enlace:"/>
+  
+  <h:outputLink value= "#{plantillaController.link()}" target="_blank">Calculadora de costos</h:outputLink>
+<p:outputLabel value="Para mayores informes, requerimos mas información de tu proyecto, puede solicitar costos y cotizaciones en la dirección: "/>
+  <p:outputLabel value="uusmb @ibt.unam.mx"/>
+
+
+<br/>
+<h2>¿Cómo generó una solicitud de servicio o una cotización?</h2>
+<p:outputLabel value="1.-Debe registrarse como usuario en este sistema."/>
+<p:outputLabel value="2.-Sus colaboradores deben darse de alta (si no lo estuvieran ya)."/>
+<p:outputLabel value="3.-Solicite una cotización a la dirección uusmb @ibt.unam.mx y a sus colaboradores para que todos reciban actualizaciones del avance del proyecto."/>
+
+   
+   
+<br/>
+
+
+<h2>¿Qué cantidad de material genético debo entregar para secuenciar?</h2>
+<p:outputLabel value="Para gDNA se requerirá lo siguiente:"/>
+<p:outputLabel value="-Para la plataforma Illumina de 3 a 5 microgramos (µg) totales de DNA determinado por fluorescencia. Para las plataformas
+Oxford Nanopore y PacBio >= 10ug totales. "/>
+<p:outputLabel value="-El material tiene que ser de la más alta calidad sin muestras aparentes de degradación cuando se corra en un gel y
+con una relación 260/280 entre 1.8 y 2.0."/>
+<p:outputLabel value="-La concentración de las muestras debe de estar en un volumen máximo de 50 µL de TE o Elution Buffer."/>
+<p:outputLabel value="-Es importante señalar que si las muestras están en un volumen mayor a 50 µL deberán concentrarse a través de vacío
+por lo que es importante que estén en Tris o agua ultrapura"/>
+ <br/>
+<p:outputLabel value="Para bibliotecas de mRNA se tiene que tomar en cuenta lo siguiente:"/>
+
+<p:outputLabel value="-Se requieren 5-10 µg de RNA total determinado por fluorescencia."/>
+<p:outputLabel value="-Las muestras deben estar en un volumen máximo de 25 µL de agua libre de RNAsas."/>
+<p:outputLabel value="-El número de integridad de RNA (RIN RNA Integrity Number) debe ser mayor de 7 o bien,"/>
+<p:outputLabel value="-Las muestras deben tener una relación 28S/18S mayor de 1.6. La relación 260/280 nm deberá ser de entre 1.8 y 2.0."/>
+<br/>
+
+<h2>¿Cuánto tiempo tarda en concluir mi servicio?</h2>
+<p:outputLabel value="Una vez entregada la muestra y realizado el pago, el tiempo máximo de entrega de resultados son 2 meses."/>
+<br/>
+
+<h2>¿Qué recibo una vez concluido mi servicio?</h2>
+<p:outputLabel value="Para el servicio de secuenciación, se entregan los siguientes resultados:"/>
+
+<p:outputLabel value="-Análisis de control de calidad de la secuenciación"/>
+<p:outputLabel value="-Datos crudos en formato fastq"/>
+<p:outputLabel value="-En caso de haber sido solicitado, resultados del análisis bioinformático"/>
+<br/>
+
+<h2>¿Cómo me entregan mis resultados?</h2>
+<p:outputLabel value="-Copia a un sistema de almacenamiento (Disco Duro, USB, Disco Compacto,etc), realizada en la unidad"/>
+<p:outputLabel value="-Generación de una página de descarga que se puede consultar via WEB desde cualquier lugar.  La desventaja de
+esta opción es que puede ser lenta si los archivos son muy grandes o muchos y la velocidad de internet disponible no es óptima."/>
+<p:outputLabel value="-Transferencia via scp o ftp  a un servidor donde se nos otorgue acceso.  (Tenemos ya acceso a servidores dentro de IBT y CCG) "/>
+<br/>
+
+
+<h2>¿Qué es bioinformática?</h2>
+<p:outputLabel value="
+La bioinformática, según una de sus definiciones más sencillas, 
+es la aplicación de tecnologías computacionales y la estadística a la gestión y 
+análisis de datos biológicos. Los términos bioinformática, biología computacional 
+y, en ocasiones, biocomputación, son utilizados en muchas situaciones como sinónimos,​ 
+y hacen referencia a campos de estudios interdisciplinares muy vinculados que 
+requieren el uso o el desarrollo de diferentes técnicas estudiadas universitariamente 
+en la Ingeniería Informática como ciencia aplicada de la disciplina informática.
+Entre estas pueden destacarse las siguientes: matemática aplicada, estadística,
+ciencias de la computación, inteligencia artificial, química y bioquímica con las 
+que el Ingeniero Informático soluciona problemas al analizar datos, o simular 
+sistemas o mecanismos, todos ellos de índole biológica, y usualmente (pero no de
+forma exclusiva) en el nivel molecular. El núcleo principal de estas técnicas se 
+encuentra en la utilización de recursos computacionales para solucionar o investigar 
+problemas sobre escalas de tal magnitud que sobrepasan el discernimiento humano. 
+La investigación en biología computacional se solapa a menudo con la biología de sistemas."/>
+<p:outputLabel value="Fuente:"/>
+<h:outputLink value= "https://es.wikipedia.org/wiki/Bioinform%C3%A1tica " >Wikipedia</h:outputLink>
+
+<br/>
+
+<h2>¿Qué servicios bioinformáticos puedo solicitar y cuáles son las limitantes?</h2>
+<p:outputLabel value="-Alineamiento de datos de secuenciación contra referencias."/>
+<p:outputLabel value="-Ensamble de genomas y transcriptomas (con referencia o de novo)."/>
+<p:outputLabel value="-Mejoramiento automatizado de genomas (es deseable contar con referencia)."/>
+<p:outputLabel value="-Ensamble de metagenomas."/>
+<p:outputLabel value="-Análisis de expresión diferencial."/>
+<p:outputLabel value="-Predicción y anotación de genes en un genoma."/>
+<p:outputLabel value="-Anotación de transcriptomas."/>
+<p:outputLabel value="-Análisis de perfil taxonómico, diversidad y riqueza de especies por 16S ARNr."/>
+<p:outputLabel value="-Depósito de secuencias e información en bases de datos públicas."/>
+<p:outputLabel value="-Generación de herramientas o programas bioinformáticos ad hoc"/>
+
+
+                   </h:panelGrid>
+                   <h:panelGrid>
+                   </h:panelGrid>
+                    
+                </h:panelGrid>
+            
+           
+             </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
+   

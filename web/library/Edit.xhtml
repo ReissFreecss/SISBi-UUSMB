@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditLibraryTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_idLibrary}" for="idLibrary" />
+                    <h:inputText id="idLibrary" value="#{libraryController.selected.idLibrary}" title="#{bundle.EditLibraryTitle_idLibrary}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_idLibrary}"/>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_libraryName}" for="libraryName" />
+                    <h:inputText id="libraryName" value="#{libraryController.selected.libraryName}" title="#{bundle.EditLibraryTitle_libraryName}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_libraryName}"/>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_preparationStatus}" for="preparationStatus" />
+                    <h:inputText id="preparationStatus" value="#{libraryController.selected.preparationStatus}" title="#{bundle.EditLibraryTitle_preparationStatus}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_preparationStatus}"/>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_preparationDate}" for="preparationDate" />
+                    <h:inputText id="preparationDate" value="#{libraryController.selected.preparationDate}" title="#{bundle.EditLibraryTitle_preparationDate}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_idBarcode2}" for="idBarcode2" />
+                    <h:selectOneMenu id="idBarcode2" value="#{libraryController.selected.idBarcode2}" title="#{bundle.EditLibraryTitle_idBarcode2}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_idBarcode2}">
+                        <f:selectItems value="#{barcodesController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_idBarcode1}" for="idBarcode1" />
+                    <h:selectOneMenu id="idBarcode1" value="#{libraryController.selected.idBarcode1}" title="#{bundle.EditLibraryTitle_idBarcode1}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_idBarcode1}">
+                        <f:selectItems value="#{barcodesController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_idRecipe}" for="idRecipe" />
+                    <h:selectOneMenu id="idRecipe" value="#{libraryController.selected.idRecipe}" title="#{bundle.EditLibraryTitle_idRecipe}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_idRecipe}">
+                        <f:selectItems value="#{recipeController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditLibraryLabel_idSample}" for="idSample" />
+                    <h:selectOneMenu id="idSample" value="#{libraryController.selected.idSample}" title="#{bundle.EditLibraryTitle_idSample}" required="true" requiredMessage="#{bundle.EditLibraryRequiredMessage_idSample}">
+                        <f:selectItems value="#{sampleController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{libraryController.update}" value="#{bundle.EditLibrarySaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditLibraryViewLink}"/>
+                <br />
+                <h:commandLink action="#{libraryController.prepareList}" value="#{bundle.EditLibraryShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditLibraryIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

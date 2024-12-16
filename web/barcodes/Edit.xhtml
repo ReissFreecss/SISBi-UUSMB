@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditBarcodesTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditBarcodesLabel_idIndex}" for="idIndex" />
+                    <h:inputText id="idIndex" value="#{barcodesController.selected.idIndex}" title="#{bundle.EditBarcodesTitle_idIndex}" required="true" requiredMessage="#{bundle.EditBarcodesRequiredMessage_idIndex}"/>
+                    <h:outputLabel value="#{bundle.EditBarcodesLabel_sequence}" for="sequence" />
+                    <h:inputText id="sequence" value="#{barcodesController.selected.sequence}" title="#{bundle.EditBarcodesTitle_sequence}" required="true" requiredMessage="#{bundle.EditBarcodesRequiredMessage_sequence}"/>
+                    <h:outputLabel value="#{bundle.EditBarcodesLabel_idKit}" for="idKit" />
+                    <h:selectOneMenu id="idKit" value="#{barcodesController.selected.idKit}" title="#{bundle.EditBarcodesTitle_idKit}" required="true" requiredMessage="#{bundle.EditBarcodesRequiredMessage_idKit}">
+                        <f:selectItems value="#{kitController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{barcodesController.update}" value="#{bundle.EditBarcodesSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditBarcodesViewLink}"/>
+                <br />
+                <h:commandLink action="#{barcodesController.prepareList}" value="#{bundle.EditBarcodesShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditBarcodesIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

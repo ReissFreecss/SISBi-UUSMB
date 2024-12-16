@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListBarcodesTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListBarcodesEmpty}" rendered="#{barcodesController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{barcodesController.items.rowCount > 0}">
+                    <h:outputText value="#{barcodesController.pagination.pageFirstItem + 1}..#{barcodesController.pagination.pageLastItem + 1}/#{barcodesController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{barcodesController.previous}" value="#{bundle.Previous} #{barcodesController.pagination.pageSize}" rendered="#{barcodesController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{barcodesController.next}" value="#{bundle.Next} #{barcodesController.pagination.pageSize}" rendered="#{barcodesController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{barcodesController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBarcodesTitle_idIndex}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idIndex}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBarcodesTitle_sequence}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sequence}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBarcodesTitle_idKit}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idKit}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{barcodesController.prepareView}" value="#{bundle.ListBarcodesViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{barcodesController.prepareEdit}" value="#{bundle.ListBarcodesEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{barcodesController.destroy}" value="#{bundle.ListBarcodesDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{barcodesController.prepareCreate}" value="#{bundle.ListBarcodesCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListBarcodesIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

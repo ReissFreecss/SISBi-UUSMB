@@ -1,0 +1,26 @@
+Index: web/index.xhtml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/web/index.xhtml b/web/index.xhtml
+--- a/web/index.xhtml	(revision c703300df30a369ee03a3f181ddc359c7ffa513a)
++++ b/web/index.xhtml	(revision f225cb38dd148acb8e141683fb52a0b3d5f5a260)
+@@ -135,7 +135,7 @@
+                      <h:panelGrid columns="1">                    
+                     
+                      <p:outputLabel for="txtUsuario" value="Usuario o correo electrónico:"/>
+-                    <p:inputText id="txtUsuario" value="#{indexController.usuario.userName}" required="true"
++                    <p:inputText id="txtUsuario" value="#{indexController.usuario.userName}" required="true" autocomplete="username"
+                                   
+                                  requiredMessage="Introduzca su nombre de usuario" />
+                  
+@@ -145,7 +145,7 @@
+                     
+                     
+                     <p:remoteCommand name="iniciarSesion" action="#{indexController.iniciarSesion()}" update="growl"/>
+-                    <p:password id="txtPass" value="#{indexController.usuario.password}" required="true" requiredMessage="Introduzca su contraseña" onkeypress="if (event.keyCode == 13) { iniciarSesion(); return false; }"/>
++                    <p:password id="txtPass" value="#{indexController.usuario.password}" required="true" requiredMessage="Introduzca su contraseña" onkeypress="if (event.keyCode == 13) { iniciarSesion(); return false; }" autocomplete="password"/>
+                
+                      </h:panelGrid>
+                          <div align="center">

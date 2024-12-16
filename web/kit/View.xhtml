@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewKitTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewKitLabel_idKit}"/>
+                    <h:outputText value="#{kitController.selected.idKit}" title="#{bundle.ViewKitTitle_idKit}"/>
+                    <h:outputText value="#{bundle.ViewKitLabel_kitName}"/>
+                    <h:outputText value="#{kitController.selected.kitName}" title="#{bundle.ViewKitTitle_kitName}"/>
+                    <h:outputText value="#{bundle.ViewKitLabel_note}"/>
+                    <h:outputText value="#{kitController.selected.note}" title="#{bundle.ViewKitTitle_note}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{kitController.destroyAndView}" value="#{bundle.ViewKitDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewKitEditLink}"/>
+                <br />
+                <h:commandLink action="#{kitController.prepareCreate}" value="#{bundle.ViewKitCreateLink}" />
+                <br />
+                <h:commandLink action="#{kitController.prepareList}" value="#{bundle.ViewKitShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewKitIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

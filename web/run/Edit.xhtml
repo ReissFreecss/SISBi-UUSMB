@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditRunTitle}"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditRunLabel_idRun}" for="idRun" />
+                    <h:inputText id="idRun" value="#{runController.selected.idRun}" title="#{bundle.EditRunTitle_idRun}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_idRun}"/>
+                    <h:outputLabel value="#{bundle.EditRunLabel_runType}" for="runType" />
+                    <h:inputText id="runType" value="#{runController.selected.runType}" title="#{bundle.EditRunTitle_runType}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_runType}"/>
+                    <h:outputLabel value="#{bundle.EditRunLabel_runStartday}" for="runStartday" />
+                    <h:inputText id="runStartday" value="#{runController.selected.runStartday}" title="#{bundle.EditRunTitle_runStartday}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_runStartday}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditRunLabel_runFinishday}" for="runFinishday" />
+                    <h:inputText id="runFinishday" value="#{runController.selected.runFinishday}" title="#{bundle.EditRunTitle_runFinishday}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditRunLabel_status}" for="status" />
+                    <h:inputText id="status" value="#{runController.selected.status}" title="#{bundle.EditRunTitle_status}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_status}"/>
+                    <h:outputLabel value="#{bundle.EditRunLabel_runName}" for="runName" />
+                    <h:inputText id="runName" value="#{runController.selected.runName}" title="#{bundle.EditRunTitle_runName}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_runName}"/>
+                    <h:outputLabel value="#{bundle.EditRunLabel_workSubdirectory}" for="workSubdirectory" />
+                    <h:inputText id="workSubdirectory" value="#{runController.selected.workSubdirectory}" title="#{bundle.EditRunTitle_workSubdirectory}" />
+                    <h:outputLabel value="#{bundle.EditRunLabel_sampleSheetName}" for="sampleSheetName" />
+                    <h:inputText id="sampleSheetName" value="#{runController.selected.sampleSheetName}" title="#{bundle.EditRunTitle_sampleSheetName}" />
+                    <h:outputLabel value="#{bundle.EditRunLabel_cycles}" for="cycles" />
+                    <h:inputText id="cycles" value="#{runController.selected.cycles}" title="#{bundle.EditRunTitle_cycles}" required="true" requiredMessage="#{bundle.EditRunRequiredMessage_cycles}"/>
+                    <h:outputLabel value="#{bundle.EditRunLabel_performance}" for="performance" />
+                    <h:inputText id="performance" value="#{runController.selected.performance}" title="#{bundle.EditRunTitle_performance}" />
+                </h:panelGrid>
+                <h:commandLink action="#{runController.update}" value="#{bundle.EditRunSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditRunViewLink}"/>
+                <br />
+                <h:commandLink action="#{runController.prepareList}" value="#{bundle.EditRunShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditRunIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

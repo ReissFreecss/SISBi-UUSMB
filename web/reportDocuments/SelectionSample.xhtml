@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <p:messages closable="true" showDetail="true"/>
+            </h:panelGroup>
+            <h:form>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver a Editar Tipo de Metodología" action="#{reportProjectController.redirectFormEditTypeMethodology()}" />
+            </h:form>
+            <div align="center">
+                <p:outputLabel value="Proyecto:  #{reportProjectController.RepoProjectName()}" style="font-size: 30px; font-style: cambria" />
+                <h:form id="form">
+                    <br />
+                    <br />
+                    <p:accordionPanel  id="muestras">
+                        <p:tab title="Muestras Asociadas al Proyecto" titleStyle="font-size: large;font-family: 'politica'" > 
+                            <p:dataTable id="tbl" value="#{reportProjectController.repoSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
+                                         style="border:solid 1px;  border-color: transparent" scrollable="#{reportProjectController.repoSample.size()>14}" scrollHeight="350" resizableColumns="false" 
+                                         rowKey="#{item.idSample}" selection="#{reportProjectController.repoEditSample}"  editable="true" editMode="cell" disabledTextSelection="true">
+                                <f:facet name="header">
+                                    <p:outputPanel>
+                                        <p:growl id="growl" showDetail="false" sticky="true"/>
+                                        <p:spacer width="100" height="10"/>
+                                        <h:outputLabel for="rMuestras" value="Rango de Muestras : "/>
+                                    </p:outputPanel>
+                                </f:facet>
+                                <f:facet name="footer">
+                                    <p:spacer width="300" height="10"/>
+                                    Total de muestras: #{reportProjectController.repoSample.size()}
+                                    <p:spacer width="140" height="10"/>
+                                    <p:commandButton value="Siguiente"  icon="ui-icon-disk" action="#{reportProjectController.actualizarSampleReport()}"/>
+                                </f:facet>
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                <p:column  width="100" filterBy="#{item.idSample}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <p:outputLabel value="ID de la muestra"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.idSample}"/>
+                                </p:column>
+                                <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Nombre de la muestra"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.sampleName}"/>
+                                </p:column>
+                                <p:column width="150" filterBy="#{item.sampleQuality}" filterMatchMode="equals" headerText="Calidad" exportable="false">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('table').filter()">
+                                            <f:selectItem itemLabel="Todos" itemValue="" />
+                                            <f:selectItem itemLabel="Aun no determinada" itemValue="Aun no determinada" />
+                                            <f:selectItem itemLabel="Buena/Aceptable" itemValue="Buena/Aceptable" />
+                                            <f:selectItem itemLabel="Buena/Poco volumen" itemValue="Buena/Poco volumen" />
+                                            <f:selectItem itemLabel="Buena/Baja concentración" itemValue="Buena/Baja concentración" />
+                                            <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente Degradada" />
+                                            <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                                            <f:selectItem itemLabel="Sin material genético" itemValue="Sin material genético" />
+                                            <f:selectItem itemLabel="No aplica" itemValue="No aplica" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <h:outputText value="#{item.sampleQuality}"/>
+                                </p:column>
+                                <p:column width="150" exportable="false">
+                                    <f:facet name="header">
+                                        <p:outputLabel value="ESTATUS"/>
+
+                                    </f:facet>
+                                    <p:cellEditor>
+                                        <f:facet name="output">
+                                            <h:outputText value="#{item.status}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{sampleController.samStat}" style="width:125px">
+                                                <f:selectItem itemLabel="---" itemValue="---" />
+                                                <f:selectItem itemLabel="Condicionada" itemValue="Condicionada" />
+                                                <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
+                                                <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
+                                                <f:selectItem itemLabel="En construcción de biblioteca" itemValue="En construccion de biblioteca" />
+                                                <f:selectItem itemLabel="En espera para secuenciación" itemValue="En espera para secuenciacion" />
+                                                <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                                <f:selectItem itemLabel="Para resecuenciar" itemValue="Para resecuenciar" />
+                                                <f:selectItem itemLabel="Rechazada (Forsake)" itemValue="Rechazada (Forsake)" />
+                                                <f:selectItem itemLabel="Entregado fastq" itemValue="Entregado fastq" />
+                                                <f:selectItem itemLabel="En Análisis Bioinformático" itemValue="En Analisis Bioinformatico" />
+                                                <f:selectItem itemLabel="Análisis Bioinformático Entregado" itemValue="Analisis Bioinformatico Entregado" />
+                                            </p:selectOneMenu></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>  
+                    </p:accordionPanel>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>
+
+
+
+
+

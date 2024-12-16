@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditKitTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditKitLabel_idKit}" for="idKit" />
+                    <h:inputText id="idKit" value="#{kitController.selected.idKit}" title="#{bundle.EditKitTitle_idKit}" required="true" requiredMessage="#{bundle.EditKitRequiredMessage_idKit}"/>
+                    <h:outputLabel value="#{bundle.EditKitLabel_kitName}" for="kitName" />
+                    <h:inputText id="kitName" value="#{kitController.selected.kitName}" title="#{bundle.EditKitTitle_kitName}" required="true" requiredMessage="#{bundle.EditKitRequiredMessage_kitName}"/>
+                    <h:outputLabel value="#{bundle.EditKitLabel_note}" for="note" />
+                    <h:inputText id="note" value="#{kitController.selected.note}" title="#{bundle.EditKitTitle_note}" />
+                </h:panelGrid>
+                <h:commandLink action="#{kitController.update}" value="#{bundle.EditKitSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditKitViewLink}"/>
+                <br />
+                <h:commandLink action="#{kitController.prepareList}" value="#{bundle.EditKitShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditKitIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

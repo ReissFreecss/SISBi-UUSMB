@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Proceso Reportes de Proyectos"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event> 
+            <f:event type="preRenderView" listener="#{reportProjectController.init()}"></f:event> 
+        </ui:define>
+        <ui:define name="body">
+            <br></br>
+            <h:form id="formStatusReportProject" styleClass="jsfcrud_list_form">
+                <p:outputLabel  value="Buscar ID del proyecto: " for="search" />
+                <p:inputText id="search" style="width: 300px" value="#{reportProjectController.findVarIdProject}" placeholder="ID" />
+                <p:commandButton action="#{reportProjectController.findReportProject}" icon="ui-icon-search" value="Buscar" update="formStatusReportProject tblReportProjectStatus"/>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table" showDetail="true"/>
+                </h:panelGroup>
+                <h:panelGroup > 
+                    <p:dataTable id="tblReportProjectStatus" value="#{reportProjectController.projectReportProject}" var="item" 
+                                 style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="20" reflow="true" scrollHeight="350" resizableColumns="true" scrollable="true"
+                                 emptyMessage="No se encontraron reportes"
+                                 >
+                        <f:facet name="header">
+                            Reportes de Análisis Bioinformáticos
+                        </f:facet>
+                        
+                         <f:facet name="footer">
+                                <h:panelGrid columns="1" style="border-color: transparent">
+                                    Total de análisis bioinformáticos #{reportProjectController.projectReportProject.size()} 
+                                </h:panelGrid>
+
+                            </f:facet>
+                        
+                        <p:column headerText="ID Proyecto">
+                            <p:outputLabel value="#{item.idProject.idProject}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Nombre de proyecto">
+                            <p:outputLabel value="#{item.idProject.projectName}"/>
+                        </p:column>
+
+                        <p:column headerText="Tipo de Reporte">
+                            <p:outputLabel value="#{item.name} "/>
+                        </p:column>
+                        
+                        <p:column headerText="Fecha de creación" style="width:  110px">
+                            <h:outputText value="#{item.dateCreate}">
+                             <f:convertDateTime pattern="yyyy/MM/dd" />
+                             </h:outputText>
+                        </p:column>
+                        
+                        <p:column headerText="Status Reporte" style="width:  110px">
+                            <p:outputLabel value="#{item.status} "/>
+                        </p:column>
+                        
+                        <p:column headerText="Creador del reporte" style="width:  110px">
+                            <p:outputLabel value="#{item.idUser.userName} "/>
+                        </p:column>
+                        
+                        <p:column headerText="Revisor asignado" style="width:  110px">
+                            <p:outputLabel value="#{item.idUserRevise.userName} "/>
+                        </p:column>
+                        
+                        <p:column headerText="Autorizador asignado" style="width:  110px">
+                            <p:outputLabel value="#{item.idUserAuthorize.userName} "/>
+                        </p:column>
+                        <!-- libraryController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName) -->
+                        
+                        <p:column headerText="Opciones" style="width:  360px">
+                            <p:commandButton icon="ui-icon-pencil" value="Continuar" action="#{reportProjectController.redirectMenuReportContinue(item.idProject.idProject, item.name)}" disabled="#{reportProjectController.validateBtnContinuar(item.idUser, item.status)}"/>
+                            <p:commandButton icon="ui-icon-check" value="Revisar" action="#{reportProjectController.redirectMenuReportRA(item.idReportProject, item.name, item.idProject.idProject, 'Revision')}" disabled="#{reportProjectController.validateBtnRevisar(item, item.idUser, item.idUserRevise, item.status)}" update="tblReportProjectStatus"/>
+                            <p:commandButton icon="ui-icon-check" value="Autorizar"  action="#{reportProjectController.redirectMenuReportRA(item.idReportProject, item.name, item.idProject.idProject, 'Autorizacion')}" disabled="#{reportProjectController.validateBtnAutorizar(item.idUser , item.idUserRevise, item.idUserAuthorize, item.status)}" update="tblReportProjectStatus"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

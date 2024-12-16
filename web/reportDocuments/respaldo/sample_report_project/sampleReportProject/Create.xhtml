@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundleSampleReportProject.CreateSampleReportProjectTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_idSampleReportProject}" for="idSampleReportProject" />
+                    <h:inputText id="idSampleReportProject" value="#{sampleReportProjectController.selected.idSampleReportProject}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_idSampleReportProject}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_idSampleReportProject}"/>
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_statusPrevious}" for="statusPrevious" />
+                    <h:inputText id="statusPrevious" value="#{sampleReportProjectController.selected.statusPrevious}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_statusPrevious}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_statusPrevious}"/>
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_statusCurrent}" for="statusCurrent" />
+                    <h:inputText id="statusCurrent" value="#{sampleReportProjectController.selected.statusCurrent}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_statusCurrent}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_statusCurrent}"/>
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_dateUpgrade}" for="dateUpgrade" />
+                    <h:inputText id="dateUpgrade" value="#{sampleReportProjectController.selected.dateUpgrade}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_dateUpgrade}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_dateUpgrade}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_idReportProject}" for="idReportProject" />
+                    <h:selectOneMenu id="idReportProject" value="#{sampleReportProjectController.selected.idReportProject}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_idReportProject}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_idReportProject}">
+                        <f:selectItems value="#{reportProjectController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundleSampleReportProject.CreateSampleReportProjectLabel_idSample}" for="idSample" />
+                    <h:selectOneMenu id="idSample" value="#{sampleReportProjectController.selected.idSample}" title="#{bundleSampleReportProject.CreateSampleReportProjectTitle_idSample}" required="true" requiredMessage="#{bundleSampleReportProject.CreateSampleReportProjectRequiredMessage_idSample}">
+                        <f:selectItems value="#{sampleController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{sampleReportProjectController.create}" value="#{bundleSampleReportProject.CreateSampleReportProjectSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{sampleReportProjectController.prepareList}" value="#{bundleSampleReportProject.CreateSampleReportProjectShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundleSampleReportProject.CreateSampleReportProjectIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

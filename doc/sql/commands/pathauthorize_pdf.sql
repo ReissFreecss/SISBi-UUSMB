@@ -1,0 +1,1 @@
+ALTER table report_project ADD COLUMN pathauthorize_pdf VARCHAR(100) NULL;

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Alta de Muestras existosa</title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+    </h:head>
+
+    <body>
+        <h:form>
+            <div align="center">
+
+                <br/>
+                <br/>
+                <h1>Alta de muestras exitosa</h1>
+                <div align="center">
+
+                    <img src="../resources/images/ok.png"></img>
+                </div>
+                <h2> Las muestras fueron registradas exitosamente.</h2>
+                <h2> <p:outputLabel value="Se registraron #{fileController.countSamples} muestras en el proyecto" /></h2>
+                <p:commandButton icon="ui-icon-pencil" value="Ver muestras" action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
+                    <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
+                </p:commandButton>
+
+
+            </div>
+
+
+            <p:dialog  widgetVar="dlgInfo"  header="AVISO IMPORTANTE"  style=" top: auto"  visible="true" responsive="true">
+
+                <h:outputText value="Estimado usuario:" /> <br/><br/>
+
+                <h:outputText value="Solo se reciben  muestras en la UUSMB  en el siguiente horario:" /><br/>
+
+                <h:outputText value="lunes a jueves de 9:00 am a 2:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
+                
+                <h:outputText value="No se aceptan muestras que no contengan nombre del tubo con el que se registró en SISBi" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
+
+                <p:commandButton value="Aceptar"  onclick="PF('dlgInfo').hide();"/>
+
+            </p:dialog>
+
+        </h:form>
+    </body>
+</html>

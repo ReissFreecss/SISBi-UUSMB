@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Formulario Report Busqueda de Variantes"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToCreateReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver a Editar las Muestras" action="#{reportProjectController.redirectEditSampleSelection()}" />
+            </h:form>
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages style="font-size: 24px;font-weight: bolder" errorStyle="color: red" infoStyle="color: green" warnStyle="color: white" layout="table"/>
+            </h:panelGroup>
+           <div class="card maxdesk center-container">
+                <div class="ui-g">
+                    <div  class="bg-c1 ui-g-12ui-g-nopad text-report">
+                        <h:form id="formReportExpresion" class="inFontSize input-report">
+                            <h2 class="text-center">REPORTE ENTREGA DEL PROYECTO : #{reportProjectController.projectSampleReportProject().projectName} </h2>
+                            
+                            <h3>IDENTIFICACIÓN DEL REPORTE O PROYECTO: #{reportProjectController.projectSampleReportProject().idProject} </h3>
+                            <p>Fecha de Solicitud:</p>
+                            <p:calendar value="#{reportProjectController.selectedRepoProject.requestDate}" pattern="dd/MM/yyyy"/>
+                            <p>Fecha de Informe:</p>
+                            <p:calendar value="#{reportProjectController.selected.dateCreate}" pattern="dd/MM/yyyy"/>
+                            <p>Fecha de Análisis Bioinformático:</p>
+                            <p:calendar value="#{reportProjectController.bioinfoAnalysisDate}" pattern="dd/MM/yyyy"/>
+                            
+                            <h3>REVISIÓN y AUTORIZACIÓN:</h3>
+                            El revisor actual es: #{reportProjectController.selected.idUserRevise.fullName}<br/>      
+                            Asignar revisor:<h:selectOneMenu value="#{reportProjectController.selected.idUserRevise}" title="Revisor:">
+                                <f:selectItems value="#{reportProjectController.usersRevise}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                            El autorizador actual es: #{reportProjectController.selected.idUserAuthorize.fullName}<br/>      
+                            Asignar autorizador<h:selectOneMenu value="#{reportProjectController.selected.idUserAuthorize}" title="Autorizador">
+                                <f:selectItems value="#{reportProjectController.usersAuthorize}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                            <p:commandButton action="#{reportProjectController.btnCambiarRevisorOAutorizador('revisor')}" icon="ui-icon-arrowreturn-1-w" value="Cambiar revisor y autorizador"  update="@form"/>
+
+                            <h3>IDENTIFICACIÓN DEL USUARIO Y COLABORADORES:</h3>
+                            
+                            <p>En esta sección se describen los responsables y colaboradores ligados a este proyecto:</p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.userRole()}" var="us">
+                                    <p:column headerText="Usuario">
+                                        <h:outputText value="#{us.getUserName()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{us.getFirstName()} #{us.getPLastName()} #{us.getMLastName()}" />
+                                    </p:column>
+                                    <p:column headerText="Dependencia">
+                                        <h:outputText value="#{us.getDependencyName()}" />
+                                    </p:column>
+                                    <p:column headerText="Teléfono">
+                                        <h:outputText value="#{us.getPhoneNumber()}" />
+                                    </p:column>
+                                    <p:column headerText="Email">
+                                        <h:outputText value="#{us.getEmail()}" />
+                                    </p:column>
+                                    <p:column headerText="Rol">
+                                        <h:outputText value="#{us.getRole()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN HISTÓRICA DE LAS MUESTRAS</h3>
+                            
+                            <p>
+                                En esta sección se definen los identificadores únicos de cada muestra, su nombre, identificación
+                                del tubo, fecha de recepción, fecha de análisis de calidad y evaluación de Aceptación:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Recepcion">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Analisis">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Estatus de Aceptación">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se define el volumen reportado por el usuario y el volumen y concentración
+                                encontrados por los miembros de la unidad:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable  value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;" >
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) Usuario">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) UUSMB">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Concentracion Total (ng)">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se reportan los valores de absorbancia reportados por el usuario y los
+                                encontrados por la Unidad. El tipo de muestra, rendimiento esperado y observaciones o comentarios
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra" style="width:210px;">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_280 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_230 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_280 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_230 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Tipo"  style="width:40px;">
+                                        <h:outputText value="#{sampleM.getType()}" />
+                                    </p:column>
+                                    <p:column headerText="Rendimiento">
+                                        <h:outputText value="#{sampleM.expectedPerformance}" />
+                                    </p:column>
+                                    <p:column headerText="Comentario">
+                                        <h:outputText value="#{sampleM.getComments()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN METODOLÓGICA </h3>
+                            
+                            <p>#{reportProjectController.selected.typeMethodology}</p>
+                            
+                            <h3>REPORTE DE CALIDAD</h3>
+                            
+                            <p>El siguiente reporte de calidad reporta el % de GC, rendimiento y % de nucleótidos por base:</p>
+                            
+                            <p><a href="#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}">#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}</a></p>
+                            
+                            <p>
+                                En este reporte se aprecia que el rendimiento cumple con el compromiso de entregar
+                                al menos 75% de 10 millones de secuencias solicitadas.
+                                Como resultado de la revisión de estos reportes de calidad, y dado que el promedio
+                                de calidad se encuentra para todas las muestras a lo largo de todas las secuencias
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field3}"/>
+                                de Q30, el porcentaje de GC se apega al teórico y los porcentajes de nucleótidos a lo largo de
+                                todas las bases se comparten dentro de lo esperado, no se realizó ninguna limpieza por calidad
+                                o de adaptadores o para eliminar secuencias repetidas.  
+                            </p>
+                            
+                            <h3>ANÁLISIS BIOINFORMÁTICO DE BUSQUEDA DE VARIANTES</h3>
+                            
+                            <p>
+                                El análisis bioinformático inicio con el alineamiento pareado de las
+                                #{reportProjectController.sampleBySRP().size()}
+                                muestras vs
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field4}"/>
+                                . 
+                                Descargado de <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field5}"/>
+                                . Luego llevamos a cabo el alineamiento, con el programa BWA (BWA-mem) v.0.7.17 con sus valores predeterminados.
+                                Luego se realizó el cálculo de coberturas usando el programa Bedtools 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field6}"/> .
+                                En el afan de descartar zonas de cero cobertura.
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field7}"/> .
+                            </p>
+                            <p>
+                                Se usaron los programs de busqueda de variantes Frebayes
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field8}"/>
+                                y bcftools 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field9}"/>,
+                                con el valor de diplocidad igual a 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field10}"/>.
+                                Se normalizaron los vcf obtenidos con bcftools 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field11}"/>,
+                                y se generaron los sieguientes archivos:
+                            </p>  
+                            
+                            <ul>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field12}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field13}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field14}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field15}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field16}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field17}"/></li>
+                            </ul>
+                            <p>
+                                La intersección de los 6 archivos anteriores, con bcftools 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field18}"/>, 
+                                se reporta en el archivo  <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field19}"/>.  
+                            </p> 
+                            <p>
+                                En caso de que el genoma tenga anotaciones:
+                            </p>
+                            <p>
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field20}"/>
+                            </p>
+                            <ul>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field21}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field22}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field23}"/></li>
+                                <li><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field24}"/></li>
+                               
+                            </ul>
+                            
+                            <h3>RESULTADOS</h3>
+                            
+                            <p>
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field25}"/>
+                            </p>
+                            
+                            <p><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field26}"/></p>
+                            
+                            <div class="container-btn-report ui-g center-gridp btn-form">
+                                <div class="ui-g-2">
+                                    <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{reportProjectController.createFieldReport}" update="formReportExpresion"/>
+                                </div>
+                                <div class="ui-g-2">
+                                    
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

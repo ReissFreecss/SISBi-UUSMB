@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditSampleDetailsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_userName}" for="userName" />
+                    <h:inputText id="userName" value="#{sampleDetailsController.selected.userName}" title="#{bundle.EditSampleDetailsTitle_userName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_firstName}" for="firstName" />
+                    <h:inputText id="firstName" value="#{sampleDetailsController.selected.firstName}" title="#{bundle.EditSampleDetailsTitle_firstName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_PLastName}" for="PLastName" />
+                    <h:inputText id="PLastName" value="#{sampleDetailsController.selected.PLastName}" title="#{bundle.EditSampleDetailsTitle_PLastName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_MLastName}" for="MLastName" />
+                    <h:inputText id="MLastName" value="#{sampleDetailsController.selected.MLastName}" title="#{bundle.EditSampleDetailsTitle_MLastName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_email}" for="email" />
+                    <h:inputText id="email" value="#{sampleDetailsController.selected.email}" title="#{bundle.EditSampleDetailsTitle_email}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_dependencyName}" for="dependencyName" />
+                    <h:inputText id="dependencyName" value="#{sampleDetailsController.selected.dependencyName}" title="#{bundle.EditSampleDetailsTitle_dependencyName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_role}" for="role" />
+                    <h:inputText id="role" value="#{sampleDetailsController.selected.role}" title="#{bundle.EditSampleDetailsTitle_role}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_idProject}" for="idProject" />
+                    <h:inputText id="idProject" value="#{sampleDetailsController.selected.idProject}" title="#{bundle.EditSampleDetailsTitle_idProject}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_projectName}" for="projectName" />
+                    <h:inputText id="projectName" value="#{sampleDetailsController.selected.projectName}" title="#{bundle.EditSampleDetailsTitle_projectName}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_projectDescription}" for="projectDescription" />
+                    <h:inputText id="projectDescription" value="#{sampleDetailsController.selected.projectDescription}" title="#{bundle.EditSampleDetailsTitle_projectDescription}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_requestDate}" for="requestDate" />
+                    <h:inputText id="requestDate" value="#{sampleDetailsController.selected.requestDate}" title="#{bundle.EditSampleDetailsTitle_requestDate}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_status}" for="status" />
+                    <h:inputText id="status" value="#{sampleDetailsController.selected.status}" title="#{bundle.EditSampleDetailsTitle_status}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_quotationNumber}" for="quotationNumber" />
+                    <h:inputText id="quotationNumber" value="#{sampleDetailsController.selected.quotationNumber}" title="#{bundle.EditSampleDetailsTitle_quotationNumber}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_billNumber}" for="billNumber" />
+                    <h:inputText id="billNumber" value="#{sampleDetailsController.selected.billNumber}" title="#{bundle.EditSampleDetailsTitle_billNumber}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_comments}" for="comments" />
+                    <h:inputText id="comments" value="#{sampleDetailsController.selected.comments}" title="#{bundle.EditSampleDetailsTitle_comments}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_idSample}" for="idSample" />
+                    <h:inputText id="idSample" value="#{sampleDetailsController.selected.idSample}" title="#{bundle.EditSampleDetailsTitle_idSample}" />
+                    <h:outputLabel value="#{bundle.EditSampleDetailsLabel_sampleName}" for="sampleName" />
+                    <h:inputText id="sampleName" value="#{sampleDetailsController.selected.sampleName}" title="#{bundle.EditSampleDetailsTitle_sampleName}" />
+                </h:panelGrid>
+                <h:commandLink action="#{sampleDetailsController.update}" value="#{bundle.EditSampleDetailsSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditSampleDetailsViewLink}"/>
+                <br />
+                <h:commandLink action="#{sampleDetailsController.prepareList}" value="#{bundle.EditSampleDetailsShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditSampleDetailsIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

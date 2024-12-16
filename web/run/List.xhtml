@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRunTitle}"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListRunEmpty}" rendered="#{runController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{runController.items.rowCount > 0}">
+                    <h:outputText value="#{runController.pagination.pageFirstItem + 1}..#{runController.pagination.pageLastItem + 1}/#{runController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{runController.previous}" value="#{bundle.Previous} #{runController.pagination.pageSize}" rendered="#{runController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{runController.next}" value="#{bundle.Next} #{runController.pagination.pageSize}" rendered="#{runController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{runController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_idRun}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idRun}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_runType}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.runType}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_runStartday}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.runStartday}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_runFinishday}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.runFinishday}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_status}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.status}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_runName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.runName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_workSubdirectory}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.workSubdirectory}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_sampleSheetName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleSheetName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_cycles}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cycles}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListRunTitle_performance}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.performance}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{runController.prepareView}" value="#{bundle.ListRunViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{runController.prepareEdit}" value="#{bundle.ListRunEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{runController.destroy}" value="#{bundle.ListRunDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{runController.prepareCreate}" value="#{bundle.ListRunCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListRunIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

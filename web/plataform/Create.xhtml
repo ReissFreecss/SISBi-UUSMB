@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">>
+    
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title" >
+            <h:outputText value="Plataformas" ></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        
+        
+        <ui:define name="body">
+            
+           
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <p:growl id="growl_success" for="msgSuccess" showDetail="true" life="4000" severity="info"/>
+            <p:growl  id="growl" showDetail="true" sticky="true" severity="error,fatal,warn"/>
+            
+         <h:form id="principal">
+	    <div align="center">
+                <p:outputLabel value="Registro de nueva plataforma de secuenciación" style="font-size: 30px; font-style: italic" />
+                 <br/><br/>
+
+	 
+                      <p:dataTable id="tblplats" value="#{plataformjpaController.allplataforms}" var="item" reflow="true" multiViewState="table"  resizableColumns="true" 
+                             scrollable="true" scrollHeight="220" rows="20" rowsPerPageTemplate="10,20,30"  paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             sortMode="multiple">
+                        <f:facet name="header">                           
+                                Plataformas Registradas                              
+                        </f:facet>
+                        <f:facet name="footer">
+                           <h:outputText value=""/>
+                              
+                        </f:facet>
+                   
+                          <p:column headerText="Id Plataforma" width="100"  >
+                           
+                              <h:outputText value="#{item.idPlataform}"/>
+                        </p:column>
+                   
+                          <p:column headerText="Nombre Plataforma" width="300" >
+                           
+                              <h:outputText value="#{item.plataformName}"/>
+                        </p:column>
+                        
+                   <p:column headerText="Tipo de plataforma" >
+                        
+                       <h:outputText value="#{item.note}"/>
+                        </p:column>
+                   <p:column headerText="Ubicación física">
+                         
+                       <h:outputText value="#{item.location}"/>
+                        </p:column>
+                                                                 
+                    </p:dataTable> <br/><br/>
+                 
+                 
+                      <p:panelGrid columns="1"  id="gral_data"  >                                                
+                    <f:facet name="header">
+                        Registro de una nueva plataforma.
+                    </f:facet>    
+
+		<h:panelGrid columns="2">
+                    <p:outputLabel value="Nombre de la Plataforma" for="plataformName" />
+                    <p:inputText id="plataformName" value="#{plataformjpaController.selected.plataformName}" required="true" requiredMessage="El nombre de la plataforma es obligatorio" a:placeholder="Ejemplo: NextSeq500">
+                    <p:keyFilter regEx="/[a-z0-9_]/i"/> 
+                    <p:ajax delay="800" event="keyup" listener="#{plataformjpaController.asignarValorCampos}" immediate="true" />
+                    </p:inputText>
+                    
+                    <p:outputLabel value="Tipo de plataforma" for="note" />
+                    <p:selectOneMenu id="note" value="#{plataformjpaController.selected.note}" required="true" >
+                        <f:selectItem itemLabel="---" itemValue=""/>
+                        <f:selectItem itemLabel="ILLUMINA" itemValue="ILLUMINA"/>
+                        <f:selectItem itemLabel="OXFORD NANOPORE" itemValue="OXFORD NANOPORE"/>
+                                <p:ajax event="valueChange"  listener="#{plataformjpaController.asignarValorCampos}" immediate="true" />
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Ubicación del equipo" for="location" />
+                    <p:inputText id="location" value="#{plataformjpaController.selected.location}" >
+                     <p:ajax delay="800" event="keyup" listener="#{plataformjpaController.asignarValorCampos}"  />
+                    </p:inputText>
+                </h:panelGrid>
+              </p:panelGrid>   
+		<br/>
+                <p:commandButton  id="createButton" style="text-align: center" value="Guardar plataforma" update="growl, growl_success,tblplats" icon="ui-icon-disk"  action="#{plataformjpaController.create_plat()}"  styleClass="ui-priority-primary"/>                
+
+                      <br/><br/>
+                      
+            </div>
+                
+                
+         </h:form>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>

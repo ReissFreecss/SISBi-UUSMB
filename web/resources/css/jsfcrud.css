@@ -1,0 +1,66 @@
+@font-face
+{
+   font-family: "politica";
+   src: url("fonts/politica_bold-webfont.eot");
+   src: url("fonts/politica_bold-webfont.eot") format("embedded-opentype"),
+        url("fonts/politica_bold-webfont.woff") format("woff"),
+        url("fonts/politica_bold-webfont.ttf") format("truetype"),
+        url("fonts/politica_bold-webfont.svg") format("svg");
+}
+
+root { 
+    display: block;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fefeff;
+    align-items: center;
+    
+    font-size: small;
+}
+
+a {
+    color: goldenrod;
+    font-size: 20px;
+}
+
+
+
+
+h1{
+    
+    font-family: "politica";
+    font-size: 30px;
+    
+}
+
+form.jsfcrud_list_form td, td td {
+   
+    vertical-align: baseline;
+    padding-bottom: 0px;
+    
+}
+
+tr.jsfcrud_odd_row {
+   
+}
+html{
+    
+  background-image: url("images/fondo-azul.jpg");
+
+    
+}
+
+
+
+tr.jsfcrud_even_row {
+  
+}
+
+#busyImage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+

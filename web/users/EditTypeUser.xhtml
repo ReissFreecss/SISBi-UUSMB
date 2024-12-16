@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+
+            <h:outputText value="Lista de usuarios"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form" >
+                <p:growl id="messages" showDetail="true" />
+                <h:panelGroup id="messagePanel" >
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+
+                <h:panelGrid id="opciones" >
+
+
+                </h:panelGrid>
+
+                <p:dataTable id="tableFilter" style="border:solid 1px; border-color: transparent" emptyMessage="">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Usuarios " />
+                            <p:inputText id="inputFindUser" placeholder="Búsqueda rápida" value="#{usersController.txtFieldGeneralUser}">
+                                <p:ajax  event="keyup" listener="#{usersController.userGeneralFilter}" update=":form:table, txtFilUserName, txtFilFirstName, inputPLastName, txtFilMLastName, txtFilEmail, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                    
+                    
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Tipo de usuario"/>
+                            <br></br>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Usuario"/>
+                            <br></br>
+                            <p:inputText id="txtFilUserName" value="#{usersController.txtFilUserName}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterNameUser}" update=":form:table, txtFilFirstName, inputPLastName, txtFilMLastName, txtFilEmail, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombre(s)"/>
+                            <br></br>
+                            <p:inputText id="txtFilFirstName" value="#{usersController.txtFilFirstName}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterFirstName}" update=":form:table, txtFilUserName, inputPLastName, txtFilMLastName, txtFilEmail, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellido Paterno"/>
+                            <br></br>
+                            <p:inputText id="inputPLastName" value="#{usersController.varPLastName}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterPLastName}" update=":form:table, txtFilUserName, txtFilFirstName, txtFilMLastName, txtFilEmail, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellido Materno"/>
+                            <br></br>
+                            <p:inputText id="txtFilMLastName" value="#{usersController.txtFilMLastName}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterMLastName}" update=":form:table, txtFilUserName, txtFilFirstName, inputPLastName, txtFilEmail, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Teléfono"/>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="E-Mail"/>
+                            <br></br>
+                            <p:inputText id="txtFilEmail" value="#{usersController.txtFilEmail}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterEmail}" update=":form:table, txtFilUserName, txtFilFirstName, inputPLastName, txtFilMLastName, txtFilDepartment, txtFilRegistrationName"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Departamento"/>
+                            <br></br>
+                            <p:inputText id="txtFilDepartment" value="#{usersController.txtFildDepartment}" style="width: 130px">
+                                <p:ajax  event="keyup" listener="#{usersController.usersFilterDepartment}" update=":form:table, txtFilUserName, txtFilFirstName, inputPLastName, txtFilMLastName, txtFilRegistrationName, txtFilEmail"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fecha de registro"/>
+                            <br></br>
+                            <p:calendar id="txtFilRegistrationName" value="#{usersController.txtFilRegistrationName}" size="10" title="Fecha a buscar">
+                                <p:ajax  event="dateSelect" listener="#{usersController.usersFilterRegistrationDate}" update=":form:table, txtFilUserName, txtFilFirstName, inputPLastName, txtFilMLastName, txtFilEmail, txtFilDepartment"/>
+                                <p:ajax  event="keyup" listener="#{usersController.cleanFilterRegistrationDate}" update=":form:table" />
+                            </p:calendar>
+                        </f:facet>
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:dataTable  id="table" value="#{usersController.usuarios}" widgetVar="table"  multiViewState="table"
+                                  rows="10" paginator="true" var="items" style="border:solid 1px; border-color: transparent" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                   
+                                  scrollable="true" rowsPerPageTemplate="5,10,15" scrollHeight="300" resizableColumns="true" reflow="true"
+                                  selectionMode="single" selection="#{usersController.selectedUser}" paginatorPosition="bottom"
+                                  emptyMessage="No se encontraron usuarios con su criterio de búsqueda" rowKey="#{items.userName}"
+                                  editable="true" editMode="cell"
+                                  >
+                              
+
+                    
+                    
+                    <p:column sortBy="#{items.userType}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{items.userType}"/></f:facet>
+                            <f:facet name="input"><p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{usersController.selectTypeUser}"  style="width:125px">
+                                    <f:selectItem  itemLabel="---" itemValue="---" />
+                                    <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                                    <f:selectItem itemLabel="Usuario" itemValue="Usuario" />
+                                    <p:ajax event="valueChange"  process="@this" update=":form:table :form:messages" listener="#{usersController.editTypeUser(items, usersController.selectTypeUser)}"/>
+                                </p:selectOneMenu></f:facet>
+                            </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column sortBy="#{items.userName}">
+                        <h:outputText value="#{items.userName}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{items.firstName}">
+                        <h:outputText value="#{items.firstName}"/>
+                    </p:column>
+                    <p:column sortBy="#{items.PLastName}">
+                        <h:outputText value="#{items.PLastName}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{items.MLastName}">
+                        <h:outputText value="#{items.MLastName}"/>
+                    </p:column>
+
+                    <p:column >
+                        <h:outputText value="#{items.phoneNumber}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{items.email}">
+                        <h:outputText value="#{items.email}"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{items.department}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{items.registrationDate}">
+                        <h:outputText value="#{items.registrationDate}">
+                            <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+
+
+
+                    <f:facet name="footer">
+                        Numero de usuarios: #{usersController.usuarios.size()} 
+                    </f:facet>
+
+                </p:dataTable>  
+
+
+                <br />
+
+
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

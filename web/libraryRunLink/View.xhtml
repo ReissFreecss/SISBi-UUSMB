@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewLibraryRunLinkTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewLibraryRunLinkLabel_note}"/>
+                    <h:outputText value="#{libraryRunLinkController.selected.note}" title="#{bundle.ViewLibraryRunLinkTitle_note}"/>
+                    <h:outputText value="#{bundle.ViewLibraryRunLinkLabel_library}"/>
+                    <h:outputText value="#{libraryRunLinkController.selected.library}" title="#{bundle.ViewLibraryRunLinkTitle_library}"/>
+                    <h:outputText value="#{bundle.ViewLibraryRunLinkLabel_run}"/>
+                    <h:outputText value="#{libraryRunLinkController.selected.run}" title="#{bundle.ViewLibraryRunLinkTitle_run}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{libraryRunLinkController.destroyAndView}" value="#{bundle.ViewLibraryRunLinkDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewLibraryRunLinkEditLink}"/>
+                <br />
+                <h:commandLink action="#{libraryRunLinkController.prepareCreate}" value="#{bundle.ViewLibraryRunLinkCreateLink}" />
+                <br />
+                <h:commandLink action="#{libraryRunLinkController.prepareList}" value="#{bundle.ViewLibraryRunLinkShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewLibraryRunLinkIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

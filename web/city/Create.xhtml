@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateCityTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateCityLabel_idCity}" for="idCity" />
+                    <h:inputText id="idCity" value="#{cityController.selected.idCity}" title="#{bundle.CreateCityTitle_idCity}" required="true" requiredMessage="#{bundle.CreateCityRequiredMessage_idCity}"/>
+                    <h:outputLabel value="#{bundle.CreateCityLabel_cityName}" for="cityName" />
+                    <h:inputText id="cityName" value="#{cityController.selected.cityName}" title="#{bundle.CreateCityTitle_cityName}" required="true" requiredMessage="#{bundle.CreateCityRequiredMessage_cityName}"/>
+                    <h:outputLabel value="#{bundle.CreateCityLabel_idCountry}" for="idCountry" />
+                    <h:selectOneMenu id="idCountry" value="#{cityController.selected.idCountry}" title="#{bundle.CreateCityTitle_idCountry}" required="true" requiredMessage="#{bundle.CreateCityRequiredMessage_idCountry}">
+                        <f:selectItems value="#{countryController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{cityController.create}" value="#{bundle.CreateCitySaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{cityController.prepareList}" value="#{bundle.CreateCityShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateCityIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Mi Perfil"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <p:growl  id="growl" showDetail="true" sticky="true"/>
+            <h:form>
+                
+                <p:button icon="ui-icon-circle-arrow-w" outcome="#{usersController.prepareList()}" value="Volver" />
+                 <br />
+                 <br />
+                
+                <h:panelGrid columns="2">
+                    
+                    <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                    <p:selectOneMenu id="idDependency" value="#{usersController.selected.idDependency}" style="width: 400px" title="Dependencia a la que pertenece el usuario" >
+                        <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                    </p:selectOneMenu>
+                    
+                     <p:outputLabel value="¿La dependencia no está en la lista?" for="createDependency"/>
+                     <p:button id="createDependency" icon="ui-icon-circle-plus" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+                    
+                    
+                    <p:outputLabel value="Nombre(s):" for="firstName" />
+                    <p:inputText id="firstName" value="#{usersController.selected.firstName}" title="Nombre del usuario" required="true" requiredMessage="El nombre de usuario es obligatorio"/>
+                   
+                    <p:outputLabel value="Apellido Paterno:" for="PlastName" />
+                    <p:inputText id="PlastName" value="#{usersController.selected.PLastName}"  title="Apellido paterno del usuario"  required="true" requiredMessage="#{bundle.EditUsersRequiredMessage_lastName}"/>
+                    
+                    <p:outputLabel value="Apellido Materno:" for="MlastName" />
+                    <p:inputText id="MlastName" value="#{usersController.selected.MLastName}"  title="Apellido materno del usuario"  />
+                    
+                    <p:outputLabel value="Nombre de usuario:" for="userName" />
+                    <p:inputText id="userName" disabled="true" value="#{usersController.txtUserName}" title="Nombre de identificacion para el usuario" required="true" requiredMessage="#{bundle.EditUsersRequiredMessage_userName}"/>
+                   
+                    <p:outputLabel value="Número de Teléfono:" for="phoneNumber" />
+                    <p:inputMask id="phoneNumber" value="#{usersController.selected.phoneNumber}" mask="999-999-9999? ext-99999" />
+                    
+                    <p:outputLabel value="Correo electrónico" for="email" />
+                   <p:inputText id="email" value="#{usersController.selected.email}"  required="true" requiredMessage="El campo Correo electronico es obligatorio">
+                    <p:keyFilter regEx="/[a-z0-9_\.\-@]/i"/>
+                    </p:inputText>
+                    
+                    <p:outputLabel value="Departamento" for="department" />
+                      <p:inputText id="department" value="#{usersController.selected.department}" title="Departamento donde radica" >
+                    <p:keyFilter regEx="/[a-z0-9_ ]/i"/>
+                    </p:inputText>
+                    
+                    <p:outputLabel value="Contraseña: *" />
+                    <p:password id="pwd1" match="pwd2" validatorMessage="Las contraseñas no coinciden" value="#{usersController.selected.password}"  required="true" requiredMessage="El campo Contraseña es obligatorio"
+                                feedback="true"
+                    promptLabel="Introduzca nueva contraseña" weakLabel="Debil"
+                    goodLabel="Mediana" strongLabel="Alta" />
+                    
+                    <p:outputLabel value="Confirme contraseña:" for="pwd2" />
+                    <p:password id="pwd2" value="#{usersController.selected.password}"  required="true" requiredMessage="Confime contraseña"
+                                />
+                   
+                
+                </h:panelGrid>
+                <br />
+                <p:commandButton icon="ui-icon-disk" action="#{usersController.update}" update="growl" value="Guardar cambios"/>
+                
+               </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

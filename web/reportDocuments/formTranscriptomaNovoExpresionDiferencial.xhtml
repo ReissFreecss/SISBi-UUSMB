@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Formulario Reporte Transcriptoma de Novo y Expresión Diferencial"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToCreateReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver a Editar las Muestras" action="#{reportProjectController.redirectEditSampleSelection()}"/>
+            </h:form>
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages style="font-size: 24px;font-weight: bolder" errorStyle="color: red" infoStyle="color: green" warnStyle="color: white" layout="table"/>
+            </h:panelGroup>
+            <div class="card maxdesk center-container">
+                <div class="ui-g">
+                    <div  class="bg-c1 ui-g-12ui-g-nopad text-report">
+                        <h:form id="formReportExpresion" class="inFontSize input-report">
+                            <h2 class="text-center">REPORTE ENTREGA DEL PROYECTO : #{reportProjectController.projectSampleReportProject().projectName} </h2>
+
+                            <h3>IDENTIFICACIÓN DEL REPORTE O PROYECTO: #{reportProjectController.projectSampleReportProject().idProject} </h3>
+                            <p>Fecha de Solicitud:</p>
+                            <h:outputLabel value="#{reportProjectController.selectedRepoProject.requestDate}" />
+                            <p>Fecha de Informe:</p>
+                            <p:calendar value="#{reportProjectController.selected.dateCreate}" pattern="dd/MM/yyyy"/>
+                            <p>Fecha de Análisis Bioinformático:</p>
+                            <p:calendar value="#{reportProjectController.bioinfoAnalysisDate}" pattern="dd/MM/yyyy"/>
+
+                            <h3>REVISIÓN y AUTORIZACIÓN:</h3>
+                            El revisor actual es: #{reportProjectController.selected.idUserRevise.fullName}<br/>
+                            Asignar revisor:<h:selectOneMenu value="#{reportProjectController.selected.idUserRevise}" title="Revisor:">
+                            <f:selectItems value="#{reportProjectController.usersRevise}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                                El autorizador actual es: #{reportProjectController.selected.idUserAuthorize.fullName}<br/>
+                                Asignar autorizador<h:selectOneMenu value="#{reportProjectController.selected.idUserAuthorize}" title="Autorizador">
+                                <f:selectItems value="#{reportProjectController.usersAuthorize}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                                <p:commandButton action="#{reportProjectController.btnCambiarRevisorOAutorizador('revisor')}" icon="ui-icon-arrowreturn-1-w" value="Cambiar revisor y autorizador"  update="@form"/>
+                            
+                            <h3>IDENTIFICACIÓN DEL USUARIO Y COLABORADORES:</h3>
+                            
+                            <p>En esta sección se describen los responsables y colaboradores ligados a este proyecto:</p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.userRole()}" var="us">
+                                    <p:column headerText="Usuario">
+                                        <h:outputText value="#{us.getUserName()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{us.getFirstName()} #{us.getPLastName()} #{us.getMLastName()}" />
+                                    </p:column>
+                                    <p:column headerText="Dependencia">
+                                        <h:outputText value="#{us.getDependencyName()}" />
+                                    </p:column>
+                                    <p:column headerText="Teléfono">
+                                        <h:outputText value="#{us.getPhoneNumber()}" />
+                                    </p:column>
+                                    <p:column headerText="Email">
+                                        <h:outputText value="#{us.getEmail()}" />
+                                    </p:column>
+                                    <p:column headerText="Rol">
+                                        <h:outputText value="#{us.getRole()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN HISTÓRICA DE LAS MUESTRAS</h3>
+                            
+                            <p>
+                                En esta sección se definen los identificadores únicos de cada muestra, su nombre, identificación
+                                del tubo, fecha de recepción, fecha de análisis de calidad y evaluación de Aceptación:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Recepcion">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Analisis">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Estatus de Aceptación">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se define el volumen reportado por el usuario y el volumen y concentración
+                                encontrados por los miembros de la unidad:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable  value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;" >
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) Usuario">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) UUSMB">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Concentracion Total (ng)">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se reportan los valores de absorbancia reportados por el usuario y los
+                                encontrados por la Unidad. El tipo de muestra, rendimiento esperado y observaciones o comentarios
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra" style="width:210px;">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_280 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_230 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_280 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_230 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Tipo"  style="width:40px;">
+                                        <h:outputText value="#{sampleM.getType()}" />
+                                    </p:column>
+                                    <p:column headerText="Rendimiento">
+                                        <h:outputText value="#{sampleM.getRealPerformance()}" />
+                                    </p:column>
+                                    <p:column headerText="Comentario">
+                                        <h:outputText value="#{sampleM.getComments()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN METODOLÓGICA </h3>
+                            
+                            <p>#{reportProjectController.selected.typeMethodology}</p>
+                            
+                            <h3>REPORTE DE CALIDAD</h3>
+                            
+                            <p>El siguiente reporte de calidad reporta el % de GC, rendimiento y % de nucleótidos por base:</p>
+                            
+                            <p><a href="#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}">#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}</a></p>
+            
+                            <p>
+                                <!--En este reporte se aprecia que el rendimiento cumple con el compromiso de entregar
+                                al menos 75% de 10 millones de secuencias solicitadas.
+                                Como resultado de la revisión de estos reportes de calidad, y dado que el promedio
+                                de calidad se encuentra para todas las muestras a lo largo de todas las secuencias
+                                <p:inputText class="insize3" value="{reportProjectController.selectedFieldReport.field3}"/>
+                                de Q30, el porcentaje de GC se apega al teórico y los porcentajes de nucleótidos a lo largo de
+                                todas las bases se comparten dentro de lo esperado, no se realizó ninguna limpieza por calidad
+                                o de adaptadores o para eliminar secuencias repetidas.  -->
+                                En este reporte se aprecia que el rendimiento cumple con el compromiso establecido de entregar 
+                               al menos el 75% de las 5 millones de secuencias solicitadas. 
+                               La calidad promedio de todas las muestras a lo largo de las secuencias alcanza un valor de Q30. 
+                               Además, los porcentajes de nucleótidos a lo largo de todas las bases se mantienen dentro de los 
+                               rangos esperados, y el porcentaje de contenido de GC concuerda con los valores teóricos en todas 
+                               las muestras. La presencia de secuencias de adaptadores o secuencias repetidas es mínima y se 
+                               encuentra dentro del rango esperado. En vista de estos resultados, no se consideró necesario realizar 
+                               limpieza alguna por calidad, de adaptadores, o para eliminar secuencias repetidas.
+                            </p>
+                            
+                            <h3>ANÁLISIS BIOINFORMÁTICO DE ENSAMBLADO DE TRANSCRITO DE NOVO</h3>
+                            
+                            <p>
+                                Inicialmente se generó un ensamblado armado con los 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field4}"/> 
+                                conjuntos de muestras (Archivo 1), usando el programa 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field5}"/>
+                            </p>
+                            <h3>Resumen de los archivos que se entregan:</h3>
+                            <p>Trinity.fasta: Archivo de secuencias en formato FASTA con <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field6}"/> transcritos resultantes del ensamble de novo.
+                            </p>
+
+
+                            <p> <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field7}"/>
+                                Tabla de abundancias por gen y por condición (para <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field25}"/> genes),
+                                obtenida a partir del alineamiento de las secuencias sobre el ensamble “Trinity.fasta”, usando bowtie2 versión 2.3.4.3.
+                                Con esta matriz se realizaron los análisis de expresión diferencial usando 2 métodos (EdgeR y NOISeq) que se explicarán en la siguiente sección.
+                            </p>
+                            <p>
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field23}"/>:
+                                Tabla resultante de la anotación para cada uno de estos ensamblados con el programa
+                                trinotate v3.1.1. En ésta se reportan <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field24}"/> anotaciones para <h:outputLabel class="insize3" value="#{reportProjectController.selectedFieldReport.field25}"/>
+                                genes únicos y <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field6}"/> transcritos únicos que fueron buscados por blastx,
+                                blastp, RNAMMER, se buscó en Pfam, SignalP, TmHMM, eggnog, Kegg, gene_ontology_blast,
+                                gene_ontology_pfam.
+                            </p>
+                            <p>
+                                Y con esta matriz se realizaron los análisis de expresión diferencial usando 4 metodos
+                                (EdgeR, NOISeq, DESeq2 y limma) que se explicaran en la siguiente sección.
+                            </p>
+
+                            <h3>ANÁLISIS BIOINFORMÁTICO DE EXPRESIÓN DIFERENCIAL</h3>
+                            <p>
+                                La tabla de coberturas por gene generada con el programa RSEM v1.3.1, se utilizó como entrada en el
+                                sitio http://www.uusmb.unam.mx/ideamex/ para realizar el Análisis de Expresión Diferencial
+                                considerando las siguientes comparaciones:
+                            </p>
+                             <table class="table1">
+                                <tr>
+                                    <td>Ensamblado</td>
+                                    <td>Número de Transcritos</td>
+                                </tr>
+                                <tr>
+                                    <td>trinity_<p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field26}"/>/Trinity.fasta</td>
+                                    <td><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field27}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>trinity_<p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field28}"/>/Trinity.fasta</td>
+                                    <td><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field29}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>trinity_<p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field30}"/>/Trinity.fasta</td>
+                                    <td><p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field31}"/></td>
+                                </tr>
+                            </table>
+
+
+                            <p>
+                                Para reportar los resultados se utilizaron como líneas de corte un FDR o pvalue menor a 0.05,
+                                una magnitud de cambio superior a 1 (LogFC >=1) y una cuenta por Millón igual a 1 (CPM=1).
+                            </p>
+
+
+                            <p>Se aplicaron 4 métodos de análisis de expresión diferencial:</p>
+
+                            <ul>
+                                <li>edgeR Results</li>
+                                <li>DESeq2 Results</li>
+                                <li>limma Results</li>
+                                <li>NOISeq Results</li>
+                            </ul>
+
+                            <h3>RESULTADOS</h3>
+
+                            <p>
+                                Los resultados se encuentran disponibles en la liga de IDEAmex:
+                                http://www.uusmb.unam.mx/ideamex/<p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field32}"/> En la sección de análisis de datos,
+                                en la gráfica Multidimensional Scaling (MDS),  podemos observar una muy buena distancia
+                                entre los grupos a comparar. En la gráfica de cajas y bigotes,  con las muestras ya normalizadas,
+                                se observan distribuciones muy diferentes para cada especie, cosa que se corrobora con la gráfica
+                                de densidad.
+                            </p>
+
+                            <p>Dentro de cada una de las carpetas:</p>
+
+                            <ul>
+                                <li><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/EdgeR.php"/></li>
+                                <li><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/DESeq2.php"/></li>
+                                <li><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/limma.php"/></li>
+                                <li><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/NOISeq.php"/></li>
+                            </ul>
+
+                            <p>
+                                Encontrará los archivos que contienen en la primera columna los identificadores de todos transcritos
+                                con los valores de expresión diferencial diferente de cero, seguido de los parámetros de cada método
+                                seleccionado, y luego las cuentas crudas y normalizadas para cada réplica de cada muestra.
+                            </p>
+
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/G6vsL6.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/L6vsLactosa.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/GlucosavsLactosa.txt"/></p>
+
+                            <p>
+                                Los archivos siguientes, contienen sólo aquellos genes con una magnitud de cambio mayor a 1
+                                (LogFC >1). y un pvalue "Menor que" 0.05, para aquellos genes con cuentas por millón > 1 (CPM>1):
+                            </p>
+
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/G6vsL6_TOP.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/L6vsLactosa_TOP.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}edgeR_Results/GlucosavsLactosa_TOP.txt"/></p>
+
+                            <p>
+                                Cada método puede generar una lista de genes que pueden coincidir o no, con los otros métodos. en
+                                los archivos siguientes están aquellos genes que fueron reportados como diferencialmente expresados
+                                por más de un método:
+                            </p>
+
+
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/G6vsL6_Intersect.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/L6vsLactosa_Intersect.txt"/></p>
+                            <p><p:link class="insize3" value="http://www.uusmb.unam.mx/ideamex/#{reportProjectController.selectedFieldReport.field32}/edgeR_Results/GlucosavsLactosa_Intersect.txt"/></p>
+
+                            <p>
+                                En la sección
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field21}"/>
+                                , se hace un análisis de integrativo de los resultados dados por cada método,
+                                para cada par de muestras comparadas.
+                            </p>
+
+                            <p>
+                                Los archivos Trinity.fasta (ensamblado de novo), <h:outputLabel class="insize3" value="#{reportProjectController.selectedFieldReport.field7}"/> (matriz de abundancias crudas) y <h:outputLabel class="insize3" value="#{reportProjectController.selectedFieldReport.field23}"/> (anotación automática de los transcritos) pueden ser descargados en la siguiente liga:
+                            </p>
+
+                            <p>
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field22}"/>
+                            </p>
+
+                            
+                            <h3>EVALUACIÓN DEL SERVICIO</h3>
+                            
+                            <p>
+                                Como parte de nuestro proceso de mejora, sería muy útil para nosotros saber su opinión sobre
+                                nuestro servicio, por lo que agradeceremos nos retroalimenta vía el cuestionario:
+                            </p>
+                            
+                            <p>Encuesta de satisfacción</p>
+                            
+                            <div class="container-btn-report ui-g center-gridp btn-form">
+                                <div class="ui-g-2">
+                                    <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{reportProjectController.createFieldReport()}" update="formReportExpresion"/>
+                                </div>
+                                <div class="ui-g-2">
+                                    
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

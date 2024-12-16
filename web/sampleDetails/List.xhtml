@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListSampleDetailsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListSampleDetailsEmpty}" rendered="#{sampleDetailsController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{sampleDetailsController.items.rowCount > 0}">
+                    <h:outputText value="#{sampleDetailsController.pagination.pageFirstItem + 1}..#{sampleDetailsController.pagination.pageLastItem + 1}/#{sampleDetailsController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{sampleDetailsController.previous}" value="#{bundle.Previous} #{sampleDetailsController.pagination.pageSize}" rendered="#{sampleDetailsController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{sampleDetailsController.next}" value="#{bundle.Next} #{sampleDetailsController.pagination.pageSize}" rendered="#{sampleDetailsController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{sampleDetailsController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_userName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.userName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_firstName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_PLastName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.PLastName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_MLastName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.MLastName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_email}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_dependencyName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dependencyName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_role}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.role}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_idProject}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idProject}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_projectName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.projectName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_projectDescription}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.projectDescription}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_requestDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.requestDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_status}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.status}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_quotationNumber}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quotationNumber}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_billNumber}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.billNumber}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_comments}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.comments}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_idSample}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idSample}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListSampleDetailsTitle_sampleName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{sampleDetailsController.prepareView}" value="#{bundle.ListSampleDetailsViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{sampleDetailsController.prepareEdit}" value="#{bundle.ListSampleDetailsEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{sampleDetailsController.destroy}" value="#{bundle.ListSampleDetailsDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandLink action="#{sampleDetailsController.prepareCreate}" value="#{bundle.ListSampleDetailsCreateLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ListSampleDetailsIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

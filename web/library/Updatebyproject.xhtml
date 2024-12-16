@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+             <h:outputText value="Bibliotecas del Proyecto - #{projectController.projectName()} -"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form styleClass="jsfcrud_list_form">
+                
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver a detalles del proyecto" action="#{projectController.redirectSimpleViewProject()}">
+                    <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
+                </p:commandButton>
+                
+                <br/>
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+            
+                    
+            <p:dataTable id="tblLibs"  value="#{libraryController.getLibsByProject()}" var="item" reflow="true"  sortMode="multiple"
+                                     style="border:solid 1px;  border-color: transparent" scrollable="#{libraryController.getLibsByProject().size()>14}" scrollHeight="350" resizableColumns="true" 
+                                     selection="#{libraryController.selectedLibraries}" rowKey="#{item.idLibrary}" >
+                            <f:facet name="header">
+                                Bibliotecas
+                            </f:facet>
+                
+                       <f:facet name="footer">
+                        <h:panelGrid columns="3" style="border-color: transparent">
+                            <p:commandButton  process="tblLibs"  id="createComment" icon="ui-icon-pencil"  oncomplete="PF('SampleDialog').show()"  value="Modificar bibliotecas seleccionadas"></p:commandButton>          
+                        </h:panelGrid>      
+                       </f:facet>
+                           
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center" exportable="false"/>                                                                                    
+                            <p:column headerText="Id biblioteca" width="110" >
+
+                                <h:outputText value="#{item.idLibrary}"/>
+                            </p:column>
+                            
+                             <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Eliminar biblioteca"/>
+                                </f:facet>
+                                 <!--<p:commandButton value="Eliminar" icon="ui-icon-circle-close" widgetVar="DeleteLibDialog" action="{sampleController.DeleteSample(item.idSample)}" update="tbl" disabled="{item.status!='Registrada'}">-->
+                                <p:commandButton value="Eliminar" icon="ui-icon-circle-close" widgetVar="DeleteLibDialog" action="#{libraryController.DeleteSample(item.idSample)}"  >
+                                    <p:confirm header="Eliminar biblioteca" 
+                                               message="¿Esta seguro que desea Eliminar esta biblioteca?" icon="ui-icon-alert" >
+                                    </p:confirm>
+                                </p:commandButton>  
+                             </p:column>
+                            
+                            <p:column width="100" headerText="Id muestra" exportable="false">
+                                 <h:outputText value="#{libraryController.getIdSample(item)}"/>                                                                 
+                            </p:column> 
+                            
+                            <p:column headerText="Nombre de biblioteca" width="250" >   
+                                <h:outputText value="#{libraryController.deleteUserFromNameSample(item.libraryName)}"/>   
+                            </p:column>
+
+                            <p:column width="150" headerText="Plataforma" exportable="false">
+
+                                <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
+                            </p:column>
+                             
+                            
+                            <p:column width="150" headerText="Kit" exportable="false">
+
+                                <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
+                            </p:column>                           
+
+
+                            <p:column width="150" headerText="Tag 1">
+
+                                <h:outputText value="#{item.idBarcode1.indexName}-#{item.idBarcode1.basei7}"/>
+                            </p:column>
+
+                            <p:column width="150" headerText="Tag 2">
+
+                                <h:outputText value="#{libraryController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
+
+                            </p:column>
+                            
+                            <p:column width="130" headerText="Tamaño biblioteca" exportable="false">
+
+                                <h:outputText value="#{item.librarySize}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Concent. por qPCR">
+
+                                <h:outputText value="#{item.qpcrConcentration}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Concent. por Qubit">
+
+                                <h:outputText value="#{item.qubitConcentration}"/>
+                            </p:column>
+                            <p:column width="130" headerText="Concent. Nanomolar">
+
+                                <h:outputText value="#{(item.qubitConcentration/(660* item.librarySize))*1000000}">
+                               <f:convertNumber  maxFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column width="110" headerText="Estatus" exportable="false">
+
+                                <h:outputText value="#{item.preparationStatus}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Fecha Construcción" exportable="false" >
+
+                                <h:outputText value="#{item.preparationDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="150" headerText="Usuario quien registro" >
+
+                                <h:outputText value="#{item.userName}">
+
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+           
+                <br />
+                
+                
+                <p:dialog header="Editar Biblioteca" height="500" widgetVar="SampleDialog" modal="true" resizable="true">
+
+
+                    <p:outputPanel id="SampleDetail" style="text-align: justify" >
+
+                        <p:outputLabel rendered="#{sampleController.sampleTable.size()!=0}" value="Numero de muestras seleccionadas: #{sampleController.sampleTable.size()}" />
+                        <p:outputLabel rendered="#{sampleController.sampleTable.size()==0}" value="Por favor seleccione muestras para su modificación" />
+                                       
+                                <h:panelGrid columns="1" >
+                                     <f:facet name="header">
+                                    Agregue los datos a modificar de la biblioteca
+                                     </f:facet>      
+                               
+                                    
+                                    <p:outputLabel  value="Nombre de biblioteca:" for="cont" />
+                                    <p:inputText  id="cont" value="#{libraryController.selected.libraryName}"  />
+                                    
+                                     <p:outputLabel value="Concentración qPCR:" for="qPCRconcen" rendered="#{sampleController.canEdit()}"/>
+                                     <p:inputText id="qPCRconcen" value="#{libraryController.selected.qpcrConcentration}"  rendered="#{sampleController.canEdit()}">
+                                        <p:keyFilter regEx="/[0-9.]/i" preventPaste="false"/>
+                                    </p:inputText>
+                                     
+                                     <p:outputLabel value="Concentración Qubit:" for="Qubitconcen" rendered="#{sampleController.canEdit()}"/>
+                                     <p:inputText id="Qubitconcen" value="#{libraryController.selected.qubitConcentration}"  rendered="#{sampleController.canEdit()}">
+                                        <p:keyFilter regEx="/[0-9.]/i" preventPaste="false"/>
+                                    </p:inputText>                                      
+                                        
+                                    <p:outputLabel value= "Plataforma:" for="plata"   />
+                                    <p:selectOneMenu id="plata" value="#{libraryController.platafrom}" required="true">                            
+                                      <f:selectItem itemLabel="---" itemValue=""/>
+                                      <f:selectItems value="#{libraryController.allPlataforms}" var="itemPlat" itemLabel="#{itemPlat}" itemValue="#{itemPlat}" />
+                                      <p:ajax event="valueChange" update="kitbyplat,barcodes_tags" listener="#{libraryController.asignarValorCamposEditLib()}" immediate="true" />
+                                      </p:selectOneMenu>
+                                    
+                                    <h:panelGrid id="kitbyplat">
+                                        <p:outputLabel value="Kit a utilizar:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" for="kit" />
+
+                                        <p:selectOneMenu   id="kit" value="#{libraryController.kit}" requiredMessage="Especifique la plataforma y el tipo de kit a utilizar">
+                                            <f:selectItems value="#{libraryController.kits}" var="k" itemLabel="#{k}" itemValue="#{k}" />
+                                            <p:ajax event="valueChange" update="barcodes_tags" listener="#{libraryController.asignarValorCamposEditLib()}" immediate="true" />
+                                        </p:selectOneMenu>
+                                        </h:panelGrid> 
+                                    
+                                    
+                                    <h:panelGrid id="barcodes_tags">
+                                    <p:outputLabel value="Tag 1 (base i7)" for="tag_list" />
+                                    <p:selectOneMenu id="tag_list" value="#{libraryController.selected.idBarcode1}">
+                                          <f:selectItems value="#{libraryController.listBarcodesi7}" var="bi7" itemLabel="#{bi7.indexName}-#{bi7.basei7}" itemValue="#{bi7}" />
+                                          <p:ajax event="valueChange" listener="#{libraryController.asignarValorCamposEditLib()}" immediate="true" />
+                                    </p:selectOneMenu>
+                                    
+                                     <p:outputLabel value="Tag 2 base i5" for="tag_list2"  />
+                                    <p:selectOneMenu id="tag_list2" value="#{libraryController.selected.idBarcode2}">
+                                         <f:selectItems value="#{libraryController.listBarcodesi5}" var="bi5" itemLabel="#{libraryController.getIndexBasei5Create(bi5)}" itemValue="#{bi5}" />
+                                         <p:ajax event="valueChange" listener="#{libraryController.asignarValorCamposEditLib()}" immediate="true" />
+                                    </p:selectOneMenu>
+                                    </h:panelGrid>
+                                    
+                                </h:panelGrid>
+                            
+                       
+                        <div align="center">
+                            <h:panelGrid   columns="2" style="text-align: center">
+                                <p:commandButton  value="Actualizar" icon="ui-icon-disk" action="#{sampleController.updateManySamples()}"/>
+                            </h:panelGrid>
+                        </div>
+                        <!--
+                        se elimino la segunda DataTable
+                        -->
+
+                    </p:outputPanel>
+
+                </p:dialog>
+              
+              
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewGenomeTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewGenomeLabel_idGenome}"/>
+                    <h:outputText value="#{genomeController.selected.idGenome}" title="#{bundle.ViewGenomeTitle_idGenome}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_gi}"/>
+                    <h:outputText value="#{genomeController.selected.gi}" title="#{bundle.ViewGenomeTitle_gi}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_genomeName}"/>
+                    <h:outputText value="#{genomeController.selected.genomeName}" title="#{bundle.ViewGenomeTitle_genomeName}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_genomeLength}"/>
+                    <h:outputText value="#{genomeController.selected.genomeLength}" title="#{bundle.ViewGenomeTitle_genomeLength}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_genomeVersion}"/>
+                    <h:outputText value="#{genomeController.selected.genomeVersion}" title="#{bundle.ViewGenomeTitle_genomeVersion}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_http}"/>
+                    <h:outputText value="#{genomeController.selected.http}" title="#{bundle.ViewGenomeTitle_http}"/>
+                    <h:outputText value="#{bundle.ViewGenomeLabel_source}"/>
+                    <h:outputText value="#{genomeController.selected.source}" title="#{bundle.ViewGenomeTitle_source}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{genomeController.destroyAndView}" value="#{bundle.ViewGenomeDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewGenomeEditLink}"/>
+                <br />
+                <h:commandLink action="#{genomeController.prepareCreate}" value="#{bundle.ViewGenomeCreateLink}" />
+                <br />
+                <h:commandLink action="#{genomeController.prepareList}" value="#{bundle.ViewGenomeShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewGenomeIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

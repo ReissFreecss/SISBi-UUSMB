@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProjectViewDlg" widgetVar="ProjectViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewProjectTitle}" closeOnEscape="true">
+
+            <h:form id="ProjectViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{projectController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_idProject}"/>
+                        <h:outputText value="#{projectController.selected.idProject}" title="#{myBundle.ViewProjectTitle_idProject}"/>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_projectName}"/>
+                        <h:outputText value="#{projectController.selected.projectName}" title="#{myBundle.ViewProjectTitle_projectName}"/>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_projectDescription}"/>
+                        <h:outputText value="#{projectController.selected.projectDescription}" title="#{myBundle.ViewProjectTitle_projectDescription}"/>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_requestDate}"/>
+                        <h:outputText value="#{projectController.selected.requestDate}" title="#{myBundle.ViewProjectTitle_requestDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_status}"/>
+                        <h:outputText value="#{projectController.selected.status}" title="#{myBundle.ViewProjectTitle_status}"/>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_quotationNumber}"/>
+                        <h:outputText value="#{projectController.selected.quotationNumber}" title="#{myBundle.ViewProjectTitle_quotationNumber}"/>
+
+                        <h:outputText value="#{myBundle.ViewProjectLabel_billNumber}"/>
+                        <h:outputText value="#{projectController.selected.billNumber}" title="#{myBundle.ViewProjectTitle_billNumber}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('ProjectViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

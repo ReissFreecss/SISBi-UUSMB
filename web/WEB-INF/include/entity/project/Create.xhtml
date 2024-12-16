@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProjectCreateDlg" widgetVar="ProjectCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateProjectTitle}" closeOnEscape="true">
+
+            <h:form id="ProjectCreateForm">
+
+                <h:panelGroup id="display" rendered="#{projectController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_idProject}" for="idProject" />
+                        <p:inputText id="idProject" value="#{projectController.selected.idProject}" title="#{myBundle.CreateProjectTitle_idProject}" required="true" requiredMessage="#{myBundle.CreateProjectRequiredMessage_idProject}" size="50" maxlength="50"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_projectName}" for="projectName" />
+                        <p:inputText id="projectName" value="#{projectController.selected.projectName}" title="#{myBundle.CreateProjectTitle_projectName}" required="true" requiredMessage="#{myBundle.CreateProjectRequiredMessage_projectName}" size="200" maxlength="200"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_projectDescription}" for="projectDescription" />
+                        <p:inputTextarea rows="4" cols="30" id="projectDescription" value="#{projectController.selected.projectDescription}" title="#{myBundle.CreateProjectTitle_projectDescription}" />
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_requestDate}" for="requestDate" />
+                        <p:calendar id="requestDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{projectController.selected.requestDate}" title="#{myBundle.CreateProjectTitle_requestDate}" required="true" requiredMessage="#{myBundle.CreateProjectRequiredMessage_requestDate}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_status}" for="status" />
+                        <p:inputText id="status" value="#{projectController.selected.status}" title="#{myBundle.CreateProjectTitle_status}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_quotationNumber}" for="quotationNumber" />
+                        <p:inputText id="quotationNumber" value="#{projectController.selected.quotationNumber}" title="#{myBundle.CreateProjectTitle_quotationNumber}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProjectLabel_billNumber}" for="billNumber" />
+                        <p:inputText id="billNumber" value="#{projectController.selected.billNumber}" title="#{myBundle.CreateProjectTitle_billNumber}" size="45" maxlength="45"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{projectController.saveNew}" value="#{myBundle.Save}" update="display,:ProjectListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ProjectCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('ProjectCreateDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

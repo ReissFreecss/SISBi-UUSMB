@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateUserRoleTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_firstName}" for="firstName" />
+                    <h:inputText id="firstName" value="#{userRoleController.selected.firstName}" title="#{bundle.CreateUserRoleTitle_firstName}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_PLastName}" for="PLastName" />
+                    <h:inputText id="PLastName" value="#{userRoleController.selected.PLastName}" title="#{bundle.CreateUserRoleTitle_PLastName}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_MLastName}" for="MLastName" />
+                    <h:inputText id="MLastName" value="#{userRoleController.selected.MLastName}" title="#{bundle.CreateUserRoleTitle_MLastName}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_userName}" for="userName" />
+                    <h:inputText id="userName" value="#{userRoleController.selected.userName}" title="#{bundle.CreateUserRoleTitle_userName}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_dependencyName}" for="dependencyName" />
+                    <h:inputText id="dependencyName" value="#{userRoleController.selected.dependencyName}" title="#{bundle.CreateUserRoleTitle_dependencyName}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_role}" for="role" />
+                    <h:inputText id="role" value="#{userRoleController.selected.role}" title="#{bundle.CreateUserRoleTitle_role}" />
+                    <h:outputLabel value="#{bundle.CreateUserRoleLabel_idProject}" for="idProject" />
+                    <h:inputText id="idProject" value="#{userRoleController.selected.idProject}" title="#{bundle.CreateUserRoleTitle_idProject}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{userRoleController.create}" value="#{bundle.CreateUserRoleSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{userRoleController.prepareList}" value="#{bundle.CreateUserRoleShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateUserRoleIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

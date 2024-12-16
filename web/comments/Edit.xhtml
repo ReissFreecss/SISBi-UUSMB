@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditCommentsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditCommentsLabel_idComment}" for="idComment" />
+                    <h:inputText id="idComment" value="#{commentsController.selected.idComment}" title="#{bundle.EditCommentsTitle_idComment}" required="true" requiredMessage="#{bundle.EditCommentsRequiredMessage_idComment}"/>
+                    <h:outputLabel value="#{bundle.EditCommentsLabel_type}" for="type" />
+                    <h:inputText id="type" value="#{commentsController.selected.type}" title="#{bundle.EditCommentsTitle_type}" required="true" requiredMessage="#{bundle.EditCommentsRequiredMessage_type}"/>
+                    <h:outputLabel value="#{bundle.EditCommentsLabel_idType}" for="idType" />
+                    <h:inputText id="idType" value="#{commentsController.selected.idType}" title="#{bundle.EditCommentsTitle_idType}" required="true" requiredMessage="#{bundle.EditCommentsRequiredMessage_idType}"/>
+                    <h:outputLabel value="#{bundle.EditCommentsLabel_userName}" for="userName" />
+                    <h:inputText id="userName" value="#{commentsController.selected.userName}" title="#{bundle.EditCommentsTitle_userName}" required="true" requiredMessage="#{bundle.EditCommentsRequiredMessage_userName}"/>
+                    <h:outputLabel value="#{bundle.EditCommentsLabel_comment}" for="comment" />
+                    <h:inputText id="comment" value="#{commentsController.selected.comment}" title="#{bundle.EditCommentsTitle_comment}" required="true" requiredMessage="#{bundle.EditCommentsRequiredMessage_comment}"/>
+                </h:panelGrid>
+                <h:commandLink action="#{commentsController.update}" value="#{bundle.EditCommentsSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditCommentsViewLink}"/>
+                <br />
+                <h:commandLink action="#{commentsController.prepareList}" value="#{bundle.EditCommentsShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditCommentsIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

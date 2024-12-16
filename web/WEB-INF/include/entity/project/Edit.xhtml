@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="ProjectEditDlg" widgetVar="ProjectEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditProjectTitle}" closeOnEscape="true">
+
+            <h:form id="ProjectEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{projectController.selected != null}">
+
+
+                        <h:outputLabel value="#{myBundle.EditProjectLabel_idProject}" for="idProject" />
+                        <h:outputText id="idProject" value="#{projectController.selected.idProject}" />
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_projectName}" for="projectName" />
+                        <p:inputText id="projectName" value="#{projectController.selected.projectName}" title="#{myBundle.EditProjectTitle_projectName}" required="true" requiredMessage="#{myBundle.EditProjectRequiredMessage_projectName}" size="200" maxlength="200"/>
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_projectDescription}" for="projectDescription" />
+                        <p:inputTextarea rows="4" cols="30" id="projectDescription" value="#{projectController.selected.projectDescription}" title="#{myBundle.EditProjectTitle_projectDescription}" />
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_requestDate}" for="requestDate" />
+                        <p:calendar id="requestDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{projectController.selected.requestDate}" title="#{myBundle.EditProjectTitle_requestDate}" required="true" requiredMessage="#{myBundle.EditProjectRequiredMessage_requestDate}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_status}" for="status" />
+                        <p:inputText id="status" value="#{projectController.selected.status}" title="#{myBundle.EditProjectTitle_status}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_quotationNumber}" for="quotationNumber" />
+                        <p:inputText id="quotationNumber" value="#{projectController.selected.quotationNumber}" title="#{myBundle.EditProjectTitle_quotationNumber}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditProjectLabel_billNumber}" for="billNumber" />
+                        <p:inputText id="billNumber" value="#{projectController.selected.billNumber}" title="#{myBundle.EditProjectTitle_billNumber}" size="45" maxlength="45"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{projectController.save}" value="#{myBundle.Save}" update="display,:ProjectListForm:datalist,:ProjectListForm:ProjectDataTableContextMenu,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ProjectEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('ProjectEditDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

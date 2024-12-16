@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewUserRoleTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_firstName}"/>
+                    <h:outputText value="#{userRoleController.selected.firstName}" title="#{bundle.ViewUserRoleTitle_firstName}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_PLastName}"/>
+                    <h:outputText value="#{userRoleController.selected.PLastName}" title="#{bundle.ViewUserRoleTitle_PLastName}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_MLastName}"/>
+                    <h:outputText value="#{userRoleController.selected.MLastName}" title="#{bundle.ViewUserRoleTitle_MLastName}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_userName}"/>
+                    <h:outputText value="#{userRoleController.selected.userName}" title="#{bundle.ViewUserRoleTitle_userName}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_dependencyName}"/>
+                    <h:outputText value="#{userRoleController.selected.dependencyName}" title="#{bundle.ViewUserRoleTitle_dependencyName}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_role}"/>
+                    <h:outputText value="#{userRoleController.selected.role}" title="#{bundle.ViewUserRoleTitle_role}"/>
+                    <h:outputText value="#{bundle.ViewUserRoleLabel_idProject}"/>
+                    <h:outputText value="#{userRoleController.selected.idProject}" title="#{bundle.ViewUserRoleTitle_idProject}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{userRoleController.destroyAndView}" value="#{bundle.ViewUserRoleDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewUserRoleEditLink}"/>
+                <br />
+                <h:commandLink action="#{userRoleController.prepareCreate}" value="#{bundle.ViewUserRoleCreateLink}" />
+                <br />
+                <h:commandLink action="#{userRoleController.prepareList}" value="#{bundle.ViewUserRoleShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewUserRoleIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

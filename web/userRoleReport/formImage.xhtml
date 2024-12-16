@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Firma del usuario: #{userRoleReportController.selected.idUser.firstName} #{userRoleReportController.selected.idUser.PLastName}"></h:outputText>
+            <f:event type="preRenderView" listener="location.reload();"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver a la lista" action="#{userRoleReportController.redirectUserRoleReport()}" />
+            </h:form>
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="formImageSing" enctype="multipart/form-data" class="inFontSize" onsubmit="location.reload();">
+                <p:growl id="messages" showDetail="true" />
+                <p:dataTable id="tableImageSing" value="" var=""
+                             style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                             emptyMessage="Ups hubo un error, consulte al programador" 
+                             >
+                    <f:facet name="header">
+                        Imagen de firma
+                    </f:facet>
+                    <p:column headerText="Subir imagen de firma">
+                        <p:growl id="messages" showDetail="true" />
+                        <p:fileUpload fileUploadListener="#{userRoleReportController.uploadFile}"   mode="advanced" dragDropSupport="false" 
+                                      invalidFileMessage="Archivo invalido, se requiere un archivo .jpg" label="Cargar archivo"
+                                      fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="columnImage"
+                                      oncomplete="location.reload();"
+                                      allowTypes="/(\.|\/)(jpe?g)$/"  disabled="#{userRoleReportController.validateBtnUpload()}"/><br/>
+                    </p:column>
+                    <p:column id="columnImage" headerText="Opciones" rendered="#{userRoleReportController.selected.pathimage!=null}">
+                        <a id="showImage" href="#{userRoleReportController.linkDirectoryImageSing}#{userRoleReportController.selected.pathimage}" target="_blank" rendered="#{userRoleReportController.selected.pathimage!=null}">Ver imagen de firma</a>
+                        <!--  
+                        <h:graphicImage id="showImage" style="max-width: 300px" url="#{userRoleReportController.linkDirectoryImageSing}#{userRoleReportController.selected.pathimage}" rendered="#{userRoleReportController.selected.pathimage!=null}" />
+                        -->
+                        <p:commandButton action="#{userRoleReportController.deleteImageSign()}" update="formImageSing" icon="ui-icon-trash" value="Eliminar" rendered="#{userRoleReportController.selected.pathimage!=null}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

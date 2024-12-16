@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+          
+      xmlns:p="http://primefaces.org/ui">
+    
+      <h:head>
+        <title>Falla en el archivo</title>
+       <h:outputStylesheet library="css" name="jsfcrud.css"/>
+    </h:head>
+    
+    <body>
+        <h:form>
+         <div align="center">
+        
+    <br/>
+    <br/>
+   
+    
+             <h1>Error al cargar el archivo</h1>
+               <div align="center">
+                        
+         <img src="../resources/images/error2.png"></img>
+                    </div>
+             <h2> <p:outputLabel value="El archivo no pudo ser cargado debido a alguno de los siguientes problemas:" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color: tomato" rendered="#{!fileController.checkNames}" value="Mas de una muestra tiene el mismo nombre." /> </h2>
+             <h2> <p:outputLabel rendered="#{!fileController.checkNames}" value="Nombre Repetido: #{fileController.nameRepeted}." /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:tomato" rendered="#{!fileController.checkLabels}" value="Mas de un tubo tiene la misma etiqueta." /> </h2>
+             <h2> <p:outputLabel rendered="#{!fileController.checkLabels}" value="Etiqueta repetida: #{fileController.labelRepeted.replaceAll('\\.0', '')}." /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:tomato" rendered="#{!fileController.checkSame}" value="Falta agregar la etiqueta del tubo o nombre a una o mas muestras." /> </h2>
+         
+             
+             <h2> <p:outputLabel style="font-style: italic; color:tomato" rendered="#{!fileController.checkPlataforms}" value="La plataforma debe ser alguna de las siguientes:" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*NextSeq 500" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*MiSeq" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*HiSeq 2000/2500" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*Pac Bio" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*Oxford Nanopore" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*NextSeq 500–Oxf Nanopore" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*MiSeq–Oxf Nanopore" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*HiSeq 2000/2500-Pac Bio" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*HiSeq 2000/2500–Oxf Nanopore" /> </h2>
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="*Pac Bio–Oxf Nanopore" /> </h2>
+             <h2> <p:outputLabel rendered="#{!fileController.checkPlataforms}" style=" color:tomato" value="Plataforma invalidad encontrada: #{fileController.invalidPlataform}" /> </h2>
+          
+             
+             <h2> <p:outputLabel style="font-style: italic; color:seashell" rendered="#{!fileController.checkPlataforms}" value="Si desconoce esta informacion por favor deje esa columna en blanco" /> </h2>
+         
+             <h2> <p:outputLabel  value="Verifique su archivo e intentelo nuevamente." /> </h2>
+             <h2><p:link outcome="Create.xhtml"  value="Volver"/> </h2>
+ 
+         
+         </div>
+        </h:form>
+    </body>
+</html>

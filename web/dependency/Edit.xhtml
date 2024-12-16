@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditDependencyTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_idDependency}" for="idDependency" />
+                    <h:inputText id="idDependency" value="#{dependencyController.selected.idDependency}" title="#{bundle.EditDependencyTitle_idDependency}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_idDependency}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_street}" for="street" />
+                    <h:inputText id="street" value="#{dependencyController.selected.street}" title="#{bundle.EditDependencyTitle_street}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_street}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_location}" for="location" />
+                    <h:inputText id="location" value="#{dependencyController.selected.location}" title="#{bundle.EditDependencyTitle_location}" />
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_postalCode}" for="postalCode" />
+                    <h:inputText id="postalCode" value="#{dependencyController.selected.postalCode}" title="#{bundle.EditDependencyTitle_postalCode}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_postalCode}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_type}" for="type" />
+                    <h:inputText id="type" value="#{dependencyController.selected.type}" title="#{bundle.EditDependencyTitle_type}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_type}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_dependencyName}" for="dependencyName" />
+                    <h:inputText id="dependencyName" value="#{dependencyController.selected.dependencyName}" title="#{bundle.EditDependencyTitle_dependencyName}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_dependencyName}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_institution}" for="institution" />
+                    <h:inputText id="institution" value="#{dependencyController.selected.institution}" title="#{bundle.EditDependencyTitle_institution}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_institution}"/>
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_acronym}" for="acronym" />
+                    <h:inputText id="acronym" value="#{dependencyController.selected.acronym}" title="#{bundle.EditDependencyTitle_acronym}" />
+                    <h:outputLabel value="#{bundle.EditDependencyLabel_idCity}" for="idCity" />
+                    <h:selectOneMenu id="idCity" value="#{dependencyController.selected.idCity}" title="#{bundle.EditDependencyTitle_idCity}" required="true" requiredMessage="#{bundle.EditDependencyRequiredMessage_idCity}">
+                        <f:selectItems value="#{cityController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{dependencyController.update}" value="#{bundle.EditDependencySaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditDependencyViewLink}"/>
+                <br />
+                <h:commandLink action="#{dependencyController.prepareList}" value="#{bundle.EditDependencyShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditDependencyIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

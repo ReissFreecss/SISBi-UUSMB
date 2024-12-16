@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="ProjectEditPage" lazy="true">
+        <pm:header title="#{myBundle.EditProjectTitle}">
+            <h:form>
+                <p:commandButton styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" action="#{mobilePageController.navigateBackInHistory('pm:ProjectListPage')}"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="ProjectEditForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{projectController.selected != null}">
+
+                        <pm:field>
+                            <h:outputLabel value="#{myBundle.EditProjectLabel_idProject}" for="idProject" />
+                            <h:outputText id="idProject" value="#{projectController.selected.idProject}" />
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_projectName}" for="projectName" />
+                            <p:inputText id="projectName" value="#{projectController.selected.projectName}" title="#{myBundle.EditProjectTitle_projectName}" required="true" requiredMessage="#{myBundle.EditProjectRequiredMessage_projectName}" size="200" maxlength="200"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_projectDescription}" for="projectDescription" />
+                            <p:inputTextarea rows="4" cols="30" id="projectDescription" value="#{projectController.selected.projectDescription}" title="#{myBundle.EditProjectTitle_projectDescription}" />
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_requestDate}" for="requestDate" />
+                            <p:calendar id="requestDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{projectController.selected.requestDate}" title="#{myBundle.EditProjectTitle_requestDate}" required="true" requiredMessage="#{myBundle.EditProjectRequiredMessage_requestDate}" showOn="button"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_status}" for="status" />
+                            <p:inputText id="status" value="#{projectController.selected.status}" title="#{myBundle.EditProjectTitle_status}" size="45" maxlength="45"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_quotationNumber}" for="quotationNumber" />
+                            <p:inputText id="quotationNumber" value="#{projectController.selected.quotationNumber}" title="#{myBundle.EditProjectTitle_quotationNumber}" size="45" maxlength="45"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditProjectLabel_billNumber}" for="billNumber" />
+                            <p:inputText id="billNumber" value="#{projectController.selected.billNumber}" title="#{myBundle.EditProjectTitle_billNumber}" size="45" maxlength="45"/>
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{projectController.save}" value="#{myBundle.Save}" update="#{mobilePageController.updatableWidgets(component,'display,:ProjectListPage:ProjectListForm:datalist,:growl')}" action="#{mobilePageController.navigateWithHistory('pm:ProjectListPage')}">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListGenomeTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+        <h:form styleClass="jsfcrud_list_form">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:outputText escape="false" value="#{bundle.ListGenomeEmpty}" rendered="#{genomeController.items.rowCount == 0}"/>
+            <h:panelGroup rendered="#{genomeController.items.rowCount > 0}">
+                <h:outputText value="#{genomeController.pagination.pageFirstItem + 1}..#{genomeController.pagination.pageLastItem + 1}/#{genomeController.pagination.itemsCount}"/>&nbsp;
+                <h:commandLink action="#{genomeController.previous}" value="#{bundle.Previous} #{genomeController.pagination.pageSize}" rendered="#{genomeController.pagination.hasPreviousPage}"/>&nbsp;
+                <h:commandLink action="#{genomeController.next}" value="#{bundle.Next} #{genomeController.pagination.pageSize}" rendered="#{genomeController.pagination.hasNextPage}"/>&nbsp;
+                <h:dataTable value="#{genomeController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_idGenome}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idGenome}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_gi}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.gi}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_genomeName}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.genomeName}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_genomeLength}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.genomeLength}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_genomeVersion}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.genomeVersion}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_http}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.http}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListGenomeTitle_source}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.source}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="&nbsp;"/>
+                        </f:facet>
+                        <h:commandLink action="#{genomeController.prepareView}" value="#{bundle.ListGenomeViewLink}"/>
+                        <h:outputText value=" "/>
+                        <h:commandLink action="#{genomeController.prepareEdit}" value="#{bundle.ListGenomeEditLink}"/>
+                        <h:outputText value=" "/>
+                        <h:commandLink action="#{genomeController.destroy}" value="#{bundle.ListGenomeDestroyLink}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:panelGroup>
+            <br />
+            <h:commandLink action="#{genomeController.prepareCreate}" value="#{bundle.ListGenomeCreateLink}"/>
+            <br />
+            <br />
+            <h:link outcome="/index" value="#{bundle.ListGenomeIndexLink}"/>
+        </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Muestras Registradas"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+           
+
+
+        </ui:define>
+        <ui:define name="body">
+            
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                <p:dialog header="Cargando..." widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false">
+                    <div align="center">
+                        <p:outputLabel value="Espere un momento :)"></p:outputLabel><br></br><br></br>
+                        <p:graphicImage value="../resources/images/load4.gif" width="120" height="120"></p:graphicImage>
+                    </div>
+
+                </p:dialog>
+            
+            
+            
+            <h:form id="form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <p:outputLabel  value="Búsqueda " style="font-size: large" />
+               
+                         <br/>
+                                <br/>
+              <p:panelGrid columns="8"  layout="grid">
+                    <p:outputLabel  value="ID de la muestra: " for="user" />
+                    <p:inputText value="#{userSampleController.ID}" type="number" size="15"/>
+                     <p:outputLabel  value="Nombre de muestra: " for="user" />
+                     <p:inputText value="#{userSampleController.nomMuestra}" size="15"/>
+                     <p:outputLabel  value="ID del tubo: " for="user" />
+                     <p:inputText value="#{userSampleController.idTubo}" size="15"/>
+                     <p:outputLabel  value="Usuario: " for="user" />
+                     <p:selectOneMenu id="user"  value="#{userSampleController.user}" title="Dependencia del usuario" 
+                                     effect="fade"  filter="true" filterMatchMode="contains">
+                          <f:selectItem itemLabel="---" itemValue="---" />
+                         <f:selectItems value="#{usersController.getUsersSamples()}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel  value="Fecha: "/>
+                    <p:calendar    size="10" value="#{userSampleController.fechaIncio}"  mindate="#{userSampleController.minDate}" maxdate="#{userSampleController.maxDate}"  navigator="true" pattern="yyyy-MM-dd" />
+                    <p:calendar    size="10" value="#{userSampleController.fechaTermino}" mindate="#{userSampleController.minDate}" maxdate="#{userSampleController.maxDate}"  navigator="true" pattern="yyyy-MM-dd" />
+ 
+                    
+                    
+                    <p:outputLabel  value="Estatus: " for="estatus"  />
+                    <p:selectOneMenu id="estatus"  value="#{userSampleController.estatus}" >
+                               <f:selectItem itemLabel="---" itemValue="---" />
+                               <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
+                                <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+                                <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                <f:selectItem itemLabel="Preparada" itemValue="Preparada" />
+                                <f:selectItem itemLabel="Forsake" itemValue="Forsake" />
+                                <f:selectItem itemLabel="Forsake (Forsake)" itemValue="Forsake (Forsake)" />
+                                <f:selectItem itemLabel="Rechazada (Forsake)" itemValue="Rechazada (Forsake)" />
+                                <f:selectItem itemLabel="Entregado fastq" itemValue="Entregado fastq" />
+                                <f:selectItem itemLabel="Calidad Aceptada" itemValue="Calidad Aceptada" />
+                                <f:selectItem itemLabel="Calidad Rechazada" itemValue="Calidad Rechazada" />
+                                <f:selectItem itemLabel="Para resecuenciar" itemValue="Para resecuenciar" />
+                                <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
+                                <f:selectItem itemLabel="Construcción ineficiente" itemValue="Construccion ineficiente" />
+                                <f:selectItem itemLabel="Basecalling y QC en proceso" itemValue="Basecalling y QC en proceso" />
+                                <f:selectItem itemLabel="En espera para secuenciación" itemValue="En espera de secuenciacion" />
+                                <f:selectItem itemLabel="En construcción de biblioteca" itemValue="En construccion de biblioteca" />
+                                <f:selectItem itemLabel="En Análisis Bioinformático" itemValue="En Analisis Bioinformatico" />
+                                <f:selectItem itemLabel="Análisis Bioinformático Entregado" itemValue="Analisis Bioinformatico Entregado" />
+                         
+                      </p:selectOneMenu>
+                    
+                    <p:commandButton value="Buscar"  update="form:tbl"/>
+                    <p:commandButton value="Limpiar" action="#{userSampleController.reset()}" update="form:tbl"/>
+                    
+                    
+                </p:panelGrid>
+               <br/>
+                
+               <p:dataTable id="tbl" value="#{userSampleController.getItems()}" rows="50" paginator="true" 
+                            var="item"  widgetVar="table" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="50,100,150" paginatorPosition="bottom"
+                             style="border:solid 1px; border-color: transparent" scrollable="true" scrollHeight="350" resizableColumns="true" reflow="true" 
+                             >
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Búsqueda rápida:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('table').filter()" style="width:150px" placeholder="Buscar"/>
+                        </p:outputPanel>
+                    </f:facet>  
+                      <f:facet name="footer">
+                          Número total de muestras: #{userSampleController.getItems().size()} 
+                     </f:facet>
+
+                      
+                     <p:column width="120" sortBy="#{item.idSample}" filterBy="#{item.idSample}" filterMatchMode="contains" style="width: 200px">
+                        <f:facet name="header">
+                            <p:outputLabel value="ID de la muestra"/>
+                        </f:facet>
+                       <h:outputText value="#{item.idSample}"/>
+                    </p:column>
+              
+
+                    <p:column width="250" sortBy="#{item.sampleName}" filterBy="#{item.sampleName}" filterMatchMode="contains" style="width: 200px">
+                        <f:facet name="header">
+                            <p:outputLabel value="Nombre de la muestra"/>
+                        </f:facet>
+                        <h:outputText value="#{item.sampleName}"/>
+                    </p:column>
+                   
+                   <p:column width="250" sortBy="#{item.idProject}" filterBy="#{item.idProject}" filterMatchMode="contains" style="width: 200px">
+                        <f:facet name="header">
+                            <p:outputLabel value="Id del proyecto"/>
+                        </f:facet>
+                       <h:commandLink style="font-size: 13px" value="#{item.idProject}" action="#{projectController.redirectViewProjectString(item.idProject)}"></h:commandLink>
+                    </p:column>
+                    <p:column width="150" sortBy="#{item.idTube}" filterBy="#{item.idTube}" filterMatchMode="contains">
+                        <f:facet name="header">
+                            <p:outputLabel value="Etiqueta del tubo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idTube}"/>
+                    </p:column>
+
+                    <p:column width="150">
+                        
+                        <f:facet name="header">
+                            <p:outputLabel value="Concentración total de ADN/ARN (ng)"/>
+                        </f:facet>
+                        
+                        <h:outputText value="#{item.sampleQuantity}"/>
+                    </p:column>
+                    
+                        <p:column width="150">
+                            <f:facet name="header">
+                               <p:outputLabel value="Volumen de muestra (μl)"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleVolume}"/>
+                        </p:column>
+                    <p:column width="150" sortBy="#{item.sampleQuality}" filterBy="#{item.sampleQuality}" filterMatchMode="equals" headerText="Calidad"> 
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('table').filter()">
+                                <f:selectItem itemLabel="Todos" itemValue="" />
+                                <f:selectItem itemLabel="Aun no determinada" itemValue="Aun no determinada" />
+                                <f:selectItem itemLabel="Buena" itemValue="Buena" />
+                                <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente Degradada" />
+                                <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                            </p:selectOneMenu>
+                        </f:facet>
+
+                        <h:outputText value="#{item.sampleQuality}"/>
+                    </p:column>
+                    
+                    <p:column width="150" filterBy="#{item.status}" sortBy="#{item.status}" filterMatchMode="equals" headerText="Estatus">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('table').filter()">
+                               <f:selectItem itemLabel="---" itemValue="---" />
+                               <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
+                                <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+                                <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                <f:selectItem itemLabel="Preparada" itemValue="Preparada" />
+                                <f:selectItem itemLabel="Forsake" itemValue="Forsake" />
+                                <f:selectItem itemLabel="Forsake (Forsake)" itemValue="Forsake (Forsake)" />
+                                <f:selectItem itemLabel="Rechazada (Forsake)" itemValue="Rechazada (Forsake)" />
+                                <f:selectItem itemLabel="Entregado fastq" itemValue="Entregado fastq" />
+                                <f:selectItem itemLabel="Calidad Aceptada" itemValue="Calidad Aceptada" />
+                                <f:selectItem itemLabel="Calidad Rechazada" itemValue="Calidad Rechazada" />
+                                <f:selectItem itemLabel="Para resecuenciar" itemValue="Para resecuenciar" />
+                                <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
+                                <f:selectItem itemLabel="Construcción ineficiente" itemValue="Construccion ineficiente" />
+                                <f:selectItem itemLabel="Basecalling y QC en proceso" itemValue="Basecalling y QC en proceso" />
+                                <f:selectItem itemLabel="En espera para secuenciación" itemValue="En espera para secuenciacion" />
+                                <f:selectItem itemLabel="En construcción de biblioteca" itemValue="En construccion de biblioteca" />
+                                <f:selectItem itemLabel="En Análisis Bioinformático" itemValue="En Analisis Bioinformatico" />
+                                <f:selectItem itemLabel="Análisis Bioinformático Entregado" itemValue="Analisis Bioinformatico Entregado" />
+                            </p:selectOneMenu>
+                        </f:facet>
+
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <p:outputLabel value="Tipo de muestra"/>
+                        </f:facet>
+                        <h:outputText value="#{item.type}"/>
+                    </p:column>
+                    <p:column width="150" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Plataforma(s) para la(s) biblioteca(s)"/>
+                            </f:facet>
+                        <h:outputText value="#{item.samplePlataform}"/>
+                        </p:column>
+                   
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <p:outputLabel value="Rendimiento solicitado en millones de lecturas"/>
+                        </f:facet>
+                        <h:outputText value="#{item.expectedPerformance}"/>
+                    </p:column>
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <p:outputLabel value="Rendimiento Real"/>
+                        </f:facet>
+                        <h:outputText value="#{item.realPerformance}"/>
+                    </p:column>
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <p:outputLabel value="Fecha de recepción"/>
+                        </f:facet>
+                        <h:outputText value="#{item.receptionDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <p:outputLabel value="Fecha de entrega"/>
+                        </f:facet>
+                        <h:outputText value="#{item.deliveryDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de inserto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.insertSize}"/>
+                        </p:column>
+                        
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de lectura"/>
+                            </f:facet>
+                            <h:outputText value="#{item.readSize}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Organismo fuente"/>
+                            </f:facet>
+                           <h:outputText value="#{item.organismName}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Organismo de referencia"/>
+                            </f:facet>
+                           <h:outputText value="#{item.referenceName}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Posible contaminante"/>
+                            </f:facet>
+                           <h:outputText value="#{item.contaminantName}"/>
+                        </p:column>
+                    
+                    
+
+
+                    
+
+                </p:dataTable>
+
+
+              
+
+
+                <br />
+                <br />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

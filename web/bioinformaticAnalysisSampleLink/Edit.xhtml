@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditBioinformaticAnalysisSampleLinkTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_startday}" for="startday" />
+                    <h:inputText id="startday" value="#{bioinformaticAnalysisSampleLinkController.selected.startday}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_startday}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_finishdate}" for="finishdate" />
+                    <h:inputText id="finishdate" value="#{bioinformaticAnalysisSampleLinkController.selected.finishdate}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_finishdate}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_link}" for="link" />
+                    <h:inputText id="link" value="#{bioinformaticAnalysisSampleLinkController.selected.link}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_link}" />
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_note}" for="note" />
+                    <h:inputText id="note" value="#{bioinformaticAnalysisSampleLinkController.selected.note}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_note}" />
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_bioinformaticAnalysis}" for="bioinformaticAnalysis" />
+                    <h:selectOneMenu id="bioinformaticAnalysis" value="#{bioinformaticAnalysisSampleLinkController.selected.bioinformaticAnalysis}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_bioinformaticAnalysis}" required="true" requiredMessage="#{bundle.EditBioinformaticAnalysisSampleLinkRequiredMessage_bioinformaticAnalysis}">
+                        <f:selectItems value="#{bioinformaticAnalysisController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditBioinformaticAnalysisSampleLinkLabel_sample}" for="sample" />
+                    <h:selectOneMenu id="sample" value="#{bioinformaticAnalysisSampleLinkController.selected.sample}" title="#{bundle.EditBioinformaticAnalysisSampleLinkTitle_sample}" required="true" requiredMessage="#{bundle.EditBioinformaticAnalysisSampleLinkRequiredMessage_sample}">
+                        <f:selectItems value="#{sampleController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{bioinformaticAnalysisSampleLinkController.update}" value="#{bundle.EditBioinformaticAnalysisSampleLinkSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditBioinformaticAnalysisSampleLinkViewLink}"/>
+                <br />
+                <h:commandLink action="#{bioinformaticAnalysisSampleLinkController.prepareList}" value="#{bundle.EditBioinformaticAnalysisSampleLinkShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditBioinformaticAnalysisSampleLinkIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

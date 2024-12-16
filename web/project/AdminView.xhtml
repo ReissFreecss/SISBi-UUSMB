@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+       >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Detalles del proyecto"></h:outputText>
+                 <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+    </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="form">
+                <h:panelGrid columns="3">
+                
+              <p:button icon="ui-icon-pencil" outcome="AdminEdit.xhtml"  value="Editar Proyecto"/>
+             
+                </h:panelGrid>
+                 <br />
+                 <p:panelGrid columns="2" layout="grid"  >
+                   <p:panelGrid columns="2" >
+                    <f:facet name="header">
+                            Datos Generales
+                        </f:facet>
+                    
+                    
+                    <p:outputLabel value="ID del proyecto:"/>
+                    <p:outputLabel value="#{projectController.selected.idProject}" />
+                    
+                    <p:outputLabel value="Nombre del proyecto:"/>
+                    <p:outputLabel value="#{projectController.selected.projectName}" />
+                    
+                    <p:outputLabel value="Descripcion:"/>
+                    <p:outputLabel value="#{projectController.selected.projectDescription}" />
+                    
+                    
+                    <p:outputLabel value="Fecha de solicitud:"/>
+                    <p:outputLabel value="#{projectController.selected.requestDate}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </p:outputLabel>
+                    
+                    <p:outputLabel value="Estatus:"/>
+                    <p:outputLabel value="#{projectController.selected.status}" />
+                    
+                       
+                    <p:outputLabel value="Método de entrega:"/>
+                    <p:outputLabel value="#{projectController.selected.deliveryMethod}" />
+                    
+                    <p:outputLabel value="Numero de cotizacion:"/>
+                    <p:outputLabel value="#{projectController.selected.quotationNumber}" />
+                    
+                    <p:outputLabel value="Numero de factura:"/>
+                    <p:outputLabel value="#{projectController.selected.billNumber}" />
+                 
+                                       
+                </p:panelGrid>
+                   <p:dataTable   value="#{commentsController.items}" scrollable="true" scrollHeight="125" var="item"  style="border:solid 1px; border-color: #e0cfc2; border-radius: 15px;" reflow="true" emptyMessage="No se han hecho comentarios en este proyecto">
+                     
+                        <f:facet name="header">
+                            Comentarios acerca del proyecto
+                        </f:facet>
+                       <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                           <h:outputText value="#{item.commentDate}">
+                                <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                            </h:outputText>
+                        </p:column>
+                       <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                             <h:outputText value="#{item.userName}"/>
+                        </p:column>
+                     
+                     <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Comentario"/>
+                            </f:facet>
+                            <h:outputText value="#{item.comment}"/>
+                        </p:column>
+                    
+                      <f:facet name="footer">
+                        
+                              <p:commandButton  id="createComment"  oncomplete="PF('CommentDialog').show()"  value="Agregar comentario"></p:commandButton>                 
+                       
+                           
+                        </f:facet>
+                    </p:dataTable>
+                   
+                   
+                </p:panelGrid>
+                 <p:dialog header="Agregar comentario" widgetVar="CommentDialog" modal="true" resizable="false">
+                     <p:outputPanel id="CommentDetail" style="text-align:center;">
+                         <h:panelGrid columns="1" >                       
+                             <p:inputTextarea  value="#{commentsController.comment}"/>
+                             <p:commandButton id="createCommen" action="#{commentsController.redirectView(projectController.selected)}" icon="ui-icon-disk" value="Guardar"/> 
+                         </h:panelGrid>            
+                     </p:outputPanel>
+                     
+                     
+                 </p:dialog>
+                    
+              
+                    
+                 
+                 
+                 
+                <br />
+              
+                
+                <p:dataTable value="#{userRoleController.items}" var="item" style="border:solid 1px;  border-color: transparent"  reflow="true">
+                        
+                     
+                     <f:facet name="header">
+                            Colaboradores en el proyecto
+                        </f:facet>
+                    
+                      <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                            <h:outputText value="#{item.userName}"/>
+                        </p:column>
+                     
+                     <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Paterno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.PLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Materno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.MLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Email"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Telefono"/>
+                            </f:facet>
+                            <h:outputText value="#{item.phoneNumber}"/>
+                        </p:column>
+                       
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Dependencia"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dependencyName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Rol del usuario en el proyecto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.role}"/>
+                        </p:column>
+                      
+                    
+                    </p:dataTable>
+                
+                <br />
+                
+                    
+                     
+                   
+                <p:dataTable id="tbl" value="#{sampleController.itemsProj}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
+                             style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
+                          rowKey="#{item.idSample}">
+                     <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Busqueda rapida:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('table').filter()" style="width:150px" placeholder="Buscar"/>
+                        </p:outputPanel>
+                    </f:facet>  
+                    <f:facet name="footer">
+                        <h:panelGrid columns="1" style="border-color: transparent">
+                         Total de muestras: #{sampleController.itemsProj.size()}
+                        <p:button outcome="/sample/List.xhtml" value="Editar muestras" icon="ui-icon-pencil"/>
+                        </h:panelGrid>
+                        
+                    </f:facet>
+
+                    <p:column width="150" filterMatchMode="contains" filterBy="#{item.sampleName}">
+                           
+                       <f:facet name="header" > 
+                                <p:outputLabel value="Nombre de la muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleName}"/>
+                        </p:column>
+                    
+                   
+                    
+                    <p:column width="150" filterMatchMode="contains" filterBy="#{item.idTube}">
+                            <f:facet name="header">
+                                <p:outputLabel value="Etiqueta del tubo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTube}"/>
+                        </p:column>
+                  
+                        <p:column width="150">
+                            <f:facet name="header">
+                               <p:outputLabel value="Cantidad de muestra (ng)"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleQuantity}"/>
+                        </p:column>
+                    
+                       <p:column width="150">
+                            <f:facet name="header">
+                               <p:outputLabel value="Volumen de muestra (μl)"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleVolume}"/>
+                        </p:column>
+                    
+                        <p:column width="150"  sortBy="#{item.sampleQuality}" filterBy="#{item.sampleQuality}" filterMatchMode="equals" headerText="Calidad">
+                             <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('table').filter()">
+                                <f:selectItem itemLabel="Todos" itemValue="" />
+                                <f:selectItem itemLabel="Aun no determinada" itemValue="Aun no determinada" />
+                                <f:selectItem itemLabel="Buena" itemValue="Buena" />
+                                <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente Degradada" />
+                                <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                            <h:outputText value="#{item.sampleQuality}"/>
+                        </p:column>
+                        <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Descripcion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.description}"/>
+                        </p:column>
+                        <p:column width="150">
+                            <f:facet name="header">
+                               <p:outputLabel value="Estatus"/>
+                            </f:facet>
+                            <h:outputText value="#{item.status}"/>
+                        </p:column>
+                
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tipo de muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.type}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Rendimiento solicitado en millones de lecturas"/>
+                            </f:facet>
+                            <h:outputText value="#{item.expectedPerformance}"/>
+                        </p:column>
+                        
+                    
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de inserto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.insertSize}"/>
+                        </p:column>
+                        
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de lectura"/>
+                            </f:facet>
+                            <h:outputText value="#{item.readSize}"/>
+                        </p:column>
+                    
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Organismo fuente"/>
+                            </f:facet>
+                           <h:outputText value="#{item.organismName}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Organismo de referencia"/>
+                            </f:facet>
+                           <h:outputText value="#{item.referenceName}"/>
+                        </p:column>
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Posible contaminante"/>
+                            </f:facet>
+                           <h:outputText value="#{item.contaminantName}"/>
+                        </p:column>
+                    
+                      
+                       <p:column width="150">
+                            <f:facet name="header">
+                                <p:outputLabel value="Fecha de recepcion"/>
+                            </f:facet>
+                           <h:outputText value="#{item.receptionDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                           </h:outputText>
+                              
+                        </p:column>
+                       
+                  
+                    <p:column width="150">
+                          <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                       <h:outputText value=" "/>
+                       <p:commandButton id="dialog" oncomplete="PF('sampleDialog').show()" value="Mas info" update="form" icon="ui-icon-note" >
+                       
+                           <p:ajax listener="#{genomeSampleController.asignaMuestra(item)}"/>
+                       </p:commandButton>
+                   </p:column>
+                     
+                    
+                  
+                
+                    
+                    
+                     
+                    </p:dataTable>
+     
+                
+        <p:dialog header="Opciones" widgetVar="sampleDialog" modal="true" resizable="false">
+         <p:panelGrid id="detail" columns="2" >
+                            <p:dataTable value="#{genomeSampleController.getGnmSmp()}" var="item4" style="border:solid 1px; border-color: transparent" 
+                                         reflow="true" emptyMessage="No hay genomas asociados a esta muestra" >
+
+                                <f:facet name="header">
+                                    Genomas asociados a la muestra
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre de usuario"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item4.genomeName}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item4.type}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        
+                        
+                            <p:dataTable value="#{bioinformaticAnalysisController.getBioAn()}" var="item5" style="border:solid 1px;  border-color: transparent"  
+                                         reflow="true" emptyMessage="No hay análisis bioinformaticos asociados a esta muestra">
+                            
+                              <f:facet name="header">
+                                   Análisis bioinformáticos solicitados
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Analisis"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item5.analysisName}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:panelGrid>
+                         <p:dataTable   value="#{commentsController.getSamplesItems()}" scrollable="true" scrollHeight="75" var="item6"  style="border:solid 1px; border-color: transparent" reflow="true" emptyMessage="No se han hecho comentarios a esta muestra">
+                     
+                       
+                        <f:facet name="header">
+                         Comentarios
+                        </f:facet>
+                       
+                       <p:column width="100" >
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                           <h:outputText value="#{item6.commentDate}">
+                                <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                            </h:outputText>
+                        </p:column>
+                       <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                             <h:outputText value="#{item6.userName}"/>
+                        </p:column>
+                     
+                     <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Comentario"/>
+                            </f:facet>
+                            <h:outputText value="#{item6.comment}"/>
+                        </p:column>
+                    
+                  
+                     
+                    </p:dataTable>
+
+            
+    </p:dialog>
+                
+                
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

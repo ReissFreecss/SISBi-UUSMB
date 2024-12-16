@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Editar proyecto"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+               <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+                <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+            </h:panelGroup>
+            <h:form id="form">
+                <p:button icon="ui-icon-circle-arrow-w" outcome="ViewProject.xhtml" value="Volver" />
+                <br />
+                <br />
+                <h:panelGrid columns="2">
+                    
+                    <p:outputLabel value="Nombre del proyecto:" for="projectName" />
+                 
+                        <p:inputText id="projectName" value="#{projectController.selectedProject.projectName}" title="#{bundle.EditProjectTitle_projectName}" required="true" requiredMessage="#{bundle.EditProjectRequiredMessage_projectName}"/>
+                  
+
+                    <p:outputLabel value="Descripcion:" for="projectDescription" />
+                    <p:inputTextarea id="projectDescription" value="#{projectController.selectedProject.projectDescription}" title="#{bundle.EditProjectTitle_projectDescription}" />
+
+                    <p:outputLabel value="Estatus del proyecto" for="status" />
+                    <p:selectOneMenu id="status" value="#{projectController.selectedProject.status}">
+                        <f:selectItem itemLabel="Registrado" itemValue="Registrado"/>
+                        <f:selectItem itemLabel="En proceso" itemValue="En proceso" />
+                        <f:selectItem itemLabel="Terminado" itemValue="Terminado" />
+                        <f:selectItem itemLabel="Cancelado" itemValue="Cancelado" />
+                        
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Comentarios:" for="projectComent" />
+                    <p:inputTextarea id="projectComent" value="#{projectController.selectedProject.comments}" />
+                    
+                    <p:outputLabel value="Número de cotizacion:" for="quoNumber" />
+                    <p:inputText id="quoNumber" value="#{projectController.selectedProject.quotationNumber}" />
+                    
+                    <p:outputLabel value="Número de factura:" for="billNumber" />
+                    <p:inputText id="billNumber" value="#{projectController.selectedProject.billNumber}" />
+
+                    
+                </h:panelGrid>
+                
+                    <p:panel id="panelCol" style="background: none; border: none; ">
+                         <h:panelGrid id="gridButton" columns="3">
+                      
+                               <p:outputLabel value="Agregue colaboradores (máximo 5)" style="color: #ffffff" />   
+                               <p:commandButton value="+" action="#{userProjectLinkController.renderCol()}" actionListener="#{userProjectLinkController.addNumber(e)}" 
+                                                update="form" disabled="#{userProjectLinkController.checkAdd}"/>
+                               <p:commandButton value="-"  action="#{userProjectLinkController.renderCol()}" actionListener="#{userProjectLinkController.subsNumber(e)}" 
+                                                update="form" disabled="#{userProjectLinkController.checkSubs}" immediate="true" >
+                                <p:resetInput target="grid" />
+                               
+                               </p:commandButton>
+                                                          
+                      </h:panelGrid>
+                          
+                    <h:panelGrid id="grid" rendered="#{userProjectLinkController.checkCol1}"  columns="5">
+
+                        <h:outputText value="Email de usuario:"  style="color: #ffffff" />
+                     
+                        <p:inputText id="col1"  value="#{userProjectLinkController.email1}"> 
+                            <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist1()}"  />
+                        </p:inputText>  
+                        
+                        <p:graphicImage id="check1" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage1}"/>
+                       
+                        <p:graphicImage id="check2" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage1}"/>
+                        
+                        <p:selectOneRadio id="role1" value="#{userProjectLinkController.selected1.role}" style="color: #ffffff"  
+                                        required="#{userProjectLinkController.checkCol1}" requiredMessage="Rol del primer usuario en el proyecto" >
+                            <f:selectItem itemLabel="Responsable" itemValue="Responsable"  />
+                            <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
+                        
+                         <p:ajax  event="click" update="form" listener="#{userProjectLinkController.existManager1()}"  />
+                        </p:selectOneRadio>
+                        
+                                           
+                    </h:panelGrid>
+                      
+             
+                      
+                      <h:panelGrid id="grid2" rendered="#{userProjectLinkController.checkCol2}"  columns="5">
+                      
+                        <h:outputText value="Email de usuario:"  style="color: #ffffff" />
+                     
+                        <p:inputText id="col2" value="#{userProjectLinkController.email2}">
+                        
+                        <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist2()}"  />
+                        
+                        </p:inputText>             
+                        <p:graphicImage id="check12" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage2}"/>
+                        <p:graphicImage id="check22" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage2}"/>
+                        
+                           <p:selectOneRadio id="role2" value="#{userProjectLinkController.selected2.role}" style="color: #ffffff" 
+                                             required="#{userProjectLinkController.checkCol2}" requiredMessage="Rol del segundo usuario en el proyecto">
+                        <f:selectItem itemLabel="Responsable" itemValue="Responsable"  />
+                        <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
+                         <p:ajax  event="click" update="form" listener="#{userProjectLinkController.existManager2()}"/>
+                    </p:selectOneRadio>
+                                    
+                      </h:panelGrid>
+                   
+                      
+                       <h:panelGrid id="grid3" rendered="#{userProjectLinkController.checkCol3}"  columns="5">
+                           
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+                     
+                        <p:inputText id="col3" value="#{userProjectLinkController.email3}">
+                         <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist3()}"  />
+                        
+                        </p:inputText>             
+                      
+                        <p:graphicImage id="check13" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage3}"/>
+                        <p:graphicImage id="check23" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage3}"/>
+                        
+                        
+                        <p:selectOneRadio id="role3" value="#{userProjectLinkController.selected3.role}" style="color: #ffffff" 
+                                     required="#{userProjectLinkController.checkCol3}" requiredMessage="Rol del tercer usuario en el proyecto"  >
+                        <f:selectItem itemLabel="Responsable" itemValue="Responsable"  />
+                        <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
+                         <p:ajax  event="click" update="form" listener="#{userProjectLinkController.existManager3()}"/>
+                    </p:selectOneRadio>
+                    
+                    </h:panelGrid>
+                          
+                          
+                          
+                       <h:panelGrid id="grid4" rendered="#{userProjectLinkController.checkCol4}"  columns="5">
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+                     
+                        <p:inputText id="col4" value="#{userProjectLinkController.email4}">
+                        <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist4()}"  />
+                        </p:inputText>
+                        
+                         <p:graphicImage id="check14" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage4}"/>
+                         <p:graphicImage id="check24" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage4}"/>
+                      
+                        <p:selectOneRadio id="role4" value="#{userProjectLinkController.selected4.role}" style="color: #ffffff" 
+                                          required="#{userProjectLinkController.checkCol4}" requiredMessage="Rol del cuarto usuario en el proyecto">
+                        <f:selectItem itemLabel="Responsable" itemValue="Responsable"  />
+                        <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
+                         <p:ajax  event="click" update="form" listener="#{userProjectLinkController.existManager4()}"/>
+                    </p:selectOneRadio>
+                    
+                    </h:panelGrid>
+                          
+                          
+                          
+                          
+                       <h:panelGrid id="grid5" rendered="#{userProjectLinkController.checkCol5}"  columns="5">
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+                     
+                        <p:inputText id="col5" value="#{userProjectLinkController.email5}">
+                         <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist5()}"  />
+                        </p:inputText>             
+                    
+                         <p:graphicImage id="check15" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage5}"/>
+                         <p:graphicImage id="check25" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage5}"/>
+                      
+                        <p:selectOneRadio id="role5" value="#{userProjectLinkController.selected5.role}" style="color: #ffffff" 
+                                          required="#{userProjectLinkController.checkCol5}" requiredMessage="Rol del quinto usuario en el proyecto">
+                        <f:selectItem itemLabel="Responsable" itemValue="Responsable"  />
+                        <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
+                         <p:ajax  event="click" update="form" listener="#{userProjectLinkController.existManager5()}"/>
+                    </p:selectOneRadio>
+                    
+                    </h:panelGrid>
+                       
+                      
+                
+                          </p:panel>
+
+
+                <p:commandButton icon="ui-icon-disk" id="create"  action="#{userProjectLinkController.create()}" actionListener="#{projectController.update}" value="Guardar cambios"/>
+                <br />
+                <br />
+              <p:outputLabel id="text" value="#{userProjectLinkController.existTxt}"  style="color: red; background-color: #ffffff"/>
+
+                 <br />
+                <br />
+                <p:dataTable value="#{userRoleController.items}" var="item" style="border:solid 1px" >
+                        
+                     <f:facet name="header">
+                            Colaboradores en el proyecto
+                        </f:facet>
+                    <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Paterno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.PLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Materno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.MLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                            <h:outputText value="#{item.userName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Dependencia"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dependencyName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Rol del usuario en el proyecto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.role}"/>
+                        </p:column>
+                      
+                    
+                    </p:dataTable>
+                 <br />
+                <br />
+                
+                
+              </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
