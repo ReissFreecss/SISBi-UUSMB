@@ -765,7 +765,8 @@
                         <p:dataTable id="tbl" value="#{sampleController.listSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
                                      style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
                                      rowKey="#{item.idSample}" selection="#{sampleController.sampleTable}"  editable="true" editMode="cell"
-                                     disabledTextSelection="false">
+                                     disabledTextSelection="false"
+                                     rowStyleClass="#{sampleController.getRowClass(item)}"> <!-- rowStyleClass para estilo dinamico -->>
                             <f:facet name="header">
 
                                 <p:outputPanel>
