@@ -21,7 +21,7 @@
             <h:form id="form">
                 <p:growl id="msgs" showDetail="true" life="10000"/>
                 <!-- aqui inicia  el form de solictar corizacion -->
-                
+
                 <!--
                 <p:confirmDialog  id="quot" global="false" showEffect="fade" hideEffect="fade" visible="{projectController.checkQuatationProj()}" message="Estimado usuario  de acuerdo a nuestros Registros este proyecto aun no cuenta con una cotizacion registrada" >
                     <h:panelGrid columns="1" id="cotizacion">
@@ -79,11 +79,11 @@
                                   fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
 
                                   auto="true" allowTypes="/(\.|\/)(pdf|jpeg|jpg|png)$/"  /><br/>
-                    
-                     <p:outputLabel style="color:black; font-size: 18px;font-weight: bold" value="Agregue como comprobante de pago:" /><br/>
-                     <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos IBT: Oficio de transferencia o captura de pantalla de SIBIOTEC" /><br/>
-                     <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos UNAM: Póliza de transferencia" /><br/>
-                     <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Externos: Comprobante de depósito bancario o pdf de la transferencia electrónica del banco" /><br/><br/>
+
+                    <p:outputLabel style="color:black; font-size: 18px;font-weight: bold" value="Agregue como comprobante de pago:" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos IBT: Oficio de transferencia o captura de pantalla de SIBIOTEC" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos UNAM: Póliza de transferencia" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Externos: Comprobante de depósito bancario o pdf de la transferencia electrónica del banco" /><br/><br/>
 
                     <h:panelGrid columns="1">
 
@@ -156,13 +156,13 @@
                 <h:panelGrid columns="2">
 
                     <p:commandButton icon="ui-icon-pencil"  disabled="#{projectController.selectedProject.status == 'Terminado' or projectController.selectedProject.status == 'Cancelado'}"  action="#{projectController.prepareEdit()}" value="Editar el proyecto">                  
-                          <!-- leslie: agregue el bloqueo del boton cuando el status del proyecto este terminaod o sea cancelado-->
-                    <f:actionListener binding="#{sampleController.getPrevURL()}"/>
+                        <!-- leslie: agregue el bloqueo del boton cuando el status del proyecto este terminaod o sea cancelado-->
+                        <f:actionListener binding="#{sampleController.getPrevURL()}"/>
                     </p:commandButton>
-                   
+
                     <p:commandButton icon="ui-icon-pencil" action="#{reportProjectController.redirectRepoProject(projectController.selectedProject.idProject)}" value="Generar Reporte Bioinfo" disabled="#{reportProjectController.actBotonReporte(sampleController, projectController.selectedProject.idProject)}" rendered="#{commentsController.checkUser()}"/>
-                
-             
+
+
                 </h:panelGrid>
                 <br />
                 <p:panelGrid columns="2" layout="grid"  >
@@ -196,39 +196,39 @@
                                 <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
                             </p:commandButton>
                         </p:outputPanel>
-                        
+
                         <p:outputLabel value="Cambiar estatus:" rendered="#{sampleController.canEdit()}" />
                         <h:panelGrid columns="2" width="500px" rendered="#{sampleController.canEdit()}" >
-                            
+
                             <!--Termina proyecto-->
                             <!--<p:commandButton rendered="{sampleController.canEdit()}" disabled="{projectController.selectedProject.status == 'Terminado' or projectController.selectedProject.status == 'Cancelado'}"  id="editStatusT" action="{projectController.updateStatus2(1)}" value="Terminar proyecto">
                                          <p:confirm header="Terminar Proyecto" 
                                            message="¿Esta seguro que desea terminar el proyecto?" icon="ui-icon-alert" />
                             </p:commandButton> -->
-                            
+
                             <!--leslie-->
                             <p:commandButton id="btnprojectClose" rendered="#{sampleController.canEdit()}" disabled="#{projectController.selectedProject.status=='Terminado' or projectController.selectedProject.status=='Cancelado'}"  oncomplete="PF('DialogCloseProy').show()" value="Terminar proyecto" icon="ui-icon-clipboard" />
 
                             <!-- fin leslie -->
-                            
-                            
-                          <p:confirmDialog header="Terminar el proyecto" widgetVar="termProjDialog" >
+
+
+                            <p:confirmDialog header="Terminar el proyecto" widgetVar="termProjDialog" >
                                 <p:outputPanel id="termAcept" style="text-align:center;">                                                      
                                     <h:panelGrid columns="1">  
                                         <p:outputLabel style="color:darkslateblue; font-size: 12px;font-weight: bold" value="■ El estatus de las muestras" /><br/>
-                                          <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
+                                        <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
                                         <p:commandButton value="Aceptar" action="{projectController.prepareProjectList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                                         <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
 
                                     </h:panelGrid>
                                 </p:outputPanel>
                             </p:confirmDialog>
-                             <!--fin Termina proyecto-->
-                            
+                            <!--fin Termina proyecto-->
+
                             <!--cancela proyecto-->
                             <p:commandButton rendered="#{sampleController.canEdit()}" disabled="#{projectController.renderCancelProject() or projectController.selectedProject.status == 'Cancelado'
                                                          or projectController.selectedProject.status == 'Terminado' }" id="editStatusC" action="#{projectController.updateStatus2(2)}" value="Cancelar proyecto">
-                                           <p:confirm header="Cancelar Proyecto" 
+                                <p:confirm header="Cancelar Proyecto" 
                                            message="¿Esta seguro que desea cancelar el proyecto?" icon="ui-icon-alert" />
                             </p:commandButton>
                             <p:confirmDialog header="Cancelar el proyecto" widgetVar="cancelProjDialog" >
@@ -250,7 +250,7 @@
                                 <p:outputPanel id="OpenAcept" style="text-align:center;">                                                      
                                     <h:panelGrid columns="1">  
                                         <p:outputLabel style="color:darkslateblue; font-size: 12px;font-weight: bold" value="■ El estatus de las muestras" /><br/>
-                                          <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
+                                        <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
                                         <p:commandButton value="Aceptar" action="#{projectController.prepareProjectList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                                         <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
 
@@ -270,7 +270,7 @@
                         <p:outputLabel value="#{projectController.selectedProject.deliveryMethod}" />
                         <p:outputLabel value="Entrega de resultados:"/>
                         <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado">
-                        <h:outputText value="Ver resultados" style="color: blue; text-decoration: underline" />
+                            <h:outputText value="Ver resultados" style="color: blue; text-decoration: underline" />
                         </h:outputLink>
                         <p:outputLabel value="Método de pago:"/>
                         <p:outputLabel value="#{projectController.selectedProject.type_project}" />
@@ -378,7 +378,7 @@
                                 <f:facet name="header">
                                     Comentarios sobre análisis bioinformático
                                 </f:facet>
-                                
+
                                 <p:column width="10" style="width:35px">
                                     <p:commandButton  id="btnEditCommentBA" icon="ui-icon-pencil" action="#{commentsController.prepareEditCommentBA(commentBA)}" disabled="#{commentsController.canEditComment(commentBA.userName)}" update=":form:opEditCommentBA"  oncomplete="PF('EditCommentBADialog').show()"  ></p:commandButton> 
                                 </p:column>
@@ -571,7 +571,7 @@
                         </h:panelGrid>            
                     </p:outputPanel>
                 </p:dialog>
-                
+
                 <p:dialog header="Editar comentario sobre análisis bioinformático" widgetVar="EditCommentBADialog" modal="true" resizable="true" width="500" height="320" >
                     <p:outputPanel id="opEditCommentBA" style="text-align:center;">
                         <h:panelGrid  columns="1" width="470">                       
@@ -765,8 +765,7 @@
                         <p:dataTable id="tbl" value="#{sampleController.listSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
                                      style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
                                      rowKey="#{item.idSample}" selection="#{sampleController.sampleTable}"  editable="true" editMode="cell"
-                                     disabledTextSelection="false"
-                                     rowStyleClass="#{sampleController.getRowClass(item)}"> <!-- rowStyleClass para estilo dinamico -->>
+                                     disabledTextSelection="false">
                             <f:facet name="header">
 
                                 <p:outputPanel>
@@ -786,7 +785,7 @@
                                     <p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
                                         <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
                                     </p:commandButton>
-                                    
+
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Genera QC Mat.Genético" action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'docx')}" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" ajax="false"/>
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Subir QC Mat.Genético" oncomplete="PF('SampleQCDialog').show()" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" />
                                     <p:commandButton icon="ui-icon-circle-plus" value="Registrar muestra(s) para este proyecto" action="#{sampleController.redirectCreateSample()}" disabled="#{projectController.checkEstatusProj()}">
@@ -803,11 +802,13 @@
                                 <f:facet name="header">
                                     <p:outputLabel value="ID de la muestra"/>
                                 </f:facet>
-                                <h:outputText value="#{item.idSample}"/>
+                                <h:outputText value="#{item.idSample}"
+                                              style="#{commentsController.hasCommentsByType(item) ? 'color: white; background-color: red;' : ''}" />
                             </p:column>
 
                             <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
 
+                               
                                 <f:facet name="header">
                                     <p:outputLabel value="Nombre de la muestra"/>
                                 </f:facet>
@@ -821,42 +822,42 @@
                                 </f:facet>
                                 <h:outputText value="#{item.idTube}"/>
                             </p:column>
-                            
+
                             <p:column width="95" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Tipo de muestra"/>
                                 </f:facet>
                                 <h:outputText value="#{item.type}"/>
                             </p:column>      
-                            
+
                             <p:column width="110" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Depleción rRNA?" />
                                 </f:facet>
                                 <h:outputText value="#{item.deplesion}"/>
                             </p:column>
-                            
+
                             <p:column width="110" exportable="false">
                                 <f:facet name="header"> 
                                     <p:outputLabel value="¿Sólo extracción?" />
                                 </f:facet>
                                 <h:outputText value="#{item.just_genextrac}"/>
                             </p:column>
-                            
+
                             <p:column width="110" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Sólo Análisis Cal.?" />
                                 </f:facet>  
                                 <h:outputText value="#{item.just_qanalysis}"/>
                             </p:column>
-                            
+
                             <p:column width="140" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Sólo Const. biblioteca?" />
                                 </f:facet>
                                 <h:outputText value="#{item.just_lib}"/>
                             </p:column>
-                            
+
                             <p:column width="130" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Sólo secuenciación?" />
@@ -871,51 +872,51 @@
                                 </f:facet>
                                 <h:outputText value="#{item.geneticExtraction}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Requiere cons.biblioteca?" />
                                 </f:facet>
                                 <h:outputText value="#{item.build_lib}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="¿Requiere secuenciación?" />
                                 </f:facet>
                                 <h:outputText value="#{item.do_seq}"/>
                             </p:column>
-                            
+
                             <p:column width="115" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Tipo de organismo"/>
                                 </f:facet>
                                 <h:outputText value="#{item.organism_type}"/>
                             </p:column>  
-                            
-                            
+
+
                             <p:column width="130" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Organismo fuente"/>
                                 </f:facet>
                                 <h:outputText value="#{item.organismName}"/>
                             </p:column>
-                            
-                            
+
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Organismo de referencia"/>
                                 </f:facet>
                                 <h:outputText value="#{item.referenceName}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Posible contaminante"/>
                                 </f:facet>
                                 <h:outputText value="#{item.contaminantName}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Descripción"/>
@@ -982,7 +983,7 @@
                                 </f:facet>
                                 <h:outputText value="#{item.sampleQuality}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <h:outputLink id="content" value="#">
@@ -1002,27 +1003,27 @@
 
                                             <p:outputLabel value="Recibida" style="text-align: center"/>  
                                             <p:outputLabel value="La unidad recibió la muestra." />  
-                                            
+
                                             <p:outputLabel value="Entrega solo extración de material genético" style="text-align: center"/>  
                                             <p:outputLabel value="Se entrego al usuario solo la extraccion" />  
 
                                             <p:outputLabel value="Entrega solo análisis de calidad" style="text-align: center"/>  
                                             <p:outputLabel value="Se entrego al usuario solo el analisis de calidad" />  
-                                            
-                                            
+
+
                                             <p:outputLabel value="En análisis de calidad" style="text-align: center"/>  
                                             <h:panelGrid columns="1" style="padding-left: 0px">
                                                 <p:outputLabel value="La muestra está siendo analizada en cuanto a calidad" />  
                                                 <p:outputLabel value="y concentración total del material genético." />  
                                             </h:panelGrid>
-                                            
-                                            
-                                             <p:outputLabel value="En espera de instrucciones del usuario" style="text-align: center"/>  
+
+
+                                            <p:outputLabel value="En espera de instrucciones del usuario" style="text-align: center"/>  
                                             <h:panelGrid columns="1" style="padding-left: 0px">
                                                 <p:outputLabel value="La muestra está en espera, mientras el usuario comunica si desea continuar" />  
                                                 <p:outputLabel value="realizará remplazo o rechazará las muestras para su procesamiento." />  
                                             </h:panelGrid>
-                                            
+
                                             <!--
                                             En espera de instrucciones por parte del usuario
                                             
@@ -1039,10 +1040,10 @@
                                                 <p:outputLabel value="La muestra no cumple con los requerimientos de concentración" style="text-align: center"/>
                                                 <p:outputLabel value="y/o relaciones de absorbancia" style="text-align: center"/>
                                             </h:panelGrid>-->
-                                            
+
                                             <p:outputLabel value="En construcción de biblioteca" style="text-align: center"/>  
                                             <p:outputLabel value="La muestra está siendo procesada para su secuenciación." />  
-                                            
+
                                             <p:outputLabel value="Entrega solo const. biblioteca" style="text-align: center"/>
                                             <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
 
@@ -1159,24 +1160,24 @@
                                 </f:facet>
                                 <h:outputText value="#{item.aceptation}"/>
                             </p:column>
-                                                 
-                            
-                            
-                            
+
+
+
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Medio de entrega"/>
                                 </f:facet>
                                 <h:outputText value="#{item.delivery}"/>
                             </p:column>
-                            
+
                             <p:column width="130" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Tipo de aplicación"/>
                                 </f:facet>
                                 <h:outputText value="#{item.app_type}"/>
                             </p:column>  
-                            
+
                             <p:column width="160" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Plataforma(s)"/>
@@ -1191,7 +1192,7 @@
                                 </f:facet>
                                 <h:outputText value="#{item.expectedPerformance}"/>
                             </p:column>
-                            
+
                             <p:column width="150" exportable="false">
                                 <f:facet name="header">
                                     <p:outputLabel value="Oxford: Rendimiento solicitado en millones de bases"/>
@@ -1215,7 +1216,7 @@
                                 </f:facet>
                                 <h:outputText value="#{item.readSize}"/>
                             </p:column>
-                                                   
+
 
 
                             <p:column width="120" exportable="false">
@@ -1256,7 +1257,7 @@
 
                 <p:accordionPanel  >
                     <p:tab title="Bibliotecas asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" >   
-                                <!--quite estas opciones del datatbale paginator="true" rows="20" para que fuera el scrollbar -->
+                        <!--quite estas opciones del datatbale paginator="true" rows="20" para que fuera el scrollbar -->
                         <p:dataTable id="tblLibs"  value="#{libraryController.getLibsByProject()}" var="item" reflow="true"  sortMode="multiple"
                                      style="border:solid 1px;  border-color: transparent" scrollable="#{libraryController.getLibsByProject().size()>14}" scrollHeight="350" resizableColumns="true" 
                                      selection="#{libraryController.selectedLibraries}" rowKey="#{item.idLibrary}" >
@@ -1270,26 +1271,26 @@
                                     Total de bibliotecas #{libraryController.getLibsByProject().size()}
                                     <br/> El simbolo � en la Columna Concent.Nanomolar aparece cuando no se han registrado valores en las concentraciones. 
                                     <br/> Una vez registrado la concent. Qubit y el tamaño de la biblioteca se hará el cálculo correspondiente
-                                    </h:panelGrid>
+                                </h:panelGrid>
 
-                                    <h:panelGrid columns="1" style="border-color: transparent">
-                                     <!--<p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="{projectController.redirectLibList()}" disabled="{projectController.checkEstatusProj()}"></p:commandButton>-->
+                                <h:panelGrid columns="1" style="border-color: transparent">
+                                    <!--<p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="{projectController.redirectLibList()}" disabled="{projectController.checkEstatusProj()}"></p:commandButton>-->
                                     <p:commandButton rendered="#{sampleController.canEdit()}" id="libdialog" oncomplete="PF('libDialog').show()" value="Actualizar varias bibliotecas" update="form" icon="ui-icon-note" disabled="#{projectController.checkEstatusProj()}"/>
-                                    </h:panelGrid>
+                                </h:panelGrid>
                             </f:facet>
-                            
-                           
+
+
                             <p:column selectionMode="multiple" style="width:16px;text-align:center" exportable="false"/>
-                            
-                             <p:column width="100" headerText="Id muestra" exportable="false">
-                                 <h:outputText value="#{libraryController.getIdSample(item)}"/>                                                                 
+
+                            <p:column width="100" headerText="Id muestra" exportable="false">
+                                <h:outputText value="#{libraryController.getIdSample(item)}"/>                                                                 
                             </p:column> 
-                            
+
                             <p:column headerText="Id biblioteca" width="110" >
 
                                 <h:outputText value="#{item.idLibrary}"/>
                             </p:column>
-                            
+
                             <p:column headerText="Nombre de biblioteca" width="250" >   
                                 <h:outputText value="#{libraryController.deleteUserFromNameSample(item.libraryName)}"/>   
                             </p:column>
@@ -1298,8 +1299,8 @@
 
                                 <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
                             </p:column>
-                             
-                            
+
+
                             <p:column width="150" headerText="Kit" exportable="false">
 
                                 <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
@@ -1316,7 +1317,7 @@
                                 <h:outputText value="#{libraryController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
 
                             </p:column>
-                            
+
                             <p:column width="130" headerText="Tamaño biblioteca" exportable="false">
 
                                 <h:outputText value="#{item.librarySize}"/>
@@ -1332,10 +1333,10 @@
                             <p:column width="130" headerText="Concent. Nanomolar">
 
                                 <h:outputText value="#{(item.qubitConcentration/(660* item.librarySize))*1000000}">
-                               <f:convertNumber  maxFractionDigits="2" />
+                                    <f:convertNumber  maxFractionDigits="2" />
                                 </h:outputText>
                             </p:column>
-                            
+
                             <!--   <p:column width="75" headerText="Concent. Nanomolar" exportable="false">
                                
 
@@ -1400,8 +1401,8 @@
 
                     </p:tab>  
                 </p:accordionPanel>
-                
-                 <p> </p>
+
+                <p> </p>
 
 
                 <p:accordionPanel  id="accordionResults">
@@ -1428,98 +1429,98 @@
                             <p:column width="45" headerText="Corrida" >
                                 <h:outputText value="#{run}" />
                             </p:column>
-                                <!-- leslie: comente esto porque no es necesario ver la biblioteca asociada
-                            <p:column width="75" headerText="Bibliotecas Asociadas" >
-                                <p:commandButton value="Bibliotecas" icon="ui-icon-disk" oncomplete="PF('LibsDialog').show()" action="#{libraryController.setRunNameSelected(run)}" update="form:Librerias"/>
-                                
-                            </p:column>-->
+                            <!-- leslie: comente esto porque no es necesario ver la biblioteca asociada
+                        <p:column width="75" headerText="Bibliotecas Asociadas" >
+                            <p:commandButton value="Bibliotecas" icon="ui-icon-disk" oncomplete="PF('LibsDialog').show()" action="#{libraryController.setRunNameSelected(run)}" update="form:Librerias"/>
+                            
+                        </p:column>-->
 
                             <p:column width="60" headerText="Reporte de calidad de las muestras" >
 
                                 <p:commandButton icon="ui-icon-circle-plus" value="Ver calidad de las muestras"  action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}" ajax="false"/>
-                                
+
                             </p:column>
                             <p:column width="90" headerText="Reporte de calidad de secuenciación" >
 
                                 <p:commandButton icon="ui-icon-circle-plus" value="Ver reporte de secuenciación" action="#{reportProjectController.verReportPDFFastQC(projectController.selectedProject, run)}" disabled="#{reportProjectController.validateBtnReportPDFFastQC(projectController.selectedProject, run)}" ajax="false"/>
                                 <p:button icon="ui-icon-circle-plus" value="Ver FastQC.html" href="#{libraryController.getQualityReportLink0(run)}" disabled="#{String.valueOf(libraryController.qualityReportByRunName(runName).isEmpty())}"/>
-                                
-                                
+
+
                             </p:column>
 
-                               <!-- Leslie comienza comment07/08/24
-                            <p:column width="95" headerText="Descarga de reportes bioinformáticos" > -->
-                                <!---<p:commandButton icon="ui-icon-circle-plus" value="Descarga último an." ajax="false" action="{reportProjectController.downloadReportsFinal(projectController.selectedProject.idProject, run)}" rendered="{reportProjectController.renderedBtnDescargarReporteFinal(projectController.selectedProject.idProject, run)}"/>-->
-                              <!--  <p:commandButton icon="ui-icon-circle-plus" value="Ver análisis bioinformáticos"  oncomplete="PF('viewBRDialog').show()" disabled="#{reportProjectController.validateBtnLista(projectController.selectedProject.idProject, run)}" rendered="#{sampleController.canEdit()}"/>
-                                <p:dialog header="Reporte(s) Bioinformático(s)" widgetVar="viewBRDialog" modal="true" resizable="false">
-                                    <p:dataTable id="BioInfoReports" value="#{reportProjectController.list_ReportProject(projectController.selectedProject.idProject, run)}" var="Br" style="border:solid 1px;  border-color: transparent"  resizableColumns="true"
-                                                     reflow="true" emptyMessage="">
+                            <!-- Leslie comienza comment07/08/24
+                         <p:column width="95" headerText="Descarga de reportes bioinformáticos" > -->
+                            <!---<p:commandButton icon="ui-icon-circle-plus" value="Descarga último an." ajax="false" action="{reportProjectController.downloadReportsFinal(projectController.selectedProject.idProject, run)}" rendered="{reportProjectController.renderedBtnDescargarReporteFinal(projectController.selectedProject.idProject, run)}"/>-->
+                          <!--  <p:commandButton icon="ui-icon-circle-plus" value="Ver análisis bioinformáticos"  oncomplete="PF('viewBRDialog').show()" disabled="#{reportProjectController.validateBtnLista(projectController.selectedProject.idProject, run)}" rendered="#{sampleController.canEdit()}"/>
+                            <p:dialog header="Reporte(s) Bioinformático(s)" widgetVar="viewBRDialog" modal="true" resizable="false">
+                                <p:dataTable id="BioInfoReports" value="#{reportProjectController.list_ReportProject(projectController.selectedProject.idProject, run)}" var="Br" style="border:solid 1px;  border-color: transparent"  resizableColumns="true"
+                                                 reflow="true" emptyMessage="">
 
-                                        <p:column width="45" headerText="Propietario" >
-                                            <h:outputText value="#{Br.idUser.fullName}" />
-                                        </p:column>
-                                        <p:column width="80" headerText="Path Work/Liga de descarga" >
-                                            <h:outputLink value="#{Br.linkauthorizePDF}" target="_blank" >
-                                                <h:outputText value="#{Br.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
-                                            </h:outputLink>
+                                    <p:column width="45" headerText="Propietario" >
+                                        <h:outputText value="#{Br.idUser.fullName}" />
+                                    </p:column>
+                                    <p:column width="80" headerText="Path Work/Liga de descarga" >
+                                        <h:outputLink value="#{Br.linkauthorizePDF}" target="_blank" >
+                                            <h:outputText value="#{Br.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
+                                        </h:outputLink>
 
-                                        </p:column>
-                                        <p:column width="50" headerText="Fecha de creación" >
-                                            <h:outputText value="#{Br.dateCreate}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column width="65" headerText="Descripción" >
-                                            <h:outputText value="#{Br.name}" />
-                                        </p:column>
-                                    </p:dataTable>
+                                    </p:column>
+                                    <p:column width="50" headerText="Fecha de creación" >
+                                        <h:outputText value="#{Br.dateCreate}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column width="65" headerText="Descripción" >
+                                        <h:outputText value="#{Br.name}" />
+                                    </p:column>
+                                </p:dataTable>
 
-                                </p:dialog>
-                            </p:column>-->
+                            </p:dialog>
+                        </p:column>-->
 
                         </p:dataTable>
-                        
-                        
-                        
-                        
+
+
+
+
                         <p></p>
-                        
+
                         <!-- Leslie inicio reportes sin corridas -->                                           
                         <p:dataTable id="tbinfo" value="#{reportProjectController.ReportsProjectByIdProject(projectController.selectedProject.idProject)}" var="TBinfo"  
                                      style="border:solid 1px;  border-color: transparent" scrollHeight="350" resizableColumns="true" 
-                                      disabledTextSelection="false" emptyMessage="Aun no hay entrega de resultados asociados a este proyecto.">
-                          <f:facet name="header"> Reportes bioinformaticos  </f:facet>
+                                     disabledTextSelection="false" emptyMessage="Aun no hay entrega de resultados asociados a este proyecto.">
+                            <f:facet name="header"> Reportes bioinformaticos  </f:facet>
                             <f:facet name="footer">
                                 <h:panelGrid columns="3" style="border-color: transparent">
                                     <p:commandButton icon="ui-icon-circle-plus" value="Subir reporte bioinformático al proyecto"  oncomplete="PF('BRDialog').show()"  rendered="#{sampleController.canEdit()}"/>
                                     <p:commandButton icon="ui-icon-circle-plus" value="Actualizar"  action="#{projectController.actualizar()}"  rendered="#{sampleController.canEdit()}" ajax="true" update="form:accordionResults:results"/>
                                 </h:panelGrid>
                             </f:facet>                                                                 
-                                        <p:column width="15" headerText="Fecha de creación" >
-                                            <h:outputText value="#{TBinfo.dateCreate}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                                            </h:outputText>
-                                        </p:column>
-                                         <p:column width="40" headerText="Creador del reporte" >
-                                            <h:outputText value="#{TBinfo.idUser.fullName}" />
-                                        </p:column>
-                                        <p:column width="45" headerText="Descripción" >
-                                            <h:outputText value="#{TBinfo.name}" />
-                                        </p:column>
-                                        <p:column width="130" headerText="Liga del reporte " >
-                                            <h:outputLink value="#{TBinfo.linkauthorizePDF}" target="_blank" >
-                                                <h:outputText value="#{TBinfo.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
-                                            </h:outputLink>
-                                        </p:column>
-                            
+                            <p:column width="15" headerText="Fecha de creación" >
+                                <h:outputText value="#{TBinfo.dateCreate}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="40" headerText="Creador del reporte" >
+                                <h:outputText value="#{TBinfo.idUser.fullName}" />
+                            </p:column>
+                            <p:column width="45" headerText="Descripción" >
+                                <h:outputText value="#{TBinfo.name}" />
+                            </p:column>
+                            <p:column width="130" headerText="Liga del reporte " >
+                                <h:outputLink value="#{TBinfo.linkauthorizePDF}" target="_blank" >
+                                    <h:outputText value="#{TBinfo.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
+                                </h:outputLink>
+                            </p:column>
+
                         </p:dataTable>
                         <!-- Fin reportes sin corridas-->
-                        
+
                     </p:tab>   
 
                 </p:accordionPanel>
                 <!-- leslie aqui redirecciona ancla-->
-              <p id="anclaresultado">.</p>
+                <p id="anclaresultado">.</p>
 
 
                 <p:dialog id="viewQRDialog" header="Reporte(s) de calidad" widgetVar="viewQRDialog" modal="true" resizable="false">
@@ -1592,8 +1593,8 @@
                         </h:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
-              
-              
+
+
 
 
 
@@ -1714,7 +1715,7 @@
                                 </h:panelGrid>
 
                             </f:facet>
-                            
+
                             <p:column headerText="Id_biblioteca" width="300" sortBy="#{item.idLibrary}">
 
                                 <h:outputText value="#{item.idLibrary}"/>
@@ -1738,15 +1739,15 @@
                             <p:column headerText="Tamaño de la biblioteca">
                                 <h:outputText value="#{item.librarySize}" />
                             </p:column>
-                            
-                           
-                            </p:dataTable>
+
+
+                        </p:dataTable>
 
 
 
-                                
 
-                        
+
+
                     </h:panelGrid>     
                     <h:panelGrid columns="1">
                         <p:outputLabel value="Por favor seleccione bibliotecas para actualizar" style="font-size: large; font-family:'politica'" rendered="#{libraryController.rederLibraryUpdate()}" />
@@ -1811,20 +1812,20 @@
                     </div>
 
                 </p:dialog>
-                
-                
+
+
                 <!-- delivery date -->
                 <p:dialog id="DialogCloseProy" header="Entrega de resultados" widgetVar="DialogCloseProy" modal="true" showEffect="fade" hideEffect="fade" resizable="false"  responsive="true" width="400">
                     <h:panelGrid columns="3">
-                        
-                   <p:outputLabel for="popup" value="Fecha de entrega resultados:" />
-                   <p:calendar id="popup" value="#{projectController.date2}"  pattern="yyyy/MM/dd"   requiredMessage="El campo fecha de entrega es obligatorio"/>
-                                                         
+
+                        <p:outputLabel for="popup" value="Fecha de entrega resultados:" />
+                        <p:calendar id="popup" value="#{projectController.date2}"  pattern="yyyy/MM/dd"   requiredMessage="El campo fecha de entrega es obligatorio"/>
+
                     </h:panelGrid><br/>
                     <p:commandButton  value="Terminar proyecto" icon="ui-icon-disk" action="#{projectController.updateStatus2(1)}" />
                 </p:dialog>
                 <!-- fin-->
-                
+
 
 
                 <p:dialog header="Confirmación" widgetVar="dialogConfirmationCancelAB" modal="true" resizable="false">

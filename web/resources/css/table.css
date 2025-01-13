@@ -12,3 +12,8 @@ and open the template in the editor.
     background-position: -16px -128px;
     background-image: url("../resources/images/flecha-derecha.jpg") !important;
 }
+
+.row-red {
+    background-color: red !important; /* Fondo de la fila */
+    color: white !important; /* Color de texto */
+}

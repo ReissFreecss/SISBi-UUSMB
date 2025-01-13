@@ -165,30 +165,30 @@ public class CommentsController implements Serializable {
 
         getFacade().createComment(comments);
         System.out.println("pasa por el ejbFacade");
-        
-         //envio de correo con comentario del proyecto obligatorio para todos los usuarios que no sean admin
+
+        //envio de correo con comentario del proyecto obligatorio para todos los usuarios que no sean admin
         if (us.getUserType().equals("Usuario")) {
-        //Obtenemos el registro de colaboradores en el proyecto
-        List<UserRole> usrole = roleFac.findRangeUsersProj(pro.getIdProject());
-        List<String> emails_colab = new ArrayList<>();
-        
+            //Obtenemos el registro de colaboradores en el proyecto
+            List<UserRole> usrole = roleFac.findRangeUsersProj(pro.getIdProject());
+            List<String> emails_colab = new ArrayList<>();
+
             try {
                 for (UserRole user : usrole) {
-                        //Todos esos registros de UserRole con el id de poyecto los guardamos en la lista de email
-                        emails_colab.add(user.getEmail());
-                        System.out.println(user.getEmail());
-                    }
+                    //Todos esos registros de UserRole con el id de poyecto los guardamos en la lista de email
+                    emails_colab.add(user.getEmail());
+                    System.out.println(user.getEmail());
+                }
                 //System.out.println("comentarios del usuario"+us.getUserName()+" para uusmb: " + comment);
                 EmailController ec = new EmailController();
-                
-                String comment_by_user="El usuario <strong>"+us.getUserName()+"</strong>"
-                        +" comentó sobre el proyecto: <strong>"+pro.getIdProject()+"</strong><br>"
-                        +" El siguiente comentario: <br><strong>"+ comment+"</strong>";
-                ec.sendCommentsProject(emails_colab, pro.getIdProject() , comment_by_user, us.getEmail());
+
+                String comment_by_user = "El usuario <strong>" + us.getUserName() + "</strong>"
+                        + " comentó sobre el proyecto: <strong>" + pro.getIdProject() + "</strong><br>"
+                        + " El siguiente comentario: <br><strong>" + comment + "</strong>";
+                ec.sendCommentsProject(emails_colab, pro.getIdProject(), comment_by_user, us.getEmail());
             } catch (Exception ex) {
                 System.out.println("error en el envio de comentario del usuario a uusmb  " + ex.getMessage());
-            }       
-        }                          
+            }
+        }
         comment = null;
 
     }
@@ -482,7 +482,7 @@ public class CommentsController implements Serializable {
     }
      */
     public List<Comments> getItems() {
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
         Project proj = (Project) context.getExternalContext().getSessionMap().get("project");
         context.getExternalContext().getSessionMap().put("item", proj);
@@ -513,6 +513,15 @@ public class CommentsController implements Serializable {
 
         }
         return filteredList;
+    }
+
+    // Obtenemos el item y lo comparamos con la respuesta de la consulta
+    public boolean hasCommentsByType(Sample item) {
+        if (item != null && item.getIdSample() != null) {
+            // Llamamos al método optimizado del AbstractFacade
+            return ejbFacade.hasCommentsByIdType(item.getIdSample().toString());
+        }
+        return false; // Si el item es nulo o no tiene ID, devolvemos false
     }
 
     //Obtener lista de comentarios de sample por medio del id

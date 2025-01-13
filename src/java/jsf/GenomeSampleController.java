@@ -19,8 +19,10 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import jpa.entities.Comments;
 import jpa.entities.Sample;
 import jpa.entities.SampleDetails;
+import org.apache.poi.ss.usermodel.Comment;
 
 @Named("genomeSampleController")
 @SessionScoped
@@ -35,28 +37,27 @@ public class GenomeSampleController implements Serializable {
     private int selectedItemIndex;
 
     public Sample getSelectedSample() {
-        FacesContext context=FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
 
-      context.getExternalContext().getSessionMap().put("sample", selectedSample);
+        context.getExternalContext().getSessionMap().put("sample", selectedSample);
         return selectedSample;
     }
 
     public void setSelectedSample(Sample selectedSample) {
-                  FacesContext context=FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
 
-      context.getExternalContext().getSessionMap().put("sample", selectedSample);
+        context.getExternalContext().getSessionMap().put("sample", selectedSample);
         this.selectedSample = selectedSample;
     }
-    
-    public void asignaMuestra(Sample sam){
-    
-      FacesContext context=FacesContext.getCurrentInstance();
 
-      context.getExternalContext().getSessionMap().put("sample", sam);
-    
+    public void asignaMuestra(Sample sam) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        context.getExternalContext().getSessionMap().put("sample", sam);
+
     }
 
-    
     public GenomeSampleController() {
     }
 
@@ -72,14 +73,11 @@ public class GenomeSampleController implements Serializable {
         return ejbFacade;
     }
 
-   
-
     public String prepareList() {
         recreateModel();
         return "List";
     }
 
-   
     public String prepareCreate() {
         current = new GenomeSample();
         selectedItemIndex = -1;
@@ -97,8 +95,6 @@ public class GenomeSampleController implements Serializable {
         }
     }
 
-  
-
     public String update() {
         try {
             getFacade().edit(current);
@@ -110,39 +106,29 @@ public class GenomeSampleController implements Serializable {
         }
     }
 
-
-
-
-
-    
     public List<GenomeSample> getGnmSmp() {
-        
-   
-   
-    ArrayList <GenomeSample> some=new ArrayList<>();
-      
-  FacesContext context= FacesContext.getCurrentInstance();
-      
-            Sample sam=(Sample) context.getExternalContext().getSessionMap().get("sample");
-        if (sam!=null) {
-            System.out.println("Genomas: "+sam.toString());
-         List<GenomeSample> gs=ejbFacade.findAll();
-    
-     for (GenomeSample gnmsmp : gs) {
-         if (gnmsmp.getIdSample().equals(sam.getIdSample())) {
-             some.add(gnmsmp);
-         }
+
+        ArrayList<GenomeSample> some = new ArrayList<>();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        Sample sam = (Sample) context.getExternalContext().getSessionMap().get("sample");
+        if (sam != null) {
+            System.out.println("Genomas: " + sam.toString());
+            List<GenomeSample> gs = ejbFacade.findAll();
+
+            for (GenomeSample gnmsmp : gs) {
+                if (gnmsmp.getIdSample().equals(sam.getIdSample())) {
+                    some.add(gnmsmp);
+                }
+            }
+
+        }
+        return some;
     }
- 
-    }
-         return some;
-}
+
     private void recreateModel() {
         items = null;
     }
-
-    
-
-
 
 }

@@ -242,9 +242,9 @@ public abstract class AbstractFacade<T> {
         cq.select(cq.from(entityClass));
 
         return getEntityManager().createQuery(cq).getResultList();
-        
-        
+
     }
+
     //-------- búsqueda de comentarios por id de proyecto
     public List<Comments> commentsByProject(String idProject) {
         String sql = "select * from comments where type = 'Project' and id_type=" + "'" + idProject + "';";
@@ -268,9 +268,9 @@ public abstract class AbstractFacade<T> {
         Subida del reporte de calidad llenado por
         La aceptacion de la muestra cambio a
         La calidad de la muestra cambio a
-        */
-        String rejected_cases="comment LIKE 'Esta muestra fue dada de alta por el usuario:%' or comment LIKE 'El usuario % ha cambiado el estatus del proyecto a %' or comment LIKE 'Se cambia el estatus de %' or comment LIKE 'Subida del reporte de calidad llenado por %' or comment LIKE 'La aceptacion de la muestra cambio a %' or comment LIKE 'La calidad de la muestra cambio a %'";
-        String sql = "select * from comments where type = 'Sample' and id_type='" + idSample.toString() + "' and user_name!='SISBI' and NOT ("+rejected_cases+");";
+         */
+        String rejected_cases = "comment LIKE 'Esta muestra fue dada de alta por el usuario:%' or comment LIKE 'El usuario % ha cambiado el estatus del proyecto a %' or comment LIKE 'Se cambia el estatus de %' or comment LIKE 'Subida del reporte de calidad llenado por %' or comment LIKE 'La aceptacion de la muestra cambio a %' or comment LIKE 'La calidad de la muestra cambio a %'";
+        String sql = "select * from comments where type = 'Sample' and id_type='" + idSample.toString() + "' and user_name!='SISBI' and NOT (" + rejected_cases + ");";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
@@ -309,7 +309,7 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
-    
+
     //leslie 05 septiembre
     public List<Kit> findAllKits() {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -683,113 +683,109 @@ public abstract class AbstractFacade<T> {
         Predicate restrictFechas = cb.or(predicFechas, u.get("receptionDate").isNotNull());
         Predicate restrictStatus = cb.equal(u.get("status"), estatus);
         // Predicate restrictNomMuestra=cb.like(u.get("sampleName"), "%"+NomMuestra); original cambio leslie 30/11/23
-        Predicate restrictNomMuestra=cb.like(cb.lower(u.get("sampleName")),"%"+NomMuestra.toLowerCase()+"%");
+        Predicate restrictNomMuestra = cb.like(cb.lower(u.get("sampleName")), "%" + NomMuestra.toLowerCase() + "%");
         // Predicate restrictNomIdTubo=cb.equal(u.get("idTube"), NomIdTubo); original cambio leslie 30/11/23
-        Predicate restrictNomIdTubo=cb.like(cb.lower(u.get("idTube")), "%"+NomIdTubo.toLowerCase()+"%");
-        
+        Predicate restrictNomIdTubo = cb.like(cb.lower(u.get("idTube")), "%" + NomIdTubo.toLowerCase() + "%");
+
         Predicate restrictID = cb.equal(u.get(UserSample_.idSample), id);
-        
-        
 
         cq.select(u);
         int var = 17;
-       /* System.out.println("El estatus es: "+estatus+" y su predicate es: "+restrictStatus);
+        /* System.out.println("El estatus es: "+estatus+" y su predicate es: "+restrictStatus);
         System.out.println("El username es: "+userName+" y su predicate es: "+restrictUserName);
           System.out.println("El nombre de la muestra es: "+NomMuestra+" y el predicate es: "+restrictNomMuestra);*/
 
-       if(userName.equals("---")){
-            var=1;
+        if (userName.equals("---")) {
+            var = 1;
         }
-        
+
         if (estatus.equals("---")) {
             var = 2;
         }
 
-        if(NomMuestra.equals("")){
+        if (NomMuestra.equals("")) {
             var = 3;
         }
-        
-        if(NomIdTubo.equals("")){
+
+        if (NomIdTubo.equals("")) {
             var = 4;
         }
-        
+
         if (estatus.equals("---") && userName.equals("---") && NomMuestra.equals("") && NomIdTubo.equals("")) {
             var = 5;
         }
-        
+
         if (estatus.equals("---") && userName.equals("---") && NomMuestra.equals("") && !NomIdTubo.equals("")) {
             var = 6;
         }
-        
+
         if (estatus.equals("---") && userName.equals("---") && NomIdTubo.equals("") && !NomMuestra.equals("")) {
             var = 7;
         }
-        
-         if (estatus.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("") && !userName.equals("---")) {
+
+        if (estatus.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("") && !userName.equals("---")) {
             var = 8;
         }
-         
-         if (NomIdTubo.equals("") && userName.equals("---") && NomMuestra.equals("") && !estatus.equals("---")) {
+
+        if (NomIdTubo.equals("") && userName.equals("---") && NomMuestra.equals("") && !estatus.equals("---")) {
             var = 9;
         }
-         
-         if(estatus.equals("---") && NomIdTubo.equals("") && !userName.equals("---") && !NomMuestra.equals("")){
-             var = 10;
-         }
-         
-          if(estatus.equals("---") && NomMuestra.equals("") && !NomIdTubo.equals("") && !userName.equals("---")){
-             var = 11;
-         }
-          
-          if(estatus.equals("---") && userName.equals("---") && !NomIdTubo.equals("") && !NomMuestra.equals("")){
-             var = 12;
-         }
-          
-          if(NomIdTubo.equals("") && NomMuestra.equals("") && !estatus.equals("---") && !userName.equals("---")){
-             var = 13;
-         } 
-          
-          if(NomIdTubo.equals("") && userName.equals("---") && !estatus.equals("---") && !NomMuestra.equals("")){
-             var = 14;
-         }
-          
-          if(NomMuestra.equals("") && userName.equals("---") && !estatus.equals("---") && !NomIdTubo.equals("")){
-             var = 15;
-         }
-          
-         if (id != null && estatus.equals("---") && userName.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("")) {
+
+        if (estatus.equals("---") && NomIdTubo.equals("") && !userName.equals("---") && !NomMuestra.equals("")) {
+            var = 10;
+        }
+
+        if (estatus.equals("---") && NomMuestra.equals("") && !NomIdTubo.equals("") && !userName.equals("---")) {
+            var = 11;
+        }
+
+        if (estatus.equals("---") && userName.equals("---") && !NomIdTubo.equals("") && !NomMuestra.equals("")) {
+            var = 12;
+        }
+
+        if (NomIdTubo.equals("") && NomMuestra.equals("") && !estatus.equals("---") && !userName.equals("---")) {
+            var = 13;
+        }
+
+        if (NomIdTubo.equals("") && userName.equals("---") && !estatus.equals("---") && !NomMuestra.equals("")) {
+            var = 14;
+        }
+
+        if (NomMuestra.equals("") && userName.equals("---") && !estatus.equals("---") && !NomIdTubo.equals("")) {
+            var = 15;
+        }
+
+        if (id != null && estatus.equals("---") && userName.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("")) {
             var = 16;
-        } 
-        
+        }
+
         /*Empiezan las nuevas condicionales*/
-       
-        
         //System.out.println("Fecha inicio: "+ fechaInicio+ " - "+"Fecha termino: "+fechaTermino );
-        System.out.println("La opcion es: "+var);
-      
+        System.out.println("La opcion es: " + var);
+
         switch (var) {
             case 17:
-                cq.where(cb.and(cb.and(cb.and(restrictUserName, restrictFechas), restrictStatus,restrictNomMuestra),restrictNomIdTubo));
+                cq.where(cb.and(cb.and(cb.and(restrictUserName, restrictFechas), restrictStatus, restrictNomMuestra), restrictNomIdTubo));
                 q = getEntityManager().createQuery(cq);
                 //cq.distinct(true);
                 break;
             case 1:
-               cq.where(cb.and(cb.and(restrictFechas, restrictStatus),restrictNomIdTubo,restrictNomMuestra));
+                cq.where(cb.and(cb.and(restrictFechas, restrictStatus), restrictNomIdTubo, restrictNomMuestra));
                 q = getEntityManager().createQuery(cq);
                 //cq.distinct(true);
                 break;
             case 2:
-                cq.where(cb.and(cb.and(restrictFechas, restrictUserName),restrictNomIdTubo,restrictNomMuestra));
+                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo, restrictNomMuestra));
                 q = getEntityManager().createQuery(cq);
                 //cq.distinct(true);
                 break;
             case 3:
-                 cq.where(cb.and(cb.and(restrictFechas, restrictUserName),restrictNomIdTubo,restrictStatus));
+                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo, restrictStatus));
                 q = getEntityManager().createQuery(cq);
                 //cq.distinct(true);
                 break;
             case 4:
-                cq.where(cb.and(cb.and(restrictFechas, restrictUserName),restrictNomMuestra,restrictStatus));
+                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomMuestra, restrictStatus));
                 q = getEntityManager().createQuery(cq);
                 break;
             case 5:
@@ -798,49 +794,49 @@ public abstract class AbstractFacade<T> {
                 //cq.distinct(true);
                 break;
             case 6:
-                cq.where(restrictFechas,restrictNomIdTubo);
+                cq.where(restrictFechas, restrictNomIdTubo);
                 q = getEntityManager().createQuery(cq);
                 break;
             case 7:
-                cq.where(restrictFechas,restrictNomMuestra);
+                cq.where(restrictFechas, restrictNomMuestra);
                 q = getEntityManager().createQuery(cq);
                 break;
             case 8:
-                cq.where(restrictFechas,restrictUserName);
+                cq.where(restrictFechas, restrictUserName);
                 q = getEntityManager().createQuery(cq);
                 break;
             case 9:
-                cq.where(restrictFechas,restrictStatus);
+                cq.where(restrictFechas, restrictStatus);
                 q = getEntityManager().createQuery(cq);
-                break; 
+                break;
             case 10:
-                cq.where(cb.and(restrictFechas,restrictUserName),restrictNomMuestra);
+                cq.where(cb.and(restrictFechas, restrictUserName), restrictNomMuestra);
                 q = getEntityManager().createQuery(cq);
-                break; 
+                break;
             case 11:
-                cq.where(cb.and(restrictFechas,restrictUserName),restrictNomIdTubo);
+                cq.where(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo);
                 q = getEntityManager().createQuery(cq);
                 break;
             case 12:
-                cq.where(cb.and(restrictFechas,restrictNomMuestra),restrictNomIdTubo);
+                cq.where(cb.and(restrictFechas, restrictNomMuestra), restrictNomIdTubo);
                 q = getEntityManager().createQuery(cq);
-                break;  
+                break;
             case 13:
-                cq.where(cb.and(restrictFechas,restrictStatus),restrictUserName);
+                cq.where(cb.and(restrictFechas, restrictStatus), restrictUserName);
                 q = getEntityManager().createQuery(cq);
-                break;  
+                break;
             case 14:
-                cq.where(cb.and(restrictFechas,restrictStatus),restrictNomMuestra);
+                cq.where(cb.and(restrictFechas, restrictStatus), restrictNomMuestra);
                 q = getEntityManager().createQuery(cq);
-                break;  
+                break;
             case 15:
-                cq.where(cb.and(restrictFechas,restrictStatus),restrictNomIdTubo);
+                cq.where(cb.and(restrictFechas, restrictStatus), restrictNomIdTubo);
                 q = getEntityManager().createQuery(cq);
-                break;  
+                break;
             case 16:
                 cq.where(restrictID);
                 q = getEntityManager().createQuery(cq).setMaxResults(1);
-                break;    
+                break;
         }
 
         return q.getResultList();
@@ -872,7 +868,7 @@ public abstract class AbstractFacade<T> {
 
     public BioinformaticAnalysis findBionformaticAnalysisByAnalysisId(int id) {
         //javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        TypedQuery<BioinformaticAnalysis> consultaBio= getEntityManager().createNamedQuery("BioinformaticAnalysis.findByIdAnalysis", BioinformaticAnalysis.class);
+        TypedQuery<BioinformaticAnalysis> consultaBio = getEntityManager().createNamedQuery("BioinformaticAnalysis.findByIdAnalysis", BioinformaticAnalysis.class);
         consultaBio.setParameter("idAnalysis", id);
         List<BioinformaticAnalysis> results = consultaBio.getResultList();
         BioinformaticAnalysis gt = results.get(0);
@@ -894,13 +890,8 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
-    */
-    
+     */
     //Nueva consulta para la nueva BD
-    
-    
-    
-
     public List<Library> findLibraryByStatus() {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Library> cq = cb.createQuery(Library.class);
@@ -982,16 +973,13 @@ public abstract class AbstractFacade<T> {
         cq.select(libraryRoot);
         cq.where(cb.equal(sll.get("sample"), sam));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
-        
-        //System.out.println("Se imprime la consulta nueva: " +q.getResultList());
 
+        //System.out.println("Se imprime la consulta nueva: " +q.getResultList());
         return q.getResultList();
 
     }
-    
-    
+
     //leslie obtener el id_sample de las bibliotecas construidas a traves de la tabla sample librarylink
-    
     public List<Sample> findSamplebyIdLib(Library lib) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
@@ -1010,7 +998,6 @@ public abstract class AbstractFacade<T> {
 
     }
     //fin leslie
-    
 
     public int count() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -1202,7 +1189,7 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
-    
+
     public List<Sample> findSampleById(String sm) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Sample> cq = cb.createQuery(Sample.class);
@@ -1285,15 +1272,15 @@ public abstract class AbstractFacade<T> {
             cq.where(cb.equal(Lsll.get(Library_.id), plataform));
             //cq.distinct(true);
         }
-        */
-        /*
+         */
+ /*
         if (!kit.equals("---") && kit != "") {
             System.out.println("Kit: " + kit);
             //predicates.add(cb.equal(Lsll.get(Library_.kit), kit));
             cq.where(cb.equal(Lsll.get(Library_.kit), kit));
 
         }
-        */
+         */
         // 
         cq.select(SampleLinkRoot).distinct(true);
         //cq.distinct(true);
@@ -1313,7 +1300,6 @@ public abstract class AbstractFacade<T> {
 
         //Join<Run, LibraryRunLink> join = runRoot.join(Run_.libraryRunLinkCollection);
         //Join<Library, LibraryRunLink> sll = runRoot.join("id_sample", JoinType.INNER);
-
         cq.select(runRoot);
         //cq.where(cb.equal(join.get("run_id"), id));
         cq.distinct(true);
@@ -1331,8 +1317,7 @@ public abstract class AbstractFacade<T> {
         cq.orderBy(cb.desc(runRoot.get(Run_.runStartday)));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return q.getResultList();
-        
-        
+
     }
 
     public List<Library> findLibraryRUn(Run id) {
@@ -1344,7 +1329,7 @@ public abstract class AbstractFacade<T> {
 
         //Join<Library, LibraryRunLink> join = runRoot.join(Library_.libraryRunLinkCollection);
         Join<Library, LibraryRunLink> join = runRoot.join(Library_.libraryRunLinkList);
-        Join<Library,SampleLibraryLink>sll = runRoot.join(Library_.sampleLibraryList);
+        Join<Library, SampleLibraryLink> sll = runRoot.join(Library_.sampleLibraryList);
         cq.select(runRoot);
         cq.where(cb.equal(join.get("run"), id));
         //leslie 22 agosto agrgue el join SampleLibraryLink, ordenarliberias en la vista de corridas por id_library 
@@ -1353,11 +1338,8 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return q.getResultList();
     }
-    
-    
-    
+
     //27 agosto
-    
     public List<Library> findLibrariesInRunByIdLib(Library id) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
@@ -1367,7 +1349,7 @@ public abstract class AbstractFacade<T> {
 
         //Join<Library, LibraryRunLink> join = runRoot.join(Library_.libraryRunLinkCollection);
         Join<Library, LibraryRunLink> join = runRoot.join(Library_.libraryRunLinkList);
-        Join<Library,SampleLibraryLink>sll = runRoot.join(Library_.sampleLibraryList);
+        Join<Library, SampleLibraryLink> sll = runRoot.join(Library_.sampleLibraryList);
         cq.select(runRoot);
         cq.where(cb.equal(join.get("run"), id));
         //leslie 22 agosto agrgue el join SampleLibraryLink, ordenarliberias en la vista de corridas por id_library 
@@ -1376,7 +1358,6 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return q.getResultList();
     }
-    
 
     public List<LibraryRunLink> findRunByLibrary(Integer id) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -1552,7 +1533,7 @@ public abstract class AbstractFacade<T> {
         //Join<Library, LibraryRunLink> jn = libraryRoot.join(Library_.libraryRunLinkCollection);
         jn = libraryRoot.join("id_library", JoinType.INNER);
         //Join<Library, LibraryRunLink> jn = libraryRoot.join("id_library", JoinType.INNER);
-        
+
         cq.select(libraryRoot);
         cq.where(cb.equal(jn.get(LibraryRunLink_.run), id));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
@@ -1654,14 +1635,15 @@ public abstract class AbstractFacade<T> {
     }
 
     //Obtener Lista de Proyectos que cunplen con los requisitos min.
-    public List<Project> proyectos_con_analisis_bioinformatico_iniciado_o_entregado(){
-    String sql ="select * from project where id_project in (\n" +
-    "select id_project from sample where id_project \n" +
-    "in (select id_project from sample where status='En Analisis Bioinformatico' or status='Analisis Bioinformatico' or status='Analisis Bioinformatico Entregado' group by id_project) \n" +
-    "group by id_project order by id_project)";
-    javax.persistence.Query q = getEntityManager().createNativeQuery(sql,Project.class);
-    return q.getResultList();
+    public List<Project> proyectos_con_analisis_bioinformatico_iniciado_o_entregado() {
+        String sql = "select * from project where id_project in (\n"
+                + "select id_project from sample where id_project \n"
+                + "in (select id_project from sample where status='En Analisis Bioinformatico' or status='Analisis Bioinformatico' or status='Analisis Bioinformatico Entregado' group by id_project) \n"
+                + "group by id_project order by id_project)";
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Project.class);
+        return q.getResultList();
     }
+
     //Busca si existen registro en la tabla de report_project por id_project
     public List<ReportProject> reportProjectByIdProject(String idProject) {
         String sql = "select * from report_project where id_project = '" + idProject + "';";
@@ -1670,16 +1652,16 @@ public abstract class AbstractFacade<T> {
     }
 
     //Conteo del Tamaño d ela lista de los Proyectos que se puede iniciar un reporte
-    public int countProyReport(){
-    String sql ="select * from project where id_project in (\n" +
-    "select id_project from sample where id_project \n" +
-    "in (select id_project from sample where status='En Analisis Bioinformatico' or status='Analisis Bioinformatico' or status='Analisis Bioinformatico Entregado' or status='Entregado fastq' group by id_project) \n" +
-    "group by id_project order by id_project)";
-    javax.persistence.Query q = getEntityManager().createNativeQuery(sql,Project.class);
-    int tam = q.getResultList().size();
-    return tam;
+    public int countProyReport() {
+        String sql = "select * from project where id_project in (\n"
+                + "select id_project from sample where id_project \n"
+                + "in (select id_project from sample where status='En Analisis Bioinformatico' or status='Analisis Bioinformatico' or status='Analisis Bioinformatico Entregado' or status='Entregado fastq' group by id_project) \n"
+                + "group by id_project order by id_project)";
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Project.class);
+        int tam = q.getResultList().size();
+        return tam;
     }
-     
+
     //Obtiene la lista de Muestras segun el id del Proyecto
     public List<Sample> samplesByRepoProject(String idProject) {
         String sql = "select * from sample where id_project=" + "'" + idProject + "' order by id_sample";
@@ -1703,18 +1685,19 @@ public abstract class AbstractFacade<T> {
 
     //Borra todos los elementos de saple_report_project asociados con el reporte mencionado
     public void DeleteRangeSample(int idReportProject) {
-        EntityManager model=getEntityManager();
+        EntityManager model = getEntityManager();
         CriteriaBuilder cb = model.getCriteriaBuilder();
         CriteriaDelete<SampleReportProject> criteriaDelete = cb.createCriteriaDelete(SampleReportProject.class);
         Root<SampleReportProject> root = criteriaDelete.from(SampleReportProject.class);
         criteriaDelete.where(root.get("idReportProject").in(idReportProject));
         javax.persistence.Query q = model.createQuery(criteriaDelete);
-        
+
         int r = q.executeUpdate();
         model.flush();
         //List<SampleReportProject> rs = q.getResultList();
         //int i=5;
     }
+
     //Obitiene el proyecto, busqueda por id del proyecto   
     public List<Project> findProjectXIdProject(String idProject) {
         String sql = "select * from project where id_project = '" + idProject + "'";
@@ -1762,7 +1745,7 @@ public abstract class AbstractFacade<T> {
     }
 
     public void deleteFieldReportByReportProject(int idReportProject) {
-        EntityManager model=getEntityManager();
+        EntityManager model = getEntityManager();
         CriteriaBuilder cb = model.getCriteriaBuilder();
         CriteriaDelete<FieldReport> criteriaDelete = cb.createCriteriaDelete(FieldReport.class);
         Root<FieldReport> root = criteriaDelete.from(FieldReport.class);
@@ -1772,7 +1755,7 @@ public abstract class AbstractFacade<T> {
     }
 
     public int deleteReportByReportProject(int idReportProject) {
-        EntityManager model=getEntityManager();
+        EntityManager model = getEntityManager();
         CriteriaBuilder cb = model.getCriteriaBuilder();
         CriteriaDelete<ReportProject> criteriaDelete = cb.createCriteriaDelete(ReportProject.class);
         Root<ReportProject> root = criteriaDelete.from(ReportProject.class);
@@ -1781,6 +1764,7 @@ public abstract class AbstractFacade<T> {
         int result = q.executeUpdate();
         return result;
     }
+
     /**
      *
      * @param idProject
@@ -1842,6 +1826,7 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
+
     //leslie 24 mayo
     public List<ReportProject> findIdReportProjectByIdProject(String idProject) {
         String sql = "select id_report_project from report_project as r inner join project as p on p.id_project = r.id_project where r.id_project LIKE '%" + idProject + "%' order by r.id_report_project ASC";
@@ -1914,7 +1899,7 @@ public abstract class AbstractFacade<T> {
     //Consulta de plataformas con tag1
     public List<Barcodes> getBarcodeByTag1Unusable(String tag1) {
         String sql = "select * from barcodes where id_barcode='" + tag1 + "' " + "and tag_type like '%i7'";
-        System.out.println("Se imprime la consulta para TAG1: "+sql);
+        System.out.println("Se imprime la consulta para TAG1: " + sql);
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Barcodes.class);
         return q.getResultList();
     }
@@ -1922,7 +1907,7 @@ public abstract class AbstractFacade<T> {
     //Consulta de plataformas con tag1
     public List<Barcodes> getBarcodeByTag2Unusable(String tag2) {
         String sql = "select * from barcodes where id_barcode='" + tag2 + "' " + "and tag_type like '%i5'";
-        System.out.println("Se imprime la consulta para TAG2: "+sql);
+        System.out.println("Se imprime la consulta para TAG2: " + sql);
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Barcodes.class);
         return q.getResultList();
     }
@@ -1946,126 +1931,138 @@ public abstract class AbstractFacade<T> {
     public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) {
         return getEntityManager().createNamedQuery("UserProjectLink.findByIdProject", UserProjectLink.class).setParameter("idProject", id_proyect).getResultList();
     }
-    */
-
+     */
     //Consulta genomes por nombre
-    public List<Genome> getGenomeLikeName(String name){
-        String sql ="select * from genome where genome_name ilike '"+name+"%';";
+    public List<Genome> getGenomeLikeName(String name) {
+        String sql = "select * from genome where genome_name ilike '" + name + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Genome.class);
         return q.getResultList();
     }
-    
+
     //Obtener comentarios por id_type
-   public List<Comments> getCommentsByIdType(String idType){
-        String sql ="select * from comments where id_type = '"+idType+"';";
-        System.out.println("Se imprime la consulta: "+sql);
+    public List<Comments> getCommentsByIdType(String idType) {
+        String sql = "select * from comments where id_type = '" + idType + "';";
+        System.out.println("Se imprime la consulta: " + sql);
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
 
-   public List<Comments> getCommentsByIdTypeAndType(String idType, String type){
+    public List<Comments> getCommentsByIdTypeAndType(String idType, String type) {
         //Esta función, a diferencia de getCommentsByIdType, se cerciora que los matches sean del
         //tipo esperado, no se confía a que no haya IDsd duplicados por ejempl entre muestras y proyectos
-        String sql ="select * from comments where id_type = '"+idType+"' AND type = '" + type + "';";
-        System.out.println("Se imprime la consulta: "+sql);
+        String sql = "select * from comments where id_type = '" + idType + "' AND type = '" + type + "';";
+        System.out.println("Se imprime la consulta: " + sql);
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
-   
-   public List<Comments> getCommentsByIdTypeAndTypeSBD(String idType, String type){
+
+    public List<Comments> getCommentsByIdTypeAndTypeSBD(String idType, String type) {
         //Esta función, es como getCommentsByIdTypeAndType pero ordena los comentaios por fecha
-        String sql ="select * from comments where id_type = '"+idType+"' AND type = '" + type + "' ORDER BY comment_date;";
-        System.out.println("Se imprime la consulta: "+sql);
+        String sql = "select * from comments where id_type = '" + idType + "' AND type = '" + type + "' ORDER BY comment_date;";
+        System.out.println("Se imprime la consulta: " + sql);
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
+
+    public boolean hasCommentsByIdType(String idType) {
+        // Consulta SQL para contar los comentarios con user_name distinto de 'SISBI' y el id_type proporcionado
+        String sql = "SELECT COUNT(id_comment) FROM comments WHERE user_name != 'SISBI' AND id_type = ?";
+
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+        q.setParameter(1, idType);
+
+        Number count = (Number) q.getSingleResult();
+        return count != null && count.intValue() > 0; // Retorna true si el conteo es mayor que cero
+    }
+
     //Obtener dependencias por institución
     public List<Dependency> getDependencyByInstitution(String institution) {
-        String sql = "select * from dependency where unaccent(lower(institution)) = '"+institution+"';";
+        String sql = "select * from dependency where unaccent(lower(institution)) = '" + institution + "';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Dependency.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia apellido paterno
     public List<Users> getUersByPLastName(String pLatName) {
-        String sql = "select * from users where unaccent(lower(p_last_name)) like '%"+pLatName+"%';";
+        String sql = "select * from users where unaccent(lower(p_last_name)) like '%" + pLatName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia apellido materno
     public List<Users> getUersByMLastName(String mLatName) {
-        String sql = "select * from users where unaccent(lower(m_last_name)) like '%"+mLatName+"%';";
+        String sql = "select * from users where unaccent(lower(m_last_name)) like '%" + mLatName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia nombre de usuario
     public List<Users> getUersByNameUser(String nameUser) {
-        String sql = "select * from users where unaccent(lower(user_name)) like '%"+nameUser+"%';";
+        String sql = "select * from users where unaccent(lower(user_name)) like '%" + nameUser + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia nombre de usuario (first name)
     public List<Users> getUersByFirstName(String firstName) {
-        String sql = "select * from users where unaccent(lower(first_name)) like '%"+firstName+"%';";
+        String sql = "select * from users where unaccent(lower(first_name)) like '%" + firstName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia email
     public List<Users> getUersByEmail(String email) {
-        String sql = "select * from users where unaccent(lower(email)) like '%"+email+"%';";
+        String sql = "select * from users where unaccent(lower(email)) like '%" + email + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por coincidencia departamento (department)
     public List<Users> getUersByDepartment(String department) {
-        String sql = "select * from users where unaccent(lower(department)) like '%"+department+"%';";
+        String sql = "select * from users where unaccent(lower(department)) like '%" + department + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por fecha de registro
     public List<Users> getUersByRegistrationDate(String dateRegistration) {
-        String sql = "select * from users where registration_date::date = '"+dateRegistration+"';";
+        String sql = "select * from users where registration_date::date = '" + dateRegistration + "';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener usuarios por búsqueda en diferentes campos
     public List<Users> getUsersGeneralFields(String filtro) {
-        String sql = "select * from users where unaccent(lower(first_name)) like '%"+filtro+"%' or unaccent(lower(p_last_name)) like '%"+filtro+"%' or unaccent(lower(user_name)) like '%"+filtro+"%' or unaccent(lower(email)) like '%"+filtro+"%' or unaccent(lower(department)) like '%"+filtro+"%' or unaccent(lower(m_last_name)) like '%"+filtro+"%';";
+        String sql = "select * from users where unaccent(lower(first_name)) like '%" + filtro + "%' or unaccent(lower(p_last_name)) like '%" + filtro + "%' or unaccent(lower(user_name)) like '%" + filtro + "%' or unaccent(lower(email)) like '%" + filtro + "%' or unaccent(lower(department)) like '%" + filtro + "%' or unaccent(lower(m_last_name)) like '%" + filtro + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
-    
+
     //Obtener los comentarios
     public List<Comments> getCommentsBAbyProject(String idProject) {
-        String sql = "select * from comments where type = 'ProjectBA' and id_type = '"+idProject+"';";
+        String sql = "select * from comments where type = 'ProjectBA' and id_type = '" + idProject + "';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
-    
+
     //Obtener los comentarios
     public List<Comments> getCommentsBAbyProjectSortedByDate(String idProject) {
-        String sql = "select * from comments where type = 'ProjectBA' and id_type = '"+idProject+"' ORDER BY comment_date ASC;";
+        String sql = "select * from comments where type = 'ProjectBA' and id_type = '" + idProject + "' ORDER BY comment_date ASC;";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Comments.class);
         return q.getResultList();
     }
 
     //Obtener correo electrónico
     public List<Users> getEmailUserByEmail(String email) {
-        String sql = "select * from users where email = '"+email+"';";
+        String sql = "select * from users where email = '" + email + "';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
-        
+
     }
-        // Merge yonbras  ----------------------- inicio
+    // Merge yonbras  ----------------------- inicio
 //=======
-public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) {
+
+    public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) {
         return getEntityManager().createNamedQuery("UserProjectLink.findByIdProject", UserProjectLink.class).setParameter("idProject", id_proyect).getResultList();
     }
 
@@ -2077,18 +2074,13 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
         return getEntityManager().createNamedQuery("Dependency.findByIdDependency", Dependency.class).setParameter("idDependency", id_dependency).getResultList().get(0);
 //>>>>>>> 3567-RegistroProyecto
         // Merge yonbras  ----------------------- final
-        
-        
-    }
-    
 
-   
+    }
 
     public BarcodesCons findBarcodesByIdBarcode(Integer id_library) {
-        List<BarcodesCons>resultsList = getEntityManager().createNamedQuery("BarcodesCons.findByIdLibrary", BarcodesCons.class).setParameter("idLibrary", id_library).getResultList();
+        List<BarcodesCons> resultsList = getEntityManager().createNamedQuery("BarcodesCons.findByIdLibrary", BarcodesCons.class).setParameter("idLibrary", id_library).getResultList();
         return resultsList.get(0);
     }
-    
 
     public BarcodesCons findBarcodeByIdLibrary(int idLibrary) {
         String sql = "SELECT row_number() OVER (ORDER BY l.id_library) AS id_registro,\n"
@@ -2099,48 +2091,44 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
                 + "    ( SELECT concat(b.id_barcode, '-', b.sequence) AS concat\n"
                 + "           FROM barcodes b\n"
                 + "          WHERE b.id_index::text = l.id_barcode_2::text) AS id_barcode_2\n"
-                + "   FROM library l where l.id_library = "+idLibrary+"  ;";
+                + "   FROM library l where l.id_library = " + idLibrary + "  ;";
 
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, BarcodesCons.class);
         return (BarcodesCons) q.getResultList().get(0);
     }
-    
-    
-    
-    public List<Library> findLibraryByIdLibrary(int idLibrary){
-        String sql = "select * from library where id_library = "+idLibrary+";";
+
+    public List<Library> findLibraryByIdLibrary(int idLibrary) {
+        String sql = "select * from library where id_library = " + idLibrary + ";";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Library.class);
         return q.getResultList();
     }
 
-    
-    public List<SampleLibraryLink> findRunByIdSampleIdLibrary(int idSample,int idLibrary){
-        String sql = "select * from sample_library_link as sll where sll.id_sample = "+idSample+ " and sll.id_library = "+idLibrary+ ";";
+    public List<SampleLibraryLink> findRunByIdSampleIdLibrary(int idSample, int idLibrary) {
+        String sql = "select * from sample_library_link as sll where sll.id_sample = " + idSample + " and sll.id_library = " + idLibrary + ";";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, SampleLibraryLink.class);
         return q.getResultList();
     }
 
-    
-    public List<Barcodes> findBarcodesByIdIndex(String idIndex){
-        String sql = "select * from barcodes where id_index = '"+idIndex+"';";
+    public List<Barcodes> findBarcodesByIdIndex(String idIndex) {
+        String sql = "select * from barcodes where id_index = '" + idIndex + "';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Barcodes.class);
         return q.getResultList();
     }
-    
+
     ////Busca relacion plataform_link_kit por medio del id de plataforma e id kit
-    public List<PlataformLinkKit> findPlataformLinkKitByIds(int idPlataform, int idKit){
-        String sql = "select * from plataform_link_kit where id_plataform = "+idPlataform+" and id_kit = "+idKit+";";
+    public List<PlataformLinkKit> findPlataformLinkKitByIds(int idPlataform, int idKit) {
+        String sql = "select * from plataform_link_kit where id_plataform = " + idPlataform + " and id_kit = " + idKit + ";";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, PlataformLinkKit.class);
         return q.getResultList();
     }
-    
+
     //Busca relacion plataform_link_kit por medio de id plataforma
-    public List<PlataformLinkKit> findPlataformLinkKitByIdPlataform(int idPlataform){
-        String sql = "select * from plataform_link_kit where id_plataform = "+idPlataform+";";
+    public List<PlataformLinkKit> findPlataformLinkKitByIdPlataform(int idPlataform) {
+        String sql = "select * from plataform_link_kit where id_plataform = " + idPlataform + ";";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, PlataformLinkKit.class);
         return q.getResultList();
     }
-    
+
     /*
     //Busca una plataforma por medio del nombre de la pataforma
     public List<Plataform> findNamePlataformsbyName(String namePlataform){
@@ -2148,7 +2136,6 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Plataform.class);
         return q.getResultList();
     }*/
-    
     //Devuelve todas las plataformas
     public List<Plataform> findAllPlataforms() {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -2161,7 +2148,7 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
 
         return q.getResultList();
     }
-    
+
     //Devuelve todas las plataformas
     public List<Plataform> findPlataformByName(String plataformName) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -2176,7 +2163,7 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
         return q.getResultList();
         //return q.getResultList();
     }
-    
+
     //Busqueda de kit por medio del nombre
     public List<Kit> findKitByName(String nameKit) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -2191,40 +2178,38 @@ public List<UserProjectLink> findUserProjectLinkByIdProyecto(String id_proyect) 
         return q.getResultList();
         //return q.getResultList();
     }
-    
+
     public List<Barcodes> findBarcodesi7byIdKit(int idKit) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Barcodes> cq = cb.createQuery(Barcodes.class);
         Root<Barcodes> BarcodesRoot = cq.from(Barcodes.class);
-        
+
         Predicate Restrict1 = cb.equal(BarcodesRoot.get(Barcodes_.idKit), idKit);
         Predicate Restrict2 = cb.isNotNull(BarcodesRoot.get(Barcodes_.basei7));
         Predicate condition = cb.and(Restrict1, Restrict2);
         cq.select(BarcodesRoot);
         cq.where(condition);
-        
+
         javax.persistence.Query q = getEntityManager().createQuery(cq);
 
         return q.getResultList();
     }
-    
+
     //MÉTODOS USADOS PARA LA CREACIÓN DE BIBLIOTECAS POR MEDIO DEL EXCEL
-    
     //buscar barcode por medio del index_name
     public List<Barcodes> findBarcodeByIndexName(String index_name) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Barcodes> cq = cb.createQuery(Barcodes.class);
         Root<Barcodes> BarcodesRoot = cq.from(Barcodes.class);
-        
+
         Predicate pre1 = cb.equal(BarcodesRoot.get(Barcodes_.indexName), index_name);
         cq.select(BarcodesRoot);
         cq.where(pre1);
-        
+
         javax.persistence.Query q = getEntityManager().createQuery(cq);
 
         return q.getResultList();
     }
-
 
 }
 

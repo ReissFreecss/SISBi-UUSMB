@@ -3,6 +3,7 @@
   <persistence-unit name="SISBIPU" transaction-type="JTA">
     <jta-data-source>java:app/sisbi_db</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <validation-mode>NONE</validation-mode>
     <properties>
     </properties>
   </persistence-unit>
