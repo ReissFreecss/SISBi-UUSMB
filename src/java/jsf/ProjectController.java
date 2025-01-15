@@ -1724,7 +1724,7 @@ public class ProjectController implements Serializable {
     /**
      *  Viernes 10/ene/2025 
      *  Se crea nuevo metodo a partir de getParamProjectId
-     * @return
+     * @returnx
      */
     public List<Project> getQueryParamProjectId(){                
         FacesContext context = FacesContext.getCurrentInstance();

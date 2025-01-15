@@ -18,7 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -475,6 +477,25 @@ public class FileController implements Serializable {
         //boolean saveDataIllumina = false;
         //boolean saveDataOxford = false;
 
+        //  08/ene/2025     Juan Antonio Villalba Luna
+        //  Array asociativo aplicado como diccionario y validar 
+        //  tipo de aplicacion
+        Map<String, String> appType = new HashMap<String, String>();
+        appType.put("1", "Genómica");
+        appType.put("2", "Metagenómica");
+        appType.put("3", "Amplicón 16S");
+        appType.put("4", "Amplicón ITS");
+        appType.put("5", "Amplicón 18S");
+        appType.put("6", "Amplicón CO1");
+        appType.put("7", "Amplicón trnL");
+        appType.put("8", "Chip seq");
+        appType.put("9", "RNAseq");
+        appType.put("10", "mRNA");
+        appType.put("11", "RNA viral");
+        appType.put("12", "smallRNA");
+        
+        String itemAppType = "";    //  inicializamos por si no entra en el switch      
+        
         try {
 
             setCountSamples(0);
@@ -597,6 +618,20 @@ public class FileController implements Serializable {
                         return;
                     }
                     //Validamos que contenga caracteres correctos
+                    /*
+                        08/ene/2025  Juan Antonio Viallalba Luna
+                    
+                        TODO:   Reestructurar validacion negando el matches
+                                if (!itemNameTube.matches("[0-9a-zA-Z_]+")) {                    
+                                    RequestContext cont = RequestContext.getCurrentInstance();
+                                    cont.execute("PF('statusDialogUploadFile').hide();");
+                                    messageDialog = "Se encontraron caracteres no válidos en el nombre del tubo:  " + itemNameTube + "   En la fila: " + countRowValidation + " del archivo";
+                                    messageDialog2 = "El nombre del tubo debe iniciar con una letra,no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
+                                    cont.execute("PF('dialogDetailError').show();");
+                                    return;
+                                }
+                        
+                    */
                     if (itemNameTube.matches("[0-9a-zA-Z_]+")) {
                     } else {
                         RequestContext cont = RequestContext.getCurrentInstance();
@@ -854,6 +889,49 @@ public class FileController implements Serializable {
                         
                         //Si se aplicará las operaciones al momento de registrar en la BD
                         //saveDataOxford = true;
+                    }
+                    
+                    /*
+                        08/ene/2025     Juan Antonio Villalba Luna
+                        Verificando que la opcion indicada para el tipo de aplicacion este entre A y L
+                    */
+                    String opcionAppType = parameters.get(colAppType).trim().replace(".0", "");
+                                  
+                    
+                    // si la celda no es vacia comparmoa los valores
+                    if (!opcionAppType.equals("")) {
+                        //  FIX:    10/ene/2025 Juan Antonio  
+                        //  Regex ^([1-9]|1[012])$ Numero entre 1 y 12
+                        //  opcionAppType = opcionAppType.replaceAll("[^a-zA-Z]", "").toUpperCase();
+                        //  Se verifica que el valor obtenido del archivo de excel se una valor numero entre 1 y 12
+                        
+                        if ( !opcionAppType.matches("^([1-9]|1[012])$")) {
+                            RequestContext cont = RequestContext.getCurrentInstance();
+                            cont.execute("PF('statusDialogUploadFile').hide();");
+                            messageDialog = "Tipo de aplicacion ";
+                            messageDialog2 = "La opcion para el tipo de aplicacion en la fila " + (countRowValidation)  +" no esta en entre 1 y 12";
+                            cont.execute("PF('dialogDetailError').show();");
+                            return;
+                        }
+
+                        //  Verificando que el valor numerico tecleado en el archivo de excel se encuentre en el rango de indices del diccionario
+                        if(appType.get(opcionAppType).equals("")) {                        
+                            RequestContext cont = RequestContext.getCurrentInstance();
+                            cont.execute("PF('statusDialogUploadFile').hide();");
+                            messageDialog = "Tipo de aplicacion ";
+                            messageDialog2 = "La opcion para el tipo de aplicacion no esta en la lista de opciones definidas hasta el dia de hoy";
+                            cont.execute("PF('dialogDetailError').show();");
+                            return;
+                        }
+                        
+                        //  itemAppType = appType.get(String.format("%s", opcionAppType));
+                        /*
+                        RequestContext cont = RequestContext.getCurrentInstance();
+                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        messageDialog = "Tipo de aplicacion ";
+                        messageDialog2 = "La opcion para el tipo de aplicacion en la fila " + (countRowValidation)  +" es: " + itemAppType;
+                        cont.execute("PF('dialogDetailError').show();");
+                        */
                     }
                     
                 } //fin del primer if
@@ -1177,7 +1255,8 @@ public class FileController implements Serializable {
                         //tamañogenoma
                         String sCont = parameters.get(colFuenteContaminacion).trim();
                         String metdeliv=parameters.get(colMetodoEntrega);  //new preform
-                        String Aptype=parameters.get(colAppType).trim();  //new preform
+                        // String Aptype=parameters.get(colAppType).trim();  //new preform
+                        String Aptype= appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  //new preform
                         String kit_lib=parameters.get(colkitLib).trim();  //new preform
                         String tag_lib=parameters.get(coltagLib).trim();  //new preform
                         //String sPlataform = parameters.get(colPlataforma).trim();
@@ -1649,9 +1728,10 @@ public class FileController implements Serializable {
                     entrada.close();
 
                 }//fin row:sheet
+                
                 EmailController ec = new EmailController();
                 ec.sendManagerSamEmail(us, pj, countSamples);
-//        ec.sendUserSamEmail(us, pj, countSamples);
+                //ec.sendUserSamEmail(us, pj, countSamples);
 
                 saveFile(manager + "_" + pj.getProjectName().replace(" ", "_"), event, timestamp);
                 //////linea de codigo agregada//// 
