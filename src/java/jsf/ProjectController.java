@@ -10,6 +10,9 @@ import jsf.util.PaginationHelper;
 import jpa.session.ProjectFacade;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -28,9 +32,11 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -39,6 +45,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import jpa.entities.BioinformaticAnalysis;
 import jpa.entities.BioinformaticsReports;
 import jpa.entities.Comments;
@@ -71,6 +78,7 @@ import jpa.session.RunFacade;
 import jpa.session.SampleLibraryLinkFacade;
 import jpa.session.UserProjectLinkFacade;
 import static jsf.LibraryController.PATH;
+import org.apache.commons.lang3.ArrayUtils;
 import static org.apache.poi.hssf.usermodel.HeaderFooter.file;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -1285,6 +1293,16 @@ public class ProjectController implements Serializable {
         }
     }
 
+    /*
+        12/12/2024  Juan Antonio Villalba Luna
+        Se tiene una area de oportunidad refactirzando estos metodos
+        
+        - prepareUView
+        - openViewDetailProject
+        
+    
+    */
+    
     public void prepareUView() {
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -1655,7 +1673,96 @@ public class ProjectController implements Serializable {
         }
 
     }
+    
+    
+    /**/
+    //Método para buscar ID de proyecto    
+    @RequestScoped
+    private String param1;        
 
+    /**
+     *
+     * @return
+     */
+    public List<Project> getParamProjectId(){                
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> params = context.getExternalContext().getRequestParameterMap();
+        Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+        
+        idProject = params.get("project");
+        ArrayList<Project> userProj = new ArrayList<>();
+        List<Project> p = ejbFacade.findProjectById(idProject);
+                
+        if (us.getUserType().equals("Admin")) {
+
+            return p;
+
+        } else {
+            List<Project> userP = ejbFacade.findProUsers(us);
+
+            for (Project project : userP) {
+
+                if (project.getIdProject().toLowerCase().contains(idProject.toLowerCase()) || project.getProjectName().toLowerCase().contains(idProject.toLowerCase())) {
+
+                    userProj.add(project);
+                }
+
+            }
+
+            return userProj;
+
+        }
+    }        
+    
+    
+    
+    /**/
+    //Método para buscar ID de proyecto    
+    @RequestScoped
+    private String param;        
+
+    /**
+     *  Viernes 10/ene/2025 
+     *  Se crea nuevo metodo a partir de getParamProjectId
+     * @return
+     */
+    public List<Project> getQueryParamProjectId(){                
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> params = context.getExternalContext().getRequestParameterMap();
+        Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+        
+        idProject = params.get("project");
+        ArrayList<Project> userProj = new ArrayList<>();
+        List<Project> p = ejbFacade.findProjectById(idProject);
+        
+        //  TODO:    Mover a una funcion
+        //  10/ene/2025 Juan Antonio Villalba Luna
+        //  >>>>>
+        setSelectedProject(p.get(0));
+        //  <<<<<
+        if (us.getUserType().equals("Admin")) {
+
+            return p;
+
+        } else {
+            List<Project> userP = ejbFacade.findProUsers(us);
+
+            for (Project project : userP) {
+
+                if (project.getIdProject().toLowerCase().contains(idProject.toLowerCase()) || project.getProjectName().toLowerCase().contains(idProject.toLowerCase())) {
+
+                    userProj.add(project);
+                }
+
+            }
+
+            return userProj;
+
+        }
+    }        
+    
+    /**/
+    
     public void cleanFindIdProject() {
         idProject = null;
     }
@@ -1706,7 +1813,7 @@ public class ProjectController implements Serializable {
 
             } else {
                 try {
-                    //3
+                    //3                    
                     context.getExternalContext().redirect("../project/SearchProjectL.xhtml");
 
                 } catch (IOException ex) {
@@ -1730,6 +1837,7 @@ public class ProjectController implements Serializable {
     public Project getProject(java.lang.String id) {
         return ejbFacade.find(id);
     }
+    
 
     @FacesConverter(forClass = Project.class)
     public static class ProjectControllerConverter implements Converter {
