@@ -534,6 +534,7 @@ public class CommentsController implements Serializable {
         if(ejbFacade.getCommentsByIdType(sam.getIdSample().toString()) == null){
             listSample = ejbFacade.getCommentsByIdType(sam.getIdSample().toString());
         }*/
+        
         List<Comments> filteredList = new ArrayList<>();
         if (sam != null) {
             System.out.println("->Comments: " + sam.toString());

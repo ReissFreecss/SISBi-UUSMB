@@ -773,8 +773,8 @@ public class ReportProjectController implements Serializable {
                 currentSample = getEjbFacadeSample().find(idSample);
                 String currentStatusSample = currentSample.getStatus();
                 if (!currentStatusSample.startsWith("Analisis Bioinformatico")){
-                    currentSample.setStatus("Analisis Bioinformatico");
-                    getEjbFacadeSample().edit(currentSample);
+                    //currentSample.setStatus("Analisis Bioinformatico");
+                    //getEjbFacadeSample().edit(currentSample);
                     //Inserta la actualizacion de los estatus de las muestras en la tabla comments, para el registro de bitacora.
                     commentsReg = new Comments();
                     commentsReg.setType("Sample");
@@ -923,7 +923,7 @@ public class ReportProjectController implements Serializable {
         FacesContext contextUs = FacesContext.getCurrentInstance();
         Users us = (Users) contextUs.getExternalContext().getSessionMap().get("usuario");
         java.util.Date datePer = new Date();
-        //Se Actualizan las Muestras A su Estado Anterior.
+        //Se Actualizan las Muestras A su Estado Anterior. COMENTARIO :)
         ReportProject editRangeReportProject = (ReportProject) (ReportProject) ejbFacade.findReportProjectidPType(varIdProject, varTypeReport).get(0);
         int idSampleReportProject = editRangeReportProject.getIdReportProject();//25
         System.out.println("IDS: " + varIdProject + " : " + varTypeReport + " : " + idSampleReportProject);
