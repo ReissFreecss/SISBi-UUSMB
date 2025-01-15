@@ -49,13 +49,6 @@
                         <div class="ui-g-2">
                             <p:commandButton class="boton-s1" value="Búsqueda de Variantes" action="#{reportProjectController.createTypeReportProject('Busqueda de Variantes', sampleController, projectController.runs)}" disabled="#{reportProjectController.validateUserTypeReport(reportProjectController.selected.idUser.idUser, reportProjectController.varIdProject, 'Busqueda de Variantes')}" update="formTypeReport" />
                         </div>
-                        
-                        <!--LESLIE 23 SEP 2024 
-                        <div class="ui-g-2">
-                            <p:commandButton class="boton-s1" value="SARS-CoV2" action="#{reportProjectController.createTypeReportProject('SARS-CoV2', sampleController, projectController.runs)}" disabled="#{reportProjectController.validateUserTypeReport(reportProjectController.selected.idUser.idUser, reportProjectController.varIdProject, 'SARS-CoV2')}" update="formTypeReport" />
-                        </div>
-                        <!--FIN LESLIE -->
-                        
                     </div>
                 </div>
             </h:form>
