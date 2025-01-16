@@ -793,7 +793,7 @@
                                     </p:commandButton>
 
                                 </h:panelGrid>
-                                Total de muestras: #{sampleController.itemsProj.size()}
+                                <!--Total de muestras: #{sampleController.itemsProj.size()}-->
 
                             </f:facet>
 
@@ -808,7 +808,7 @@
 
                             <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
 
-                               
+
                                 <f:facet name="header">
                                     <p:outputLabel value="Nombre de la muestra"/>
                                 </f:facet>
@@ -828,18 +828,11 @@
                                     <p:outputLabel value="Tipo de muestra"/>
                                 </f:facet>
                                 <h:outputText value="#{item.type}"/>
-                            </p:column>      
-
-                1. Se agrego comentario "COMENTARIO :)" como prueba de la rama Carlos
-2. Se comentaron las lineas
-            <p:column width="110" exportable="false">
-                              1. Se agrego comentario "COMENTARIO :)" como prueba de la rama Carlos
-2. Se comentaron las lineas
-  <f:facet name="header">
+                            </p:column>
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header">
                                     <p:outputLabel value="¿Depleción rRNA?" />
-                           1. Se agrego comentario "COMENTARIO :)" como prueba de la rama Carlos
-2. Se comentaron las lineas
-     </f:facet>
+                                </f:facet>
                                 <h:outputText value="#{item.deplesion}"/>
                             </p:column>
 
