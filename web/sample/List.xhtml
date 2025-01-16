@@ -11,10 +11,7 @@
 
             <h:outputText value="Muestras del Proyecto - #{projectController.projectName()} -"></h:outputText>
             <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
-
-
-
-
+                        
         </ui:define>
         <ui:define name="body">
             <h:form styleClass="jsfcrud_list_form" id="form">
@@ -65,7 +62,7 @@
                         
                     </f:facet>
 
-                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
                     <p:column  width="105" filterBy="#{item.idSample}" filterMatchMode="contains" >
                         <f:facet name="header">
@@ -1098,10 +1095,10 @@
                 
                                 <!--leslie06 mayo-->
                 
-                 <p:dialog id="samplesStateBefore" header="Error al actualizar estatus de las muestras" widgetVar="samplesStateBefore" modal="true" style="font-size: large; text-align: center; font-size: 13px" >
+                 <p:dialog id="samplesStateBefore" header="Error al actualizar estatus de las muestras" widgetVar="samplesStateBefore" modal="true" style="font-size: large; text-align: center; font-size: 13px" dynamic="true" draggable="false">
                     <h:panelGrid columns="1" >
                         <br></br>
-                        <p:outputLabel value="#{sampleController.messageDialog}" style="font-weight: bold"/>
+                        <p:outputLabel value="#{sampleController.getMessageDialog()}" style="font-weight: bold"/>
                         <br></br>
                     </h:panelGrid>
                 </p:dialog>

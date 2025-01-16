@@ -164,7 +164,7 @@ public class SampleController implements Serializable {
     private BioinformaticAnalysisFacade ejbFacadeBioinformaticAnalysis;
 
     List<Sample> samplesDiferent = new ArrayList<>();
-    String messageDialog;
+    String messageDialog = "";
     String tableDialog;
 
     private boolean haveBioAn = true;
@@ -352,7 +352,7 @@ public class SampleController implements Serializable {
     }
 
     public String getMessageDialog() {
-        return messageDialog;
+        return this.messageDialog;
     }
 
     public void setMessageDialog(String messageDialog) {
@@ -1964,10 +1964,16 @@ public class SampleController implements Serializable {
         String statusAnt = "";
         boolean statusChange = false;
         boolean qualityChange = false;
+        int iteracion = 0;
+        String strMessage = "";
+        
+        
         for (Sample sample : sampleTable) {
-
+            iteracion++;
             if (samName != null && !samName.isEmpty()) {
+                
                 String[] name = sample.getSampleName().split("_");
+                
                 if (name.length >= 1) {
 
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -2152,10 +2158,15 @@ public class SampleController implements Serializable {
                     commentFac.createComment(commentsSample);
                 } else {
                     if (pos_stat_ant == 15) {
-                        System.out.println(" xX  FOSRSAKE:  No se va actualizar el status");
+                        System.out.println(" xX  FOSRSAKE:  No se va actualizar el status item " + iteracion);                        
+                        
+                        //setMessageDialog("¡No se puede realizar el cambio de estatus, la muestra con ID "+ sample.getIdSample() +" esta RECHAZADA (Forsake)!");                                                                        
                         RequestContext dialog_stat = RequestContext.getCurrentInstance();
-                        setMessageDialog("¡No se puede realizar el cambio de estatus, la muestra esta RECHAZADA (Forsake)!");
+                        strMessage = "¡No se puede realizar el cambio de estatus, la muestra con ID "+ sample.getIdSample() +" esta RECHAZADA (Forsake)!";
+                        setMessageDialog(strMessage);
+                        //  dialog_stat.update("samplesStateBefore");
                         dialog_stat.execute("PF('samplesStateBefore').show();");
+                        
                         return;
 
                     } else {
@@ -2174,11 +2185,14 @@ public class SampleController implements Serializable {
                             commentFac.createComment(commentsSample);
                         } else {
                             if (pos_stat_nuevo <= pos_stat_ant) {
-                                System.out.println("xX INTENTO CAMBIO DE ESTADO ANTERIOR O MISMO ESTATUS : No se va actualizar el estatus");
+                                System.out.println("xX INTENTO CAMBIO DE ESTADO ANTERIOR O MISMO ESTATUS : No se va actualizar el estatus");                                
+                                
                                 RequestContext dialog_stat = RequestContext.getCurrentInstance();
                                 // messageDialog="¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
-                                setMessageDialog("¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!");
+                                strMessage = "¡La muestra con ID "+ sample.getIdSample() +" no se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
+                                setMessageDialog(strMessage);
                                 dialog_stat.execute("PF('samplesStateBefore').show();");
+                                
                                 return;
 
                             } else {
@@ -2290,7 +2304,8 @@ public class SampleController implements Serializable {
                 System.out.println("pasa por el ejbFacade");
                 comment = null;
 
-            }
+            }                      
+            
             getFacade().edit(sample);
 
         }
@@ -2543,7 +2558,7 @@ public class SampleController implements Serializable {
                     if (pos_stat_ant == 15) {
                         System.out.println(" xX  FOSRSAKE:  No se va actualizar el status");
                         RequestContext dialog_stat = RequestContext.getCurrentInstance();
-                        setMessageDialog("¡No se puede realizar el cambio de estatus, la muestra esta RECHAZADA (Forsake)!");
+                        setMessageDialog("¡No se puede realizar el cambio de estatus, la muestra esta RECHAZADA (Forsake)!");                        
                         dialog_stat.execute("PF('samplesStateBefore').show();");
                         return;
                     } else {
@@ -2565,7 +2580,7 @@ public class SampleController implements Serializable {
                                 System.out.println("xX INTENTO CAMBIO DE ESTADO ANTERIOR O MISMO ESTATUS : No se va actualizar el estatus");
                                 RequestContext dialog_stat = RequestContext.getCurrentInstance();
                                 // messageDialog="¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
-                                setMessageDialog("¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!");
+                                setMessageDialog("¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!");                                
                                 dialog_stat.execute("PF('samplesStateBefore').show();");
                                 return;
                             } else {
