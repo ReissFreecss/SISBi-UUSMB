@@ -100,7 +100,8 @@ import jpa.entities.Run;
 import jpa.entities.SampleLibraryLink;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell.XWPFVertAlign;
 
-class SignatureException extends IOException{
+class SignatureException extends IOException {
+
     public SignatureException(String errorMessage) {
         super(errorMessage);
     }
@@ -111,9 +112,9 @@ class SignatureException extends IOException{
 public class ReportProjectController implements Serializable {
 
     String DirectoryImageSing = PathFiles.DirectoryImageSing;
-    
+
     private ReportProject current;
-    
+
     private DataModel items = null;
     @EJB
     private jpa.session.ReportProjectFacade ejbFacade;
@@ -164,7 +165,6 @@ public class ReportProjectController implements Serializable {
     private final String DirectoryreportDocuments = PathFiles.DirectoryreportDocuments;
     //private final String DirectoryDownloadWords = PathFiles.DirectoryDownloadWords;//Esto ya no es usado. TODO explicar esto
 
-
     public String getFindVarIdProject() {
         return findVarIdProject;
     }
@@ -204,6 +204,7 @@ public class ReportProjectController implements Serializable {
     public void setClassFieldReport(FieldReport classFieldReport) {
         this.classFieldReport = classFieldReport;
     }
+
     //Clases, variables y metodos para agregar campos a la tabla field_project   Final
     public List<ReportProject> getProjectReportProject() {
         return projectReportProject;
@@ -368,13 +369,14 @@ public class ReportProjectController implements Serializable {
         messageFinal = "Mensaje predeterminado";
         findReportProject();
     }
-    public void findReportProject(){
-        if(findVarIdProject == null || findVarIdProject.trim().equals("")){
+
+    public void findReportProject() {
+        if (findVarIdProject == null || findVarIdProject.trim().equals("")) {
             projectReportProject = new ArrayList<>();
             projectReportProject = ejbFacadeProject.reportProjectStatus();
             setProjectReportProject(projectReportProject);
             //System.out.println("Arreglo sin busqueda: "+projectReportProject);
-        }else{
+        } else {
             projectReportProject = new ArrayList<>();
             projectReportProject = ejbFacade.findReportProjectByIdProject(findVarIdProject);
             setProjectReportProject(projectReportProject);
@@ -394,7 +396,6 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    
     public void redirectRepoProjectStatus() {
         //System.out.println("El id del proyecto essssss::::::   " + idProject);
         try {
@@ -404,18 +405,17 @@ public class ReportProjectController implements Serializable {
             Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public String RepoProjectName() {
         return this.selectedRepoProject.getProjectName();
     }
-
 
     public String actBotonReporte(SampleController sampleController, String idProject) {
         Project proj = getEjbFacadeProject().find(idProject);
         this.selectedRepoProject = proj;
         //Metodo obtiene el userRoleReport de la sesion iniciada actualmente, si devueleve null es que el usrio no tiene permisos, si sientoce me devuleve el id del user
         UserRoleReport userRol = getUserRoleReportContext();
-        if(userRol == null){
+        if (userRol == null) {
             System.out.println("no tengo rol de crear reportes");
             return "true"; //null no tiene permisos,
         }
@@ -425,7 +425,7 @@ public class ReportProjectController implements Serializable {
             return "true"; //si no tinen permisos para crear reportes
         }
         return "false";//Actualmente, la generación de reportes no se bloquea más que por permisos del usuario
-        
+
         //Si quieren el bloqueo que estaba antes, comenten la línea anterior y descomenten el siguente blouqe de código:
         /*
         String compId = proj.getIdProject();
@@ -511,20 +511,20 @@ public class ReportProjectController implements Serializable {
         return n; */
     }
 
-    public boolean renderedBtnDescargarReporteFinal(String idProject, String run_name){
+    public boolean renderedBtnDescargarReporteFinal(String idProject, String run_name) {
         try {
             List<ReportProject> reportsProject = ejbFacade.findReportProjectByIdProject(idProject);
             ReportProject itemReportProject;
             for (int i = 0; i < reportsProject.size(); i++) {
                 itemReportProject = reportsProject.get(i);
-                if (itemReportProject.getStatus().equals("Autorizado")||itemReportProject.getStatus().equals("Entregado")) {
+                if (itemReportProject.getStatus().equals("Autorizado") || itemReportProject.getStatus().equals("Entregado")) {
                     List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(idProject);
-                    qualreports.sort( new SortQualityReportsByRecency());
+                    qualreports.sort(new SortQualityReportsByRecency());
                     QualityReports qrep = qualreports.get(0);
                     Run qrep_run = qrep.getIdRun();
                     //System
                     System.out.println(qrep_run.getRunName());
-                    if (qrep_run.getRunName().equals(run_name)){
+                    if (qrep_run.getRunName().equals(run_name)) {
                         return true;
                     }
                 }
@@ -535,22 +535,22 @@ public class ReportProjectController implements Serializable {
             return false;
         }
     }
-    
-    public String validateBtnLista(String idProject, String run_name){
+
+    public String validateBtnLista(String idProject, String run_name) {
         List<ReportProject> lrp = list_ReportProject(idProject, run_name);
-        return lrp.isEmpty()? "true": "false";
+        return lrp.isEmpty() ? "true" : "false";
     }
 
-    public List<ReportProject> list_ReportProject(String idProject, String run_name){
+    public List<ReportProject> list_ReportProject(String idProject, String run_name) {
         //TOPDO Considerar herencia de listBR()
         List<ReportProject> reportsProject = ejbFacade.findReportProjectByIdProject(idProject);
         List<ReportProject> matching_projects = new ArrayList<>();
         List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(idProject);
         //qualreports.sort( new SortQualityReportsByRecency());
-        for (ReportProject itemReportProject:reportsProject){
-            for (QualityReports qrep:qualreports){
+        for (ReportProject itemReportProject : reportsProject) {
+            for (QualityReports qrep : qualreports) {
                 Run qrep_run = qrep.getIdRun();
-                if (qrep_run.getRunName().equals(run_name)){
+                if (qrep_run.getRunName().equals(run_name)) {
                     if (itemReportProject.getStatus().equals("Entregado") || itemReportProject.getStatus().equals("Autorizado")) {
                         matching_projects.add(itemReportProject);
                     }
@@ -559,33 +559,32 @@ public class ReportProjectController implements Serializable {
         }
         return matching_projects;
     }
-    
-    
-     public List<ReportProject> ReportsProjectByIdProject(String idProject){
+
+    public List<ReportProject> ReportsProjectByIdProject(String idProject) {
         List<ReportProject> reportsProject = ejbFacade.findReportProjectByIdProject(idProject);
-       List<ReportProject> matching_projects = new ArrayList<>();
-        for (ReportProject itemReportProject:reportsProject){           
+        List<ReportProject> matching_projects = new ArrayList<>();
+        for (ReportProject itemReportProject : reportsProject) {
             if (itemReportProject.getStatus().equals("Entregado") || itemReportProject.getStatus().equals("Autorizado")) {
-                 matching_projects.add(itemReportProject);
-            }             
+                matching_projects.add(itemReportProject);
+            }
         }
         return matching_projects;
     }
 
-    public String downloadReportsFinal(String idProject, String run_name){
+    public String downloadReportsFinal(String idProject, String run_name) {
         try {
             List<ReportProject> reportsProject = ejbFacade.findReportProjectByIdProject(idProject);
             ReportProject itemReportProject;
-            System.out.println("tamaño de la lista: "+reportsProject.size());
+            System.out.println("tamaño de la lista: " + reportsProject.size());
             for (int i = 0; i < reportsProject.size(); i++) {
                 itemReportProject = reportsProject.get(i);
                 //itemReportProject.getIdProject().getSampleCollection().get(0).
-                if (itemReportProject.getStatus().equals("Autorizado") || itemReportProject.getStatus().equals("Entregado")){
+                if (itemReportProject.getStatus().equals("Autorizado") || itemReportProject.getStatus().equals("Entregado")) {
                     List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(idProject);
-                    qualreports.sort( new SortQualityReportsByRecency());
+                    qualreports.sort(new SortQualityReportsByRecency());
                     QualityReports qrep = qualreports.get(0);
                     Run qrep_run = qrep.getIdRun();
-                    if (qrep_run.getRunName().equals(run_name)){
+                    if (qrep_run.getRunName().equals(run_name)) {
                         String ruteDoc;
                         ruteDoc = DirectoryreportDocuments + itemReportProject.getPathauthorizePDF();
                         File ficheroXLS = new File(ruteDoc);
@@ -597,7 +596,7 @@ public class ReportProjectController implements Serializable {
                             String nameDocDowload;
                             String contentType;
                             contentType = "application/pdf";
-                            nameDocDowload = "F01_PT05_LNATCG_" + itemReportProject.getIdProject().getIdProject().replace(":", "_") +"_"+ typeReportInitials(itemReportProject.getName()) + ".pdf";
+                            nameDocDowload = "F01_PT05_LNATCG_" + itemReportProject.getIdProject().getIdProject().replace(":", "_") + "_" + typeReportInitials(itemReportProject.getName()) + ".pdf";
                             HttpServletResponse response = (HttpServletResponse) ctx2.getExternalContext().getResponse();
                             response.setContentType(contentType);
                             response.setHeader("Content-Disposition", "attachment;filename=\"" + nameDocDowload + "\"");
@@ -610,7 +609,7 @@ public class ReportProjectController implements Serializable {
                             ctx2.responseComplete();
                         }
                         fis2.close();
-                        System.out.println("descarga finalizada para "+itemReportProject.getPathauthorize());
+                        System.out.println("descarga finalizada para " + itemReportProject.getPathauthorize());
                         showMessage("downloadReportsFinal ejecutado satisfactoriamente.");
                     }
 
@@ -750,6 +749,7 @@ public class ReportProjectController implements Serializable {
             System.out.println("ID Sample: " + elementoSample.getIdSample());
         }
     }
+
     //Metodo Actualiza el estatus de las muestras en la tabla Sample, registra el cambio en la tabla Sample Report Project.
     //Registra las actualizaciones de las muestras en la tabla comments
     public String actualizarSampleReport() throws IOException {
@@ -772,19 +772,44 @@ public class ReportProjectController implements Serializable {
                 //Actualiza el estatus de las muestras en la tabla Sample.
                 currentSample = getEjbFacadeSample().find(idSample);
                 String currentStatusSample = currentSample.getStatus();
-                if (!currentStatusSample.startsWith("Analisis Bioinformatico")){
-                    //currentSample.setStatus("Analisis Bioinformatico");
-                    //getEjbFacadeSample().edit(currentSample);
-                    //Inserta la actualizacion de los estatus de las muestras en la tabla comments, para el registro de bitacora.
-                    commentsReg = new Comments();
-                    commentsReg.setType("Sample");
-                    commentsReg.setIdType(String.valueOf(idSample));
-                    commentsReg.setUserName(us.getUserName());//Usuario que realizo el cambio
-                    commentsReg.setComment("Se cambia el estatus de " + currentStatusSample + " a Analisis Bioinformatico");//Comentario explicito del registro
-                    commentsReg.setCommentDate(datePer);
-                    getEjbCommentsFacade().create(commentsReg);
-                    System.out.println("Muestra Actualizado:" + idUpSample + "    OBJETO:" + currentSample);
+                if (!currentStatusSample.equals("Entregado fastq")
+                        && !currentStatusSample.startsWith("Analisis Bioinformatico")) {
+                    
+                    // Se realiza un cambio de estatus sobre la muestra
+                    currentSample.setStatus("Analisis Bioinformatico");
+                    getEjbFacadeSample().edit(currentSample);
+
+                    // Buscar si existe un comentario previo para esta muestra y usuario
+                    Comments existingComment = getEjbCommentsFacade().findCommentByIdTypeUserAndType(
+                            String.valueOf(idSample), us.getUserName(), "Sample"
+                    );
+
+                    String correctComment = "Se cambia el estatus de " + currentStatusSample + " a - En Analisis Bioinformatico";
+
+                    if (existingComment != null) {
+                        // Verificar si el comentario existente tiene un error de nomenclatura
+                        if (!existingComment.getComment().equals(correctComment)) {
+                            // Corregir el comentario existente
+                            existingComment.setComment(correctComment);
+                            existingComment.setCommentDate(datePer); // Actualizar la fecha
+                            getEjbCommentsFacade().edit(existingComment);
+                            System.out.println("Comentario corregido para muestra: " + idSample);
+                        }
+                    } else {
+                        // Crear un nuevo comentario si no existe
+                        commentsReg = new Comments();
+                        commentsReg.setType("Sample");
+                        commentsReg.setIdType(String.valueOf(idSample));
+                        commentsReg.setUserName(us.getUserName()); // Usuario que realizó el cambio
+                        commentsReg.setComment(correctComment);
+                        commentsReg.setCommentDate(datePer); // Fecha del cambio
+                        getEjbCommentsFacade().create(commentsReg);
+                        System.out.println("Nuevo comentario creado para muestra: " + idSample);
+                    }
+
+                    System.out.println("Muestra Actualizada:" + idUpSample + "    OBJETO:" + currentSample);
                 }
+
                 //Inserta el registro del cambio de estatus en la tabla sample_report_project
                 currentSampleRP = new SampleReportProject();
                 currentSampleRP.setIdReportProject(currentItemReportProject);
@@ -822,7 +847,7 @@ public class ReportProjectController implements Serializable {
     //Obtiene la fecha de analisis bioinformático (de la bitácora)
     public Date getBioinfoAnalysisDate() {
         Date badate;
-        if (repoEditSample==null){
+        if (repoEditSample == null) {
             badate = getLastBioinfoAnlDate(repoSample);
         } else {
             badate = getLastBioinfoAnlDate(repoEditSample);
@@ -837,12 +862,13 @@ public class ReportProjectController implements Serializable {
         }*/
         return badate;
     }
-    public void setBioinfoAnalysisDate(Date badate){
+
+    public void setBioinfoAnalysisDate(Date badate) {
         //No hace nada, pero para que no se pare por que quiere un setter...
     }
 
     public static String periodReport(Date _fecha) {
-        if (_fecha==null){
+        if (_fecha == null) {
             return "";
         }
         String year = String.valueOf(_fecha.getYear() + 1900);
@@ -890,8 +916,6 @@ public class ReportProjectController implements Serializable {
         return monthS + " " + year;
     }
 
-
-
     public void redirectEditSampleSelection() {
         rangoSampleVal = new ArrayList();
         System.out.println("Inicio de Redireccion");
@@ -929,7 +953,7 @@ public class ReportProjectController implements Serializable {
         System.out.println("IDS: " + varIdProject + " : " + varTypeReport + " : " + idSampleReportProject);
         // las muestras escogidas ahora están en repoEditSample;
         List<SampleReportProject> rangeListEditSampleReportProject = (List<SampleReportProject>) ejbSampleRP.EditRangeSample(idSampleReportProject);
-        for (SampleReportProject sampleRp:rangeListEditSampleReportProject) {
+        for (SampleReportProject sampleRp : rangeListEditSampleReportProject) {
             Sample the_sample = sampleRp.getIdSample();
             int idSample = the_sample.getIdSample();//Id del sample para actualizar
             System.out.println("idSample: " + idSample);
@@ -994,6 +1018,7 @@ public class ReportProjectController implements Serializable {
             return "SelectionSample?faces-redirect=true&includeViewParams=true&similar_report_exists=true";
         }
     }
+
     //Metodoss desde boton generar reporte         Final    LUIS
     //Metodo para redireccionar al formulario del reporte, incluye validación para por si ya existen campos registrados
     public String redirectFormReport(List<ReportProject> reportes_mismo_proyecto_y_tipo_reporte) {
@@ -1002,7 +1027,7 @@ public class ReportProjectController implements Serializable {
         int sizeField = ejbFacadeFieldReport.existsFieldReport(itemReportProject.getIdReportProject());
         if (sizeField > 0) {
             classFieldReport = (FieldReport) ejbFacadeFieldReport.findFieldReportByReportProject(itemReportProject.getIdReportProject()).get(0);
-            if (reportes_mismo_proyecto_y_tipo_reporte==null){
+            if (reportes_mismo_proyecto_y_tipo_reporte == null) {
                 return "menuReport?faces-redirect=true&includeViewParams=true";
             } else {
                 return "";
@@ -1014,18 +1039,20 @@ public class ReportProjectController implements Serializable {
         }
         //Preguntarle a luis sobre los mensajes emergentes
     }
+
     public String getTypeMethodologyFromSamples(List<Sample> samples) {
-        Set<Object> options = new HashSet<> ();
-        for(Sample sample: samples){
+        Set<Object> options = new HashSet<>();
+        for (Sample sample : samples) {
             options.add(sample.getType());
         }
-        if (options.size()==1){
+        if (options.size() == 1) {
             return options.iterator().next().toString();
         } else {
             return options.iterator().next().toString();
         }
     }
-    private void resetReport(String tipoReport, String idProject, Users us){
+
+    private void resetReport(String tipoReport, String idProject, Users us) {
         //Resets the report to 0
         project = getEjbFacadeProject().find(idProject);
         //ejbFacadeFieldReport.DeleteRangeSample(current.getIdReportProject());
@@ -1042,17 +1069,17 @@ public class ReportProjectController implements Serializable {
         current.setIdProject(project);
         current.setIdUser(us);
         //TODO poner en todos lados la validacion de que no se repita usuario en crear, revisar y autorizar
-        if (current.getIdUserRevise()==null){
-            for (Users userrev:this.getUsersRevise()){
-                if (!Objects.equals(userrev.getIdUser(), us.getIdUser())){
+        if (current.getIdUserRevise() == null) {
+            for (Users userrev : this.getUsersRevise()) {
+                if (!Objects.equals(userrev.getIdUser(), us.getIdUser())) {
                     current.setIdUserRevise(userrev);
                     break;
                 }
             }
         }
-        if (current.getIdUserAuthorize()==null){
-            for (Users userauth:this.getUsersAuthorize()){
-                if (!Objects.equals(userauth.getIdUser(), us.getIdUser()) && !Objects.equals(current.getIdUserRevise().getIdUser(), userauth.getIdUser())){
+        if (current.getIdUserAuthorize() == null) {
+            for (Users userauth : this.getUsersAuthorize()) {
+                if (!Objects.equals(userauth.getIdUser(), us.getIdUser()) && !Objects.equals(current.getIdUserRevise().getIdUser(), userauth.getIdUser())) {
                     current.setIdUserAuthorize(userauth);
                     break;
                 }
@@ -1064,13 +1091,13 @@ public class ReportProjectController implements Serializable {
         restartArray();
 
         getFacade().edit(current);
-}
+    }
+
     public String createTypeReportProject(String tipoReport, SampleController sampleController, List<Run> runs) {
         String mensaje;
- 
+
         FacesContext context = FacesContext.getCurrentInstance();
         Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-
 
         varTypeReport = tipoReport;
         String idProject = varIdProject;
@@ -1083,14 +1110,12 @@ public class ReportProjectController implements Serializable {
                 ReportProject itemReportProject = (ReportProject) (ReportProject) report_projects.get(0);
                 varIdReportProject = itemReportProject.getIdReportProject();
                 current = getFacade().find(varIdReportProject);
-                
 
                 //current.setTypeMethodology(typeMethodology);
                 //Si el proyecto existe en report_project:
                 //Validar, si para este proyecto ya se ha iniciado un reporte.
                 //Si se ha iniciado un reporte verificar el estatus, para saber a donde redirigirlo.
                 //Verificar si existe un registro relacionado en sample_report_project
-
                 //return redirectSelectReport();
                 //por ahora aqui pone el mensaje predeterminado del correo electrónico
                 //TODO durante las pruebas, al dar crear reporte en un reporte de un tipo ya existente, se resetea
@@ -1099,10 +1124,10 @@ public class ReportProjectController implements Serializable {
                 //Flash flash = FacesContext.getCurrentInstance().getExternalContext().getFlash();
                 //flash.setKeepMessages(true);
                 //showError("El reporte "+tipoReport+" para el proyecto "+idProject+" ya existe, y se sobreescribirá", "Ya existen "+sizeReport+" para este proyecto y tipo de reporte");
-                System.out.println("Recreando el reporte de "+tipoReport+" para "+current.getIdProject().getProjectName()+" - "+current.getIdProject().getIdProject());
+                System.out.println("Recreando el reporte de " + tipoReport + " para " + current.getIdProject().getProjectName() + " - " + current.getIdProject().getIdProject());
                 //resetReport(tipoReport, idProject, us);
                 messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para revisión desde la plataforma de SISBI";
-                subjetFinal = "Reporte del proyecto listo para revisión: " +  current.getIdProject().getIdProject();
+                subjetFinal = "Reporte del proyecto listo para revisión: " + current.getIdProject().getIdProject();
 
                 to_return = redirectFormTypeMethodology(report_projects);
 
@@ -1134,7 +1159,7 @@ public class ReportProjectController implements Serializable {
                 fieldReportController.setVarIdReportProject(idCurrent);
                 varIdReportProject = idCurrent;
                 messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para revisión desde la plataforma de SISBI";
-                subjetFinal = "Reporte del proyecto listo para revisión: " +  current.getIdProject().getIdProject();
+                subjetFinal = "Reporte del proyecto listo para revisión: " + current.getIdProject().getIdProject();
                 /* ValidacionLuisMuestras :   aqui debe estar tu validacion para las muestras
                 De preferencia crea un metodo para hacer todo modular
 
@@ -1165,6 +1190,7 @@ public class ReportProjectController implements Serializable {
             return redirectSelectionSample(reportes_mismo_proyecto_y_tipo_reporte);
         }
     }
+
     //Guardar tipo de metodologia seleccionada
     public String saveTypeMethodology(String typeMethodology) {
         current.setTypeMethodology(typeMethodology);
@@ -1172,25 +1198,29 @@ public class ReportProjectController implements Serializable {
         System.out.println("Se guardó el tipo de metodologia");
         return redirectSelectionSample(null);
     }
+
     public String redirectFormEditTypeMethodology() {
         return "editTypeMethodology?faces-redirect=true&includeViewParams=true";
     }
+
     public String redirectFormSelectTypeMethodology() {
         return "selectTypeMethodology?faces-redirect=true&includeViewParams=true";
     }
+
     public String editTypeMethodology(String typeMethodology) {
         current.setTypeMethodology(typeMethodology);
         getFacade().edit(current);
-        System.out.println("Se editó el tipo de metodologia a "+typeMethodology+" en "+current.toString());
+        System.out.println("Se editó el tipo de metodologia a " + typeMethodology + " en " + current.toString());
         //return "menuReport?faces-redirect=true&includeViewParams=true";
         return redirectSelectionSample(null);
     }
-    public String getTypeMethodology(){
-        if (current==null){
+
+    public String getTypeMethodology() {
+        if (current == null) {
             return "(No hay muestra seleccionada)";
         } else {
             String gtm = current.getTypeMethodology();
-            if (gtm==null){
+            if (gtm == null) {
                 return "(nulo)";
             } else {
                 return gtm;
@@ -1198,31 +1228,31 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    public String redirectMenuReportCreate(){
+    public String redirectMenuReportCreate() {
         return redirectFormTypeMethodology(null);
     }
 
     //Metodos para crear los tipos de reportes
     public String formTypeReport(String typeReport, List<ReportProject> reportes_mismo_proyecto_y_tipo_reporte) {
         String query_parameters;
-        if (reportes_mismo_proyecto_y_tipo_reporte==null){
-            query_parameters="faces-redirect=true&includeViewParams=true";
+        if (reportes_mismo_proyecto_y_tipo_reporte == null) {
+            query_parameters = "faces-redirect=true&includeViewParams=true";
         } else {
-            query_parameters="faces-redirect=true&includeViewParams=true&similar_report_exists=true";
+            query_parameters = "faces-redirect=true&includeViewParams=true&similar_report_exists=true";
         }
         switch (typeReport) {
             case "Expresion Diferencial":
-                return "formExpresionDiferencial?"+query_parameters;
+                return "formExpresionDiferencial?" + query_parameters;
             case "Analisis Metagenomico":
-                return "formAnalisisMetagenomico?"+query_parameters;
+                return "formAnalisisMetagenomico?" + query_parameters;
             case "Ensamble de Genoma":
-                return "formEnsambleGenoma?"+query_parameters;
+                return "formEnsambleGenoma?" + query_parameters;
             case "Transcriptoma de Novo y Expresion Diferencial":
-                return "formTranscriptomaNovoExpresionDiferencial?"+query_parameters;
+                return "formTranscriptomaNovoExpresionDiferencial?" + query_parameters;
             case "Busqueda de Variantes":
-                return "formBusquedaVariantes?"+query_parameters;
+                return "formBusquedaVariantes?" + query_parameters;
             case "SARS-CoV2": //leslie 23 septiembre 
-                return "formSarsCov2?"+query_parameters;
+                return "formSarsCov2?" + query_parameters;
             default:
                 break;
         }
@@ -1238,7 +1268,7 @@ public class ReportProjectController implements Serializable {
         Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
 
         Map<String, String> query_params = context.
-                   getExternalContext().getRequestParameterMap();
+                getExternalContext().getRequestParameterMap();
         try {
             //current = new ReportProject();
             //this.resetReport(varTypeReport, varIdProject, us);
@@ -1295,7 +1325,7 @@ public class ReportProjectController implements Serializable {
     //Metodo Para obtener las Muestras Actualizadas desde la BD en la tabla sample_report_projec
     public List<SampleReportProject> sampleInSampleReportProject() {
         List<SampleReportProject> rangeListEditSampleReportProject;
-        if (varIdProject == null || varTypeReport == null){
+        if (varIdProject == null || varTypeReport == null) {
             System.out.println("Como varIdProject or varTypeReport es nulo (!!!!!!), no se pudo obtener sampleInSampleReportProject()");
             rangeListEditSampleReportProject = new ArrayList<>();
         } else {
@@ -1316,19 +1346,20 @@ public class ReportProjectController implements Serializable {
 
     public ArrayList<Sample> sampleBySRP() {
         ArrayList<Sample> samp = new ArrayList();
-        for (SampleReportProject srp: sampleInSampleReportProject()) {
+        for (SampleReportProject srp : sampleInSampleReportProject()) {
             Sample sample = srp.getIdSample();
             samp.add(sample);
         }
         return samp;
     }
 
-    public String sample_descr(SampleReportProject srp){
+    public String sample_descr(SampleReportProject srp) {
         Sample sample = srp.getIdSample();
         return sample.getSampleName();
     }
+
     public String strListSampleBySRP(ReportProject report_project) {
-        Stream<String> strsrp=sampleInSampleReportProject(report_project).stream().map(SRP->SRP.getIdSample().getSampleName()
+        Stream<String> strsrp = sampleInSampleReportProject(report_project).stream().map(SRP -> SRP.getIdSample().getSampleName()
         );
         return strsrp.collect(Collectors.joining(",\n"));
     }
@@ -1350,7 +1381,7 @@ public class ReportProjectController implements Serializable {
     //Metodo Para Obtener los datos de Usuarios
     public List<UserRole> userRole() {
         List<UserRole> list;
-        if (varIdProject == null){
+        if (varIdProject == null) {
             System.out.println("No se encontró ningún usuario responsable!");
             list = new ArrayList<>();
         } else {
@@ -1359,6 +1390,7 @@ public class ReportProjectController implements Serializable {
         }
         return list;
     }
+
     public List<UserRole> userRole(String varIdProject) {
         //Cuando exista la maldita variable varIdProject, no va a ser null!
         List<UserRole> list;
@@ -1380,13 +1412,14 @@ public class ReportProjectController implements Serializable {
     //Metodo quitar repeticiones de la palabra millones.
     public String desduplica_millones(Object obj) {
         if (obj != null) {
-            String regex="millones(\\s+millones)+";
+            String regex = "millones(\\s+millones)+";
             return obj.toString().replaceAll(regex, "millones");
         } else {
             System.out.println("Es null el rendimiento: " + obj);
             return " ";
         }
     }
+
     public void fieldBD() {
         FacesContext context = FacesContext.getCurrentInstance();
         Project proj = (Project) context.getExternalContext().getSessionMap().get("project");
@@ -1454,7 +1487,7 @@ public class ReportProjectController implements Serializable {
             if (!ctx2.getResponseComplete()) {
                 //String fileName2 = ficheroXLS.getName();
                 String contentType;
-                if (localBaseName.endsWith(".pdf")){
+                if (localBaseName.endsWith(".pdf")) {
                     contentType = "application/pdf";
                 } else {
                     contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -1469,10 +1502,10 @@ public class ReportProjectController implements Serializable {
                 }
                 out.flush();
                 out.close();
-                System.out.println("\nDescargado "+ruteDoc+". Encabezado de nombre "+localBaseName+"\n");
+                System.out.println("\nDescargado " + ruteDoc + ". Encabezado de nombre " + localBaseName + "\n");
                 ctx2.responseComplete();
             }
-            showMessage("Descarga Finalizada de "+ruteDoc);
+            showMessage("Descarga Finalizada de " + ruteDoc);
             fis2.close();
             //ficheroXLS.delete();
             //System.out.println("Archivo Eliminado");
@@ -1480,7 +1513,6 @@ public class ReportProjectController implements Serializable {
             showError("Error en downloadReport:", e);
         }
     }
-
 
     public String dateQualityAnalisys(String idSample) {
         List<Comments> listDateQA = ejbCommentsFacade.dateQualityAnalysis(idSample);
@@ -1498,9 +1530,9 @@ public class ReportProjectController implements Serializable {
     public String urlQualityReports(String id_Project) {
         String url;
         List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(id_Project);
-        if (qualreports.isEmpty()){
+        if (qualreports.isEmpty()) {
             url = "http://www.sisbi-sin-liga.com";
-        }else{
+        } else {
             qualreports.sort(new SortQualityReportsByRecency());
             url = qualreports.get(0).getUrlQualityReport();
         }
@@ -1523,6 +1555,7 @@ public class ReportProjectController implements Serializable {
                 paragraph
         );
     }
+
     void tablas_datos_proyecto(XWPFDocument doc, Project proj, java.util.Date dateInforme, java.util.Date dateAnalisis, List<Sample> all_project_samples, List<Sample> selected_samples) throws FileNotFoundException, InvalidFormatException, IOException {
         //Tablas de Datos del Proyecto
         for (XWPFTable tbl : doc.getTables()) {
@@ -1530,17 +1563,17 @@ public class ReportProjectController implements Serializable {
                 for (XWPFTableCell cell : row.getTableCells()) {
                     for (XWPFParagraph p : cell.getParagraphs()) {
                         for (XWPFRun r : p.getRuns()) {
-                            for (int ipos=0; ipos<10; ipos++){
+                            for (int ipos = 0; ipos < 10; ipos++) {
                                 //Cada subindice de getText es un elemento de texto separado de otros por un retorno de carro
                                 //No encuentro como sacar el número de estos elementos, pero un màximo de la cantidad de estos
                                 //elementos de 10 me parece razonable
                                 String text;
-                                try{
+                                try {
                                     text = r.getText(ipos);
-                                } catch (java.lang.IndexOutOfBoundsException e){
+                                } catch (java.lang.IndexOutOfBoundsException e) {
                                     break;
                                 }
-                                if (text!=null){
+                                if (text != null) {
                                     if (text.contains("FIELDBD")) {
                                         text = text.replace("FIELDBDc", proj.getIdProject());
                                         text = text.replace("FIELDBDd", proj.getProjectName());
@@ -1562,16 +1595,16 @@ public class ReportProjectController implements Serializable {
                 }
             }
         }
-        for (XWPFParagraph paragraph: doc.getParagraphs()) {
+        for (XWPFParagraph paragraph : doc.getParagraphs()) {
             for (XWPFRun r : paragraph.getRuns()) {
-                for (int ipos=0; ipos<10; ipos++){
+                for (int ipos = 0; ipos < 10; ipos++) {
                     String text;
-                    try{
+                    try {
                         text = r.getText(ipos);
-                    } catch (java.lang.IndexOutOfBoundsException e){
+                    } catch (java.lang.IndexOutOfBoundsException e) {
                         break;
                     }
-                    if (text!=null){
+                    if (text != null) {
                         //Datos de Portada.
                         if (text.contains("FIELDBD") || text.contains("FIELDSYSTEM")) {
                             text = text.replace("FIELDBDa", proj.getIdProject());
@@ -1593,14 +1626,14 @@ public class ReportProjectController implements Serializable {
                 for (XWPFTableCell cell : row.getTableCells()) {
                     for (XWPFParagraph p : cell.getParagraphs()) {
                         for (XWPFRun r : p.getRuns()) {
-                            for (int ipos=0; ipos<10; ipos++){
+                            for (int ipos = 0; ipos < 10; ipos++) {
                                 String text;
-                                try{
+                                try {
                                     text = r.getText(ipos);
-                                } catch (java.lang.IndexOutOfBoundsException e){
+                                } catch (java.lang.IndexOutOfBoundsException e) {
                                     break;
                                 }
-                                if (text!=null){
+                                if (text != null) {
                                     if (text.contains("FIELDBD")) {
 
                                         text = text.replace("FIELDBDc", proj.getIdProject());
@@ -1617,23 +1650,23 @@ public class ReportProjectController implements Serializable {
                                         r.setText(text, ipos);
                                     }
                                 }
-                                
+
                             }
                         }
                     }
                 }
             }
         }
-        for (XWPFParagraph paragraph: doc.getParagraphs()) {
+        for (XWPFParagraph paragraph : doc.getParagraphs()) {
             for (XWPFRun r : paragraph.getRuns()) {
-                for (int ipos=0; ipos<10; ipos++){
+                for (int ipos = 0; ipos < 10; ipos++) {
                     String text;
-                    try{
+                    try {
                         text = r.getText(ipos);
-                    } catch (java.lang.IndexOutOfBoundsException e){
+                    } catch (java.lang.IndexOutOfBoundsException e) {
                         break;
                     }
-                    if (text!=null){
+                    if (text != null) {
                         //Datos de Portada.
                         if (text.contains("FIELDBD") || text.contains("FIELDSYSTEM")) {
                             text = text.replace("FIELDBDa", proj.getIdProject());
@@ -1653,45 +1686,46 @@ public class ReportProjectController implements Serializable {
         ndp.setStyle(paragraph.getStyle());
         ndp.setAlignment(paragraph.getAlignment());
         for (XWPFRun r : paragraph.getRuns()) {
-            XWPFRun new_run=null;
+            XWPFRun new_run = null;
             System.out.println("llego a copia_parrafo");
-            for (int ipos=0; ipos<100; ipos++){
+            for (int ipos = 0; ipos < 100; ipos++) {
                 String text;
-                try{
-                    text=r.getText(ipos);
-                } catch (java.lang.IndexOutOfBoundsException e){
+                try {
+                    text = r.getText(ipos);
+                } catch (java.lang.IndexOutOfBoundsException e) {
                     System.out.println("manda excepion indexout");
                     break;
                 }
-                if (ipos==99){
-                    int y=3;
+                if (ipos == 99) {
+                    int y = 3;
                 }
-                if (ipos==0){
+                if (ipos == 0) {
                     new_run = crea_corrida_con_texto_y_formato(ndp, text, r);
-               } else {
+                } else {
                     new_run.addBreak(BreakType.TEXT_WRAPPING);
                     new_run.setText(text, ipos);
                 }
             }
         }
     }
+
     void copia_parrafo(XWPFParagraph destiny, XWPFParagraph paragraph) {
         destiny.setStyle(paragraph.getStyle());
         destiny.setAlignment(paragraph.getAlignment());
 
         for (XWPFRun r : paragraph.getRuns()) {
-            XWPFRun new_run=null;
-            for (int ipos=0; ipos<100; ipos++){
+            XWPFRun new_run = null;
+            for (int ipos = 0; ipos < 100; ipos++) {
                 String text;
-                try{
-                    text=r.getText(ipos);
-                } catch (java.lang.IndexOutOfBoundsException e){
+                try {
+                    text = r.getText(ipos);
+                } catch (java.lang.IndexOutOfBoundsException e) {
                     break;
                 }
-                if (ipos==99){
-                    int y=3;
+                if (ipos == 99) {
+                    int y = 3;
                 }
-                if (ipos==0){
+                if (ipos == 0) {
                     new_run = crea_corrida_con_texto_y_formato(destiny, text, r);
                 } else {
                     new_run.addBreak(BreakType.TEXT_WRAPPING);
@@ -1700,32 +1734,33 @@ public class ReportProjectController implements Serializable {
             }
         }
     }
+
     void copia_tabla(XWPFDocument destiny, XWPFTable table) {
-        int irow=0;
+        int irow = 0;
         XWPFTable destinyTable = destiny.createTable(table.getNumberOfRows(), 1);
         destinyTable.setColBandSize(table.getColBandSize());
         destinyTable.setRowBandSize(table.getRowBandSize());
-        if (table.getTableAlignment()!=null){
+        if (table.getTableAlignment() != null) {
             destinyTable.setTableAlignment(table.getTableAlignment());
         }
-        for (XWPFTableRow row:table.getRows()){
-            XWPFTableRow destrow=destinyTable.getRow(irow++);
-            int icol=0;
-            for (XWPFTableCell cell:row.getTableCells()){
+        for (XWPFTableRow row : table.getRows()) {
+            XWPFTableRow destrow = destinyTable.getRow(irow++);
+            int icol = 0;
+            for (XWPFTableCell cell : row.getTableCells()) {
                 XWPFTableCell destCell;
-                if (icol==0){
+                if (icol == 0) {
                     destCell = destrow.getCell(icol);
                 } else {
                     destCell = destrow.addNewTableCell();
                 }
-                for (XWPFParagraph par:cell.getParagraphs()){
+                for (XWPFParagraph par : cell.getParagraphs()) {
                     XWPFParagraph new_paragraph;
-                    new_paragraph=destCell.addParagraph();
+                    new_paragraph = destCell.addParagraph();
                     copia_parrafo(new_paragraph, par);
                 }
                 try {
                     XWPFVertAlign xpwfva = cell.getVerticalAlignment();
-                    if (xpwfva!=null){
+                    if (xpwfva != null) {
                         destCell.setVerticalAlignment(xpwfva);
                     }
                 } catch (NullPointerException exc) {
@@ -1738,7 +1773,7 @@ public class ReportProjectController implements Serializable {
             }
             try {
                 destrow.setHeightRule(row.getHeightRule());
-            } catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 //
             }
             destrow.setHeight(row.getHeight());
@@ -1763,7 +1798,7 @@ public class ReportProjectController implements Serializable {
 
         //Tabla para Datos del Usuario Responsable.
         XWPFTable tableUserRole = doc.getTables().get(2);
-        for (UserRole usRole: userRole(proj.getIdProject())) {
+        for (UserRole usRole : userRole(proj.getIdProject())) {
             XWPFTableRow tableRowTwo = tableUserRole.createRow();
             tableRowTwo.getCell(0).setText(usRole.getUserName());
             tableRowTwo.getCell(1).setText(usRole.getFirstName() + " " + usRole.getPLastName() + " " + exceptionNull(usRole.getMLastName()));
@@ -1771,7 +1806,7 @@ public class ReportProjectController implements Serializable {
             tableRowTwo.getCell(3).setText(usRole.getPhoneNumber());
             tableRowTwo.getCell(4).setText(usRole.getEmail());
             tableRowTwo.getCell(5).setText(usRole.getRole());
-            for (XWPFTableCell cell:tableRowTwo.getTableCells()){
+            for (XWPFTableCell cell : tableRowTwo.getTableCells()) {
                 cell.getParagraphs().get(0).setStyle("LO-normal");
             }
         }
@@ -1779,7 +1814,7 @@ public class ReportProjectController implements Serializable {
         System.out.println("Se reemplaza:   Tabla para Datos del Usuario Responsable."); //aca llega bien
     }
 
-    ArrayList<Sample> muestras_validas(List<Sample> samples){
+    ArrayList<Sample> muestras_validas(List<Sample> samples) {
         // Aquí obtiene las muestras que son válidas para bioinformática
         /*
                 Estados de aceptation:
@@ -1788,27 +1823,28 @@ public class ReportProjectController implements Serializable {
         Aceptada
         también hay, sin deber, null, hello y una cadena vacía
 
-        */
+         */
         ArrayList<Sample> mstras_validas = new ArrayList();
-        for (Sample sample: samples){
-            String aceptacion=sample.getAceptation();
-            if (aceptacion!=null && (aceptacion.equals("Aceptada") || aceptacion.equals("Condicionada"))){
+        for (Sample sample : samples) {
+            String aceptacion = sample.getAceptation();
+            if (aceptacion != null && (aceptacion.equals("Aceptada") || aceptacion.equals("Condicionada"))) {
                 mstras_validas.add(sample);
             }
         }
         return mstras_validas;
     }
 
-    boolean hay_muestra_condicionada_o_rechazada(List<Sample> samples){
-        for (Sample sample:samples){
+    boolean hay_muestra_condicionada_o_rechazada(List<Sample> samples) {
+        for (Sample sample : samples) {
             String acc = sample.getAceptation();
-            if (acc!=null && (acc.equals("Condicionada") || acc.equals("Rechazada"))){
+            if (acc != null && (acc.equals("Condicionada") || acc.equals("Rechazada"))) {
                 return true;
             }
         }
         return false;
     }
-    void format_table(XWPFTable tbl){
+
+    void format_table(XWPFTable tbl) {
         tbl.setTopBorder(XWPFTable.XWPFBorderType.SINGLE, 1, 1, tbl.getTopBorderColor());
         tbl.setBottomBorder(XWPFTable.XWPFBorderType.SINGLE, 1, 1, tbl.getBottomBorderColor());
         tbl.setLeftBorder(XWPFTable.XWPFBorderType.SINGLE, 1, 1, tbl.getLeftBorderColor());
@@ -1816,13 +1852,14 @@ public class ReportProjectController implements Serializable {
         tbl.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, 1, 1, tbl.getInsideHBorderColor());
         tbl.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, 1, 1, tbl.getInsideVBorderColor());
     }
+
     void tablas_info_muestras(XWPFDocument doc, Project proj, List<Sample> all_project_samples, List<Sample> muestras_seleccionadas, String typeMethodology) throws FileNotFoundException, InvalidFormatException, IOException {
         //Tabla Descripcion de las Muestras seleccionadas para actualizacion de estatus.
         //ArrayList<Sample> mstras_validas = muestras_validas(samples);
         //boolean hay_mstra_condicionada_o_rechazada = hay_muestra_condicionada_o_rechazada(mstras_validas);
         boolean samples_are_RNA = typeMethodology.contains("RNA");
         XWPFTable tableSampleDesc = doc.getTables().get(3);
-        for (Sample sampleDesc:all_project_samples) {
+        for (Sample sampleDesc : all_project_samples) {
             XWPFTableRow tableRowSampleDesc = tableSampleDesc.createRow();
             //tableRowSampleDesc.getCell(0).
             tableRowSampleDesc.getCell(0).setText(sampleDesc.getIdSample().toString());
@@ -1837,7 +1874,7 @@ public class ReportProjectController implements Serializable {
 
         //Tabla Comentarios de Muestras Seleccionadas.
         XWPFTable tableSampleComms = doc.getTables().get(4);
-        for (Sample sampleComms:muestras_seleccionadas) {
+        for (Sample sampleComms : muestras_seleccionadas) {
             XWPFTableRow tableRowSampleComms = tableSampleComms.createRow();
             tableRowSampleComms.getCell(0).setText(sampleComms.getIdSample().toString());
             tableRowSampleComms.getCell(1).setText(sampleComms.getSampleName());
@@ -1846,10 +1883,10 @@ public class ReportProjectController implements Serializable {
             XWPFTableCell cell_3 = tableRowSampleComms.getCell(3);
             // usar idtype de la tabla comments, cuando el tipo de comentario es comment
             List<Comments> comments = ejbFacade.non_automated_commentsByIdSample(sampleComms.getIdSample());
-            for (Comments comment: comments) {
+            for (Comments comment : comments) {
                 XWPFParagraph paragraph = cell_3.addParagraph();
                 XWPFRun run = paragraph.createRun();
-                run.setText(comment.getComment().trim()+"\n");
+                run.setText(comment.getComment().trim() + "\n");
             }
         }
         format_table(tableSampleComms);
@@ -1857,7 +1894,7 @@ public class ReportProjectController implements Serializable {
 
         //Tabla Descripcion de Volumen y Concenracion de Muestras Seleccionadas
         XWPFTable tableSampleVol = doc.getTables().get(5);
-        for (Sample sampleVol:muestras_seleccionadas) {
+        for (Sample sampleVol : muestras_seleccionadas) {
             XWPFTableRow tableRowSampleVol = tableSampleVol.createRow();
             tableRowSampleVol.getCell(0).setText(sampleVol.getIdSample().toString());
             tableRowSampleVol.getCell(1).setText(sampleVol.getSampleName());
@@ -1871,7 +1908,7 @@ public class ReportProjectController implements Serializable {
 
         //Tabla Absorbancia de Muestras Seleccionadas.
         XWPFTable tableSampleAbs = doc.getTables().get(6);
-        if (samples_are_RNA){
+        if (samples_are_RNA) {
             XWPFTableRow title_row = tableSampleAbs.getRow(0);
             tableSampleAbs.removeRow(1);
             // total width 12895
@@ -1882,7 +1919,7 @@ public class ReportProjectController implements Serializable {
             title_row.getCell(2).setWidth("1700");
             title_row.getCell(3).setWidth("1700");
             title_row.getCell(3).setWidth("1700");
-            for (Sample sampleAbs:muestras_seleccionadas) {
+            for (Sample sampleAbs : muestras_seleccionadas) {
                 XWPFTableRow tableRowSampleAbs = tableSampleAbs.createRow();
                 tableRowSampleAbs.getCell(0).setWidth("1700");
                 tableRowSampleAbs.getCell(0).setText(sampleAbs.getIdSample().toString());
@@ -1895,14 +1932,14 @@ public class ReportProjectController implements Serializable {
                 XWPFTableCell expPerformanceCell = tableRowSampleAbs.getCell(4);
                 String sample_platform = sampleAbs.getSamplePlataform();
                 expPerformanceCell.setWidth("1700");
-                if (sample_platform==null || sample_platform.equals("Oxford Nanopore")){
+                if (sample_platform == null || sample_platform.equals("Oxford Nanopore")) {
                     expPerformanceCell.setText(desduplica_millones(sampleAbs.getExpectedPerformanceOxford()));//Rendimiento: Expected Oxford
                 } else {
                     expPerformanceCell.setText(desduplica_millones(sampleAbs.getExpectedPerformance()));//Rendimiento: Expected Illumina
                 }
             }
         } else {
-            for (Sample sampleAbs:muestras_seleccionadas) {
+            for (Sample sampleAbs : muestras_seleccionadas) {
                 XWPFTableRow tableRowSampleAbs = tableSampleAbs.createRow();
                 tableRowSampleAbs.getCell(0).setText(sampleAbs.getIdSample().toString());
                 tableRowSampleAbs.getCell(1).setText(sampleAbs.getSampleName());
@@ -1916,7 +1953,7 @@ public class ReportProjectController implements Serializable {
                 typeCell.setText(exceptionNull(sampleAbs.getType()));//Tipo
                 XWPFTableCell expPerformanceCell = tableRowSampleAbs.addNewTableCell();
                 String sample_platform = sampleAbs.getSamplePlataform();
-                if (sample_platform==null || sample_platform.equals("Oxford Nanopore")){
+                if (sample_platform == null || sample_platform.equals("Oxford Nanopore")) {
                     expPerformanceCell.setText(desduplica_millones(sampleAbs.getExpectedPerformanceOxford()));//Rendimiento: Expected Oxford
                 } else {
                     expPerformanceCell.setText(desduplica_millones(sampleAbs.getExpectedPerformance()));//Rendimiento: Expected Illumina
@@ -1932,7 +1969,7 @@ public class ReportProjectController implements Serializable {
         //ArrayList<Sample> mstras_validas = muestras_validas(samples);
         //boolean hay_mstra_condicionada_o_rechazada = hay_muestra_condicionada_o_rechazada(mstras_validas);
         XWPFTable tableSampleDesc = doc.getTables().get(3);
-        for (Sample sampleDesc:all_project_samples) {
+        for (Sample sampleDesc : all_project_samples) {
             XWPFTableRow tableRowSampleDesc = tableSampleDesc.createRow();
             tableRowSampleDesc.getCell(0).setText(sampleDesc.getIdSample().toString());
             tableRowSampleDesc.getCell(1).setText(sampleDesc.getSampleName());
@@ -1946,7 +1983,7 @@ public class ReportProjectController implements Serializable {
 
         //Tabla Comentarios de Muestras Seleccionadas.
         XWPFTable tableSampleComms = doc.getTables().get(4);
-        for (Sample sampleComms:all_project_samples) {
+        for (Sample sampleComms : all_project_samples) {
             XWPFTableRow tableRowSampleComms = tableSampleComms.createRow();
             tableRowSampleComms.getCell(0).setText(sampleComms.getIdSample().toString());
             tableRowSampleComms.getCell(1).setText(sampleComms.getSampleName());
@@ -1955,38 +1992,40 @@ public class ReportProjectController implements Serializable {
             XWPFTableCell cell_3 = tableRowSampleComms.getCell(3);
             // usar idtype de la tabla comments, cuando el tipo de comentario es comment
             List<Comments> comments = ejbFacade.non_automated_commentsByIdSample(sampleComms.getIdSample());
-            for (Comments comment: comments) {
+            for (Comments comment : comments) {
                 XWPFParagraph paragraph = cell_3.addParagraph();
                 XWPFRun run = paragraph.createRun();
-                run.setText(comment.getComment()+"\n");
+                run.setText(comment.getComment() + "\n");
             }
         }
         format_table(tableSampleComms);
         System.out.println("Se reemplaza:  Tabla Comentarios de Muestras Seleccionadas");
     }
 
-    private String sufijo_tipo_muestra(String typeMethodology){
-        if (null == typeMethodology){
+    private String sufijo_tipo_muestra(String typeMethodology) {
+        if (null == typeMethodology) {
             System.out.println("tipoMetNull");
             return "";
-        } else switch (typeMethodology) {
-            case "Perfiles taxonómicos de amplicones":
-            case "Amplicones 16SoITS":
-                //Era 16SoITS
-                System.out.println("tipoMetA16");
-                return "A16";
-            case "DNA":
-                System.out.println("tipoMetDNA");
-                return "DNA";
-            case "RNAseq Bac":
-                System.out.println("tipoMetRNAB");
-                return "RNAB";
-            case "RNAseq Euc":
-                System.out.println("tipoMetRNAE");
-                return "RNAE";
-            default:
-                System.out.println("tipoMetExtraño "+typeMethodology);
-                return "";
+        } else {
+            switch (typeMethodology) {
+                case "Perfiles taxonómicos de amplicones":
+                case "Amplicones 16SoITS":
+                    //Era 16SoITS
+                    System.out.println("tipoMetA16");
+                    return "A16";
+                case "DNA":
+                    System.out.println("tipoMetDNA");
+                    return "DNA";
+                case "RNAseq Bac":
+                    System.out.println("tipoMetRNAB");
+                    return "RNAB";
+                case "RNAseq Euc":
+                    System.out.println("tipoMetRNAE");
+                    return "RNAE";
+                default:
+                    System.out.println("tipoMetExtraño " + typeMethodology);
+                    return "";
+            }
         }
 
     }
@@ -1995,62 +2034,63 @@ public class ReportProjectController implements Serializable {
         // 'document' will be mutated with the contents of to_merge
         // For now this document only merger in paragraphs
         List<XWPFParagraph> paragraphs = to_merge.getParagraphs();
-        for (XWPFParagraph paragraph_to_merge:paragraphs){
+        for (XWPFParagraph paragraph_to_merge : paragraphs) {
             XWPFParagraph new_paragraph = document.createParagraph();
-            try{
+            try {
                 String style = paragraph_to_merge.getStyle();
                 new_paragraph.setStyle(style);
                 System.out.println("mess desde  a mergemethodsIn");
-            } catch (java.lang.ArrayIndexOutOfBoundsException e){
+            } catch (java.lang.ArrayIndexOutOfBoundsException e) {
                 // do nothing, as often let to be the single option
                 System.out.println(" entro la excepcion desde merge methodsin");
             }
-            for (XWPFRun original_run:paragraph_to_merge.getRuns()){
+            for (XWPFRun original_run : paragraph_to_merge.getRuns()) {
                 XWPFRun new_run = new_paragraph.createRun();
-                String text=original_run.getText(0);
-                if (text!=null){
+                String text = original_run.getText(0);
+                if (text != null) {
                     //Se va a llamar FIELDBDj, pero se me hace que los nombre de campos se pueden comprimir quizá en algún ticket.
-                    if (text.contains("FIELDBDj")){
+                    if (text.contains("FIELDBDj")) {
                         List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(proj.getIdProject());
-                        if (qualreports.isEmpty()){
+                        if (qualreports.isEmpty()) {
                             text = text.replace("FIELDBDj", "(sin reporte de FasstQC)");
                         } else {
                             QualityReports qrep = qualreports.get(0);
                             String run_name = qrep.getIdRun().getRunName();
                             text = text.replace("FIELDBDj", run_name);
                         }
-                        
+
                         System.out.println("agrega url  o no si hay corrida");
                     }
                     new_run.setText(text);
                 }
-                if (original_run.isItalic()){
+                if (original_run.isItalic()) {
                     new_run.setItalic(true);
                 }
-                if (original_run.isBold()){
+                if (original_run.isBold()) {
                     new_run.setBold(true);
                 }
-                if (original_run.isStrikeThrough()){
+                if (original_run.isStrikeThrough()) {
                     new_run.setStrikeThrough(true);
                 }
                 //new_run.setVerticalAlignment(original_run.getVerticalAlignment());
-            }System.out.println("saliendo del metodo");
+            }
+            System.out.println("saliendo del metodo");
         }
         return document;
     }
 
-      public XWPFDocument mergeQualityReportIn(XWPFDocument document, XWPFDocument to_merge, Project proj, String field_manual_c) {
+    public XWPFDocument mergeQualityReportIn(XWPFDocument document, XWPFDocument to_merge, Project proj, String field_manual_c) {
         // 'document' will be muteted with the contents of to_merge
         // For now this document only merger in paragraphs, not tables
         List<XWPFParagraph> paragraphs = to_merge.getParagraphs();
-        for (XWPFParagraph paragraph_to_merge:paragraphs){
+        for (XWPFParagraph paragraph_to_merge : paragraphs) {
             XWPFParagraph new_paragraph = document.createParagraph();
             String style = paragraph_to_merge.getStyle();
             new_paragraph.setStyle(style);
-            for (XWPFRun original_run:paragraph_to_merge.getRuns()){
+            for (XWPFRun original_run : paragraph_to_merge.getRuns()) {
                 XWPFRun new_run = new_paragraph.createRun();
                 String text = original_run.getText(0);
-                if (text!=null){
+                if (text != null) {
                     if (text.contains("FIELDMANUAL")) {
                         text = text.replace("FIELDMANUALc", field_manual_c);
                     }
@@ -2064,13 +2104,13 @@ public class ReportProjectController implements Serializable {
                         hyperlinkrun.setUnderline(UnderlinePatterns.SINGLE);
                     }
                     new_run.setText(text);
-                    if (original_run.isItalic()){
+                    if (original_run.isItalic()) {
                         new_run.setItalic(true);
                     }
-                    if (original_run.isBold()){
+                    if (original_run.isBold()) {
                         new_run.setBold(true);
                     }
-                    if (original_run.isStrikeThrough()){
+                    if (original_run.isStrikeThrough()) {
                         new_run.setStrikeThrough(true);
                     }
                     //new_run.setSubscript(original_run.getSubscript());
@@ -2080,18 +2120,18 @@ public class ReportProjectController implements Serializable {
         return document;
     }
 
-     private void resultados_ED(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer){
+    private void resultados_ED(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         String IDEAMex_link;
-        IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/"+itemFieldReport.getField17();//¿O 40?
+        IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/" + itemFieldReport.getField17();//¿O 40?
         for (XWPFParagraph p : doc.getParagraphs()) {
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
             List<XWPFRun> runs = p.getRuns();
-            int i=0;
+            int i = 0;
             if (runs != null) {
                 for (XWPFRun r : runs) {
                     String text = r.getText(0);
-                    if (text!=null){
+                    if (text != null) {
                         if (text.contains("FIELDMANUAL")) {
                             text = text.replace("FIELDMANUALd", itemFieldReport.getField4());
                             text = text.replace("FIELDMANUALe", itemFieldReport.getField5());
@@ -2108,68 +2148,59 @@ public class ReportProjectController implements Serializable {
                             text = text.replace("FIELDMANUALp", itemFieldReport.getField16());
                             text = text.replace("FIELDMANUALq", IDEAMex_link);//17
                             text = text.replace("FIELDMANUALr", itemFieldReport.getField18());
-                            text = text.replace("FIELDMANUALs", IDEAMex_link+"/VennDiagram.php");
-                           // text = text.replace("FIELDMANUALt", itemFieldReport.getField20());
-                           // text = text.replace("FIELDMANUALu", itemFieldReport.getField21());
-                           // text = text.replace("FIELDMANUALv", itemFieldReport.getField22());
-                           // text = text.replace("FIELDMANUALw", itemFieldReport.getField23());
-                           // text = text.replace("FIELDMANUALx", itemFieldReport.getField24());
-                           // text = text.replace("FIELDMANUALy", itemFieldReport.getField25());
+                            text = text.replace("FIELDMANUALs", IDEAMex_link + "/VennDiagram.php");
+                            // text = text.replace("FIELDMANUALt", itemFieldReport.getField20());
+                            // text = text.replace("FIELDMANUALu", itemFieldReport.getField21());
+                            // text = text.replace("FIELDMANUALv", itemFieldReport.getField22());
+                            // text = text.replace("FIELDMANUALw", itemFieldReport.getField23());
+                            // text = text.replace("FIELDMANUALx", itemFieldReport.getField24());
+                            // text = text.replace("FIELDMANUALy", itemFieldReport.getField25());
                             // 4 carpetas
-                            text = text.replace("FIELDMANUALz", IDEAMex_link+"/EdgeR.php");//16 mencionado por Vero. Campo 26.
-                            text = text.replace("FIELDMANUALZa", IDEAMex_link+"/DESeq2.php");//17, campo 27
-                            text = text.replace("FIELDMANUALZb", IDEAMex_link+"/limma.php");//18, campo 28
-                            text = text.replace("FIELDMANUALZc", IDEAMex_link+"/NOISeq.php");//19, campo 29
+                            text = text.replace("FIELDMANUALz", IDEAMex_link + "/EdgeR.php");//16 mencionado por Vero. Campo 26.
+                            text = text.replace("FIELDMANUALZa", IDEAMex_link + "/DESeq2.php");//17, campo 27
+                            text = text.replace("FIELDMANUALZb", IDEAMex_link + "/limma.php");//18, campo 28
+                            text = text.replace("FIELDMANUALZc", IDEAMex_link + "/NOISeq.php");//19, campo 29
 
                             // TODO substituir G6, L6, Lactosa y Glucosa por variables
                             //String txts1= IDEAMex_link+"/edgeR_Results/G6vsL6.txt\n"+
-                              //      IDEAMex_link+"/edgeR_Results/L6vsLactosa.txt\n"+
-                                //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa.txt";//22
-
+                            //      IDEAMex_link+"/edgeR_Results/L6vsLactosa.txt\n"+
+                            //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa.txt";//22
                             //text = text.replace("FIELDMANUALZd", txts1);//campo 30
-
                             //text = text.replace("FIELDMANUALZe", itemFieldReport.getField31());
                             //text = text.replace("FIELDMANUALZf", itemFieldReport.getField32());
                             //text = text.replace("FIELDMANUALZg", itemFieldReport.getField33());
                             //text = text.replace("FIELDMANUALZh", itemFieldReport.getField34());
                             //  text = text.replace("FIELDMANUALZi", itemFieldReport.getField35());
-
                             // Tops (el basename del archivo en la secciòn anterior+"_TOP.txt")
                             //String txts2=IDEAMex_link+"/edgeR_Results/G6vsL6_TOP.txt\n"+
-                              //      IDEAMex_link+"/edgeR_Results/L6vsLactosa_TOP.txt\n"+
-                                //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa_TOP.txt";//25
-
+                            //      IDEAMex_link+"/edgeR_Results/L6vsLactosa_TOP.txt\n"+
+                            //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa_TOP.txt";//25
                             //text = text.replace("FIELDMANUALZj", txts2);
-
                             // Secciones (el nombre del archivo de la penúltima sección+"_Intersect.txt")
                             //String txts3=IDEAMex_link+"/edgeR_Results/G6vsL6_Intersect.txt\n"+
-                              //      IDEAMex_link+"/edgeR_Results/L6vsLactosa_Intersect.txt\n"+
-                                //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa_Intersect.txt";
+                            //      IDEAMex_link+"/edgeR_Results/L6vsLactosa_Intersect.txt\n"+
+                            //    IDEAMex_link+"/edgeR_Results/GlucosavsLactosa_Intersect.txt";
                             //text = text.replace("FIELDMANUALZk", txts3);
-
                             //text = text.replace("FIELDMANUALZl", itemFieldReport.getField38());
                             //text = text.replace("FIELDMANUALZm", itemFieldReport.getField39());
                             //text = text.replace("FIELDMANUALZn", itemFieldReport.getField40());
-                            
-                            
                             System.out.println("Se reemplazan todos los FIELDMANUAL");
                         }
 
                         if (text.contains("FIELDBDi")) {
-                            try{
+                            try {
                                 text = text.replace("FIELDBDi", String.valueOf(rangoSampleVal.size()));
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 System.out.println("Error al cambiar el numero de muestras,no hay FIELDBDi");
                             }
                         }
-                        if (text.contains("FIELDEDTABLE")){
+                        if (text.contains("FIELDEDTABLE")) {
                             System.out.println("llego al FIELDTABLE");
                             text = text.replace("FIELDEDTABLE", "");
                             XWPFTable tbl = destino.createTable(4, 2);
                             XWPFParagraph title0 = tbl.getRow(0).getCell(0).getParagraphs().get(0);
                             XWPFRun run0 = title0.createRun();
-                            
+
                             run0.setText("Ensamblado");
                             run0.setBold(true);
                             System.out.println("asigna setText Ensamblado");
@@ -2189,22 +2220,22 @@ public class ReportProjectController implements Serializable {
                     }
 
                 }//fin for
-                i=i++;
-                            System.out.println("Se reemplazan todos los FIELDMANUAL vuelta"+i);
+                i = i++;
+                System.out.println("Se reemplazan todos los FIELDMANUAL vuelta" + i);
             }
         }
     }
 
-    void resultados_AM(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer){
+    void resultados_AM(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
             List<XWPFRun> runs = p.getRuns();
             if (runs != null) {
                 for (XWPFRun r : runs) {
-                    if (r!=null){
+                    if (r != null) {
                         String text = r.getText(0);
-                        if (text!=null){
+                        if (text != null) {
                             crea_corrida_con_texto_y_formato(destino_p, text, r);
                         }
                     }
@@ -2213,7 +2244,7 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    void resultados_EG(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer){
+    void resultados_EG(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             List<XWPFRun> runs = p.getRuns();
             XWPFParagraph destino_p = destino.createParagraph();
@@ -2231,18 +2262,18 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    void resultados_TN(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer){
+    void resultados_TN(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         String IDEAMex_link;
-        IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/"+itemFieldReport.getField32();
+        IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/" + itemFieldReport.getField32();
         for (XWPFParagraph p : doc.getParagraphs()) {
             List<XWPFRun> runs = p.getRuns();
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
             if (runs != null) {
                 for (XWPFRun r : runs) {
-                    if (r!=null){
+                    if (r != null) {
                         String text = r.getText(0);
-                        if (text!=null){
+                        if (text != null) {
                             if (text.contains("FIELDMANUAL")) {
                                 text = text.replace("FIELDMANUALd", itemFieldReport.getField4());
                                 text = text.replace("FIELDMANUALe", itemFieldReport.getField5());
@@ -2252,10 +2283,10 @@ public class ReportProjectController implements Serializable {
                                 // Los campos desde FIELDMANUALh hasta FieldMANUALt ahora son archivos Ideamex con una subpath fijo
                                 // pero que la raíz es el vìnculo de proyecto (en vez de leer desde el campo 8 hasa el 20)
 
-                                text = text.replace("FIELDMANUALh", IDEAMex_link+"/EdgeR.php");//16 mencionado por Vero
-                                text = text.replace("FIELDMANUALi", IDEAMex_link+"/DESeq2.php");//17
-                                text = text.replace("FIELDMANUALj", IDEAMex_link+"/limma.php");//18
-                                text = text.replace("FIELDMANUALk", IDEAMex_link+"/NOISeq.php");//19
+                                text = text.replace("FIELDMANUALh", IDEAMex_link + "/EdgeR.php");//16 mencionado por Vero
+                                text = text.replace("FIELDMANUALi", IDEAMex_link + "/DESeq2.php");//17
+                                text = text.replace("FIELDMANUALj", IDEAMex_link + "/limma.php");//18
+                                text = text.replace("FIELDMANUALk", IDEAMex_link + "/NOISeq.php");//19
 
                                 // substituir G6, L6, Lactosa y Glucosa por variables
                                 List<String> names = new ArrayList();
@@ -2265,19 +2296,19 @@ public class ReportProjectController implements Serializable {
                                 names.add(itemFieldReport.getField26());
                                 names.add(itemFieldReport.getField28());
                                 names.add(itemFieldReport.getField30());
-                                text = text.replace("FIELDMANUALl", IDEAMex_link+"/edgeR_Results/"+names.get(0)+".txt");//20
-                                text = text.replace("FIELDMANUALm", IDEAMex_link+"/edgeR_Results/"+names.get(1)+".txt");//21
-                                text = text.replace("FIELDMANUALn", IDEAMex_link+"/edgeR_Results/"+names.get(2)+".txt");//22
+                                text = text.replace("FIELDMANUALl", IDEAMex_link + "/edgeR_Results/" + names.get(0) + ".txt");//20
+                                text = text.replace("FIELDMANUALm", IDEAMex_link + "/edgeR_Results/" + names.get(1) + ".txt");//21
+                                text = text.replace("FIELDMANUALn", IDEAMex_link + "/edgeR_Results/" + names.get(2) + ".txt");//22
 
                                 // Tops (el basename del archivo en la secciòn anterior+"_TOP.txt")
-                                text = text.replace("FIELDMANUALo", IDEAMex_link+"/edgeR_Results/"+names.get(0)+"_TOP.txt");//23
-                                text = text.replace("FIELDMANUALp", IDEAMex_link+"/edgeR_Results/"+names.get(1)+"_TOP.txt");//24
-                                text = text.replace("FIELDMANUALq", IDEAMex_link+"/edgeR_Results/"+names.get(2)+"_TOP.txt");//25
+                                text = text.replace("FIELDMANUALo", IDEAMex_link + "/edgeR_Results/" + names.get(0) + "_TOP.txt");//23
+                                text = text.replace("FIELDMANUALp", IDEAMex_link + "/edgeR_Results/" + names.get(1) + "_TOP.txt");//24
+                                text = text.replace("FIELDMANUALq", IDEAMex_link + "/edgeR_Results/" + names.get(2) + "_TOP.txt");//25
 
                                 // Secciones (el nombre del archivo de la penúltima sección+"_Intersect.txt")
-                                text = text.replace("FIELDMANUALr", IDEAMex_link+"/edgeR_Results/"+names.get(0)+"_Intersect.txt");
-                                text = text.replace("FIELDMANUALs", IDEAMex_link+"/edgeR_Results/"+names.get(1)+"_Intersect.txt");
-                                text = text.replace("FIELDMANUALt", IDEAMex_link+"/edgeR_Results/"+names.get(2)+"_Intersect.txt");
+                                text = text.replace("FIELDMANUALr", IDEAMex_link + "/edgeR_Results/" + names.get(0) + "_Intersect.txt");
+                                text = text.replace("FIELDMANUALs", IDEAMex_link + "/edgeR_Results/" + names.get(1) + "_Intersect.txt");
+                                text = text.replace("FIELDMANUALt", IDEAMex_link + "/edgeR_Results/" + names.get(2) + "_Intersect.txt");
                                 //
                                 text = text.replace("FIELDMANUALu", itemFieldReport.getField21());
                                 text = text.replace("FIELDMANUALv", itemFieldReport.getField22());
@@ -2292,7 +2323,7 @@ public class ReportProjectController implements Serializable {
                                 text = text.replace("FIELDMANUALZe", itemFieldReport.getField31());
                                 text = text.replace("FIELDMANUALZf", itemFieldReport.getField32());
                             }
-                            if (text.contains("FIELDEDTABLE")){
+                            if (text.contains("FIELDEDTABLE")) {
                                 text = text.replace("FIELDEDTABLE", "");
                                 XWPFTable tbl = destino.createTable(4, 2);
                                 XWPFParagraph title0 = tbl.getRow(0).getCell(0).getParagraphs().get(0);
@@ -2303,11 +2334,11 @@ public class ReportProjectController implements Serializable {
                                 XWPFRun run1 = title1.createRun();
                                 run1.setText("Número de transcritos");
                                 run1.setBold(true);
-                                tbl.getRow(1).getCell(0).setText("trinity_"+itemFieldReport.getField26()+"/Trinity.fasta");
+                                tbl.getRow(1).getCell(0).setText("trinity_" + itemFieldReport.getField26() + "/Trinity.fasta");
                                 tbl.getRow(1).getCell(1).setText(itemFieldReport.getField27());
-                                tbl.getRow(2).getCell(0).setText("trinity_"+itemFieldReport.getField28()+"/Trinity.fasta");
+                                tbl.getRow(2).getCell(0).setText("trinity_" + itemFieldReport.getField28() + "/Trinity.fasta");
                                 tbl.getRow(2).getCell(1).setText(itemFieldReport.getField29());
-                                tbl.getRow(3).getCell(0).setText("trinity_"+itemFieldReport.getField30()+"/Trinity.fasta");
+                                tbl.getRow(3).getCell(0).setText("trinity_" + itemFieldReport.getField30() + "/Trinity.fasta");
                                 tbl.getRow(3).getCell(1).setText(itemFieldReport.getField31());
                             }
                             crea_corrida_con_texto_y_formato(destino_p, text, r);
@@ -2318,7 +2349,7 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    void resultados_BV(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer){
+    void resultados_BV(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
@@ -2326,7 +2357,7 @@ public class ReportProjectController implements Serializable {
             if (runs != null) {
                 for (XWPFRun r : runs) {
                     String text = r.getText(0);
-                    if (text!=null){
+                    if (text != null) {
                         if (text.contains("FIELDMANUAL")) {
                             text = text.replace("FIELDMANUALd", itemFieldReport.getField4());
                             text = text.replace("FIELDMANUALe", itemFieldReport.getField5());
@@ -2357,10 +2388,9 @@ public class ReportProjectController implements Serializable {
                             text = text.replace("FIELDMANUALzf", itemFieldReport.getField30());
                         }
                         if (text.contains("FIELDBDi")) {
-                            try{
+                            try {
                                 text = text.replace("FIELDBDi", String.valueOf(rangoSampleVal.size()));
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
                                 System.out.println("Error al cambiar el numero de muestras");
                             }
                         }
@@ -2371,28 +2401,28 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    XWPFRun crea_corrida_con_texto_y_formato(XWPFParagraph destino, String texto, XWPFRun molde){
+    XWPFRun crea_corrida_con_texto_y_formato(XWPFParagraph destino, String texto, XWPFRun molde) {
         XWPFRun new_run;
-        if (XWPFFieldRun.class.isInstance(molde)){
+        if (XWPFFieldRun.class.isInstance(molde)) {
             new_run = destino.createFieldRun();
-        } else if (XWPFFieldRun.class.isInstance(molde)){
+        } else if (XWPFFieldRun.class.isInstance(molde)) {
             XWPFHyperlinkRun hlrun;
-            XWPFHyperlinkRun hlmolde = (XWPFHyperlinkRun)molde;
+            XWPFHyperlinkRun hlmolde = (XWPFHyperlinkRun) molde;
             hlrun = createHyperlinkRun(destino, hlmolde.getAnchor());
             new_run = hlrun;
         } else {
             new_run = destino.createRun();
         }
-        if (texto!=null){
+        if (texto != null) {
             new_run.setText(texto);
         }
-        if (molde.isItalic()){
+        if (molde.isItalic()) {
             new_run.setItalic(true);
         }
-        if (molde.isBold()){
+        if (molde.isBold()) {
             new_run.setBold(true);
         }
-        if (molde.isStrikeThrough()){
+        if (molde.isStrikeThrough()) {
             new_run.setStrikeThrough(true);
         }
         new_run.setVerticalAlignment(molde.getVerticalAlignment().toString());
@@ -2400,31 +2430,30 @@ public class ReportProjectController implements Serializable {
         return new_run;
     }
 
-    
-    private void pasa_elementos(XWPFDocument destiny, XWPFDocument source){
+    private void pasa_elementos(XWPFDocument destiny, XWPFDocument source) {
         //Modified from https://stackoverflow.com/questions/23008540/how-to-merge-two-word-documents-which-are-saved-with-docx-to-a-third-file/36894991#36894991
-        int i=0;
-        int j=0;
-        for(IBodyElement e : source.getBodyElements()){
-            if(e instanceof XWPFParagraph){
+        int i = 0;
+        int j = 0;
+        for (IBodyElement e : source.getBodyElements()) {
+            if (e instanceof XWPFParagraph) {
                 XWPFParagraph p = (XWPFParagraph) e;
-                if(p.getCTP().getPPr()!=null && p.getCTP().getPPr().getSectPr()!=null){
-                }else{
+                if (p.getCTP().getPPr() != null && p.getCTP().getPPr().getSectPr() != null) {
+                } else {
                     copia_parrafo(destiny, p);
                     System.out.println("volvio de copia_parrao con ne_run");
                     i++;
                 }
-            }else if(e instanceof XWPFTable){
-                XWPFTable t = (XWPFTable)e;
-                copia_tabla(destiny,t);
+            } else if (e instanceof XWPFTable) {
+                XWPFTable t = (XWPFTable) e;
+                copia_tabla(destiny, t);
                 j++;
             }
         }
         System.out.println("ejecutando elementos");
     }
+
     //Creacion de documento Word desde una plantilla --------------------------------Inicio
     public String createReportWordSampleQC(SampleController sampleController, Project proj, String format) throws IOException {
-
 
         java.util.Date datePer = new Date();
         // Reporte de muestras por ahora está aquí
@@ -2435,7 +2464,7 @@ public class ReportProjectController implements Serializable {
             all_project_samples = sampleController.getItemsProj(proj);
 
             // El documento de la introducción será la base que iremos creciendo para agregar más cosas
-            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"intro_muestras.docx")));
+            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "intro_muestras.docx")));
             System.out.println("Se cargó el machote para el QC de muestras");
 
             //doc = mergeMethodsIn(doc, docMethodol, proj);
@@ -2446,7 +2475,6 @@ public class ReportProjectController implements Serializable {
             //doc.enforceUpdateFields();
             //doc.createTOC();
 
-
             String doc_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + ".docx";
             String ruteDoc = DirectoryreportDocuments + doc_base_name;
             String pdf_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + ".pdf";
@@ -2456,18 +2484,18 @@ public class ReportProjectController implements Serializable {
             System.out.println("Terminado QC de muestras -->Desde genera Genera QC material genetico");
             //La conversión del documento en cuestión a PDF es mediante Word_to_PDF(ruteDoc, rutePdf)
             File filpdf = new File(rutePdf);
-            switch (format){
+            switch (format) {
                 case "docx":
                     downloadReport(ruteDoc, doc_base_name);
                     try {
                         Word_to_PDF(ruteDoc, rutePdf);
-                    } catch (IOException | org.docx4j.openpackaging.exceptions.InvalidFormatException e){
+                    } catch (IOException | org.docx4j.openpackaging.exceptions.InvalidFormatException e) {
                         showError("Hubo un error al convertir a PDF. -->Desde genera Genera QC material genetico", e);
                     }
                     break;
                 case "pdf":
                     //Ahora solo crea el reporte si no existe ya en PDF
-                    if (!filpdf.exists()){
+                    if (!filpdf.exists()) {
                         Word_to_PDF(ruteDoc, rutePdf);
                     }
                     downloadReport(rutePdf, pdf_base_name);
@@ -2480,19 +2508,19 @@ public class ReportProjectController implements Serializable {
         return null;
     }
 
-    public List<Sample> getSamplesInRun(String runName, List<Sample> project_samples){
+    public List<Sample> getSamplesInRun(String runName, List<Sample> project_samples) {
         //HashSet<Sample> samplesHM = new HashSet<>();
         ArrayList<Sample> samplesarr = new ArrayList<>();
         List<Run> runs = ejbQualityReportsFacade.findRun(runName);
         Run run = runs.get(0);
         List<LibraryRunLink> libraries = run.getLibraryRunLinkList();
-        for (LibraryRunLink lbr: libraries){
+        for (LibraryRunLink lbr : libraries) {
             List<SampleLibraryLink> samples = ejbQualityReportsFacade.findSamplesByID(lbr.getLibrary());
-            for (SampleLibraryLink samplell:samples){
+            for (SampleLibraryLink samplell : samples) {
                 Sample sample = samplell.getSample();
-                if (project_samples.contains(sample)){
+                if (project_samples.contains(sample)) {
                     //Integer id_sample = sample.getIdSample();
-                    if (!samplesarr.contains(sample)){
+                    if (!samplesarr.contains(sample)) {
                         //System.out.println("nosample");
                         //samplesHM.add(sample);
                         samplesarr.add(sample);
@@ -2504,39 +2532,39 @@ public class ReportProjectController implements Serializable {
         return samplesarr;
     }
 
-    public String sample_types(List<Sample> samples) throws Exception{
-        HashMap <String, Integer> hm = new HashMap<>();
-        for (Sample sample: samples){
+    public String sample_types(List<Sample> samples) throws Exception {
+        HashMap<String, Integer> hm = new HashMap<>();
+        for (Sample sample : samples) {
             String sample_type = sample.getType();
-            if (hm.containsKey(sample_type)){
-                hm.replace(sample_type, hm.get(sample_type)+1);
+            if (hm.containsKey(sample_type)) {
+                hm.replace(sample_type, hm.get(sample_type) + 1);
             } else {
                 hm.put(sample_type, 1);
             }
         }
-        if (hm.size()>1){
+        if (hm.size() > 1) {
             throw new Exception("More than one sample type");
         }
         return hm.keySet().iterator().next();
     }
 
-    public String obtiene_tipos_metodologia(List<Sample> samples, Project proj) throws Exception{
+    public String obtiene_tipos_metodologia(List<Sample> samples, Project proj) throws Exception {
         List<ReportProject> repps = ejbFacadeProject.findReportProjectByIdProject(proj.getIdProject());
-        HashMap <String, Integer> hm = new HashMap<>();
-        for (ReportProject repp: repps){
+        HashMap<String, Integer> hm = new HashMap<>();
+        for (ReportProject repp : repps) {
             String methodology_type = repp.getTypeMethodology();
-            if (methodology_type!=null){
-                if (hm.containsKey(methodology_type)){
-                    hm.replace(methodology_type, hm.get(methodology_type)+1);
+            if (methodology_type != null) {
+                if (hm.containsKey(methodology_type)) {
+                    hm.replace(methodology_type, hm.get(methodology_type) + 1);
                 } else {
                     hm.put(methodology_type, 1);
                 }
             }
         }
-        if (hm.size()>1){
+        if (hm.size() > 1) {
             //TODO desambiguar cuando hay más de tipo de metodología en los anàlisis bioinformáticos
             //throw new Exception("More than one sample type");
-        } else if (hm.isEmpty()){
+        } else if (hm.isEmpty()) {
             String sample_type = sample_types(samples);
             return sample_type;
         }
@@ -2544,142 +2572,145 @@ public class ReportProjectController implements Serializable {
     }
 
     public String verReportPDFFastQC(Project proj, String runName) throws IOException {
-        String doc_base_name = "F02_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_"+runName+ ".pdf";
+        String doc_base_name = "F02_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + runName + ".pdf";
         String ruteDoc = DirectoryreportDocuments + doc_base_name;
         downloadReport(ruteDoc, doc_base_name);
         return "ViewProject?includeViewParams=true";
     }
 
     public String validateBtnReportPDFFastQC(Project proj, String runName) throws IOException {
-        String doc_base_name = "F02_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_"+runName+".pdf";
+        String doc_base_name = "F02_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + runName + ".pdf";
         String rutePdf = DirectoryreportDocuments + doc_base_name;
         File file = new File(rutePdf);
-        if (file.exists()){
+        if (file.exists()) {
             return "false";
         } else {
             return "true";
         }
     }
+
     public String validateBtnReportHTMLFastQC(Project proj, String runName) throws IOException {
         List<QualityReports> qualreports = ejbQualityReportsFacade.urlQualityReportsByIdProject(proj.getIdProject());
-        if (qualreports.isEmpty()){
+        if (qualreports.isEmpty()) {
             return "false";
         } else {
             return "true";
         }
     }
-    String messagelocation="";
-    public String findlocationseq(List<String> runnames){
+    String messagelocation = "";
+
+    public String findlocationseq(List<String> runnames) {
         System.out.println("obteniendo nombres de equipo segun la lista de corridas seleccionada");
         List<String> devices = new ArrayList<>();
         //String []devices={};
-        String addlocationseq="";
-        String device="";
-        String company="Illumina";              
+        String addlocationseq = "";
+        String device = "";
+        String company = "Illumina";
         /*si se selecciono mas de una corrida entonces guarda los nombres del 
         equipo en devices y usa el contador para despues recorrer con otro for y sacar las ubicaciones
-            */
-            for (int i=0;i<runnames.size();i++){
-                System.out.println("entro al for para hacer el split en la vuelta"+i);
-                String[] devsplit=runnames.get(i).toString().split("_");
-                devices.add(devsplit[1]); //la posicion 0 es la fecha, la posicion 1 el nombre del equipo--> 220607_NS500502_0153_AHJWCNBGXL  
-                System.out.println("imprimo el nombre del equipo: "+devices.get(i));
-                System.out.println("agrego el valor a la lista devices");
-            }          
-            System.out.println("fin el for que hace el split");
-            
-        if (devices.size()>0){
+         */
+        for (int i = 0; i < runnames.size(); i++) {
+            System.out.println("entro al for para hacer el split en la vuelta" + i);
+            String[] devsplit = runnames.get(i).toString().split("_");
+            devices.add(devsplit[1]); //la posicion 0 es la fecha, la posicion 1 el nombre del equipo--> 220607_NS500502_0153_AHJWCNBGXL  
+            System.out.println("imprimo el nombre del equipo: " + devices.get(i));
+            System.out.println("agrego el valor a la lista devices");
+        }
+        System.out.println("fin el for que hace el split");
+
+        if (devices.size() > 0) {
             System.out.println("entro al if del switch");
-           for(int i=0;i<=devices.size() ;i++){
-               switch(devices.get(i).toUpperCase()){                      
-                   case "A01314":
-                       addlocationseq="del Instituto Tecnológico y de Estudios Superiores de Monterrey en Monterrey, Nuevo León, México";
-                       device="NovaSeq X";
-                        break;                   
+            for (int i = 0; i <= devices.size(); i++) {
+                switch (devices.get(i).toUpperCase()) {
+                    case "A01314":
+                        addlocationseq = "del Instituto Tecnológico y de Estudios Superiores de Monterrey en Monterrey, Nuevo León, México";
+                        device = "NovaSeq X";
+                        break;
                     case "M06162":
-                       addlocationseq="del la compañia Abalat en la Ciudad de México";
-                       device="MiSeq";
+                        addlocationseq = "del la compañia Abalat en la Ciudad de México";
+                        device = "MiSeq";
                         break;
                     case "M07836":
-                       addlocationseq="del Instituto de Ecologia de la UNAM en la Ciudad de México";
-                       device="MiSeq";
+                        addlocationseq = "del Instituto de Ecologia de la UNAM en la Ciudad de México";
+                        device = "MiSeq";
                         break;
                     case "M02676":
-                       addlocationseq="de la Red de Apoyo a la Investigación la UNAM en la Ciudad de México";
-                       device="MiSeq";
+                        addlocationseq = "de la Red de Apoyo a la Investigación la UNAM en la Ciudad de México";
+                        device = "MiSeq";
                         break;
                     case "FS10001306":
-                       addlocationseq="de la compañia Analitek Life en la Ciudad de México";
-                       device="iSeq";
+                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
+                        device = "iSeq";
                         break;
                     case "M07079":
-                       addlocationseq="de la compañia Analitek Life en la Ciudad de México";
-                       device="MiSeq";
-                        break;                   
+                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
+                        device = "MiSeq";
+                        break;
                     case "NB502037":
-                       addlocationseq="del Laboratorio de Genética Genos Médica en la Ciudad de México";
-                       device="NextSeq500";
+                        addlocationseq = "del Laboratorio de Genética Genos Médica en la Ciudad de México";
+                        device = "NextSeq500";
                         break;
                     case "KHS0062":
-                       addlocationseq="de la Unidad de Genómica Avanzada LANGEBIO del CINVESTAV IPN";
-                       device="HiSeq";
+                        addlocationseq = "de la Unidad de Genómica Avanzada LANGEBIO del CINVESTAV IPN";
+                        device = "HiSeq";
                         break;
                     case "MG01HX05":
-                       addlocationseq="de la compañia MACROGEN en los Estados Unidos";
-                       device="HiSeq";
+                        addlocationseq = "de la compañia MACROGEN en los Estados Unidos";
+                        device = "HiSeq";
                         break;
                     case "LH00586":
-                       addlocationseq="de la compañia PSOMAGEN en los Estados Unidos";
-                       device="NovaSeq";
+                        addlocationseq = "de la compañia PSOMAGEN en los Estados Unidos";
+                        device = "NovaSeq";
                         break;
                     case "NS500560":
-                       addlocationseq="del Instituto Nacional de Medicina Genómica";
-                       device="NextSeq500";
+                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
+                        device = "NextSeq500";
                         break;
                     case "VH01014":
-                       addlocationseq="del Instituto Nacional de Medicina Genómica";
-                       device="NextSeq2000";
+                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
+                        device = "NextSeq2000";
                         break;
                     case "FS10002358":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="iSeq 100";
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "iSeq 100";
                         break;
                     case "NS500502":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="NextSeq 500";
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "NextSeq 500";
                         break;
                     case "MN18784":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="MinION";
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
                         break;
                     case "MN22733":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="MinION";
-                       company="Oxford Nanopore";
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
                         break;
                     case "MN22784":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="MinION";
-                       company="Oxford Nanopore";
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
                         break;
                     case "MC-115680":
-                       addlocationseq="de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                       device="MinION";
-                       company="Oxford Nanopore";
-                        break;    
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                        break;
                     default:
-                       addlocationseq="[ubicacion]";
-                       device="[equipo]";
-                       company="[Illumina/Oxford nanopore]";
-               }
-               
-               messagelocation="La secuenciación se realizó en un equipo "+device+" de la compañía "+company+" ubicado en las instalaciones "+addlocationseq;
-               System.out.println("La secuenciación se realizó en un equipo "+device+" de la compañía "+company+" ubicado en las instalaciones "+addlocationseq);
+                        addlocationseq = "[ubicacion]";
+                        device = "[equipo]";
+                        company = "[Illumina/Oxford nanopore]";
+                }
+
+                messagelocation = "La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq;
+                System.out.println("La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq);
                 /* La secuenciación se realizó en un equipo [MiSeq|NexSeq|..] 
-                   de la compañía Illumina ubicado en las instalaciones [ubicación] */   
-               
-           }                   
-        }return messagelocation;
+                   de la compañía Illumina ubicado en las instalaciones [ubicación] */
+
+            }
+        }
+        return messagelocation;
         //fin leslie
     }
 
@@ -2687,38 +2718,36 @@ public class ReportProjectController implements Serializable {
         Project proj = projc.getSelectedProject();
         java.util.Date datePer = new Date();
         XWPFDocument doc;
-        
+
         List<Sample> all_project_samples;
         all_project_samples = sampleController.getItemsProj(proj);
         List<Sample> samples;
         samples = new ArrayList<>();
-        
+
         //leslie
-       // List<String> namesrun = new ArrayList<>();
+        // List<String> namesrun = new ArrayList<>();
         //finleslie
-        
-        if (projc.getRuns().isEmpty()){
+        if (projc.getRuns().isEmpty()) {
             showError("Debe seleccionar al menos una corrida", "");
             return "ViewProject?includeViewParams=true";
         }
-        for (String runName:projc.getRuns()){
-            
+        for (String runName : projc.getRuns()) {
+
             List<Sample> run_samples = getSamplesInRun(runName, all_project_samples);
-            for (Sample run_sample: run_samples){
-                if (!samples.contains(run_sample)){
+            for (Sample run_sample : run_samples) {
+                if (!samples.contains(run_sample)) {
                     samples.add(run_sample);
                 }
             }
-            
+
             //leslie
 //            namesrun.add(runName);
             //finleslie
         }
         String runs_suffix = String.join("_and_", projc.getRuns());
-        
-       // findlocationseq(namesrun);
-       // String messagesec=findlocationseq(namesrun);
-        
+
+        // findlocationseq(namesrun);
+        // String messagesec=findlocationseq(namesrun);
         try {
             String typeMethodology = obtiene_tipos_metodologia(samples, proj);
             if (typeMethodology.equals("RNA")) {
@@ -2728,9 +2757,9 @@ public class ReportProjectController implements Serializable {
             }
 
             // El documento de la introducción será la base que iremos creciendo para agregar más cosas
-            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"intro_secuenciacion.docx")));
-            XWPFDocument docMethodol = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"metodos"+sufijo_tipo_muestra(typeMethodology)+".docx")));
-            XWPFDocument docCalidad = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"Reporte_de_calidad.docx")));
+            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "intro_secuenciacion.docx")));
+            XWPFDocument docMethodol = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "metodos" + sufijo_tipo_muestra(typeMethodology) + ".docx")));
+            XWPFDocument docCalidad = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Reporte_de_calidad.docx")));
             System.out.println("Se cargaron los machotes para FastQC");
             doc = mergeMethodsIn(doc, docMethodol, proj);
             doc = mergeQualityReportIn(doc, docCalidad, proj, "arriba");
@@ -2741,18 +2770,19 @@ public class ReportProjectController implements Serializable {
 
             //leslie 10 septiembre cambie f02 por f01 , noexiste f02_pt05
             //leslie remplaza runs_suffix por la palabara secuenciacion
-            String doc_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") +"_Secuenciacion"+ runs_suffix+ ".docx";
+            String doc_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_Secuenciacion" + runs_suffix + ".docx";
             String ruteDoc = DirectoryreportDocuments + doc_base_name;
             doc.write(new FileOutputStream(ruteDoc));
             System.out.println("Terminado QC de corridas");
             downloadReport(ruteDoc, doc_base_name);
             showMessage("El reporte de calidad de corrida fue generado satisfactoriamente.");
-    
+
         } catch (Exception e) {
             showError("Hubo un error al generar el reporte.", e);
         }
         return "";
     }
+
     public void bionInfoRep(ProjectController pctrl) {
         System.out.println("Entra al metodo BionInfoRep");
 
@@ -2765,17 +2795,17 @@ public class ReportProjectController implements Serializable {
         String ganl = typeReportInitials(pctrl.getAnalysis());
         String trn = tipoReporteNormalizado(banl.getAnalysisName());
         List<ReportProject> report_projects = ejbFacade.findReportProjectByIdProject(proj.getIdProject());
-        List <ReportProject> rpmatches = new ArrayList<>();
-        for (ReportProject rp:report_projects){
-            if (rp.getIdUser().equals(us)){
-                if (tipoReporteNormalizado(rp.getName()).equals(trn)){
+        List<ReportProject> rpmatches = new ArrayList<>();
+        for (ReportProject rp : report_projects) {
+            if (rp.getIdUser().equals(us)) {
+                if (tipoReporteNormalizado(rp.getName()).equals(trn)) {
                     rpmatches.add(rp);
                 }
             }
         }
         File destpath;
-        
-        if (rpmatches.isEmpty()){
+
+        if (rpmatches.isEmpty()) {
 
             //Aun no se agrega la parte current.getIdReportProject(), puesto que al guardarse el archivo todavìa no se tiene
             // un idReportProject pues todavia no se ha persistido el ReportProject.
@@ -2788,42 +2818,39 @@ public class ReportProjectController implements Serializable {
             new_reportproject.setIdProject(proj);
             new_reportproject.setIdUser(us);
             getFacade().create(new_reportproject);
-            String nameFile = "authorize_F01_PT05_LNATCG_"+ proj.getIdProject().replace(":", "_")+"_"+new_reportproject.getIdReportProject().toString()+"_"+ganl+".pdf";
+            String nameFile = "authorize_F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + new_reportproject.getIdReportProject().toString() + "_" + ganl + ".pdf";
             new_reportproject.setPathauthorize_PDF(nameFile);
-            getFacade().edit(new_reportproject);   
+            getFacade().edit(new_reportproject);
             destpath = new File(DirectoryreportDocuments, nameFile);
         } else {
             ReportProject to_overwrite = rpmatches.get(0);
-            String nameFile = "authorize_F01_PT05_LNATCG_"+ proj.getIdProject().replace(":", "_")+"_"+to_overwrite.getIdReportProject().toString()+"_"+ganl+".pdf";
+            String nameFile = "authorize_F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + to_overwrite.getIdReportProject().toString() + "_" + ganl + ".pdf";
             to_overwrite.setPathauthorize_PDF(nameFile);
-            getFacade().edit(to_overwrite);   
-            System.out.println("RepportProject used: "+to_overwrite.toString());
+            getFacade().edit(to_overwrite);
+            System.out.println("RepportProject used: " + to_overwrite.toString());
             destpath = new File(DirectoryreportDocuments, to_overwrite.getPathauthorizePDF());
         }
-        
-       
-        try{
-            if (destpath.exists()){
-                System.out.println("Reemplazando el archivo preexistente "+destpath.getName());
+
+        try {
+            if (destpath.exists()) {
+                System.out.println("Reemplazando el archivo preexistente " + destpath.getName());
                 java.nio.file.Files.delete(destpath.toPath());
             }
             java.nio.file.Files.copy(pctrl.getFile().getInputstream(), destpath.toPath());
-            showMessage("Subido el PDF autorizado a "+destpath.toPath());
-        } catch (IOException e){
-            showError("Error al subir el PDF autorizado a "+destpath.toPath(), e);
+            showMessage("Subido el PDF autorizado a " + destpath.toPath());
+        } catch (IOException e) {
+            showError("Error al subir el PDF autorizado a " + destpath.toPath(), e);
         }
 
-
     }
+
     public String createReportWordBioinfo(SampleController sampleController) throws IOException {
         //TODO assertar si projectReportProject es un arreglo que sòlo contiene a current
         Project proj = current.getIdProject();
         FieldReport itemFieldReport = getSelectedFieldReport();
         System.out.println("Tipo de reporte ::: " + varTypeReport);
 
-
-        System.out.println("varidproy"+proj.getIdProject());
-
+        System.out.println("varidproy" + proj.getIdProject());
 
         java.util.Date datePer = current.getDateCreate();
         // Reporte de muestras por ahora está aquí
@@ -2833,11 +2860,11 @@ public class ReportProjectController implements Serializable {
         String ruteDoc;
         String tipoAbr;
         tipoAbr = typeReportInitials(varTypeReport);
-        doc_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_"+current.getIdReportProject()+"_"+tipoAbr+".docx";
+        doc_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + tipoAbr + ".docx";
         ruteDoc = DirectoryreportDocuments + doc_base_name;
         String tipoReporte;
         String doc_download_base_name;
-        if (repoEditSample == null){
+        if (repoEditSample == null) {
             repoEditSample = this.sampleBySRP();
         }
         try {
@@ -2846,23 +2873,23 @@ public class ReportProjectController implements Serializable {
             String typeMethodology = current.getTypeMethodology();
             String tipoMetPrefix = typeMetPrefix(varTypeReport);
             tipoReporte = tipoReporteNormalizado(varTypeReport);
-            if (tipoAbr==null){
+            if (tipoAbr == null) {
                 Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, "Tipo de reporte no registrado: {0}", varTypeReport);
                 showError("Error al generar el reporte", "E001");
                 return "menuReport?faces-redirect=true&includeViewParams=true";
             }
-            doc_download_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") +"_"+tipoAbr+".docx";
+            doc_download_base_name = "F01_PT05_LNATCG_" + proj.getIdProject().replace(":", "_") + "_" + tipoAbr + ".docx";
 
             // El documento de la introducción será la base que iremos creciendo para agregar más cosas
-            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"intro_bioinformatica.docx")));
+            doc = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "intro_bioinformatica.docx")));
             Date badate = getLastBioinfoAnlDate(all_project_samples);
             tablas_datos_proyecto(doc, proj, current.getDateCreate(), badate, all_project_samples, repoEditSample);
             tabla_pie_pagina_usuario_responsable(doc, proj);
             tablas_info_muestras(doc, proj, all_project_samples, repoEditSample, current.getTypeMethodology());
-            XWPFDocument docMethodol = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"metodos"+sufijo_tipo_muestra(typeMethodology)+".docx")));
-            XWPFDocument docCalidad = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"Reporte_de_calidad.docx")));
-            XWPFDocument docRptBioinfo = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"Bioinformatica_"+tipoMetPrefix+".docx")));
-            XWPFDocument docEval = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport+"Evaluacion_y_firmas.docx")));
+            XWPFDocument docMethodol = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "metodos" + sufijo_tipo_muestra(typeMethodology) + ".docx")));
+            XWPFDocument docCalidad = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Reporte_de_calidad.docx")));
+            XWPFDocument docRptBioinfo = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Bioinformatica_" + tipoMetPrefix + ".docx")));
+            XWPFDocument docEval = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Evaluacion_y_firmas.docx")));
             System.out.println("Se cargaron los machotes para el reporte bioinformático");
             doc = mergeMethodsIn(doc, docMethodol, proj);
             //leslie 
@@ -2870,7 +2897,7 @@ public class ReportProjectController implements Serializable {
             doc = mergeQualityReportIn(doc, docCalidad, proj, itemFieldReport.getField3());
             //leslie
             System.out.println("paso el merge de Quality reports");
-            switch (tipoReporte){
+            switch (tipoReporte) {
                 case "Expresion Diferencial":
                     resultados_ED(docRptBioinfo, doc, itemFieldReport, proj, datePer);
                     System.out.println("salio de resultados_ED");
@@ -2892,12 +2919,12 @@ public class ReportProjectController implements Serializable {
             docEval = fillCRANames(docEval);
             System.out.println("salio de fillCRNames");
             pasa_elementos(doc, docEval);
-            
+
             System.out.println("paso pasa_elemetos");
             /*
             ///doc.enforceUpdateFields();
             //doc.createTOC();
-            */
+             */
             try (FileOutputStream outw = new FileOutputStream(ruteDoc)) {
                 doc.write(outw);
                 doc.close();
@@ -2906,28 +2933,28 @@ public class ReportProjectController implements Serializable {
         } catch (IOException | InvalidFormatException | XmlException e) {
             showError("Hubo un error al generar el reporte bioinformático.", e);
             doc = null;
-            tipoReporte=null;
-            doc_download_base_name=null;
+            tipoReporte = null;
+            doc_download_base_name = null;
         }
-        if (doc!=null){
+        if (doc != null) {
             current.setStatus("Elaboracion");
             current.setPathcreate(doc_base_name);//por ahora este atributo es sólamente el basename del nombre de archivo, para no exceder el máximo de tamaño de cadena de 100 caracteres.
             getFacade().edit(current);
-            System.out.println("Creado el reporte "+tipoReporte+", guardado en "+ruteDoc);
+            System.out.println("Creado el reporte " + tipoReporte + ", guardado en " + ruteDoc);
             downloadReport(ruteDoc, doc_download_base_name);
             showMessage("El reporte bioinformático fue generado satisfactoriamente.");
         }
         return "";
         //return "menuReport?faces-redirect=true&includeViewParams=true";
     }
-    
-    private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples){
+
+    private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples) {
         // Agrega una leyenda al final del documento donde se invita al usuario a aceptar el procesamiento
         // de las muestras aceptadas o rechazadas mediante un comentario en SISBI o bien comunicarse
         // con la UUSMB para acordar la reposición de las muestras.
-        if (hay_muestra_condicionada_o_rechazada(all_project_samples)){
+        if (hay_muestra_condicionada_o_rechazada(all_project_samples)) {
             try {
-                File myObj = new File(DirectoryTemplateReport+"procedimiento_aceptacion.txt");
+                File myObj = new File(DirectoryTemplateReport + "procedimiento_aceptacion.txt");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
@@ -2944,31 +2971,29 @@ public class ReportProjectController implements Serializable {
     }
 
     //Creacion de documento Word desde una plantilla --------------------------------Final
-
-    public Date getLastBioinfoAnlDate(List<Sample> samples){
+    public Date getLastBioinfoAnlDate(List<Sample> samples) {
         //Devuelve cuándo terminó el anàlsis de calidad de la última muestra
         List<Date> dates = new ArrayList<>();
-        for (Sample sample:samples){
-            List<Comments>comms = ejbFacade.getCommentsByIdTypeAndTypeSBD(sample.getIdSample().toString(), "Sample");
-            for (Comments comm:comms){
-                if (comm.getComment().startsWith("Estatus cambia de -")){
-                    if (!comm.getComment().endsWith("Analisis Bioinformatico-")){
+        for (Sample sample : samples) {
+            List<Comments> comms = ejbFacade.getCommentsByIdTypeAndTypeSBD(sample.getIdSample().toString(), "Sample");
+            for (Comments comm : comms) {
+                if (comm.getComment().startsWith("Estatus cambia de -")) {
+                    if (!comm.getComment().endsWith("Analisis Bioinformatico-")) {
                         //esta es la fecha a elegir
                         dates.add(comm.getCommentDate());
                         break;
                     }
                 }
-                
+
             }
         }
         dates.sort(new DatesComparator());
-        if (dates.isEmpty()){
+        if (dates.isEmpty()) {
             return null;
         } else {
-            return dates.get(dates.size()-1);
+            return dates.get(dates.size() - 1);
         }
     }
-
 
     //Metodos generales
     public void showMessage(String message) {
@@ -2978,38 +3003,40 @@ public class ReportProjectController implements Serializable {
     }
 
     public void showMessage(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.INFO, message+": "+details);
+        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.INFO, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showWarning(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message+": "+details);
+        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(FacesMessage.SEVERITY_WARN, message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
-    
-    public void showError(String message, Exception e){
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message+":", e);
+
+    public void showError(String message, Exception e) {
+        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message + ":", e);
         email.sendEmailErrorTraceback(message, e);
         showError(message, e.getLocalizedMessage());
     }
-    
+
     public void showError(String mensaje, String details) {
         //java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, "Error en downloadReport:", e);
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, details);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
     //validar si existe el archivo antes de descargar por tipo de rol
-    public void validateFileExistRol(String typeRol){
-        if(typeRol.equals("revise")){
-            if(current.getPathcreate().equals("")){
+    public void validateFileExistRol(String typeRol) {
+        if (typeRol.equals("revise")) {
+            if (current.getPathcreate().equals("")) {
                 showMessage("Ups, no existe el archivo, el rol creador debe estar modificandolo");
             }
-        } else if(typeRol.equals("authorize")){
+        } else if (typeRol.equals("authorize")) {
             //filename = ctx.getRealPath("/resources/docReportsSign/"+ current.getPathrevise()) ;
         }
     }
+
     private XWPFDocument signByRole(String typeRol) throws FileNotFoundException, InvalidFormatException, IOException {
         String filename;
         if (typeRol.equals("revise")) {
@@ -3029,9 +3056,10 @@ public class ReportProjectController implements Serializable {
         signByRole(doc, typeRol);
         return doc;
     }
-    private XWPFDocument fillCRANames(XWPFDocument doc){
+
+    private XWPFDocument fillCRANames(XWPFDocument doc) {
         //Fill in creator, authorizer and reviewer names
-        
+
         //Tablas de Datos del Proyecto
         for (XWPFTable tbl : doc.getTables()) {
             for (XWPFTableRow row : tbl.getRows()) {
@@ -3041,7 +3069,7 @@ public class ReportProjectController implements Serializable {
                             String text = r.getText(0);
 
                             //INFORMACION DEL CREADOR, REVISOR O AUTORIZADOR DEL REPORTE
-                            if (text!=null){
+                            if (text != null) {
                                 if (text.contains("CREATEUSER")) {
                                     text = text.replace("CREATEUSER", current.getIdUser().getFullName());
                                     r.setText(text, 0);
@@ -3059,13 +3087,15 @@ public class ReportProjectController implements Serializable {
                     }
                 }
             }
-        }System.out.println("pasa por fillCRAmes");
+        }
+        System.out.println("pasa por fillCRAmes");
         return doc;
     }
+
     private void signByRole(XWPFDocument doc, String typeRol) throws FileNotFoundException, InvalidFormatException, IOException {
         Date theDate;
         String roleName;
-        switch (typeRol){
+        switch (typeRol) {
             case "authorize":
                 //involvedUser = current.getIdUserAuthorize();
                 roleName = typeRol.toUpperCase();
@@ -3092,19 +3122,19 @@ public class ReportProjectController implements Serializable {
                             String text = r.getText(0);
 
                             ////TABLA DE FIRMAS: Insercion de fecha de creación, revisión o autorización
-                            if (text != null && text.contains(roleName+"DATE")) {
-                                text = text.replace(roleName+"DATE", getDateStringFormat(theDate));
+                            if (text != null && text.contains(roleName + "DATE")) {
+                                text = text.replace(roleName + "DATE", getDateStringFormat(theDate));
                                 r.setText(text, 0);
                             }
                             //TABLA DE FIRMAS: Insercion de imagen de firma
                             UserRoleReport userRol = getUserRoleReportContext();
                             if (userRol.getPathimage() != null) {
-                                if (text != null && text.contains(roleName+"SIGN")) {
-                                    text = text.replace(roleName+"SIGN", "");
+                                if (text != null && text.contains(roleName + "SIGN")) {
+                                    text = text.replace(roleName + "SIGN", "");
                                     r.setText(text, 0);
                                     String imgFile = DirectoryImageSing + userRol.getPathimage();
                                     File fImgFile = new File(imgFile);
-                                    if (!fImgFile.exists()){
+                                    if (!fImgFile.exists()) {
                                         throw new SignatureException("Imagen de firma no encontrada");
                                     }
                                     FileInputStream is = new FileInputStream(fImgFile);
@@ -3121,12 +3151,12 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    public String typeReportInitials(Integer typeReport){
+    public String typeReportInitials(Integer typeReport) {
         BioinformaticAnalysis banl = ejbFacade.findBionformaticAnalysisByAnalysisId(typeReport);
         return typeReportInitials(banl.getAnalysisName());
     }
 
-    public String typeReportInitials(String typeReport){
+    public String typeReportInitials(String typeReport) {
         String typeReportInitials;
 
         switch (typeReport) {
@@ -3160,7 +3190,7 @@ public class ReportProjectController implements Serializable {
         return typeReportInitials;
     }
 
-    public String typeMetPrefix(String typeReport){
+    public String typeMetPrefix(String typeReport) {
         String tipoMetPrefix;
         switch (varTypeReport) {
             case "Expresion Diferencial":
@@ -3186,15 +3216,15 @@ public class ReportProjectController implements Serializable {
             case "Variantes Genéticas":
             case "Busqueda de Variantes":
             case "Análisis de variantes":
-                 tipoMetPrefix = "busquedavariantes";
+                tipoMetPrefix = "busquedavariantes";
                 break;
             default:
-                tipoMetPrefix=null;
+                tipoMetPrefix = null;
         }
         return tipoMetPrefix;
     }
 
-    public String tipoReporteNormalizado(String typeReport){
+    public String tipoReporteNormalizado(String typeReport) {
         String tipoReporte;
         switch (typeReport) {
             case "Expresion Diferencial":
@@ -3202,7 +3232,7 @@ public class ReportProjectController implements Serializable {
             case "Análisis de expresión diferencial":
                 // Hay 2 entradas parecidas, una "Análisis de Expresión Diferencial" y otra "Analisis de expresión eiferencial"
                 // Esta última es la que usamos ahora
-                tipoReporte="Expresion Diferencial";
+                tipoReporte = "Expresion Diferencial";
                 break;
             case "Metagenomas":
             case "Analisis Metagenomico":
@@ -3232,9 +3262,6 @@ public class ReportProjectController implements Serializable {
         return tipoReporte;
     }
 
-
-
-
     //Descargar archivo word y pdf proceso de firma
     public void downloadFile(String typeRol) throws FileNotFoundException, IOException {
         try {
@@ -3247,15 +3274,15 @@ public class ReportProjectController implements Serializable {
                     nameDocDowload = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + typeReportInitials(current.getName()) + ".docx";
                     break;
                 case "revise":
-                    fileBaseName =  current.getPathrevise();
+                    fileBaseName = current.getPathrevise();
                     nameDocDowload = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + typeReportInitials(current.getName()) + ".docx";
                     break;
                 case "authorize":
-                    fileBaseName =  current.getPathauthorize();
+                    fileBaseName = current.getPathauthorize();
                     nameDocDowload = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + typeReportInitials(current.getName()) + ".docx";
                     break;
                 case "authorize_pdf":
-                    fileBaseName =  current.getPathauthorizePDF();
+                    fileBaseName = current.getPathauthorizePDF();
                     nameDocDowload = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + typeReportInitials(current.getName()) + ".pdf";
                     break;
                 default:
@@ -3265,7 +3292,7 @@ public class ReportProjectController implements Serializable {
                     break;
             }
 
-            if (fileBaseName.endsWith(".pdf")){
+            if (fileBaseName.endsWith(".pdf")) {
                 contentType = "application/pdf";
             } else {
                 contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -3281,16 +3308,16 @@ public class ReportProjectController implements Serializable {
                     response.setContentType(contentType);
                     response.setHeader("Content-Disposition", "attachment;filename=\"" + nameDocDowload + "\"");
                     ServletOutputStream out = response.getOutputStream();
-                    
+
                     while ((read = fis2.read(bytes)) != -1) {
                         out.write(bytes, 0, read);
                     }
                     out.flush();
                     out.close();
-                    System.out.println("\nDescargado "+fileBaseName+". Encabezado de nombre: "+nameDocDowload+"\n");
+                    System.out.println("\nDescargado " + fileBaseName + ". Encabezado de nombre: " + nameDocDowload + "\n");
                     ctx2.responseComplete();
                 }
-                System.out.println("Descarga Finalizada de "+fileBaseName);
+                System.out.println("Descarga Finalizada de " + fileBaseName);
             }
         } catch (IOException e) {
             showError("Hubo un error en el método downloadFile", e);
@@ -3305,7 +3332,7 @@ public class ReportProjectController implements Serializable {
                 ruteDoc = DirectoryreportDocuments + current.getPathauthorize();
             } else if (current.getPathrevise() != null) {
                 ruteDoc = DirectoryreportDocuments + current.getPathrevise();
-            } else if (current.getPathcreate()!= null) {
+            } else if (current.getPathcreate() != null) {
                 ruteDoc = DirectoryreportDocuments + current.getPathcreate();
             }
 
@@ -3333,10 +3360,10 @@ public class ReportProjectController implements Serializable {
                 }
                 out.flush();
                 out.close();
-                System.out.println("\nDescargado "+ruteDoc+". Encabezado de nombre "+nameDocDowload+"\n");
+                System.out.println("\nDescargado " + ruteDoc + ". Encabezado de nombre " + nameDocDowload + "\n");
                 ctx2.responseComplete();
             }
-            System.out.println("Descarga Finalizada de "+ruteDoc);
+            System.out.println("Descarga Finalizada de " + ruteDoc);
             fis2.close();
         } catch (IOException e) {
             showError("Hubo un error en el método downloadFileUpdated: ", e);
@@ -3344,12 +3371,12 @@ public class ReportProjectController implements Serializable {
     }
 
     //Validar boton tipod e reporte, solo el que lo creo puede editarlo
-    public String validateUserTypeReport(int idUser, String idProject, String typeReport){
-        if(!ejbFacade.findReportProjectidPType(idProject, typeReport).isEmpty()){
+    public String validateUserTypeReport(int idUser, String idProject, String typeReport) {
+        if (!ejbFacade.findReportProjectidPType(idProject, typeReport).isEmpty()) {
             ReportProject reportProject = ejbFacade.findReportProjectidPType(idProject, typeReport).get(0);
-            if(Objects.equals(reportProject.getIdUser().getIdUser(), getUserContext().getIdUser())){
+            if (Objects.equals(reportProject.getIdUser().getIdUser(), getUserContext().getIdUser())) {
                 return "false";
-            }else{
+            } else {
                 return "true";
             }
         }
@@ -3357,9 +3384,11 @@ public class ReportProjectController implements Serializable {
     }
 
     UploadedFile filep;
+
     public UploadedFile getFilep() {
         return filep;
     }
+
     public void setFilep(UploadedFile filep) {
         this.filep = filep;
     }
@@ -3373,16 +3402,16 @@ public class ReportProjectController implements Serializable {
                 //return "true";
                 return "false";//TODO al menos por ahora para probar
             }
-        }else if (typeRol.equals("revise")){
-            if (current.getPathrevise()== null || current.getPathrevise().equals("")) {
+        } else if (typeRol.equals("revise")) {
+            if (current.getPathrevise() == null || current.getPathrevise().equals("")) {
                 return "false";
                 //return validateBtnFirmarRevisar();
                 //return validateBtnQuitarFirmaRevisar();
             } else {
                 return "false";
             }
-        }else if (typeRol.equals("authorize")){
-            if (current.getPathauthorize()== null || current.getPathauthorize().equals("")) {
+        } else if (typeRol.equals("authorize")) {
+            if (current.getPathauthorize() == null || current.getPathauthorize().equals("")) {
                 return "false";
                 //return validateBtnQuitarFirmaAutorizar();
             } else {
@@ -3391,11 +3420,11 @@ public class ReportProjectController implements Serializable {
         }
         return null;
     }
-    
-    public String validateBtnRegistrarReporteFastQC(ProjectController pctrl){
-        if (pctrl.getRuns() == null){
+
+    public String validateBtnRegistrarReporteFastQC(ProjectController pctrl) {
+        if (pctrl.getRuns() == null) {
             return "false";//TODO por el momento
-        } else if (pctrl.getRuns().isEmpty()){
+        } else if (pctrl.getRuns().isEmpty()) {
             return "false";//TODO por el momento
         } else {
             return "false";
@@ -3408,14 +3437,14 @@ public class ReportProjectController implements Serializable {
 
         try {
             //Quitó current.getTypeMethodology()
-            nameFile = "F01_PT05_LNATCG_"+current.getIdProject().getIdProject().replace(":", "_") +"_"+current.getIdReportProject()+"_"+typeReportInitials(varTypeReport)+".docx";
+            nameFile = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(varTypeReport) + ".docx";
             System.out.println("mostramos la ruta o nombre::  " + filep.getFileName());
             File destpath = new File(DirectoryreportDocuments, nameFile);
             String cadreemplazo;
-            if (destpath.exists()){
-                System.out.println("Reemplazando el archivo preexistente "+destpath.getName());
+            if (destpath.exists()) {
+                System.out.println("Reemplazando el archivo preexistente " + destpath.getName());
                 java.nio.file.Files.delete(destpath.toPath());
-                cadreemplazo=", reemplazando el archivo que existìa eon ese nombre";
+                cadreemplazo = ", reemplazando el archivo que existìa eon ese nombre";
             } else {
                 cadreemplazo = "";
             }
@@ -3423,9 +3452,9 @@ public class ReportProjectController implements Serializable {
             current.setPathcreate(nameFile);
             current.setStatus("Elaboracion");
             getFacade().edit(current);
-            showMessage("Archivo "+event.getFile().getFileName()+" subido satisfactoriamente"+cadreemplazo, event.getFile().getFileName() + " fue cargado.");
+            showMessage("Archivo " + event.getFile().getFileName() + " subido satisfactoriamente" + cadreemplazo, event.getFile().getFileName() + " fue cargado.");
         } catch (IOException ex) {
-            showError("There was a problem, your file was not uploaded.",ex);
+            showError("There was a problem, your file was not uploaded.", ex);
             return "menuReport?faces-redirect=true&includeViewParams=true";
         }
         //sendEmailToRoleRevise();
@@ -3436,14 +3465,14 @@ public class ReportProjectController implements Serializable {
         String nameFile;
         filep = event.getFile();
         try {
-            nameFile = "revise_F01_PT05_LNATCG_"+current.getIdProject().getIdProject().replace(":", "_") +"_"+current.getIdReportProject()+"_"+typeReportInitials(varTypeReport)+".docx";
+            nameFile = "revise_F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(varTypeReport) + ".docx";
             System.out.println("mostramos la ruta o nombre::  " + filep.getFileName());
             File destpath = new File(DirectoryreportDocuments, nameFile);
             String cadreemplazo;
-            if (destpath.exists()){
-                System.out.println("Reemplazando el archivo preexistente "+destpath.getName());
+            if (destpath.exists()) {
+                System.out.println("Reemplazando el archivo preexistente " + destpath.getName());
                 java.nio.file.Files.delete(destpath.toPath());
-                cadreemplazo=", reemplazando el archivo que existìa eon ese nombre";
+                cadreemplazo = ", reemplazando el archivo que existìa eon ese nombre";
             } else {
                 cadreemplazo = "";
             }
@@ -3451,9 +3480,9 @@ public class ReportProjectController implements Serializable {
             current.setPathrevise(nameFile);
             current.setStatus("Revision");
             getFacade().edit(current);
-            showMessage("Archivo "+event.getFile().getFileName()+" subido satisfactoriamente"+cadreemplazo, event.getFile().getFileName() + " fue cargado.");
+            showMessage("Archivo " + event.getFile().getFileName() + " subido satisfactoriamente" + cadreemplazo, event.getFile().getFileName() + " fue cargado.");
         } catch (IOException ex) {
-            showError("There was a problem, your file was not uploaded.",ex);
+            showError("There was a problem, your file was not uploaded.", ex);
         }
         System.out.println(event.getFile().getFileName());
         FacesMessage message = new FacesMessage("Archivo Word subido satisfactoriamente", event.getFile().getFileName() + " fue cargado.");
@@ -3466,35 +3495,35 @@ public class ReportProjectController implements Serializable {
         String nameFile;
         filep = event.getFile();
         String ext;
-        if (filep.getFileName().endsWith(".docx")){
-            ext=".docx";
-            nameFile = "authorize_F01_PT05_LNATCG_"+ current.getIdProject().getIdProject().replace(":", "_")+"_"+current.getIdReportProject()+"_"+typeReportInitials(current.getName())+ext;
+        if (filep.getFileName().endsWith(".docx")) {
+            ext = ".docx";
+            nameFile = "authorize_F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ext;
             current.setStatus("Autorizacion");
             current.setPathauthorize(nameFile);
         } else if (filep.getFileName().endsWith(".pdf")) {
-            ext=".pdf";
-            nameFile = "authorize_F01_PT05_LNATCG_"+ current.getIdProject().getIdProject().replace(":", "_")+"_"+current.getIdReportProject()+"_"+typeReportInitials(current.getName())+ext;
+            ext = ".pdf";
+            nameFile = "authorize_F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ext;
             current.setStatus("Autorizado");
             current.setPathauthorize_PDF(nameFile);
-       } else {
-            ext=null;
-            showError("Error en uploadFileAuthorize", "Extensión no reconocida en archivo "+filep.getFileName());
+        } else {
+            ext = null;
+            showError("Error en uploadFileAuthorize", "Extensión no reconocida en archivo " + filep.getFileName());
             return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
         }
         try {
             System.out.println("mostramos la ruta o nombre::  " + filep.getFileName());
             File destpath = new File(DirectoryreportDocuments, nameFile);
             String cadreemplazo;
-            if (destpath.exists()){
-                System.out.println("Reemplazando el archivo preexistente "+destpath.getName());
+            if (destpath.exists()) {
+                System.out.println("Reemplazando el archivo preexistente " + destpath.getName());
                 java.nio.file.Files.delete(destpath.toPath());
-                cadreemplazo=", reemplazando el archivo que existìa eon ese nombre";
+                cadreemplazo = ", reemplazando el archivo que existìa eon ese nombre";
             } else {
                 cadreemplazo = "";
             }
             java.nio.file.Files.copy(filep.getInputstream(), destpath.toPath());
             getFacade().edit(current);
-            showMessage("Archivo "+event.getFile().getFileName()+" subido satisfactoriamente"+cadreemplazo, event.getFile().getFileName() + " fue cargado.");
+            showMessage("Archivo " + event.getFile().getFileName() + " subido satisfactoriamente" + cadreemplazo, event.getFile().getFileName() + " fue cargado.");
         } catch (IOException ex) {
             showError("There was a problem your file was not uploaded.", ex);
         }
@@ -3504,7 +3533,7 @@ public class ReportProjectController implements Serializable {
     public String deleteUploadWordCreate() {
         //FacesContext context = FacesContext.getCurrentInstance();
         //ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
-        File file = new File( DirectoryreportDocuments + current.getPathcreate());
+        File file = new File(DirectoryreportDocuments + current.getPathcreate());
 
         file.delete();
         current.setPathcreate(null);
@@ -3512,10 +3541,11 @@ public class ReportProjectController implements Serializable {
         getFacade().edit(current);
         return "menuReport?faces-redirect=true&includeViewParams=true";
     }
+
     public String deleteUploadWordRevise() {
         //FacesContext context = FacesContext.getCurrentInstance();
         //ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
-        File file = new File( DirectoryreportDocuments + current.getPathrevise());
+        File file = new File(DirectoryreportDocuments + current.getPathrevise());
 
         file.delete();
         current.setPathrevise(null);
@@ -3528,7 +3558,7 @@ public class ReportProjectController implements Serializable {
     public String deleteUploadWordAuthorize() {
         //FacesContext context = FacesContext.getCurrentInstance();
         //ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
-        File file = new File( DirectoryreportDocuments + current.getPathauthorize());
+        File file = new File(DirectoryreportDocuments + current.getPathauthorize());
 
         file.delete();
         current.setPathauthorize(null);
@@ -3538,18 +3568,17 @@ public class ReportProjectController implements Serializable {
         return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
     }
 
-
     public String deleteUploadWord(String typeRol) {
-        String statusReport="", pathReport="";
+        String statusReport = "", pathReport = "";
 
-        if(typeRol.equals("create")){
+        if (typeRol.equals("create")) {
             pathReport = current.getPathcreate();
             statusReport = "Creado";
-        }else if(typeRol.equals("revise")){
+        } else if (typeRol.equals("revise")) {
             //current.setIdUserRevise(null);
             pathReport = current.getPathrevise();
             statusReport = "Revision";
-        }else if(typeRol.equals("authorize")){
+        } else if (typeRol.equals("authorize")) {
             //current.setIdUserRevise(null);
             pathReport = current.getPathauthorize();
             statusReport = "Autorizacion";
@@ -3570,18 +3599,19 @@ public class ReportProjectController implements Serializable {
         //projectReportProject = ejbFacadeProject.reportProjectStatus();
         //init();
     }
+
     //Botón borrar reporte (para las pruebas)
-    public String validateDisplayBtnDeleteReport(ReportProject report){
+    public String validateDisplayBtnDeleteReport(ReportProject report) {
         //El creador del reporte es el {unico que lo puede borrar
         FacesContext context = FacesContext.getCurrentInstance();
         Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-        if (us.equals(report.getIdUser())){
+        if (us.equals(report.getIdUser())) {
             return "true";
         } else {
             return "false";
         }
     }
-    
+
     public void deleteReport(ReportProject report) {
         FacesContext context = FacesContext.getCurrentInstance();
         int idReportProject = report.getIdReportProject();//25
@@ -3590,6 +3620,7 @@ public class ReportProjectController implements Serializable {
 
         ejbSampleRP.deleteReportByReportProject(idReportProject);
     }
+
     //Metodos para validar botones de generar, revisar y autorizar            Inicio
     public String validateBtnContinuar(Users idUserCreate, String statusReport) {
         //Obtenemos el id del usuario con la sesion actual iniciada
@@ -3628,8 +3659,8 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    public String validateUserRoleFidelAlejandro(){
-        if(getUserRoleReportContext().getIdUser().getIdUser() == 46){
+    public String validateUserRoleFidelAlejandro() {
+        if (getUserRoleReportContext().getIdUser().getIdUser() == 46) {
             return "false";
         }
         return "true";
@@ -3648,7 +3679,7 @@ public class ReportProjectController implements Serializable {
             //primera etapa de validacion
             //TODO quitè el candado aqui, para desactivar la autorizaciòn de revisar un documento si el usuario es igual al usuario creador
             // El candado va a estar en setUserRevise
-            if (userDetails.getTorevise() == false || idUserRevise==null || userDetails == null || statusReport.equals("Creado")) {
+            if (userDetails.getTorevise() == false || idUserRevise == null || userDetails == null || statusReport.equals("Creado")) {
                 return "true";
             } else if (idUserRevise.getIdUser() > 0) {
                 if (!Objects.equals(idUserRevise.getIdUser(), us.getIdUser())) {
@@ -3694,10 +3725,10 @@ public class ReportProjectController implements Serializable {
             //primera etapa de validacion
             //System.out.println("idUserAuthorize  : " + idUserAuthorize+" vs "+us.getIdUser());
             //if (userDetails.getToaauthorize() == false || us.getIdUser() == idUserCreate || us.getIdUser() == idUserRevise || userDetails == null || statusReport.equals("Creado") || statusReport.equals("Elaboracion") || statusReport.equals("Elaborado") || statusReport.equals("Revision")||statusReport.equals("Revisado")) {
-            if (us.getIdUser()==46){
+            if (us.getIdUser() == 46) {
                 //Usuario Alejandro Sánchez siempre puede autorizar
                 return "false";
-            } else if (idUserAuthorize==null){
+            } else if (idUserAuthorize == null) {
                 //Si es 0 idUserauthorize, deshabilita el botón
                 return "true";
             } else if (idUserAuthorize.getIdUser() == us.getIdUser()) {
@@ -3724,18 +3755,20 @@ public class ReportProjectController implements Serializable {
             }
         }
     }
+
     //Metodo para validar si ya ha subido su firma
-    public Users getUserContext(){
+    public Users getUserContext() {
         FacesContext context = FacesContext.getCurrentInstance();
         Users user = (Users) context.getExternalContext().getSessionMap().get("usuario");
 
         return user;
     }
+
     //Metodo obtiene el userRoleReport de la sesion iniciada actualmente
-    public UserRoleReport getUserRoleReportContext(){
+    public UserRoleReport getUserRoleReportContext() {
         FacesContext context = FacesContext.getCurrentInstance();
         Users user = (Users) context.getExternalContext().getSessionMap().get("usuario");
-        if(ejbFacadeUserRole.findUserRoleReportById(user.getIdUser()).isEmpty()){
+        if (ejbFacadeUserRole.findUserRoleReportById(user.getIdUser()).isEmpty()) {
             return null;
         } else {
             UserRoleReport userRole = ejbFacadeUserRole.findUserRoleReportById(user.getIdUser()).get(0);
@@ -3743,34 +3776,34 @@ public class ReportProjectController implements Serializable {
         }
     }
 
-    public String validateUploadImageSign(){
+    public String validateUploadImageSign() {
         UserRoleReport userRole = getUserRoleReportContext();
-        System.out.println("rol de usuario "+userRole.getIdUser().getFirstName());
-        System.out.println("imagen de usuario "+userRole.getPathimage());
+        System.out.println("rol de usuario " + userRole.getIdUser().getFirstName());
+        System.out.println("imagen de usuario " + userRole.getPathimage());
 
-        if(userRole.getPathimage() == null){
+        if (userRole.getPathimage() == null) {
             return "true";
-        }else{
+        } else {
             return "false";
         }
     }
 
     //Metodos para validar botones de generar, revisar y autorizar            Final
-    public String validateMenuReportImageSign(){
+    public String validateMenuReportImageSign() {
         UserRoleReport userRole = getUserRoleReportContext();
-        if(userRole.getPathimage() == null){
+        if (userRole.getPathimage() == null) {
             return "true";
-        }else{
+        } else {
             return "false";
         }
     }
 
-    public String validateBtnGenerarWordCreate(){
+    public String validateBtnGenerarWordCreate() {
         return null;
     }
 
     public String validateBtnMenuReportEdit() {//Valdida botones de edicion
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Creado":
             case "Elaboracion":
                 return "false";
@@ -3778,14 +3811,15 @@ public class ReportProjectController implements Serializable {
                 return "true";
         }
     }
+
     public String validateBtnFirmaCrear() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Creado":
             case "Elaborado":
             case "Revision":
                 return "true";
             default:
-                if (current.getPathcreate()==null){
+                if (current.getPathcreate() == null) {
                     return "true";
                 } else {
                     return validateUploadImageSign();
@@ -3794,7 +3828,7 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnQuitarFirmaCrear() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Creado":
             case "Elaboracion":
                 return "true";
@@ -3804,7 +3838,7 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnFirmarRevisar() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Creado":
             case "Elaboracion":
             case "Elaborado":
@@ -3813,10 +3847,10 @@ public class ReportProjectController implements Serializable {
                 //Si está todavìa en creado o eleboración, se deshabilita
                 return "true";
             default:
-                if(current.getIdUserRevise() == null){
+                if (current.getIdUserRevise() == null) {
                     return "true";
-                }else{
-                    if (current.getPathrevise()==null){
+                } else {
+                    if (current.getPathrevise() == null) {
                         return "true";
                     } else {
                         return validateUploadImageSign();
@@ -3826,7 +3860,7 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnQuitarFirmaRevisar() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Creado":
             case "Elaboracion":
             case "Elaborado":
@@ -3834,11 +3868,11 @@ public class ReportProjectController implements Serializable {
                 //Si está todavìa en creado o eleboración, se deshabilita
                 return "true";
             default:
-                if(current.getIdUserRevise() != null){
+                if (current.getIdUserRevise() != null) {
                     //return "false";
-                    if(current.getPathrevise() != null){
+                    if (current.getPathrevise() != null) {
                         return "false";
-                    }else{
+                    } else {
                         return validateUploadImageSign();
                         //return "false";
                     }
@@ -3857,13 +3891,13 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnFirmarAutorizar() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             //case "Revisado":
             case "Autorizacion":
-                if(current.getIdUserAuthorize()== null){
+                if (current.getIdUserAuthorize() == null) {
                     return "true";
-                }else{
-                    if (current.getPathauthorize()==null){
+                } else {
+                    if (current.getPathauthorize() == null) {
                         return "true";
                     } else {
                         return validateUploadImageSign();
@@ -3875,12 +3909,12 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnDescargarAutorizar() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Autorizado":
             case "Entregado":
-                if(current.getIdUserAuthorize()== null){
+                if (current.getIdUserAuthorize() == null) {
                     return validateUploadImageSign();
-                }else{
+                } else {
                     return "false";
                 }
             default:
@@ -3889,19 +3923,18 @@ public class ReportProjectController implements Serializable {
     }
 
     public String validateBtnQuitarFirmaAutorizar() {
-        switch (current.getStatus()){
+        switch (current.getStatus()) {
             case "Autorizado":
             case "Entregado":
-                if(current.getIdUserAuthorize()== null){
+                if (current.getIdUserAuthorize() == null) {
                     return validateUploadImageSign();
-                }else{
+                } else {
                     return "false";
                 }
             default:
                 return "true";
         }
     }
-
 
     public String validateBtnEliminarPDFAutorizar() {
         if (current.getStatus().equals("Autorizado")) {
@@ -3914,9 +3947,9 @@ public class ReportProjectController implements Serializable {
     public String validateBtnEnviarEmail(String reportStatus) {
         ///O sea, cuando está autorizado, no hay vuelta de hoja. pero sólamente así está deshabilitado el botoncito.
         if (current.getStatus().equals(reportStatus)) {
-            if (reportStatus.equals("Autorizado")){
+            if (reportStatus.equals("Autorizado")) {
                 //Si estamos en la autorización, hacemos una validación extra, que exista el PDF
-                if (current.getPathauthorizePDF_exists()){
+                if (current.getPathauthorizePDF_exists()) {
                     return "false";
                 } else {
                     return "true";
@@ -3949,7 +3982,7 @@ public class ReportProjectController implements Serializable {
             //Verificar si existe un registro relacionado en sample_report_project
             //return redirectSelectReport();
             messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para revisión desde la plataforma de SISBI";
-            subjetFinal = "Reporte del proyecto listo para revisión: " +  current.getIdProject().getIdProject();
+            subjetFinal = "Reporte del proyecto listo para revisión: " + current.getIdProject().getIdProject();
             return redirectFormTypeMethodology(null);
 
         } catch (Exception e) {
@@ -3977,7 +4010,7 @@ public class ReportProjectController implements Serializable {
             //Verificar si existe un registro relacionado en sample_report_project
             //return redirectSelectReport();
             messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para revisión desde la plataforma de SISBI";
-            subjetFinal = "Reporte del proyecto listo para revisión: " +  current.getIdProject().getIdProject();
+            subjetFinal = "Reporte del proyecto listo para revisión: " + current.getIdProject().getIdProject();
             return redirectFormTypeMethodology(null);
 
         } catch (Exception e) {
@@ -3997,7 +4030,6 @@ public class ReportProjectController implements Serializable {
         //Asignando valor al objeto de la clase
         current = getFacade().find(varIdReportProject);
 
-
         System.out.println("varIdReportProject ::: " + varIdReportProject + "\n"
                 + "varTypeReport  ::: " + varTypeReport + "\n"
                 + "varIdProject :::: " + varIdProject
@@ -4005,13 +4037,13 @@ public class ReportProjectController implements Serializable {
 
         if (typeRol.equals("Revision")) {
             //inicializamos los valores para el envío de correo
-            subjetFinal =  "Reporte del proyecto listo para autorización: " +  current.getIdProject().getIdProject();
-            messageFinal  = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para autorizarse desde la plataforma de SISBI";
+            subjetFinal = "Reporte del proyecto listo para autorización: " + current.getIdProject().getIdProject();
+            messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible para autorizarse desde la plataforma de SISBI";
             return "menuReportRevise?faces-redirect=true&includeViewParams=true";
         } else if (typeRol.equals("Autorizacion")) {
             //inicializamos los valores para el envío de correo
-            subjetFinal =  "Reporte del proyecto listo: " +  current.getIdProject().getIdProject();
-            messageFinal  = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible desde la plataforma de SISBI";
+            subjetFinal = "Reporte del proyecto listo: " + current.getIdProject().getIdProject();
+            messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible desde la plataforma de SISBI";
             return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
         }
         return null;
@@ -4022,10 +4054,10 @@ public class ReportProjectController implements Serializable {
         XWPFDocument doc;
         try {
             doc = signByRole("create");
-            String ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_"+current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ".docx";
+            String ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ".docx";
             current.setPathcreate(ruteDoc);
             //TODO Acabo de cambiar DirectoryDownloadWords por Directory
-            FileOutputStream outfw = new FileOutputStream(DirectoryreportDocuments+ruteDoc); 
+            FileOutputStream outfw = new FileOutputStream(DirectoryreportDocuments + ruteDoc);
             doc.write(outfw);
             doc.close();
             outfw.close();
@@ -4034,7 +4066,7 @@ public class ReportProjectController implements Serializable {
             current.setStatus("Elaborado");
             getFacade().edit(current);
             showMessage("Reporte firmado");
-        } catch (IOException|InvalidFormatException e){
+        } catch (IOException | InvalidFormatException e) {
             showError("Hubo un error en el método FinishRevise", e);
         }
         return "menuReport?faces-redirect=false&includeViewParams=true";
@@ -4045,14 +4077,15 @@ public class ReportProjectController implements Serializable {
         getFacade().edit(current);
         showMessage("Firma quitada (en la base de datos)");
     }
+
     public void changeStat() {
         current.setStatus("Elaboracion");
         getFacade().edit(current);
         showMessage("El reporte ha cambiado al estus -Elaboracion-");
         System.out.println("**Intenta enviar correo al elaborador");
-        try{
+        try {
             sendEmailRoleCreateCorrect();
-        } catch (Exception e){
+        } catch (Exception e) {
             showError("Error avisando el quitado firma", e);
         }
         System.out.println("****Redirige a la lista de reportes");
@@ -4066,18 +4099,18 @@ public class ReportProjectController implements Serializable {
         Users user = (Users) context.getExternalContext().getSessionMap().get("usuario");
 
         Date date = new Date();
-        System.out.println("fecha "+date);
+        System.out.println("fecha " + date);
         current.setIdUserRevise(user);
         current.setDateReviseIfEmpty(date);
         getFacade().edit(current);
         XWPFDocument doc;
         try {
             doc = signByRole("revise");
-            String suffix_ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject()+ "_" + typeReportInitials(current.getName()) + ".docx";
+            String suffix_ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ".docx";
             String ruteDoc = "revise_" + suffix_ruteDoc;
             current.setPathrevise(ruteDoc);
             //TODO Acabo de cambiar DirectoryDownloadWords por Directory
-            try (FileOutputStream outf=new FileOutputStream(DirectoryreportDocuments+ruteDoc)){
+            try (FileOutputStream outf = new FileOutputStream(DirectoryreportDocuments + ruteDoc)) {
                 doc.write(outf);
                 outf.flush();
                 outf.close();
@@ -4088,7 +4121,7 @@ public class ReportProjectController implements Serializable {
             current.setStatus("Revisado");
             showMessage("Documento firmado");
             getFacade().edit(current);
-        } catch (IOException|InvalidFormatException e){
+        } catch (IOException | InvalidFormatException e) {
             showError("Hubo un error en el método FinishRevise", e);
         }
         return "";
@@ -4099,15 +4132,15 @@ public class ReportProjectController implements Serializable {
         current.setStatus("Revision");
         getFacade().edit(current);
         showMessage("Firma quitada (en la base de datos)");
-        try{
+        try {
             sendEmailRoleCreateCorrect();
-        } catch (Exception e){
+        } catch (Exception e) {
             showError("Error avisando el quitado firma", e);
         }
         return "";
     }
-    
-    public String projects_label(String label, int anl_label){
+
+    public String projects_label(String label, int anl_label) {
         FacesContext context = FacesContext.getCurrentInstance();
         String trn = tipoReporteNormalizado(label);
         Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
@@ -4115,41 +4148,37 @@ public class ReportProjectController implements Serializable {
         List<ReportProject> report_projects = ejbFacade.findReportProjectByIdProject(pj.getIdProject());
         //List <ReportProject> rpmatches = new ArrayList<>();
         int nrp = 0;
-        for (ReportProject rp:report_projects){
-            if (rp.getIdUser().equals(us)){
-                String  rpnorm = tipoReporteNormalizado(rp.getName());
-                if (trn.equals(rpnorm)){
+        for (ReportProject rp : report_projects) {
+            if (rp.getIdUser().equals(us)) {
+                String rpnorm = tipoReporteNormalizado(rp.getName());
+                if (trn.equals(rpnorm)) {
                     //rpmatches.add(rp);
                     nrp++;
                 }
             }
         }
-        return label+" ("+String.valueOf(nrp)+" existent reports)";
+        return label + " (" + String.valueOf(nrp) + " existent reports)";
     }
-    
-    
+
     /*
     
     Leslie 24 mayo 2024; 
     1.- Este metodo deberia buscar todo la lista de reportes bioinformaticos 
     (de preferencia solo los autorizados porque son la version final que vera el usuario)
     2.- Debe permitir obtener el id_report_project,idproject para poder actualizar el authorize path
-    */
-    public List<ReportProject> AllReportsProjectByIdProject(String idProject){
+     */
+    public List<ReportProject> AllReportsProjectByIdProject(String idProject) {
         List<ReportProject> reportsProject = ejbFacade.findReportProjectByIdProject(idProject);
-       List<ReportProject> matching_projects = new ArrayList<>();
-        for (ReportProject itemReportProject:reportsProject){           
-            if (itemReportProject.getStatus().equals("Revisado") || itemReportProject.getStatus().equals("Revision") || 
-                    itemReportProject.getStatus().equals("Autorizado")|| itemReportProject.getStatus().equals("Autorizacion")) {
-                 matching_projects.add(itemReportProject);
-            }             
+        List<ReportProject> matching_projects = new ArrayList<>();
+        for (ReportProject itemReportProject : reportsProject) {
+            if (itemReportProject.getStatus().equals("Revisado") || itemReportProject.getStatus().equals("Revision")
+                    || itemReportProject.getStatus().equals("Autorizado") || itemReportProject.getStatus().equals("Autorizacion")) {
+                matching_projects.add(itemReportProject);
+            }
         }
         return matching_projects;
     }
-    
-    
 
-    
     public void Word_to_PDF(String document_path, String PDF_path) throws IOException, org.docx4j.openpackaging.exceptions.InvalidFormatException {
         //Genera un archivo PDF desde un documento de Word
         //PdfOptions pdfoptns = PdfOptions.create();
@@ -4157,30 +4186,30 @@ public class ReportProjectController implements Serializable {
         //pdfoptns.getFontProvider().
         FileInputStream newfis = new FileInputStream(document_path);
         File pdfFile = new File(PDF_path);
-        if (pdfFile.exists()){
-            System.out.println("Va a generar el PDF reemplazando "+PDF_path);
+        if (pdfFile.exists()) {
+            System.out.println("Va a generar el PDF reemplazando " + PDF_path);
         } else {
-            System.out.println("Va a generar el PDF en la ruta "+PDF_path);
+            System.out.println("Va a generar el PDF en la ruta " + PDF_path);
         }
         try (OutputStream out = new FileOutputStream(pdfFile)) {
-            
-            IXDocReport report = XDocReportRegistry.getRegistry().loadReport( newfis, TemplateEngineKind.Freemarker );
+
+            IXDocReport report = XDocReportRegistry.getRegistry().loadReport(newfis, TemplateEngineKind.Freemarker);
             // Create context Java model
             Properties properties = new Properties();
             properties.setProperty("resource.loaders", "class");
             properties.setProperty(
-            "resource.loader.class.class",               "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+                    "resource.loader.class.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 
             ITemplateEngine templateEngine = new VelocityTemplateEngine(properties);
             //ITemplateEngine templateEngine = new FreemarkerTemplateEngine();
             //Instalé la fuente Arial en Linux
             report.setTemplateEngine(templateEngine);
             IContext context = report.createContext();
-            
+
             Options options = Options.getTo(ConverterTypeTo.PDF);//.via(
             options = options.via(ConverterTypeVia.XWPF);
             PdfOptions pdfOptions = PdfOptions.create();
-            
+
             //pdfOptions.fontProvider(new MyFontProvider());
             options.subOptions(pdfOptions);
             report.convert(context, options, out);
@@ -4190,10 +4219,10 @@ public class ReportProjectController implements Serializable {
 
             // A partir de aquí se consdidera una generaciòn satisfactoria del PDF
             //current.setPathauthorize(rutePdf);
-        } catch (NullPointerException|EvaluationException|XDocReportException e){
+        } catch (NullPointerException | EvaluationException | XDocReportException e) {
             showError("Hubo un error al generar el PDF", e);
         }
-                         }
+    }
 
     //Metodo para firmar en usuario autorizar
     public String finishAuthorize() throws org.docx4j.openpackaging.exceptions.InvalidFormatException {
@@ -4204,34 +4233,34 @@ public class ReportProjectController implements Serializable {
         current.setDateAuthorizeIfEmpty(new Date());
         XWPFDocument doc;
 
-        String suffix_ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_"+current.getIdReportProject()+ "_" + typeReportInitials(current.getName()) + ".docx";
+        String suffix_ruteDoc = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ".docx";
         String ruteDoc = "authorize_" + suffix_ruteDoc;
         try {
             doc = signByRole("authorize");
             current.setPathauthorize(ruteDoc);
             //TODO Acabo de cambiar DirectoryDownloadWords por Directory
-            try (FileOutputStream filedoc = new FileOutputStream(DirectoryreportDocuments+ruteDoc)){
+            try (FileOutputStream filedoc = new FileOutputStream(DirectoryreportDocuments + ruteDoc)) {
                 doc.write(filedoc);
                 filedoc.flush();
                 filedoc.close();
                 doc.close();
             }
-            System.out.println("Documento firmado por su autorizador: " + DirectoryreportDocuments+ruteDoc);
+            System.out.println("Documento firmado por su autorizador: " + DirectoryreportDocuments + ruteDoc);
             current.setStatus("Autorizado");
-        } catch (IOException|InvalidFormatException e){
+        } catch (IOException | InvalidFormatException e) {
             showError("Hubo un error en el método FinishAuthorize", e);
         }
         try {
-            String suffix_rutePdf = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject()+ "_" + typeReportInitials(current.getName()) + ".pdf";
+            String suffix_rutePdf = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + typeReportInitials(current.getName()) + ".pdf";
             String rutePdf = "authorize_" + suffix_rutePdf;
-            Word_to_PDF(DirectoryreportDocuments+ruteDoc, DirectoryreportDocuments+rutePdf);
+            Word_to_PDF(DirectoryreportDocuments + ruteDoc, DirectoryreportDocuments + rutePdf);
             current.setPathauthorize_PDF(rutePdf);
-        } catch (IOException e){
+        } catch (IOException e) {
             showError("Hubo un error en la conversión de documento a PDF", e);
         }
         getFacade().edit(current);
-    return "";
-    //return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
+        return "";
+        //return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
     }
 
     public void unfinishAuthorize() {
@@ -4239,9 +4268,9 @@ public class ReportProjectController implements Serializable {
         current.setStatus("Autorizacion");
         getFacade().edit(current);
         showMessage("Firma quitada (en la base de datos)");
-        try{
+        try {
             sendEmailRoleReviseCorrect();
-        } catch (Exception e){
+        } catch (Exception e) {
             showError("Error avisando el quitado de firma", e);
         }
         //return "";
@@ -4328,33 +4357,36 @@ public class ReportProjectController implements Serializable {
         return null;
     }
 
-    public void EnviarCorreo(){
+    public void EnviarCorreo() {
         email.enviarCorreoPrueba();
     }
+
     //Metodos para enviar correos para continuar con el proceso de firma
-    public List<UserRoleReport> getUsersRoleRevise(){
+    public List<UserRoleReport> getUsersRoleRevise() {
         return ejbFacadeUserRoleReport.findUsersRoleReportByRevise();
     }
-    
-    public List<Users> getUsersRevise(){
+
+    public List<Users> getUsersRevise() {
         List<UserRoleReport> usersRoleRevise;
         List<Users> usersRevise = new ArrayList<>();
         usersRoleRevise = ejbFacadeUserRoleReport.findUsersRoleReportByRevise();
-        for (UserRoleReport uRr:usersRoleRevise){
+        for (UserRoleReport uRr : usersRoleRevise) {
             usersRevise.add(uRr.getIdUser());
         }
         return usersRevise;
     }
-    public List<Users> getUsersAuthorize(){
+
+    public List<Users> getUsersAuthorize() {
         List<UserRoleReport> usersRoleAuthorize;
         List<Users> usersAuthorize = new ArrayList<>();
         usersRoleAuthorize = ejbFacadeUserRoleReport.findUsersRoleReportByAuthorize();
-        for (UserRoleReport uRr:usersRoleAuthorize){
+        for (UserRoleReport uRr : usersRoleAuthorize) {
             usersAuthorize.add(uRr.getIdUser());
         }
         return usersAuthorize;
     }
-    public void sendEmailToRoleRevise(){
+
+    public void sendEmailToRoleRevise() {
         //List<UserRoleReport> usersRevise;
         //usersRevise = ejbFacadeUserRoleReport.findUsersRoleReportByRevise();
         //UserRoleReport userRevise;
@@ -4366,16 +4398,17 @@ public class ReportProjectController implements Serializable {
         listEmailsRevise.add(current.getIdUserRevise().getEmail());
         String nameUserCreate = current.getIdUser().getFirstName() + current.getIdUser().getPLastName() + current.getIdUser().getMLastName();
         String nameUserRevise;
-        if(current.getIdUserRevise() == null){
+        if (current.getIdUserRevise() == null) {
             nameUserRevise = "";
-        }else{
+        } else {
             nameUserRevise = current.getIdUserRevise().getFirstName() + current.getIdUserRevise().getPLastName() + current.getIdUserRevise().getMLastName();
         }
         System.out.println(nameUserCreate);
         System.out.println(nameUserRevise);
         email.sendEmailRoleFinish("revise", current.getIdProject().getIdProject(), current.getName(), nameUserCreate, nameUserRevise, listEmailsRevise);
     }
-    public void sendEmailToRoleAutorize(){
+
+    public void sendEmailToRoleAutorize() {
         ArrayList<String> listEmailsAuthorize = new ArrayList<>();
         /*for (int i = 0; i < usersAuthorize.size(); i++) {
             userAuthorize = usersAuthorize.get(i);
@@ -4392,22 +4425,25 @@ public class ReportProjectController implements Serializable {
             showError("Error al enviar correo", e);
         }
     }
+
     //Metodos para enviar correos para corregir errores
-    public void sendEmailRoleCreateCorrect(){
+    public void sendEmailRoleCreateCorrect() {
         email.sendEmailRoleCorrect(current.getIdProject().getIdProject(), current.getName(), current.getIdUser().getEmail());
     }
-    public void sendEmailRoleReviseCorrect(){
+
+    public void sendEmailRoleReviseCorrect() {
         email.sendEmailRoleCorrect(current.getIdProject().getIdProject(), current.getName(), current.getIdUserRevise().getEmail());
     }
 
-    public void add_collaborators_to_emails_list(List<String> emails_list){
+    public void add_collaborators_to_emails_list(List<String> emails_list) {
         //Adds the collaborator email address to the provided list object
-        for (UserRole usRole: userRole()) {
+        for (UserRole usRole : userRole()) {
             emails_list.add(usRole.getEmail());
         }
     }
+
     //Metodo para enviar a colaboradores y responsables de proyecto
-    public String sendEmailResponsablesColaboradores(){
+    public String sendEmailResponsablesColaboradores() {
         getFacade().edit(current);//Guadrda cambios que se hayan hecho al ReportProject
         ArrayList<String> listEmails = new ArrayList<>();
         //Esta función es para mandar el reporte autorizado
@@ -4416,15 +4452,15 @@ public class ReportProjectController implements Serializable {
         add_collaborators_to_emails_list(listEmails);
         listEmails.add(current.getIdUserRevise().getEmail());//Por ahora el revisor, para las pruebas
         try {
-            String TRI=typeReportInitials(varTypeReport);
+            String TRI = typeReportInitials(varTypeReport);
             String doc_base_name;
             String downloaded_base_name;
-            if (current.getPathauthorizePDF_exists()){
+            if (current.getPathauthorizePDF_exists()) {
                 doc_base_name = current.getPathauthorizePDF();
-                downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_"+TRI+".pdf";
+                downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + TRI + ".pdf";
             } else {
                 doc_base_name = current.getPathauthorize();
-                downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_"+TRI+".docx";
+                downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + TRI + ".docx";
             }
             email.sendEmailRespoablesColaboradores(subjetFinal, messageFinal, current.getIdProject().getProjectName(), current, doc_base_name, downloaded_base_name, listEmails);
             current.setStatus("Entregado");
@@ -4442,34 +4478,34 @@ public class ReportProjectController implements Serializable {
         //return "menuReportAuthorize?faces-redirect=true&includeViewParams=true";
     }
 
-    public String sendEmailResponsablesColaboradoresYRevisor(){
+    public String sendEmailResponsablesColaboradoresYRevisor() {
         getFacade().edit(current);
         ArrayList<String> listEmails = new ArrayList<>();
         //TODO quitar comentación a esta línea bloque después de las pruebas
         //add_collaborators_to_emails_list(listEmails);
         listEmails.add(current.getIdUserRevise().getEmail());
-        String TRI=typeReportInitials(varTypeReport);
-        String doc_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_"+current.getIdReportProject()+"_"+TRI+".docx";
-        String downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_")+"_"+TRI+".docx";
+        String TRI = typeReportInitials(varTypeReport);
+        String doc_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + current.getIdReportProject() + "_" + TRI + ".docx";
+        String downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + TRI + ".docx";
         try {
-            String revise_path = "revise_"+current.getPathcreate();
-            File destiny = new File(PathFiles.DirectoryreportDocuments+revise_path);
-            if (destiny.exists()){
+            String revise_path = "revise_" + current.getPathcreate();
+            File destiny = new File(PathFiles.DirectoryreportDocuments + revise_path);
+            if (destiny.exists()) {
                 destiny.delete();
             }
-            Files.copy(new File(PathFiles.DirectoryreportDocuments+current.getPathcreate()).toPath(), destiny.toPath());
+            Files.copy(new File(PathFiles.DirectoryreportDocuments + current.getPathcreate()).toPath(), destiny.toPath());
             current.setStatus("Revision");//Bueno, esto para reviar. Se deben hacer más especìficas las funciones
             current.setPathrevise(revise_path);
             getFacade().edit(current);
         } catch (Exception e) {
             showError("Error al cambiar el estado del reporte", e);
         }
-        try{
+        try {
             showMessage("Correo enviado", "Se ha enviado el reporte bioinformático a revisión exitosamente");
             email.sendEmailRespoablesColaboradores(subjetFinal, messageFinal, current.getIdProject().getProjectName(), current, doc_base_name, downloaded_base_name, listEmails);
-             //aqui debe enviar la noti de envio
+            //aqui debe enviar la noti de envio
             //showMessage("Correo enviado", "Se ha enviado el reporte bioinformático a revisión exitosamente");
-            
+
         } catch (Exception e) {
             showError("Error al enviar correo", e);
         }
@@ -4477,24 +4513,24 @@ public class ReportProjectController implements Serializable {
         //return "menuReport?faces-redirect=true&includeViewParams=true";
     }
 
-    public String sendEmailResponsablesColaboradoresYAutorizador(){
+    public String sendEmailResponsablesColaboradoresYAutorizador() {
         getFacade().edit(current);
         ArrayList<String> listEmails = new ArrayList<>();
         //TODO quitar comentación a esta línea bloque después de las pruebas
         //add_collaborators_to_emails_list(listEmails);
         listEmails.add(current.getIdUserAuthorize().getEmail());
         try {
-            String TRI=typeReportInitials(varTypeReport);
+            String TRI = typeReportInitials(varTypeReport);
             String doc_base_name = current.getPathrevise();
-            String downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + TRI+".docx";
+            String downloaded_base_name = "F01_PT05_LNATCG_" + current.getIdProject().getIdProject().replace(":", "_") + "_" + TRI + ".docx";
             email.sendEmailRespoablesColaboradores(subjetFinal, messageFinal, current.getIdProject().getProjectName(), current, doc_base_name, downloaded_base_name, listEmails);
             current.setStatus("Autorizacion");//TODO sí es así el status de 'en autorizaci¿on', 'Autorizar'?
-            String authorize_path = "authorize_"+current.getPathcreate();
-            File destiny = new File(PathFiles.DirectoryreportDocuments+authorize_path);
-            if (destiny.exists()){
+            String authorize_path = "authorize_" + current.getPathcreate();
+            File destiny = new File(PathFiles.DirectoryreportDocuments + authorize_path);
+            if (destiny.exists()) {
                 destiny.delete();
             }
-            Files.copy(new File(PathFiles.DirectoryreportDocuments+current.getPathrevise()).toPath(), destiny.toPath());
+            Files.copy(new File(PathFiles.DirectoryreportDocuments + current.getPathrevise()).toPath(), destiny.toPath());
             current.setPathauthorize(authorize_path);
             getFacade().edit(current);
         } catch (Exception e) {
@@ -4504,20 +4540,20 @@ public class ReportProjectController implements Serializable {
         //return "menuReportRevise?faces-redirect=true&includeViewParams=true";
     }
 
-    public void backMakeChangesAuthorize(){
-        subjetFinal =  "Reporte del proyecto listo: " +  current.getIdProject().getIdProject();
-        messageFinal  = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible desde la plataforma de SISBI";
+    public void backMakeChangesAuthorize() {
+        subjetFinal = "Reporte del proyecto listo: " + current.getIdProject().getIdProject();
+        messageFinal = "Su reporte con nombre " + current.getIdProject().getProjectName() + " con tipo de reporte: " + current.getName() + " esta disponible desde la plataforma de SISBI";
         current.setStatus("Autorizado");
         getFacade().edit(current);
     }
 
-    public void btnCambiarRevisorOAutorizador(String cual){
+    public void btnCambiarRevisorOAutorizador(String cual) {
         // Se supone que el revisor ya esta cambiado, s+olo hay que guardar los cambios- Pero tambien se va a guardar también cualquier otro cambio pendiente
         getFacade().edit(current);
-        showMessage("Cambiado el "+cual);
+        showMessage("Cambiado el " + cual);
     }
 
-    public void returnViewProject(){
+    public void returnViewProject() {
         Project project1 = getEjbFacadeProject().find(varIdProject);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().put("project", project1);
@@ -4638,10 +4674,10 @@ public class ReportProjectController implements Serializable {
     public ReportProject getReportProject(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
-    
-    public List<ReportProject> getReportProjectsByIdProject(String idProject){
+
+    public List<ReportProject> getReportProjectsByIdProject(String idProject) {
         return ejbFacade.findReportProjectByIdProject(idProject);
-    } 
+    }
 
     @FacesConverter(forClass = ReportProject.class)
     public static class ReportProjectControllerConverter implements Converter {
@@ -4686,20 +4722,22 @@ public class ReportProjectController implements Serializable {
 
         public SortQualityReportsByRecency() {
         }
+
         // Used for sorting in ascending order of
         // roll number
-        public int compare(QualityReports a, QualityReports b)
-        {
-           return b.getIdRun().getRunStartday().compareTo(a.getIdRun().getRunStartday());
+        public int compare(QualityReports a, QualityReports b) {
+            return b.getIdRun().getRunStartday().compareTo(a.getIdRun().getRunStartday());
         }
     }
-    
-    private static class DatesComparator implements Comparator<Date>{
-        public DatesComparator(){
-            
+
+    private static class DatesComparator implements Comparator<Date> {
+
+        public DatesComparator() {
+
         }
+
         @Override
-        public int compare(Date datea, Date dateb){
+        public int compare(Date datea, Date dateb) {
             return datea.compareTo(dateb);
         }
     }

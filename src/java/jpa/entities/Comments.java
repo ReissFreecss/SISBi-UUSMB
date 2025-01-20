@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Comments.findByType", query = "SELECT c FROM Comments c WHERE c.type = :type")
     , @NamedQuery(name = "Comments.findByIdType", query = "SELECT c FROM Comments c WHERE c.idType = :idType")
     , @NamedQuery(name = "Comments.findByUserName", query = "SELECT c FROM Comments c WHERE c.userName = :userName")
-    , @NamedQuery(name = "Comments.findByComment", query = "SELECT c FROM Comments c WHERE c.comment = :comment")})
+    , @NamedQuery(name = "Comments.findByComment", query = "SELECT c FROM Comments c WHERE c.comment = :comment")
+    , @NamedQuery(name = "Comments.findByIdTypeAndUserNameAndType",query = "SELECT c FROM Comments c WHERE c.idType = :idType AND c.userName = :userName AND c.type = :type")
+})
 public class Comments implements Serializable {
 
     @Basic(optional = false)
