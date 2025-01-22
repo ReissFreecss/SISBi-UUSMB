@@ -3494,20 +3494,33 @@ public class LibraryController implements Serializable {
         int cont2_LibraryName_num = 0;  
         String cad = "";
         String listSampleLibrariescad="";
-        //int LibraryName_=0;
         
+        //int LibraryName_=0;
+        System.out.println("TAMAÑO de muestras seleccionadas: " + listSampleLibraries.size());
+        System.out.println("Cantidad de bliblotecas creada: " + countLibsByProject);
         System.out.println("   Inicio del ciclo de getLibsByProject -----------------------------------------------");
+        
         for (int i = 0; i < listSampleLibraries.size(); i++) {
+            
+            System.out.println("TAMAÑO C1 de muestras seleccionadas: " + listSampleLibraries.size() + "--------------");
+            System.out.println("CANTIDAD C1 de bliblotecas creada: " + countLibsByProject + "--------------");
+            System.out.println("Ciclo 1 cantidad recorrio: " + i + "--------------");
+            
             for (int j = 0; j < countLibsByProject; j++) {
                   boolean isNum=false;
-                  System.out.println("Se manda a llamar getLibsByProject 1-------------------------");
+                  
+                  System.out.println("Se manda a llamar getLibsByProj1ect 1-------------------------");
+                  System.out.println("TAMAÑO C2 de muestras seleccionadas: " + listSampleLibraries.size() + "--------------");
+                  System.out.println("Cantidad C2 de bliblotecas creada: " + countLibsByProject + "--------------");
+                  System.out.println("Ciclo 2 cantidad recorrio: " + j + "--------------");
+                  
                 String cadLibraryName[] = getLibsByProject().get(j).getLibraryName().split("_");
                 char []numLibraryName=cadLibraryName[cadLibraryName.length-1].toCharArray();
                 //System.out.println("El valor del ultimo digito es "+cadLibraryName[cadLibraryName.length-1]);
                 for(int z=0; z<numLibraryName.length; z++){
                     if(Character.isDigit(numLibraryName[z])){
                         isNum=true;
-                        //System.out.println("El valor es "+isNum);
+                        //System.out.println("El valor es "+isNum);         
                     }else{
                         isNum=false;
                         break;
