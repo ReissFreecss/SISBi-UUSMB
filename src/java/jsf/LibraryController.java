@@ -3498,9 +3498,17 @@ public class LibraryController implements Serializable {
         
         System.out.println("   Inicio del ciclo de getLibsByProject -----------------------------------------------");
         for (int i = 0; i < listSampleLibraries.size(); i++) {
+            
+            System.out.println("Cantidad de muestras seleccionadas: " + listSampleLibraries.size());
+            System.out.println("Numero de interaciones Ciclo 1: " + i);
+            
             for (int j = 0; j < countLibsByProject; j++) {
                   boolean isNum=false;
+                  
                   System.out.println("Se manda a llamar getLibsByProject 1-------------------------");
+                  System.out.println("Numero de interaciones Ciclo 1 en Ciclo 2: " + i);
+                  System.out.println("Numero de interaciones Ciclo 2: " + j);
+                  
                 String cadLibraryName[] = getLibsByProject().get(j).getLibraryName().split("_");
                 char []numLibraryName=cadLibraryName[cadLibraryName.length-1].toCharArray();
                 //System.out.println("El valor del ultimo digito es "+cadLibraryName[cadLibraryName.length-1]);
