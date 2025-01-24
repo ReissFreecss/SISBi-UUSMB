@@ -7,7 +7,9 @@ import jpa.session.GenomeSampleFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -53,6 +55,9 @@ public class GenomeSampleController implements Serializable {
     public void asignaMuestra(Sample sam) {
 
         FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Integer> librarySample = new HashMap<>();
+        
+
 
         context.getExternalContext().getSessionMap().put("sample", sam);
 
