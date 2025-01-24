@@ -34,7 +34,7 @@
                     <f:facet name="header">
                         <p:outputPanel>
                             <h:outputText value="Búsqueda rápida:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('table').filter()" style="width:150px" placeholder="Buscar"/>
+                            <p:inputText id="globalFilter" onkeyup="return event.keyCode === 13 ? ( event.target.value.length > 3 ? PF('table').filter() : false ) : false;" style="width:150px" placeholder="Buscar"/>
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect"  listener="#{projectController.prepareUView()}"/>
