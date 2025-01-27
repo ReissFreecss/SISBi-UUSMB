@@ -56,6 +56,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.servlet.http.HttpServletRequest;
 import jpa.entities.BioinformaticAnalysis;
 import jpa.entities.BioinformaticAnalysisSampleLink;
 
@@ -3583,5 +3584,15 @@ public class SampleController implements Serializable {
         } else {
             return "comentario-otro-usuario"; // Clase para otros comentarios
         }
+    }
+    
+    public String ligaPruebasFormatoMuestras() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        
+        return ipAddress != "132.246.32.95" ? "http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" : "http://132.246.32.95/F02_PG03_Registro_oficial_de_Muestras.xlsx";
     }
 }
