@@ -52,7 +52,8 @@
                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estimado usuario: En esta sección podrá registrar un conjunto de muestras a través  de una plantilla  excel. " style="font-size:20px; align-content: center  "/> <br/>
                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Siga las siguientes instrucciones:" style="font-size:20px; align-content: center  "/> <br/><br/>
                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.- Descargue la plantilla de nuestro archivo excel desde la liga: " style="font-size:20px; align-content: center  "/> 
-                 <p:button target="_blank" href="http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" value="Descargar plantilla" /> 
+                <!-- <p:button target="_blank" href="http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" value="Descargar plantilla" />   -->
+                <p:button target="_blank" href="#{sampleController.ligaPruebasFormatoMuestras()}" value="Descargar plantilla" />                 
                 <br/>
                  <!-- 
                 <p:button target="_blank" href="http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" value="Descargar plantilla" /> 
