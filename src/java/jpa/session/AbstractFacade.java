@@ -1964,15 +1964,13 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    public boolean hasCommentsByIdType(String idType) {
-        // Consulta SQL para contar los comentarios con user_name distinto de 'SISBI' y el id_type proporcionado
-        String sql = "SELECT COUNT(id_comment) FROM comments WHERE user_name != 'SISBI' AND id_type = ?";
-
+    public List<String> getSamplesWithComments() {
+        // Consulta SQL para obtener todos los id_type con comentarios
+        String sql = "SELECT DISTINCT id_type FROM comments WHERE user_name != 'SISBI'";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
-        q.setParameter(1, idType);
 
-        Number count = (Number) q.getSingleResult();
-        return count != null && count.intValue() > 0; // Retorna true si el conteo es mayor que cero
+        // Devuelve una lista de IDs
+        return q.getResultList();
     }
 
     //Obtener dependencias por institución
@@ -2005,7 +2003,7 @@ public abstract class AbstractFacade<T> {
 
     //Obtener usuarios por coincidencia nombre de usuario (first name)
     public List<Users> getUersByFirstName(String firstName) {
-        String sql = "select * from users where unaccent(lower(first_name)) like '%" + firstName + "%';";
+        String sql = "select * from users where unaccent(lower(fiCAriasrst_name)) like '%" + firstName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }
