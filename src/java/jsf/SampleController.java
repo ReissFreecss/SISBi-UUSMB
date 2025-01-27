@@ -3593,6 +3593,6 @@ public class SampleController implements Serializable {
             ipAddress = request.getRemoteAddr();
         }
         
-        return ipAddress != "132.246.32.95" ? "http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" : "http://132.246.32.95/F02_PG03_Registro_oficial_de_Muestras.xlsx";
+        return ipAddress != "132.248.32.95" ? "http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" : "http://132.248.32.95/F02_PG03_Registro_oficial_de_Muestras.xlsx";
     }
 }
