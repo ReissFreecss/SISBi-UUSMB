@@ -222,6 +222,42 @@ public abstract class AbstractFacade<T> {
 
     }
 
+    // Método para localizar dependencias en base de datos Institucion, Nombre, Localizacion
+    public List<Dependency> findInstitutionByNameAndLocationAndDependencyName(String institution, String location, String dependencyName) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Dependency> cq = cb.createQuery(Dependency.class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        Predicate institutionPredicate = cb.equal(cb.upper(root.get("institution")), institution.toUpperCase());
+        Predicate locationPredicate = location != null && !location.isEmpty()
+                ? cb.equal(cb.upper(root.get("location")), location.toUpperCase())
+                : cb.isNull(root.get("location"));
+        Predicate dependencyNamePredicate = cb.equal(cb.upper(root.get("dependencyName")), dependencyName.toUpperCase());
+
+        cq.select(root).where(cb.and(institutionPredicate, locationPredicate, dependencyNamePredicate));
+
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    // Método para localizar dependencias en base de datos por Institución y Nombre de Dependencia
+    public List<Dependency> findInstitutionByNameAndDependencyName(String institution, String dependencyName) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Dependency> cq = cb.createQuery(Dependency.class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        // Condición para comparar la institución (ignorando mayúsculas y minúsculas)
+        Predicate institutionPredicate = cb.equal(cb.upper(root.get("institution")), institution.toUpperCase());
+
+        // Condición para comparar el nombre de la dependencia (ignorando mayúsculas y minúsculas)
+        Predicate dependencyNamePredicate = cb.equal(cb.upper(root.get("dependencyName")), dependencyName.toUpperCase());
+
+        // Construcción de la consulta con las condiciones anteriores
+        cq.select(root).where(cb.and(institutionPredicate, dependencyNamePredicate));
+
+        // Ejecución de la consulta
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
     public List<Comments> findCommentByType(String type) {
 
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
