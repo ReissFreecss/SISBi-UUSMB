@@ -9,7 +9,13 @@
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
             <h:outputText value="Lista de proyectos"></h:outputText>
-
+            <script>
+                function evento(event) {
+                    event.preventDefault();
+                    document.getElementById('form:tbl:btnLimpiar').disabled=false;
+                    PF('table').filter();
+                }
+            </script>
         </ui:define>
         <ui:define name="body">
             
@@ -33,7 +39,14 @@
                     <f:facet name="header">
                         <p:outputPanel>
                             <h:outputText value="Búsqueda rápida:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('table').filter()" style="width:150px" placeholder="Buscar"/>
+                            <!-- <p:inputText id="globalFilter" onkeypress="return event.keyCode === 13 ? ( event.target.value.length > 3 ? PF('table').filter() : false ) : false;" style="width:150px" placeholder="Buscar"/> -->
+                            
+                            <p:inputText id="globalFilter" onkeypress="return event.keyCode === 13 ? ( event.target.value.length > 3 ?  evento(event) : false ) : false;" style="width:150px; margin-right: 12px;" placeholder="Buscar"/>
+                            <p:commandButton id="btnLimpiar" type="button" icon="ui-icon-cancel" value="Limpiar" onclick="document.getElementById('form:tbl:globalFilter').value = ''; evento(event); document.getElementById('form:tbl:btnLimpiar').disabled=true;"/>
+                            <p style="font-size: 0.9em;">
+                                <h:outputText value="Presione la tecla de enter para iniciar la búsqueda rápida" />
+                            </p>
+                            
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect"  listener="#{projectController.prepareUView()}"/>
