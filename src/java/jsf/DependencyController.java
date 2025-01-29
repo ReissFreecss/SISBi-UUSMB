@@ -104,45 +104,80 @@ public class DependencyController implements Serializable {
         }
     }
 
-    // Metodo para crear dependencia
+    //Metodo para autocompletado de dependencia
+    public List<String> completeInstitution(String query) {
+        List<String> results = new ArrayList<>();
+
+        // Obtener todas las instituciones registradas
+        List<Object[]> institutions = ejbFacade.findAllInstitutionsAndDependencies();
+
+        // Filtrar las instituciones que coincidan con la consulta del usuario
+        for (Object[] inst : institutions) {
+            String institutionName = (String) inst[0]; // Extraer el nombre de la institución
+            if (institutionName.toLowerCase().contains(query.toLowerCase())) {
+                results.add(institutionName);
+            }
+        }
+
+        return results;
+    }
+
+    // Metodo para autocompletado de nombre de dependencia
+    public List<String> completeDependencyName(String query) {
+        List<String> results = new ArrayList<>();
+
+        // Obtener todas las instituciones registradas
+        List<Object[]> dependency = ejbFacade.findAllInstitutionsAndDependencies();
+
+        // Filtrar las instituciones que coincidan con la consulta del usuario
+        for (Object[] inst : dependency) {
+            String dependencyName = (String) inst[1]; // Extraer el nombre de la institución
+            if (dependencyName.toLowerCase().contains(query.toLowerCase())) {
+                results.add(dependencyName);
+            }
+        }
+
+        return results;
+
+    }
+
     public void CreateDependency() {
         try {
             System.out.println("Entrando al método createDependency...");
 
-            // Obtener el usuario actual de la sesión
-            FacesContext context = FacesContext.getCurrentInstance();
-            Users usuarioActual = (Users) context.getExternalContext().getSessionMap().get("usuario");
-
-            // Se verifica que no haya ningun dato null excepto las siglas de la institucion
-            if (getSelected().getInstitution() == null
-                    || getSelected().getInstitution().isEmpty()
-                    || getSelected().getDependencyName().isEmpty()
-                    || getSelected().getLocation().isEmpty()
-                    || getSelected().getStreet().isEmpty()
-                    || getSelected().getPostalCode().isEmpty()) {
-                JsfUtil.addErrorMessage("Hay un campo obligatorio sin llenar");
-                return;
-            }
-
             // Obtener valores originales antes de la normalización
             String originalInstitution = getSelected().getInstitution();
             String originalDependencyName = getSelected().getDependencyName();
-            String location = getSelected().getLocation();
 
-            // Verificar si la dependencia ya existe con el nombre, ubicación y dependencia
-            List<Dependency> existingDependencies = ejbFacade.findInstitutionByNameAndDependencyName(
-                    originalInstitution,
-                    originalDependencyName
-            );
+            // Validar que los campos requeridos no sean nulos o vacíos
+            if (originalInstitution == null || originalInstitution.isEmpty()) {
+                JsfUtil.addErrorMessage("El nombre de la institución es obligatorio.");
+                return;
+            }
+            if (originalDependencyName == null || originalDependencyName.isEmpty()) {
+                JsfUtil.addErrorMessage("El nombre de la dependencia es obligatorio.");
+                return;
+            }
 
-            if (!existingDependencies.isEmpty()) {
+            // Normalizar los datos ingresados
+            String normalizedInstitution = normalizeText(originalInstitution);
+            String normalizedDependencyName = normalizeText(originalDependencyName);
+
+            // Obtener todas las instituciones y dependencias existentes en la base de datos
+            List<Object[]> existingDependencies = ejbFacade.findAllInstitutionsAndDependencies();
+
+            // Validar si existe una coincidencia exacta
+            boolean exists = existingDependencies.stream().anyMatch(dep -> {
+                String dbInstitution = normalizeText((String) dep[0]);
+                String dbDependencyName = normalizeText((String) dep[1]);
+                return dbInstitution.equals(normalizedInstitution) && dbDependencyName.equals(normalizedDependencyName);
+            });
+
+            if (exists) {
+                System.out.println("La institución ya está registrada con el mismo nombre de dependencia.");
                 JsfUtil.addErrorMessage("La institución ya está registrada con el mismo nombre de dependencia.");
                 RequestContext.getCurrentInstance().execute("PF('repeatDialog').show();");
             } else {
-                // Normalizar el texto de la institución y el nombre de la dependencia
-                String normalizedInstitution = normalizeText(originalInstitution);
-                String normalizedDependencyName = normalizeText(originalDependencyName);
-
                 // Actualizar los valores normalizados en el objeto seleccionado
                 getSelected().setInstitution(normalizedInstitution);
                 getSelected().setDependencyName(normalizedDependencyName);
@@ -343,7 +378,7 @@ public class DependencyController implements Serializable {
         List<Dependency> dependencies = ejbFacade.getAllDependency();
         return dependencies;
     }
-    
+
     //Metodo para normalizar texto de dependencia:
     private String normalizeText(String text) {
         if (text == null) {
