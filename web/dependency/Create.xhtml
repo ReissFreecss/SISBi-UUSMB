@@ -39,11 +39,16 @@
                 <h:panelGrid id="InsitutionData" columns="2">
 
                     <p:outputLabel value="Institución:" for="institution" />
-                    <p:inputText id="institution" value="#{dependencyController.selected.institution}" 
-                                 title="Nombre completo de la institución" required="true" 
-                                 requiredMessage="El nombre de la institución es obligatorio">
+                    <p:autoComplete id="institution" value="#{dependencyController.selected.institution}" 
+                                    title="Nombre completo de la institución" required="true" 
+                                    requiredMessage="El nombre de la institución es obligatorio"
+                                    completeMethod="#{dependencyController.completeInstitution}"
+                                    minQueryLength="2" maxResults="5" var="inst" itemLabel="#{inst}" itemValue="#{inst}"
+                                    forceSelection="false">
+
                         <p:ajax event="blur" listener="#{dependencyController.validateInstitution}" update="messages" />
-                    </p:inputText>
+                        <p:ajax event="itemSelect" listener="#{dependencyController.onInstitutionSelect}" update="messages" />
+                    </p:autoComplete>
 
                     <p:outputLabel value="Siglas de la institución:" for="acronym" />
                     <p:inputText id="acronym" value="#{dependencyController.selected.acronym}" title="Siglas o acrónimo de la institución" >
@@ -52,9 +57,15 @@
 
 
                     <p:outputLabel value="Nombre de la Dependencia:" for="dependencyName" />
-                    <p:inputText id="dependencyName" value="#{dependencyController.selected.dependencyName}" title="Dependencia de la instutucion donde radica el usuario" required="true" requiredMessage="El nombre de la dependencia es obligatorio">
+                    <p:autoComplete id="dependencyName" value="#{dependencyController.selected.dependencyName}" 
+                                    title="Dependencia de la institución donde radica el usuario" 
+                                    required="true" requiredMessage="El nombre de la dependencia es obligatorio"
+                                    completeMethod="#{dependencyController.completeDependencyName}"
+                                    minQueryLength="2" var="dep" itemLabel="#{dep}" itemValue="#{dep}"
+                                    maxResults="5" forceSelection="false">
 
-                    </p:inputText>
+                        <p:ajax event="blur" listener="#{dependencyController.validateDependencyName}" update="messages" />
+                    </p:autoComplete>
 
                     <p:outputLabel value="Calle y número:" for="street" />
                     <p:inputText id="street" value="#{dependencyController.selected.street}" title="Direccion con Calle, Colonia, y Numero de la dependencia" required="true" requiredMessage="La calle y número son obligatorios">
