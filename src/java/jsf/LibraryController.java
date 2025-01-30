@@ -3195,7 +3195,7 @@ public class LibraryController implements Serializable {
             //Fin de la validacion del nombre
 
             /*Inicia la validacion del _numerico*/
-            /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
+ /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
              for(int z=0; z<cadLibraryName.length-1; z++){
                  cad=cad+cadLibraryName[z];
              }
@@ -3442,99 +3442,12 @@ public class LibraryController implements Serializable {
         }
 
         numLib = listSampleLibraries.size();
-<<<<<<< HEAD
 
         // Preprocesar los nombres de bibliotecas existentes en un HashMap
         Map<String, Integer> libraryNameCounts = new HashMap<>();
         for (Library lib : getLibsByProject()) {
             String baseName = getOriginalLibraryName(lib.getLibraryName());
             libraryNameCounts.put(baseName, libraryNameCounts.getOrDefault(baseName, 0) + 1);
-=======
-        
-        /*Enumeracion de las bibliotecas*/
-        int countLibsByProject = getLibsByProject().size();
-        int cont1_LibraryName_num = 0;
-        int cont2_LibraryName_num = 0;  
-        String cad = "";
-        String listSampleLibrariescad="";
-        
-        //int LibraryName_=0;
-        System.out.println("TAMAÑO de muestras seleccionadas: " + listSampleLibraries.size());
-        System.out.println("Cantidad de bliblotecas creada: " + countLibsByProject);
-        System.out.println("   Inicio del ciclo de getLibsByProject -----------------------------------------------");
-        
-        for (int i = 0; i < listSampleLibraries.size(); i++) {
-            
-            System.out.println("TAMAÑO C1 de muestras seleccionadas: " + listSampleLibraries.size() + "--------------");
-            System.out.println("CANTIDAD C1 de bliblotecas creada: " + countLibsByProject + "--------------");
-            System.out.println("Ciclo 1 cantidad recorrio: " + i + "--------------");
-            
-            for (int j = 0; j < countLibsByProject; j++) {
-                  boolean isNum=false;
-                  
-                  System.out.println("Se manda a llamar getLibsByProj1ect 1-------------------------");
-                  System.out.println("TAMAÑO C2 de muestras seleccionadas: " + listSampleLibraries.size() + "--------------");
-                  System.out.println("Cantidad C2 de bliblotecas creada: " + countLibsByProject + "--------------");
-                  System.out.println("Ciclo 2 cantidad recorrio: " + j + "--------------");
-                  
-                String cadLibraryName[] = getLibsByProject().get(j).getLibraryName().split("_");
-                char []numLibraryName=cadLibraryName[cadLibraryName.length-1].toCharArray();
-                //System.out.println("El valor del ultimo digito es "+cadLibraryName[cadLibraryName.length-1]);
-                for(int z=0; z<numLibraryName.length; z++){
-                    if(Character.isDigit(numLibraryName[z])){
-                        isNum=true;
-                        //System.out.println("El valor es "+isNum);         
-                    }else{
-                        isNum=false;
-                        break;
-                    }
-                }
-                //String cad = cadLibraryName[0];
-                for (int x = 0; x < cadLibraryName.length - 1; x++) {
-                    //cad = cad + "_" + cadLibraryName[x];
-                    cad = cad + cadLibraryName[x];
-                }
-                System.out.println("Se manda a llamar getLibsByProject 222222222222222-------------------------");
-                if (listSampleLibraries.get(i).getLibrary().getLibraryName()
-                        .equals(getLibsByProject().get(j).getLibraryName())) {
-                    cont1_LibraryName_num++;
-                }
-                
-                String listSampleLibraries_[]=listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");
-                for(int y=0; y<listSampleLibraries_.length; y++){
-                    listSampleLibrariescad=listSampleLibrariescad+listSampleLibraries_[y];
-                }
-                
-                if(listSampleLibrariescad.equals(cad)){
-                    if(isNum==true){
-                       cont2_LibraryName_num++;  
-                    } 
-                }  
-                System.out.println("El registro sin _ es: " + listSampleLibrariescad);
-                System.out.println("La cadena es: " + cad);
-                cad = "";
-                listSampleLibrariescad="";
-            }
-            System.out.println("El conteo 1 es: " + cont1_LibraryName_num);
-            System.out.println("El conteo 2 es: " + cont2_LibraryName_num);
-            
-            
-            if (cont1_LibraryName_num > 0 && cont2_LibraryName_num == 0) {
-                listSampleLibraries.get(i).getLibrary().setLibraryName(listSampleLibraries.get(i).getLibrary().getLibraryName() + "_" + 1);
-                System.out.println("Entra a la opcion 1 del _numero");
-            } else if (cont1_LibraryName_num == 0 && cont2_LibraryName_num > 0) {
-                listSampleLibraries.get(i).getLibrary().setLibraryName(listSampleLibraries.get(i).getLibrary().getLibraryName() + "_" + (cont2_LibraryName_num + 1));
-                System.out.println("Entra a la opcion 2 del _numero");
-            } else if (cont1_LibraryName_num > 0 && cont2_LibraryName_num > 0) {
-                listSampleLibraries.get(i).getLibrary().setLibraryName(listSampleLibraries.get(i).getLibrary().getLibraryName() + "_" + (cont2_LibraryName_num + 1));
-                System.out.println("Entra a la opcion 3 del _numero");
-            } else {
-                listSampleLibraries.get(i).getLibrary().setLibraryName(listSampleLibraries.get(i).getLibrary().getLibraryName());
-                System.out.println("Entra a la opcion 4 del _numero");
-            }
-            cont1_LibraryName_num = 0;
-            cont2_LibraryName_num = 0;
->>>>>>> origin/main
         }
 
         System.out.println("Total de librerías construidas: " + libraryNameCounts.size());
@@ -3879,7 +3792,7 @@ public class LibraryController implements Serializable {
                         dialog.execute("PF('biblioErrDialog').show();");
                         //rowSampleExcel.clear();
                         return;
-                    }   
+                    }
 
                     //Validar si el tag1 pertenece al kit seleccionado
                     // 1.- Buscamos el kit en la BD
