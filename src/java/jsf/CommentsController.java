@@ -9,10 +9,13 @@ import jpa.session.CommentsFacade;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -515,13 +518,20 @@ public class CommentsController implements Serializable {
         return filteredList;
     }
 
+    // Clase de la vista o controlador
+    private Set<String> samplesWithComments;
+
+    @PostConstruct
+    public void init() {
+        samplesWithComments = new HashSet<>(ejbFacade.getSamplesWithComments());
+    }
+
     // Obtenemos el item y lo comparamos con la respuesta de la consulta
     public boolean hasCommentsByType(Sample item) {
         if (item != null && item.getIdSample() != null) {
-            // Llamamos al método optimizado del AbstractFacade
-            return ejbFacade.hasCommentsByIdType(item.getIdSample().toString());
+            return samplesWithComments.contains(item.getIdSample().toString());
         }
-        return false; // Si el item es nulo o no tiene ID, devolvemos false
+        return true;
     }
 
     //Obtener lista de comentarios de sample por medio del id
@@ -534,7 +544,6 @@ public class CommentsController implements Serializable {
         if(ejbFacade.getCommentsByIdType(sam.getIdSample().toString()) == null){
             listSample = ejbFacade.getCommentsByIdType(sam.getIdSample().toString());
         }*/
-        
         List<Comments> filteredList = new ArrayList<>();
         if (sam != null) {
             System.out.println("->Comments: " + sam.toString());

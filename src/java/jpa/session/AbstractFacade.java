@@ -222,6 +222,36 @@ public abstract class AbstractFacade<T> {
 
     }
 
+    // Método para localizar dependencias en base de datos Institucion, Nombre, Localizacion
+    public List<Dependency> findInstitutionByNameAndLocationAndDependencyName(String institution, String location, String dependencyName) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Dependency> cq = cb.createQuery(Dependency.class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        Predicate institutionPredicate = cb.equal(cb.upper(root.get("institution")), institution.toUpperCase());
+        Predicate locationPredicate = location != null && !location.isEmpty()
+                ? cb.equal(cb.upper(root.get("location")), location.toUpperCase())
+                : cb.isNull(root.get("location"));
+        Predicate dependencyNamePredicate = cb.equal(cb.upper(root.get("dependencyName")), dependencyName.toUpperCase());
+
+        cq.select(root).where(cb.and(institutionPredicate, locationPredicate, dependencyNamePredicate));
+
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    // Método para localizar dependencias en base de datos Institucion, Nombre
+    public List<Object[]> findAllInstitutionsAndDependencies() {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        // Seleccionar solo las columnas institution y dependencyName
+        cq.multiselect(root.get("institution"), root.get("dependencyName"));
+
+        // Ejecutar la consulta y devolver la lista de resultados
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
     public List<Comments> findCommentByType(String type) {
 
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
@@ -1964,15 +1994,13 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    public boolean hasCommentsByIdType(String idType) {
-        // Consulta SQL para contar los comentarios con user_name distinto de 'SISBI' y el id_type proporcionado
-        String sql = "SELECT COUNT(id_comment) FROM comments WHERE user_name != 'SISBI' AND id_type = ?";
-
+    public List<String> getSamplesWithComments() {
+        // Consulta SQL para obtener todos los id_type con comentarios
+        String sql = "SELECT DISTINCT id_type FROM comments WHERE user_name != 'SISBI'";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
-        q.setParameter(1, idType);
 
-        Number count = (Number) q.getSingleResult();
-        return count != null && count.intValue() > 0; // Retorna true si el conteo es mayor que cero
+        // Devuelve una lista de IDs
+        return q.getResultList();
     }
 
     //Obtener dependencias por institución
@@ -2005,7 +2033,7 @@ public abstract class AbstractFacade<T> {
 
     //Obtener usuarios por coincidencia nombre de usuario (first name)
     public List<Users> getUersByFirstName(String firstName) {
-        String sql = "select * from users where unaccent(lower(first_name)) like '%" + firstName + "%';";
+        String sql = "select * from users where unaccent(lower(fiCAriasrst_name)) like '%" + firstName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }

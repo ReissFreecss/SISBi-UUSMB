@@ -40,7 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,13 +123,13 @@ public class LibraryController implements Serializable {
     private jpa.session.RunFacade ejbFacadeRun;
     @EJB
     private jpa.session.QualityReportsFacade ejbQR;
-    
+
     @EJB
     private jpa.session.PlataformLinkKitFacade ejbPlataformLinkKit;
-    
+
     @EJB
     private jpa.session.PlataformFacade ejbPlataform;
-    
+
     @EJB
     private jpa.session.KitFacade ejbKit;
 
@@ -142,11 +144,9 @@ public class LibraryController implements Serializable {
     private String runNameSelected;
 
     private Boolean disabledBtn;
-    
-    private Boolean EditLibrariesName=false;
-    
-  
-    
+
+    private Boolean EditLibrariesName = false;
+
     public Boolean getEditLibrariesName() {
         return EditLibrariesName;
     }
@@ -170,12 +170,9 @@ public class LibraryController implements Serializable {
     public void setRunNameSelected(String runNameSelected) {
         this.runNameSelected = runNameSelected;
     }
-    
-    //leslie22 agosto
-    
-    
-    //leslie fin
 
+    //leslie22 agosto
+    //leslie fin
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> getListBarcodesi5() {
@@ -212,10 +209,10 @@ public class LibraryController implements Serializable {
         return ejbBar.findBarcode("i5", auxKit);
         //return listBarcodesi5;
     }*/
-
     public void setListBarcodesi5(List<Barcodes> listBarcodesi5) {
         this.listBarcodesi5 = listBarcodesi5;
     }
+
     //Método inutilizable : funcionaba para devolver el la lista de barcodes con i7 : desechado con la nueva BD
     /*
     public List<Barcodes> getListBarcodesi7() {
@@ -260,14 +257,14 @@ public class LibraryController implements Serializable {
             return ejbBar.findBarcode("i7", auxKit);
         }
     }
-    */
+     */
     //Nuevo método para la consulta a la BD
     public List<Barcodes> getListBarcodesi7() {
         List<Barcodes> listBarcodes = new ArrayList<>();
         if (ejbKit.findKitByName(kit).size() > 0) {
             Kit objectKit = ejbKit.findKitByName(kit).get(0);
-            for(Barcodes itemBarcode : objectKit.getBarcodesList()){
-                if(itemBarcode.getBasei7() != null){
+            for (Barcodes itemBarcode : objectKit.getBarcodesList()) {
+                if (itemBarcode.getBasei7() != null) {
                     //Agregamos los que tengan valores en el campo de basei7
                     listBarcodes.add(itemBarcode);
                 }
@@ -275,7 +272,7 @@ public class LibraryController implements Serializable {
         }
         return listBarcodes;
     }
-    
+
     public List<Barcodes> getListBarcodesi5() {
         List<Barcodes> listBarcodes = new ArrayList<>();
 
@@ -284,7 +281,7 @@ public class LibraryController implements Serializable {
         //Verificamos el tipo de plataforma 
         if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore")) {
             basei5miseq = true;
-        } else if (platafrom.equals("NovaSeq") || platafrom.equals("NextSeq500")|| platafrom.equals("iSeq")) { //leslie agregue la opcion iSeq
+        } else if (platafrom.equals("NovaSeq") || platafrom.equals("NextSeq500") || platafrom.equals("iSeq")) { //leslie agregue la opcion iSeq
             basei5nextseq = true;
         }
 
@@ -308,24 +305,24 @@ public class LibraryController implements Serializable {
         }
         return listBarcodes;
     }
-    
+
     //Método para obtener el basei5 en la vista, al momento de crear las bibliotecas en la vista CreateL.xhtml
-    public String getIndexBasei5Create(Barcodes itemBarcode){
+    public String getIndexBasei5Create(Barcodes itemBarcode) {
         if (itemBarcode != null) {
             //Verificamos el tipo de plataforma 
             if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore")) {
                 System.out.println("Se recibe: " + itemBarcode);
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Miseq();
-            } else if (platafrom.equals("NovaSeq") || platafrom.equals("iSeq") ||platafrom.equals("NextSeq500")) {
+            } else if (platafrom.equals("NovaSeq") || platafrom.equals("iSeq") || platafrom.equals("NextSeq500")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Nextseq();
             }
         }
-        
+
         return null;
     }
-    
+
     //Método para obtener el basei5 en la vista, en cualquier vista
-    public String getIndexBasei5View(Barcodes itemBarcode, String itemPlataform){
+    public String getIndexBasei5View(Barcodes itemBarcode, String itemPlataform) {
         if (itemBarcode != null) {
             //Verificamos el tipo de plataforma 
             if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore")) {
@@ -334,11 +331,10 @@ public class LibraryController implements Serializable {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Nextseq();
             }
         }
-        
+
         return null;
     }
 
-    
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> getListBarcodesi7DiferentKits(String itemKit) {
@@ -375,8 +371,6 @@ public class LibraryController implements Serializable {
 
         return ejbBar.findBarcode("i7", auxKit);
     }*/
-
-    
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> getListBarcodesi5Kits(String itemKit, String itemPlataform) {
@@ -405,7 +399,6 @@ public class LibraryController implements Serializable {
         return ejbBar.findBarcode("i5", auxKit);
         //return listBarcodesi5;
     }*/
-
     public void setListBarcodesi7(List<Barcodes> listBarcodesi7) {
         this.listBarcodesi7 = listBarcodesi7;
     }
@@ -515,13 +508,11 @@ public class LibraryController implements Serializable {
     public void setCommentFac(CommentsFacade commentFac) {
         this.commentFac = commentFac;
     }
-    
+
     //variables para el aprtado de creacion de corridas 
     //leslie16 agosto2024
     private String plat_sequencing;
     private String nom_equipo;
-
-    
 
     //fin leslie
     private Users user;
@@ -550,7 +541,7 @@ public class LibraryController implements Serializable {
     private String usuario;
     private List<String> usersList = new ArrayList<>();
     List<String> plataformKit = new ArrayList<>();
-    
+
     //leslie16 agosto 
     public String getPlat_sequencing() {
         return plat_sequencing;
@@ -559,16 +550,14 @@ public class LibraryController implements Serializable {
     public void setPlat_sequencing(String plat_sequencing) {
         this.plat_sequencing = plat_sequencing;
     }
-    
+
     public void asignarValorCampos() { //metodo que ayuda a validar los campos 
-    
-    plat_sequencing=plat_sequencing;
-    nom_equipo=nom_equipo;
-    scode=scode;
+
+        plat_sequencing = plat_sequencing;
+        nom_equipo = nom_equipo;
+        scode = scode;
     }
-    
-    
-    
+
     public String getNom_equipo() {
         return nom_equipo;
     }
@@ -849,9 +838,6 @@ public class LibraryController implements Serializable {
     boolean smallRender = true;
     int index;
 
-   
-    
-
     List<Library> selectedLibraries = new ArrayList<>();
 
     public List<Library> getSelectedLibraries() {
@@ -933,7 +919,6 @@ public class LibraryController implements Serializable {
     public void setLibs(List<AuxLibrary> libs) {
         this.libs = libs;
     }*/
-
     public int getNumLib() {
 
         return numLib;
@@ -969,7 +954,6 @@ public class LibraryController implements Serializable {
 
         this.platafrom = platafrom;
     }
-
 
     public Library getSelected() {
         if (current == null) {
@@ -1050,8 +1034,6 @@ public class LibraryController implements Serializable {
         return idSample;
     }
 
-    
-
     public List<Library> getLibsRun() {
         //resetValues();
         List<Library> libByProject = new ArrayList<>();
@@ -1061,11 +1043,11 @@ public class LibraryController implements Serializable {
         System.out.println("valor de proyecto en size: " + projs.size());
         System.out.println("valor de user: " + user);
         System.out.println("valor de usersList.size: " + usersList.size());
-        
-        if((range == null || range == "") && projs.size() == 0 && user == null && usersList.size()==0){
+
+        if ((range == null || range == "") && projs.size() == 0 && user == null && usersList.size() == 0) {
             return null;
         }
-        
+
         if (projs.isEmpty() && usersList.isEmpty() && (range != null || range != "")) {
             System.out.println("busqueda por rango");
             num = 3;
@@ -1192,7 +1174,7 @@ public class LibraryController implements Serializable {
         if (LibraryTable.isEmpty()) {
             context.addMessage(null, new FacesMessage("¡ERROR!", "No han seleccionado ninguna libreria para crear la corrida"));
         } else {
-            
+
             boolean validateCompatiblePlataform = validatePlataform();
             //boolean validateCompatiblePlataform = true;
 
@@ -1205,15 +1187,15 @@ public class LibraryController implements Serializable {
 
             List<String> tags = new ArrayList<>();
             for (Library userLib : LibraryTable) {
-                
+
                 //Validamos si la biblioteca contiene barcodes;
                 if (userLib.getIdBarcode1() == null) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('modulDialog').show();");
-                    messageDialog = "No se puede crear corrida con la biblioteca: "+userLib.getLibraryName()+", debido a que no contiene tag 1 y 2.";
+                    messageDialog = "No se puede crear corrida con la biblioteca: " + userLib.getLibraryName() + ", debido a que no contiene tag 1 y 2.";
                     return;
                 }
-                String valor = userLib.getIdBarcode1().getIndexName() +"-"+userLib.getIdBarcode1().getBasei7();
+                String valor = userLib.getIdBarcode1().getIndexName() + "-" + userLib.getIdBarcode1().getBasei7();
                 // us=userLib.getLibrary().getUserName();
                 //Kit=userLib.getLibrary().getKit();
                 LibName = userLib.getLibraryName();
@@ -1221,7 +1203,7 @@ public class LibraryController implements Serializable {
                     valor = valor + getIndexBasei5View(userLib.getIdBarcode2(), userLib.getPlataformLinkKit().getPlataform().getPlataformName());
                 }
                 tags.add(valor);
-                
+
                 //Comprobamos que la biblioteca no sea repetida
                 if (listaLibraryName.indexOf(userLib.getLibraryName()) >= 0) {
                     RequestContext rc = RequestContext.getCurrentInstance();
@@ -1250,47 +1232,47 @@ public class LibraryController implements Serializable {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('dlgerror2').show();");
                 }
-                
+
             } else {
                 RequestContext rc = RequestContext.getCurrentInstance();
                 rc.execute("PF('dlgerror').show();");
             }
         }
     }
-    
-    public boolean validatePlataform(){
+
+    public boolean validatePlataform() {
         List<String> selectionTypePlatform = new ArrayList<>();
-        for(Library itemLibrary : LibraryTable){
+        for (Library itemLibrary : LibraryTable) {
             //selectionPlatform.add(itemLibrary.getPlataform());
             //Ahora estamos obteniendo una plataforma
             selectionTypePlatform.add(itemLibrary.getPlataformLinkKit().getPlataform().getNote());
         }
         boolean illumina;
         //Tomamos el primer item
-        if(selectionTypePlatform.get(0).equals("ILLUMINA")){
+        if (selectionTypePlatform.get(0).equals("ILLUMINA")) {
             illumina = true;
-        }else{
+        } else {
             illumina = false;
         }
-        
-        if(illumina == true){
-            if(selectionTypePlatform.indexOf("OXFORD NANOPORE") >= 0){
+
+        if (illumina == true) {
+            if (selectionTypePlatform.indexOf("OXFORD NANOPORE") >= 0) {
                 System.out.println("illumina true: No se puede crear corrida con plataformas combinadas entre Illumina y Oxford Nanopore");
                 return false;
             }
-        }else{
-            for(String itemPlataform : selectionTypePlatform){
-                if(!itemPlataform.equals("OXFORD NANOPORE")){
+        } else {
+            for (String itemPlataform : selectionTypePlatform) {
+                if (!itemPlataform.equals("OXFORD NANOPORE")) {
                     System.out.println((itemPlataform != "Oxford Nanopore"));
-                    System.out.println("Se imprime comparacion: "+itemPlataform);
+                    System.out.println("Se imprime comparacion: " + itemPlataform);
                     System.out.println("illumina false: No se puede crear corrida con plataformas combinadas entre Illumina y Oxford Nanopore");
                     return false;
                 }
             }
-        }  
+        }
         return true;
     }
-    
+
     //Método que sirve para validar la creación de corridas con bibliotecas compatibles y valida que el rendimiento en el archivo CSV sea el indicado a la plataforma de la biblioteca
     public boolean isIllumina(String platform) {
         //Constantes para validar tamaños de secuencias
@@ -1308,8 +1290,6 @@ public class LibraryController implements Serializable {
             return true;
         }
     }
-    
-    
 
     public void checkTags() {
         RequestContext context = RequestContext.getCurrentInstance();
@@ -1396,10 +1376,10 @@ public class LibraryController implements Serializable {
             RequestContext rc = RequestContext.getCurrentInstance();
             rc.execute("PF('dlgerrorcsvrepetido').show();");
             return null;
-        //} else if (Description.equals("") || Description == null) {
+            //} else if (Description.equals("") || Description == null) {
             //System.out.println("Existen campos vacíos");
             //messageDialog = "El campo descripción es obligatorio";
-           // RequestContext rc = RequestContext.getCurrentInstance();
+            // RequestContext rc = RequestContext.getCurrentInstance();
             //rc.execute("PF('dlgerrorcsvrepetido').show();");
             //return null;
         } else if (run1.equals("") || run1 == null) {
@@ -1408,7 +1388,7 @@ public class LibraryController implements Serializable {
             RequestContext rc = RequestContext.getCurrentInstance();
             rc.execute("PF('dlgerrorcsvrepetido').show();");
             return null;
-        }  else {
+        } else {
             return "siguiente";
         }
     }
@@ -1420,7 +1400,7 @@ public class LibraryController implements Serializable {
             return null;
         }
         //run2 = run1;
-        
+
 
         /*Se obtiene la fecha junto con el dia de la insercion del registro*/
         System.out.println("entra al metodo createrun");
@@ -1598,11 +1578,11 @@ public class LibraryController implements Serializable {
         System.out.println("Los variables son: -----------------------------------------------------");
 
         //if (Description.equals("") || Description == null) {
-          //  System.out.println("Existen campos vacíos");
-            //messageDialog = "El campo descripción es obligatorio";
-            //RequestContext rc = RequestContext.getCurrentInstance();
-            //rc.execute("PF('dlgerrorcsvrepetido').show();");
-            //return null;
+        //  System.out.println("Existen campos vacíos");
+        //messageDialog = "El campo descripción es obligatorio";
+        //RequestContext rc = RequestContext.getCurrentInstance();
+        //rc.execute("PF('dlgerrorcsvrepetido').show();");
+        //return null;
         //} else 
         if (run1.equals("") || run1 == null) {
             System.out.println("Existen campos vacíos");
@@ -1642,7 +1622,7 @@ public class LibraryController implements Serializable {
     }
 
     public String createSampleSheet(int caseOrigin, int idRun, Run runCurrent) throws FileNotFoundException {
-        
+
         run2 = run1;
 
         //Validación de los campos del formulario
@@ -1756,7 +1736,7 @@ public class LibraryController implements Serializable {
                 //aqui consulto con getLibraryRunLinkByIdRun que me da la lista ordenada por id_sample atraves de un leftjoin 
                 List<LibraryRunLink> libraryRun = ejbLibraryRun.getLibraryRunLinkByIdRun(idRun);
                 for (int i = 0; i < libraryRun.size(); i++) {
-                    
+
                     /*
                     //Validamos si la biblioteca contiene barcodes;
                 if (libraryRun.get(i).getLibrary().getIdBarcode1() == null) {
@@ -1766,8 +1746,7 @@ public class LibraryController implements Serializable {
                     System.out.println("la bilbioteca no contiene barcodes 1");
                     return null;
                 }
-                    */
-                    
+                     */
                     System.out.println("Resultado de la iteracion: " + libraryRun.get(i));
                     System.out.println("id de Libreria: " + libraryRun.get(i).getLibraryRunLinkPK().getIdLibrary());
                     System.out.println("objeto libreria: " + ejbLib.find(libraryRun.get(i).getLibraryRunLinkPK().getIdLibrary()));
@@ -1817,12 +1796,10 @@ public class LibraryController implements Serializable {
 
                 libRun = new ArrayList<>();
                 libRun = librerias;
-                
-                
+
                 //aqui puedo ordenarlas pero solo por id_library //leslie 22 agos
                 //Collections.sort(libRun, (Library a,Library b) -> a.getIdLibrary().compareTo(b.getIdLibrary()));
-                 //desde aqui debo sortearlas
-                 
+                //desde aqui debo sortearlas
                 System.out.println("CSS Etapa 6: Se asigna a libRun = listLibrary ----------------------------------------------------------------   *******************");
                 System.out.println("Contenido libRun ------------------------------------**************");
                 System.out.println(libRun);
@@ -1849,11 +1826,11 @@ public class LibraryController implements Serializable {
         String Scode = "";
         String Index = "";
         //leslie 22 agosto : 
-        String namelibrary="";
-        String LibName="";
+        String namelibrary = "";
+        String LibName = "";
         try {
             for (Library libRuns : libRun) {
-                
+
                 /*
                 //Validamos si la biblioteca contiene barcodes;
                 if (libRuns.getIdBarcode1() == null) {
@@ -1863,8 +1840,7 @@ public class LibraryController implements Serializable {
                     System.out.println("la bilbioteca no contiene barcodes 2");
                     return null;
                 }
-                */
-                
+                 */
                 System.out.println("CSS Etapa 8: Entramos al ciclo for (Library libRuns : libRun)  ----------------------------------------------------------------   *******************");
                 System.out.println("-----------------------------------------------------------");
                 System.out.println("Iterando libreria: " + libRun);
@@ -1947,7 +1923,7 @@ public class LibraryController implements Serializable {
                     //plataform = runs.getLibrary().getPlataform();
                     plataform = runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName();
                     //leslie22 agosto
-                    namelibrary =runs.getLibrary().getLibraryName().toString();
+                    namelibrary = runs.getLibrary().getLibraryName().toString();
                     if (plataform.equals("Oxford Nanopore")) {
                         rName = NameRun.substring(18, 21);
                         Scode = NameRun.substring(9, 17);
@@ -1998,7 +1974,7 @@ public class LibraryController implements Serializable {
                 pw.println("WorkFlow,GenerateFASTQ,,,,,,,,");
                 //pw.println("Application,NextSeq FASTQ Only,,,,,,,,");
                 //leslie 22 agosto
-                pw.println("Application,"+plataform+ "FASTQ Only,,,,,,,,");
+                pw.println("Application," + plataform + "FASTQ Only,,,,,,,,");
                 //pw.println("Application,FASTQ Only,,,,,,,,");
                 pw.println("Assay," + Kit + ",,,,,,,,");
                 pw.println("Description," + Description + ",,,,,,,,");
@@ -2012,14 +1988,14 @@ public class LibraryController implements Serializable {
                 pw.println(String.valueOf(run2).replaceAll("null", "") + ",,,,,,,,,");
 
                 pw.println("[Settings],,,,,,,,,");
-                
+
                 pw.println(",,,,,,,,,");
 
                 pw.println("[Data],,,,,,,,,");
 
                 if (plataform.equals("Oxford Nanopore")) {
                     // pw.println("ProjectID,Locate,Barcode,Sample_Id,Sample_Name,kit,FlowcellVersion");
-                        //leslie 22 agosto edit Sample_Name x Library_Name ,Sample_ID  tiene como dato el mismo que LibraryName
+                    //leslie 22 agosto edit Sample_Name x Library_Name ,Sample_ID  tiene como dato el mismo que LibraryName
                     pw.println("Sample_ID,Library_Name,Sample_Plate,Sample_Well,Index_Plate,Index_Plate_Well,I7_Index_ID,index,I5_Index_ID,index2,Sample_Project,"
                             + "Description,Rendimiento real(M),Tamanio biblioteca,Rendimiento solicitado(M),abs_260_280,abs_260_230,"
                             + "Locate,kit,id_sample,Aceptation,Comprobante_Pago,Cotizacion,Analisis BioInfo");
@@ -2103,10 +2079,10 @@ public class LibraryController implements Serializable {
                             Project = runs.getSample().getIdProject().getIdProject();
                             SamName = runs.getSample().getSampleName();
                             //leslie 22 agosto para obtener el nombre de la biblioteca 
-                            LibName= runs.getLibrary().getLibraryName();
-                            String libm =Normalizer.normalize(LibName, Normalizer.Form.NFD);
-                            String FormatedLibrary=libm.replaceAll("[^\\p{ASCII}]","");
-                            String newFromatedLibrary=deleteUserFromNameSample(FormatedLibrary);
+                            LibName = runs.getLibrary().getLibraryName();
+                            String libm = Normalizer.normalize(LibName, Normalizer.Form.NFD);
+                            String FormatedLibrary = libm.replaceAll("[^\\p{ASCII}]", "");
+                            String newFromatedLibrary = deleteUserFromNameSample(FormatedLibrary);
                             //fin leslie
                             String sm = Normalizer.normalize(SamName, Normalizer.Form.NFD);
                             String Pj = Normalizer.normalize(Project, Normalizer.Form.NFD);
@@ -2130,7 +2106,7 @@ public class LibraryController implements Serializable {
                                     newFromatedLibrary + "," + newFromatedLibrary + "," + "" + "," + "" + "," + Index.replaceAll("[A-H]*[0-9]*_", "") + "," + Index.replaceAll("_.*", "")
                                     + "," + runs.getLibrary().getIdBarcode1().getIndexName().replace("-", "_") + "," + runs.getLibrary().getIdBarcode1().getBasei7().replace("-", "_")
                                     + "," + "" + "," + "" + "," + Formated + "," + String.valueOf(runs.getSample().getComments()).replaceAll("null", "") + ","
-                                    + "" + "," + "" + "," + (isIllumina(runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName())? String.valueOf(runs.getSample().getExpectedPerformance()).replaceAll("null", "") : String.valueOf(runs.getSample().getExpectedPerformanceOxford()).replaceAll("null", "")) + "," + String.valueOf(runs.getSample().getAbs260_280_usmb()).replaceAll("null", "") + ","
+                                    + "" + "," + "" + "," + (isIllumina(runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName()) ? String.valueOf(runs.getSample().getExpectedPerformance()).replaceAll("null", "") : String.valueOf(runs.getSample().getExpectedPerformanceOxford()).replaceAll("null", "")) + "," + String.valueOf(runs.getSample().getAbs260_280_usmb()).replaceAll("null", "") + ","
                                     + String.valueOf(runs.getSample().getAbs260_230_usmb()).replaceAll("null", "") + "," + "" + "," + runs.getLibrary().getPlataformLinkKit().getKit().getKitName().replace(" ", "_") + "," + runs.getSample().getIdSample()
                                     + "," + runs.getSample().getAceptation() + "," + checkPaymentProj(runs.getSample().getIdProject().getIdProject()) + ","
                                     + checkQuatationProj(runs.getSample().getIdProject().getIdProject()) + ","
@@ -2239,7 +2215,6 @@ public class LibraryController implements Serializable {
                         //Eliminando join con valores nullos  --------------------------------------------------- Final
                         
                          */
-                        
 
                         for (SampleLibraryLink runs : runLib) {
                             System.out.println("id del proyecto: " + runs.getSample().getIdProject());
@@ -2247,10 +2222,10 @@ public class LibraryController implements Serializable {
                             Project = runs.getSample().getIdProject().getIdProject();
                             SamName = runs.getSample().getSampleName();
                             //leslie 22 agosto para obtener el nombre de la biblioteca 
-                            LibName= runs.getLibrary().getLibraryName();
-                            String libm =Normalizer.normalize(LibName, Normalizer.Form.NFD);
-                            String FormatedLibrary=libm.replaceAll("[^\\p{ASCII}]","");
-                            String newFromatedLibrary=deleteUserFromNameSample(FormatedLibrary);
+                            LibName = runs.getLibrary().getLibraryName();
+                            String libm = Normalizer.normalize(LibName, Normalizer.Form.NFD);
+                            String FormatedLibrary = libm.replaceAll("[^\\p{ASCII}]", "");
+                            String newFromatedLibrary = deleteUserFromNameSample(FormatedLibrary);
                             //fin leslie                           
                             String sm = Normalizer.normalize(SamName, Normalizer.Form.NFD);
                             String Pj = Normalizer.normalize(Project, Normalizer.Form.NFD);
@@ -2279,26 +2254,26 @@ public class LibraryController implements Serializable {
                                 /*
                                 barcode2 = runs.getLibrary().getIdBarcode2().getIndexName().replace("-", "_");
                                 barcode2Sec = runs.getLibrary().getIdBarcode2().getBasei7().replace("-", "_");
-                                */
-                                if(getIndexBasei5View(runs.getLibrary().getIdBarcode2(), runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName()) == null){
+                                 */
+                                if (getIndexBasei5View(runs.getLibrary().getIdBarcode2(), runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName()) == null) {
                                     barcode2 = "";
                                     barcode2Sec = "";
-                                }else{
-                                    
+                                } else {
+
                                     //Verificamos el tipo de plataforma 
                                     if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("HiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("MiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("Oxford Nanopore")) {
                                         barcode2 = runs.getLibrary().getIdBarcode2().getIndexName().replace("-", "_");
                                         barcode2Sec = runs.getLibrary().getIdBarcode2().getBasei5Miseq().replace("-", "_");
-                                        System.out.println("la plataforma es hiseq/miseq, el barcode index 5 forward"+barcode2Sec);
+                                        System.out.println("la plataforma es hiseq/miseq, el barcode index 5 forward" + barcode2Sec);
                                         //leslie 22 agosto 2024: agrege la opcion de iseq y cambie minION por oxford
                                     } else if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NovaSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NextSeq500") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("iSeq")) {
                                         barcode2 = runs.getLibrary().getIdBarcode2().getIndexName().replace("-", "_");
                                         barcode2Sec = runs.getLibrary().getIdBarcode2().getBasei5Nextseq().replace("-", "_");
-                                        System.out.println("la plataforma es novaseq/nextseq,iseq, el barcode index 5 reverse forward"+barcode2Sec);
+                                        System.out.println("la plataforma es novaseq/nextseq,iseq, el barcode index 5 reverse forward" + barcode2Sec);
                                     }
                                     System.out.println("El barcode 2 NO es nulo");
                                 }
-                                
+
                             } catch (Exception ex) {
                                 barcode2 = "";
                                 barcode2Sec = "";
@@ -2311,7 +2286,7 @@ public class LibraryController implements Serializable {
                                     + "," + barcode1 + "," + barcode1Sec
                                     + "," + barcode2 + "," + barcode2Sec
                                     + "," + Formated + "," + String.valueOf(runs.getSample().getComments()).replaceAll("null", "") + ","
-                                    + "" + "," + "" + "," + (isIllumina(runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName())? String.valueOf(runs.getSample().getExpectedPerformance()).replaceAll("null", "") : String.valueOf(runs.getSample().getExpectedPerformanceOxford()).replaceAll("null", "")) + "," + String.valueOf(runs.getSample().getAbs260_280_usmb()).replaceAll("null", "") + ","
+                                    + "" + "," + "" + "," + (isIllumina(runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName()) ? String.valueOf(runs.getSample().getExpectedPerformance()).replaceAll("null", "") : String.valueOf(runs.getSample().getExpectedPerformanceOxford()).replaceAll("null", "")) + "," + String.valueOf(runs.getSample().getAbs260_280_usmb()).replaceAll("null", "") + ","
                                     + String.valueOf(runs.getSample().getAbs260_230_usmb()).replaceAll("null", "") + "," + "" + "," + runs.getLibrary().getPlataformLinkKit().getKit().getKitName().replace(" ", "_") + "," + runs.getSample().getIdSample()
                                     + "," + runs.getSample().getAceptation() + "," + checkPaymentProj(runs.getSample().getIdProject().getIdProject()) + ","
                                     + checkQuatationProj(runs.getSample().getIdProject().getIdProject()) + ","
@@ -2401,7 +2376,7 @@ public class LibraryController implements Serializable {
         range = null;
         disabledBtn = false;
         usersList.clear();
-        
+
     }
 
     public String getOptPlataform() {
@@ -2412,7 +2387,7 @@ public class LibraryController implements Serializable {
         init();
         return (String) prop.get(0);
     }
-    
+
     //Obtenemos la plataforma de las muestras seleccionadas mediante una lista llmada 'sampleTable' en la vista 'sample/List.xhtml' 
     public String getPlataformSamplesL() {
 
@@ -2468,7 +2443,7 @@ public class LibraryController implements Serializable {
                 //System.out.println("ID1: " + library.getIdBarcode1() + "\tID2: " + library.getIdBarcode2());
                 BarcodesCons b = getFacade().findBarcodesByIdBarcode(library.getIdLibrary());
                 Barcodes bar = new Barcodes();
-                bar.setIdBarcode( Integer.parseInt(b.getIdBarcode1())  );
+                bar.setIdBarcode(Integer.parseInt(b.getIdBarcode1()));
                 //System.out.println("TAG1: " + (++i) + " :\t" + b.getIdBarcode1() + "\tTAG2: " + b.getIdBarcode2());
                 library.setIdBarcode1(bar);
                 bar = new Barcodes();
@@ -2517,7 +2492,7 @@ public class LibraryController implements Serializable {
     //Metodo para actualizar la lista utilizada en la tabla de "Muestras para las nuevas bibliotecas"
     public void updateListSampleLibrary(TemplateLibrary item, String id_tag1, String id_tag2, String nameLibrary) {
         System.out.println("Accedemos al método para actualizar barcodes");
-        EditLibrariesName=true;
+        EditLibrariesName = true;
         System.out.println("SE HIZO EL EDIT");
         //Creamos las variables del tipo Barcodes para asignarlos al tag1 y 2 
         Barcodes barcode1 = new Barcodes();
@@ -2566,7 +2541,7 @@ public class LibraryController implements Serializable {
         if (!itemKit.isEmpty() || itemKit != "") {
             libCurrent.setKit(itemKit);
         }
-        */
+         */
         item.setLibrary(libCurrent);
         listSampleLibraries.get(listSampleLibraries.indexOf(item)).setLibrary(libCurrent);
     }
@@ -2608,7 +2583,6 @@ public class LibraryController implements Serializable {
         }
     }
 
-    
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> getBarcodesI7() {
@@ -2654,7 +2628,6 @@ public class LibraryController implements Serializable {
 
         
     }*/
-
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> barcodesI7L() {
@@ -2699,7 +2672,6 @@ public class LibraryController implements Serializable {
         }
 
     }*/
-    
     //Método inutilizable por la nueva BD
     /*
     public List<Barcodes> getBarcodesI5() {
@@ -2727,7 +2699,6 @@ public class LibraryController implements Serializable {
         return ejbBar.findBarcode("i5", auxKit);
 
     }*/
-
     //Método obsoleto : eliminar
     //Método que devuelve los kits dependiendo de la plataforma selecciona en al vista de "Registro de bibliotecas"
     /*
@@ -2789,7 +2760,6 @@ public class LibraryController implements Serializable {
         return null;
 
     }*/
-    
     //Método nuevo para devolver los kits de acuerdo a la plataforma seleccionada
     public List<String> getKits() {
         List<String> listaKitNames = new ArrayList<>();
@@ -2808,8 +2778,6 @@ public class LibraryController implements Serializable {
         }
         return listaKitNames;
     }
-    
-    
 
     //Método que devuelve los kits dependiendo de la plataforma selecciona en al vista "Registro de bibliotecas con siferentes kits"
     public List<String> getDiferentsKits(String itemPlataform) {
@@ -2869,7 +2837,7 @@ public class LibraryController implements Serializable {
         return null;
 
     }
-    
+
     //Método obsoleto : Eliminar 
     /*
     public List<String> getPlataforms() {
@@ -2942,7 +2910,6 @@ public class LibraryController implements Serializable {
         return null;
 
     }*/
-    
     //Método actualizado
     //Damos opciones en el select de 'Plataforma' en la vista library/CreateL.xhtml
     //Se realiza una consulta a la BD
@@ -2950,7 +2917,7 @@ public class LibraryController implements Serializable {
         List<String> listNamePaltaform = new ArrayList<>();
         //listNamePaltaform = ejbPlataformLinkKit.findNamePlataformsbyName(getPlataformSamplesL());
         listNamePaltaform.add("----");
-        
+
         //Comprobamos si la consulta arroja un resultado
         if (ejbPlataform.findPlataformByName(sampleTable.get(0).getSamplePlataform()).size() == 0) {
             for (Plataform itemPlataform : ejbPlataform.findAll()) {
@@ -2962,42 +2929,35 @@ public class LibraryController implements Serializable {
             for (Plataform itemPlataform : ejbPlataformLinkKit.findPlataformByName(sampleTable.get(0).getSamplePlataform())) {
                 listNamePaltaform.add(itemPlataform.getPlataformName());
             }
-        } 
-        
-        
+        }
 
         return listNamePaltaform;
 
     }
-    
-    
+
     //leslie 27 agosto
-    
-     public List<String> getAllPlataforms() {
+    public List<String> getAllPlataforms() {
         List<String> listPlataformName = new ArrayList<>();
         // 1.- obtenemos todas las plataformas y las agregamos a la lista de manera individual
         for (Plataform itemPlataform : ejbPlataform.findAllPlataforms()) {
-            listPlataformName.add(itemPlataform.getPlataformName());                    
+            listPlataformName.add(itemPlataform.getPlataformName());
         }
 
         return listPlataformName;
     }
-     
-     public void asignarValorCamposEditLib() { //metodo que ayuda a validar los campos 
-    
+
+    public void asignarValorCamposEditLib() { //metodo que ayuda a validar los campos 
+
         current.getLibraryName();
         current.getQpcrConcentration();
         current.getQubitConcentration();
-        platafrom=platafrom;
-        kit=kit;
+        platafrom = platafrom;
+        kit = kit;
         //current.getPlataformLinkKit();
         current.getIdBarcode1();
         current.getIdBarcode2();
-           
-    }
 
-     
- 
+    }
 
     public String putName(List<String> sams) {
 
@@ -3189,7 +3149,6 @@ public class LibraryController implements Serializable {
         }
 
     }*/
-
     //Método Para crear bibliotecas - Linabat
     public void createLibraryL(ActionEvent actionEvent) {
         //Declaramos las variables de contexto y sesión
@@ -3200,7 +3159,7 @@ public class LibraryController implements Serializable {
         //Validación de nommbre de biblioteca y combinación de tag...
         int nameRepeat = 0;
         int tag12Repeat = 0;
-        int contlistSampleLibraries=0;
+        int contlistSampleLibraries = 0;
         //Realizamos las validaciones
         for (int i = 0; i < listSampleLibraries.size(); i++) {
             //Validamos si existen campos vacíos 
@@ -3215,42 +3174,37 @@ public class LibraryController implements Serializable {
                 dialog.execute("PF('biblioErrDialog').show();");
                 return;
             }
-            
+
             //Inicia la validacion de que si cuando se edita el nombre este no este registrado en la base de datos
-            if(EditLibrariesName==true){
-                for(int j=0; j<getLibsByProject().size(); j++){
+            if (EditLibrariesName == true) {
+                for (int j = 0; j < getLibsByProject().size(); j++) {
                     System.out.println("Se manda a llamar getLibsByProject en CreateL  3333-------------------------");
-                if(listSampleLibraries.get(i).getLibrary().getLibraryName().equals(getLibsByProject().get(j).getLibraryName())){
-                    contlistSampleLibraries++;
+                    if (listSampleLibraries.get(i).getLibrary().getLibraryName().equals(getLibsByProject().get(j).getLibraryName())) {
+                        contlistSampleLibraries++;
+                    }
                 }
             }
-            }
-            
-            if(contlistSampleLibraries>0){
+
+            if (contlistSampleLibraries > 0) {
                 System.out.println("EL NOMBRE SE REPITE EN LA BASE DE DATOS");
                 messageDialog = "Ups, en la fila " + (i + 1) + " El nombre ya esta registrado, favor de ingresar otro";
                 dialog.execute("PF('biblioErrDialog').show();");
                 return;
             }
-            contlistSampleLibraries=0;
+            contlistSampleLibraries = 0;
             //Fin de la validacion del nombre
-            
-             /*Inicia la validacion del _numerico*/
-             /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
+
+            /*Inicia la validacion del _numerico*/
+            /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
              for(int z=0; z<cadLibraryName.length-1; z++){
                  cad=cad+cadLibraryName[z];
              }
              
-             for (int j = 0; j <getLibsByProject().size(); j++) {
+             for (int j = 0; j <getLibsByProject().size(); j++) {jkjd
                  cadgetLibsByProject=getLibsByProject().
                  cadgetLibsByProject=null;  
              }*/
-             
-             
-             
-           
-             /*Termina la validacion del _numerico*/
-             
+ /*Termina la validacion del _numerico*/
             if (diferentKit == false) {
                 //Validamos cuando el kit sea "TruSeq Small RNA"  y para todos los kit's de la plataforma "Oxford Nanopore"
                 //Entonces no habrá tag 2
@@ -3297,7 +3251,7 @@ public class LibraryController implements Serializable {
             if (listSampleLibraries.get(i).getLibrary().getIdBarcode2() == null) {
                 nameIBarcode2 = "";
             } else {
-                nameIBarcode2 = getIndexBasei5Create(listSampleLibraries.get(i).getLibrary().getIdBarcode2()) ; 
+                nameIBarcode2 = getIndexBasei5Create(listSampleLibraries.get(i).getLibrary().getIdBarcode2());
                 System.out.println("Lo que tiene el barcode 2 es: " + nameIBarcode2);
             }
 
@@ -3314,7 +3268,7 @@ public class LibraryController implements Serializable {
             }
             nameRepeat = 0;
 
-            String currentTag12 = listSampleLibraries.get(i).getLibrary().getIdBarcode1().getIndexName() +"-"+ listSampleLibraries.get(i).getLibrary().getIdBarcode1().getBasei7() + nameIBarcode2;
+            String currentTag12 = listSampleLibraries.get(i).getLibrary().getIdBarcode1().getIndexName() + "-" + listSampleLibraries.get(i).getLibrary().getIdBarcode1().getBasei7() + nameIBarcode2;
             System.out.println("Nombre de librería " + (i + 1) + ": " + currentNameLibrary + " Combinación de barcodes: " + currentTag12);
             //Validación de combinación de tag1 y 2 repetidos
             for (int k = 0; k < listSampleLibraries.size(); k++) {
@@ -3324,7 +3278,7 @@ public class LibraryController implements Serializable {
                 } else {
                     nameKBarcode2 = getIndexBasei5Create(listSampleLibraries.get(k).getLibrary().getIdBarcode2());
                 }
-                String itemTag12 = listSampleLibraries.get(k).getLibrary().getIdBarcode1().getIndexName() +"-"+listSampleLibraries.get(k).getLibrary().getIdBarcode1().getBasei7() + nameKBarcode2;
+                String itemTag12 = listSampleLibraries.get(k).getLibrary().getIdBarcode1().getIndexName() + "-" + listSampleLibraries.get(k).getLibrary().getIdBarcode1().getBasei7() + nameKBarcode2;
                 if (itemTag12.trim().equals(currentTag12.trim())) {
                     tag12Repeat++;
                 }
@@ -3376,7 +3330,7 @@ public class LibraryController implements Serializable {
             plataformKit = (PlataformLinkKit) ejbPlataformLinkKit.findPlataformLinkKitByIds(findPlataform.getIdPlataform(), findKit.getIdKit()).get(0);
             //Asignamos el objeto al set de paltaforma/kit de library
             library.setPlataformLinkKit(plataformKit);
-            
+
             //library.setPlataform(platafrom);
             //library.setKit(kit);
             if (types.equals("1") || platafrom.equals("Oxford Nanopore") || platafrom.equals("Pac Bio")) {
@@ -3458,7 +3412,7 @@ public class LibraryController implements Serializable {
         }
 
     }
-    
+
     public void loadFieldGenerateRun(Run runCurrent) {
         run1 = runCurrent.getCycles().toString();
         run2 = runCurrent.getCycles().toString();
@@ -3469,24 +3423,33 @@ public class LibraryController implements Serializable {
     }
 
     public void limpiaLista() {
-        //Variable para identificar en que vista estamos, creación de bibliotecas con el mismo kit o diferentes ktis
-        diferentKit = false;
-
-        //Cargar la lista de muestras de la selección 
+        // Preparación inicial
+        diferentKit = false; // Variable para identificar en qué vista estamos
         platafrom = "";
         kit = "";
+
+        // Obtener las muestras seleccionadas desde la sesión
         FacesContext context = FacesContext.getCurrentInstance();
         sampleTable = (List<Sample>) context.getExternalContext().getSessionMap().get("listSamples");
 
-        listSampleLibraries = new ArrayList<TemplateLibrary>();
+        listSampleLibraries = new ArrayList<>();
 
-        for (int i = 0; i < sampleTable.size(); i++) {
+        // Crear la lista inicial de bibliotecas basadas en las muestras seleccionadas
+        for (Sample sample : sampleTable) {
             Library library = new Library();
-            library.setLibraryName(sampleTable.get(i).getSampleName());
-            listSampleLibraries.add(new TemplateLibrary(sampleTable.get(i), library, new Barcodes()));
+            library.setLibraryName(sample.getSampleName());
+            listSampleLibraries.add(new TemplateLibrary(sample, library, new Barcodes()));
         }
-        
+
         numLib = listSampleLibraries.size();
+<<<<<<< HEAD
+
+        // Preprocesar los nombres de bibliotecas existentes en un HashMap
+        Map<String, Integer> libraryNameCounts = new HashMap<>();
+        for (Library lib : getLibsByProject()) {
+            String baseName = getOriginalLibraryName(lib.getLibraryName());
+            libraryNameCounts.put(baseName, libraryNameCounts.getOrDefault(baseName, 0) + 1);
+=======
         
         /*Enumeracion de las bibliotecas*/
         int countLibsByProject = getLibsByProject().size();
@@ -3571,17 +3534,46 @@ public class LibraryController implements Serializable {
             }
             cont1_LibraryName_num = 0;
             cont2_LibraryName_num = 0;
+>>>>>>> origin/main
         }
-        System.out.println("   Fin del ciclo de getLibsByProject -----------------------------------------------");
 
-        /*fin enumeracion de las bibliotecas*/
+        System.out.println("Total de librerías construidas: " + libraryNameCounts.size());
+        System.out.println("Hash de nombres de librerías: " + libraryNameCounts); // Debug
 
-        /*
-        if (libs != null) {
-            libs.clear();
+        // Asignar nombres únicos a las bibliotecas seleccionadas
+        for (TemplateLibrary templateLibrary : listSampleLibraries) {
+            String baseName = getOriginalLibraryName(templateLibrary.getLibrary().getLibraryName());
+
+            // Verificar si ya existe el nombre base en las bibliotecas procesadas
+            int suffix = libraryNameCounts.getOrDefault(baseName, 0);
+            if (suffix > 0) {
+                templateLibrary.getLibrary().setLibraryName(baseName + "_" + (suffix + 1));
+            }
+
+            // Actualizar el contador en el mapa
+            libraryNameCounts.put(baseName, suffix + 1);
         }
-        */
 
+        // Debug: Imprimir el resultado final (opcional para pruebas)
+        for (TemplateLibrary library : listSampleLibraries) {
+            System.out.println("Biblioteca asignada: " + library.getLibrary().getLibraryName());
+        }
+    }
+
+    // Método auxiliar para obtener el nombre base de una biblioteca (incluye identificadores adicionales)
+    private String getOriginalLibraryName(String libraryName) {
+        String[] parts = libraryName.split("_");
+        StringBuilder baseName = new StringBuilder();
+
+        // Concatenar todas las partes excepto la última si es un número
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) {
+                baseName.append("_");
+            }
+            baseName.append(parts[i]);
+        }
+
+        return baseName.toString();
     }
 
     public boolean render() {
@@ -3600,7 +3592,6 @@ public class LibraryController implements Serializable {
     public void setCountLibraries(int countLibraries) {
         this.countLibraries = countLibraries;
     }
-
 
     public void procesFile(FileUploadEvent event) throws FileNotFoundException, IOException, InvalidFormatException {
         RequestContext dialog = RequestContext.getCurrentInstance();
@@ -3625,7 +3616,7 @@ public class LibraryController implements Serializable {
         listKits.add("IDT-ILMN Nextera DNA UD");
         listKits.add("EXP-NBD196");
         listKits.add("IDT-ILMN-TruSeq-DNA-and-RNA-UD");*/
-        
+
         listKits.add("IDT-ILMN Nextera DNA UD");// cambio de -IDT-ILMN Nextera DNA UD- a -IDT FOR ILLUMINA UD INDEXES, IDT FOR ILLUMINA DNA-RNA UD INDEXES, IDT FOR ILLUMINA PCR UD INDEXES, IDT FOR ILLUMINA NEXTERA DNA UD INDEXES V2-                
         listKits.add("Nextera XT v2");// cambio de -Nextera XT v2- a -NEXTERA DNA INDEXES, NEXTERA DNA CD INDEXES, NEXTERA INDEX KIT, NEXTERA XT INDEX KIT V2-
         listKits.add("AmpliSeq for Illumina Panels"); // nuevo kit
@@ -3633,13 +3624,11 @@ public class LibraryController implements Serializable {
         listKits.add("TruSeq HT"); //cambio de -TruSeq HT- a -TRUSEQ DNA AND RNA CD INDEXES, TRUSEQ HT-               
         listKits.add("TruSeq smallRNA");// cambio de -TruSeq Small RNA- a -TRUSEQ SMALL RNA-   
         listKits.add("EXP-NBD196");
-        
+
         //Inicio de conteo de validación
         int rowStartValidation = 2;
         int finalValidation = 1;
         int rowStartRegistration = 2;
-        
-        
 
         //llenado de nombre de muestras
         List<String> sampleNames = new ArrayList<String>();
@@ -3650,7 +3639,7 @@ public class LibraryController implements Serializable {
         for (int i = 0; i < listSampleLibraries.size(); i++) {
             sampleNames.add(listSampleLibraries.get(i).getSample().getIdSample().toString());
         }
-        
+
         for (int i = 0; i < listSampleLibraries.size(); i++) {
             //insertar a la BD ---------------------------------------------------
             /*Agregamos y con plsit separamos en tipos y ciclos el campo de tamaño de lectura
@@ -3659,7 +3648,7 @@ public class LibraryController implements Serializable {
             String[] typeAndCycles = formated.split("x");
             String types = typeAndCycles[0];
             String cycles = typeAndCycles[1];
-            }
+        }
 
         DataInputStream entrada = new DataInputStream(event.getFile().getInputstream());
         XSSFWorkbook workbook = new XSSFWorkbook(entrada);
@@ -3691,7 +3680,7 @@ public class LibraryController implements Serializable {
                 //Entramos a la validación de numero de librerías, se realizan las iteraciones con el numero de librerías
                 if (count1 >= (numLib + rowStartValidation)) {
                     finalValidation = 2;
-                    System.out.println("Se termina la iteración: completado count: "+count1 + " Y lib = "+numLib);
+                    System.out.println("Se termina la iteración: completado count: " + count1 + " Y lib = " + numLib);
                     break;
                 }
                 //Comienza a realizar las validaciones cuando se llega a la fila con información de las muetsras
@@ -3721,13 +3710,12 @@ public class LibraryController implements Serializable {
                                 break;
                         }
                     }
-                    
-                    
-                    if(parameters.get(0).trim().equals("")){
-                        
+
+                    if (parameters.get(0).trim().equals("")) {
+
                         break;
                     }
-                    
+
                     System.out.println("id Muestra: " + parameters.get(0));
                     System.out.println("Muestra: " + parameters.get(MUESTRAS));
                     System.out.println("Tag 1: " + parameters.get(TAG_1));
@@ -3883,7 +3871,7 @@ public class LibraryController implements Serializable {
                         //rowSampleExcel.clear();
                         return;
                     }
-                    
+
                     //Se valida si el tag1 tiene valor en base i7
                     if (ejbBar.findBarcodeByIndexName(tag1).get(0).getBasei7() == null) {
                         messageDialog = "Para la muestra " + NameLib + " no es correcto el TAG 1: " + tag1 + "  , favor de revisarlo";
@@ -3891,20 +3879,19 @@ public class LibraryController implements Serializable {
                         dialog.execute("PF('biblioErrDialog').show();");
                         //rowSampleExcel.clear();
                         return;
-                    }
-                    
+                    }   
+
                     //Validar si el tag1 pertenece al kit seleccionado
                     // 1.- Buscamos el kit en la BD
                     Kit kitValidation = ejbKit.findKitByName(itemKit).get(0);
                     // 2.- Comparamos si el tag1(Barcode) del excel tiene relación con el kit seleccionado en el formulario
-                    if(ejbBar.findBarcodeByIndexName(tag1).get(0).getIdKit().getIdKit() != kitValidation.getIdKit()){
+                    if (ejbBar.findBarcodeByIndexName(tag1).get(0).getIdKit().getIdKit() != kitValidation.getIdKit()) {
                         messageDialog = "Para la muestra " + NameLib + " El TAG 1: " + tag1 + ", no es compatible con el kit seleccionado, favor de revisarlo";
                         closeStatusDialogUploadFile();
                         dialog.execute("PF('biblioErrDialog').show();");
                         //rowSampleExcel.clear();
                         return;
                     }
-                    
 
                     //Validamos cuando el kit sea ‘TruSeq Small RNA’  y para todos los kit's de la plataforma ‘Oxford Nanopore’
                     //No habrá ningún tipo de validación para el tag 2
@@ -3922,9 +3909,9 @@ public class LibraryController implements Serializable {
                                         //rowSampleExcel.clear();
                                         return;
                                     }
-                                    
+
                                     //Se valida si el tag2 tiene valor en base i5 dependiendo de la plataforma seleccionada
-                                                                       //Verificamos el tipo de plataforma 
+                                    //Verificamos el tipo de plataforma 
                                     if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore")) {
                                         if (ejbBar.findBarcodeByIndexName(tag2).get(0).getBasei5Miseq() == null) {
                                             messageDialog = "Para la muestra " + NameLib + " no es correcto el TAG 2 basei5miseq: " + tag2 + "  , favor de revisarlo";
@@ -3933,8 +3920,8 @@ public class LibraryController implements Serializable {
                                             //rowSampleExcel.clear();
                                             return;
                                         }
-                                    } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") ||itemPlataform.equals("NextSeq500")) {
-                                        if (ejbBar.findBarcodeByIndexName(tag2).get(0).getBasei5Nextseq()== null) {
+                                    } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") || itemPlataform.equals("NextSeq500")) {
+                                        if (ejbBar.findBarcodeByIndexName(tag2).get(0).getBasei5Nextseq() == null) {
                                             messageDialog = "Para la muestra " + NameLib + " no es correcto el TAG 2 basei5nextSeq: " + tag2 + "  , favor de revisarlo";
                                             closeStatusDialogUploadFile();
                                             dialog.execute("PF('biblioErrDialog').show();");
@@ -3967,23 +3954,22 @@ public class LibraryController implements Serializable {
 //asas
                     //Valida si la combinación de tag 1 y 2 se repite
                     //Buscamos el kit en la BD
-                    String conTag1 = ejbBar.findBarcodeByIndexName(tag1).get(0).getIndexName()+"-"+ejbBar.findBarcodeByIndexName(tag1).get(0).getBasei7();
+                    String conTag1 = ejbBar.findBarcodeByIndexName(tag1).get(0).getIndexName() + "-" + ejbBar.findBarcodeByIndexName(tag1).get(0).getBasei7();
                     String conTag2 = "";
                     if (!itemKit.equals("TruSeq smallRNA")) {
-                        conTag2 =getIndexBasei5Create(ejbBar.findBarcodeByIndexName(tag2).get(0));
-                        
-                        //recibo esto en consola-- Se imprime combinación de tags: N701-TAAGGCGAS501-GCGATCTA]]
+                        conTag2 = getIndexBasei5Create(ejbBar.findBarcodeByIndexName(tag2).get(0));
 
+                        //recibo esto en consola-- Se imprime combinación de tags: N701-TAAGGCGAS501-GCGATCTA]]
                     }
-                    System.out.println("Se imprime combinación de tags: "+conTag1+conTag2);
-                    if (rowSampleExcel.indexOf(conTag1+conTag2) >= 0) {
+                    System.out.println("Se imprime combinación de tags: " + conTag1 + conTag2);
+                    if (rowSampleExcel.indexOf(conTag1 + conTag2) >= 0) {
                         messageDialog = "Para la muestra " + parameters.get(MUESTRAS) + " la combinación de Tag's ya ha sido repetido";
                         closeStatusDialogUploadFile();
                         dialog.execute("PF('biblioErrDialog').show();");
                         return;
                     }
-                    rowSampleExcel.add(conTag1+conTag2);
-                    System.out.println("Se imprime roxSampleExcel: "+rowSampleExcel);
+                    rowSampleExcel.add(conTag1 + conTag2);
+                    System.out.println("Se imprime roxSampleExcel: " + rowSampleExcel);
                     // recibo esto en consola -- Se imprime roxSampleExcel: [N701-TAAGGCGAS501-GCGATCTA]]]
 
                     if (diferentKit == true) {
@@ -4036,22 +4022,20 @@ public class LibraryController implements Serializable {
 
                 }
             }
-            
 
             //Comparamos si la cantidad de muestras es la misma a la del archivo excel
-            System.out.println("L validación final queda: count1: " +count1 +", numLib: "+ numLib+ ", finalValidation: " + finalValidation);
-            
-            // en consola recibo --  L validación final queda: count1: 2, numLib: 1, finalValidation: 1]]
+            System.out.println("L validación final queda: count1: " + count1 + ", numLib: " + numLib + ", finalValidation: " + finalValidation);
 
+            // en consola recibo --  L validación final queda: count1: 2, numLib: 1, finalValidation: 1]]
             if (numLib != (count1 - finalValidation)) {
-                
-                System.out.println("Se imprime el número de filas: " + count1 +" y numero de muestras: "+numLib);
+
+                System.out.println("Se imprime el número de filas: " + count1 + " y numero de muestras: " + numLib);
                 messageDialog = "La cantidad de muestras no es la misma a la del archivo con los seleccionados, verifique su documento o vuelva a seleccionar las muestras";
                 closeStatusDialogUploadFile();
                 dialog.execute("PF('biblioErrDialog').show();");
                 return;
             }
-            
+
             //Validar que todas las filas sean correctas ------------------------------------------------------------------FINAL
         } catch (Exception e) {
             messageDialog = "Ups ocurrió un error duranto el proceso, por favor contacte al mantenimiento, tome una captura de pantalla y anexe lo siguiente: " + e.getMessage();
@@ -4114,8 +4098,8 @@ public class LibraryController implements Serializable {
                     System.out.println("campo 1, nombre biblioteca: " + parameters.get(MUESTRAS));
                     System.out.println("campo 2,tag1: " + parameters.get(TAG_1));
                     System.out.println("campo 3,tag2: " + parameters.get(TAG_2));
-                    
-                    if(parameters.get(0).trim().equals("")){
+
+                    if (parameters.get(0).trim().equals("")) {
                         //rowStartValidation = 1;
                         break;
                     }
@@ -4172,7 +4156,7 @@ public class LibraryController implements Serializable {
                                     //rst = St.executeQuery(tg2);
                                     itemBarcode2 = ejbBar.findBarcodeByIndexName(tag2).get(0);
                                     System.out.println("Barcode2 encontrado:           ------------------------------------------ Barcode 2");
-                                    System.out.println("diffkit=false   :"+itemBarcode2);
+                                    System.out.println("diffkit=false   :" + itemBarcode2);
 
                                 }
                             }
@@ -4186,7 +4170,7 @@ public class LibraryController implements Serializable {
                                     //tg2 = "Select id_index from barcodes where id_barcode='" + tag2 + "'" + "and tag_type='i5'";//consulta para obtener el id_index del tag2
                                     //rst = St.executeQuery(tg2);
                                     itemBarcode2 = ejbBar.findBarcodeByIndexName(tag2).get(0);
-                                    System.out.println("barcode 2: "+itemBarcode2);
+                                    System.out.println("barcode 2: " + itemBarcode2);
 
                                 }
                             }
@@ -4203,11 +4187,10 @@ public class LibraryController implements Serializable {
                     } else {
                         System.out.println("Ciclos 2: null");
                     }*/
-
                     Library library = new Library();
                     library.setLibraryName(NameLib);
                     library.setPreparationStatus("Construida");
-                    
+
                     System.out.println("ya se asignaron nombte y status ");
 
                     //Validamos cuando el kit sea ‘TruSeq Small RNA’  y para todos los kit's de la plataforma ‘Oxford Nanopore’
@@ -4218,9 +4201,8 @@ public class LibraryController implements Serializable {
                         if (!itemPlataform.equals("Oxford Nanopore")) {
                             if (!itemKit.equals("TruSeq smallRNA")) {
                                 if (!itemKit.equals("TruSeq HT")) {
-                                    
+
                                     //ADAPTAR CODIGO validar  --------------------------------------------------------------------    debido a que ahora la biblioteca recibe el id del barcode
-                                    
                                     System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                                     library.setIdBarcode1(itemBarcode1);
                                     System.out.println("tag2: " + tag2 + " id_index: " + itemBarcode2);
@@ -4233,7 +4215,7 @@ public class LibraryController implements Serializable {
                                 }
                             } else {
                                 //ADAPTAR 
-                                
+
                                 System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                                 library.setIdBarcode1(itemBarcode1);
                                 //System.out.println("tag2: " + tag2 + " id_index: " + rst.getString(1));
@@ -4242,7 +4224,7 @@ public class LibraryController implements Serializable {
                             }
                         } else {
                             //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
-                            
+
                             System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                             library.setIdBarcode1(itemBarcode1);
                             //System.out.println("tag2: " + tag2 + " id_index: " + rst.getString(1));
@@ -4254,14 +4236,14 @@ public class LibraryController implements Serializable {
                         if (!itemPlataform.equals("Oxford Nanopore")) {
                             if (!itemKit.equals("TruSeq smallRNA")) {
                                 if (!itemKit.equals("TruSeq HT")) {
-                                   
+
                                     System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                                     library.setIdBarcode1(itemBarcode1);
                                     System.out.println("tag2: " + tag2 + " id_index: " + itemBarcode2);
                                     library.setIdBarcode2(itemBarcode2);
-                                    
+
                                 } else {
-                                    
+
                                     System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                                     library.setIdBarcode1(itemBarcode1);
                                     //System.out.println("tag2: " + tag2 + " id_index: " + rst.getString(1));
@@ -4270,7 +4252,7 @@ public class LibraryController implements Serializable {
 
                             } else {
                                 //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
-                                
+
                                 System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                                 library.setIdBarcode1(itemBarcode1);
                                 //System.out.println("tag2: " + tag2 + " id_index: " + rst.getString(1));
@@ -4278,7 +4260,7 @@ public class LibraryController implements Serializable {
                             }
                         } else {
                             //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
-                            
+
                             System.out.println("tag1: " + tag1 + " id_index: " + itemBarcode1);
                             library.setIdBarcode1(itemBarcode1);
                             //System.out.println("tag2: " + tag2 + " id_index: " + rst.getString(1));
@@ -4289,15 +4271,14 @@ public class LibraryController implements Serializable {
                     System.out.println("Barcode2 encontrado:           ------------------------------------------ Barcode 2");
                     //System.out.println(itemBarcode2);
                     System.out.println("Barcode2 encontrado:           ------------------------------------------ Barcode 2");
-                    
 
                     library.setPreparationDate(fechaPrep);
                     //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
                     /*
                     library.setPlataform(itemPlataform);
                     library.setKit(itemKit);
-                    */
-                    System.out.println("se asigno la fecha"+fechaPrep.toString());
+                     */
+                    System.out.println("se asigno la fecha" + fechaPrep.toString());
                     //Buscamos el link y plataforma
                     Kit findKit = ejbKit.findKitByName(itemKit).get(0);
                     Plataform findPlataform = ejbPlataform.findPlataformByName(itemPlataform).get(0);
@@ -4307,19 +4288,17 @@ public class LibraryController implements Serializable {
                     //Asignamos el objeto al set de paltaforma/kit de library
                     library.setPlataformLinkKit(plataformKit);
                     System.out.println("se asigno laplataforma");
-                    
+
                     //Codigo inutilizable; ya no tiene la propiedad type la biblioteca
-                   /* if (prop.get(1).equals("1") || platafrom.equals("Oxford Nanopore") || platafrom.equals("Pac Bio")) {
+                    /* if (prop.get(1).equals("1") || platafrom.equals("Oxford Nanopore") || platafrom.equals("Pac Bio")) {
 
                         libraryType = "Sigle Read";
                     }*/
                     //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
                     //library.setType(libraryType);
-                   
-                    
                     //String inse = (String) prop.get(3);
                     //int insert = Integer.parseInt(inse);
-                   // System.out.println("tamaño de insert"+inse);
+                    // System.out.println("tamaño de insert"+inse);
                     //ADAPTAR CODIGO debido a que ahora no tiene esta propiedad
                     /*
                     library.setInsertSize(insert);
@@ -4329,11 +4308,9 @@ public class LibraryController implements Serializable {
                     if (libraryType.equals("Paired End") || libraryType.equals("Mate Pair")) {
                         library.setCycles_2(cycle);
                     }
-                    */
-                    
-                   
+                     */
                     library.setUserName(us.getUserName());
-                    System.out.println("asigno user: "+us.getUserName().toString());
+                    System.out.println("asigno user: " + us.getUserName().toString());
 
                     getFacade().create(library);
                     System.out.println("-------Libreria creada----------");
@@ -4423,9 +4400,9 @@ public class LibraryController implements Serializable {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public void uploadFileLib(FileUploadEvent event) {
+    public void uploadFileLib(FileUploadEvent event) {
 
-          UploadedFile file = event.getFile();
+        UploadedFile file = event.getFile();
         BufferedReader br;
         int cont = 0;
         try {
@@ -4439,13 +4416,12 @@ public class LibraryController implements Serializable {
                 sb.append(line + "\r\n");
 
                 cont++;
-                System.out.println("cont ahora vale: "+cont);
+                System.out.println("cont ahora vale: " + cont);
                 //el contador incluye la fila de titulos de columnas
             }
 
             String[] corteEnters = sb.toString().split("\n");
-               // System.out.println(" corte enters="+c);
-            
+            // System.out.println(" corte enters="+c);
 
             if (checkEditLibraries(corteEnters)) {
 
@@ -4454,7 +4430,7 @@ public class LibraryController implements Serializable {
                         String[] corteComas = corteEnters[i].replace("\"", "").split(",");
                         //String id = corteComas[0] + corteComas[1] + corteComas[2];
                         String id = corteComas[0]; //id_colocado desde el excel
-                        
+
                         for (Library selectedLibrary : selectedLibraries) {
 
                             //String idLib = selectedLibrary.getLibraryName() + selectedLibrary.getIdBarcode1().toString().replace("[", "").replace("]", "");
@@ -4465,38 +4441,46 @@ public class LibraryController implements Serializable {
                             System.out.println("***" + id);
                             System.out.println("+++" + idLib);
                             if (id.equals(idLib)) {
-                                       
-                                           
-                             String nombrelib = corteComas[1].trim();
-                             String cons_qpcr = corteComas[2].trim();
-                             String cons_qubit = corteComas[3].trim();
-                             String sizelib = corteComas[4].trim();
-                                
-                             
-                             if (!nombrelib.equals("")) {
-                                 System.out.println("NOMBRE LIB :"+nombrelib); 
-                                selectedLibrary.setLibraryName(nombrelib);
-                                 }else {System.out.println("nombre vacio");}
-                             
-                             if (!cons_qpcr.equals("")) {
-                                 System.out.println("QPCR :" +cons_qpcr);
-                                selectedLibrary.setQpcrConcentration(Double.parseDouble(cons_qpcr));
-                                 } else{System.out.println("qpcr vacio");}
-                                
-                             if (!cons_qubit.equals("")) {
-                                 System.out.println("QUBIT :" + cons_qubit);
-                                selectedLibrary.setQubitConcentration(Double.parseDouble(cons_qubit));
-                                 } else{System.out.println("qubit vacio");}
-                             
-                             if (!sizelib.equals("")) {
-                                 System.out.println("SIZE :" + sizelib);
-                                selectedLibrary.setLibrarySize(Integer.parseInt(sizelib));
-                                 } else{System.out.println("size vacio");}
-    
+
+                                String nombrelib = corteComas[1].trim();
+                                String cons_qpcr = corteComas[2].trim();
+                                String cons_qubit = corteComas[3].trim();
+                                String sizelib = corteComas[4].trim();
+
+                                if (!nombrelib.equals("")) {
+                                    System.out.println("NOMBRE LIB :" + nombrelib);
+                                    selectedLibrary.setLibraryName(nombrelib);
+                                } else {
+                                    System.out.println("nombre vacio");
+                                }
+
+                                if (!cons_qpcr.equals("")) {
+                                    System.out.println("QPCR :" + cons_qpcr);
+                                    selectedLibrary.setQpcrConcentration(Double.parseDouble(cons_qpcr));
+                                } else {
+                                    System.out.println("qpcr vacio");
+                                }
+
+                                if (!cons_qubit.equals("")) {
+                                    System.out.println("QUBIT :" + cons_qubit);
+                                    selectedLibrary.setQubitConcentration(Double.parseDouble(cons_qubit));
+                                } else {
+                                    System.out.println("qubit vacio");
+                                }
+
+                                if (!sizelib.equals("")) {
+                                    System.out.println("SIZE :" + sizelib);
+                                    selectedLibrary.setLibrarySize(Integer.parseInt(sizelib));
+                                } else {
+                                    System.out.println("size vacio");
+                                }
+
                                 if (!sizelib.equals("") & !cons_qubit.equals("")) {
-                                double nano=(Double.parseDouble(cons_qubit)/(660*Double.parseDouble(sizelib)))*1000000;
-                                selectedLibrary.setNanomolarConcentration(nano);
-                                 } else{System.out.println("nanomolar sin cambios");}
+                                    double nano = (Double.parseDouble(cons_qubit) / (660 * Double.parseDouble(sizelib))) * 1000000;
+                                    selectedLibrary.setNanomolarConcentration(nano);
+                                } else {
+                                    System.out.println("nanomolar sin cambios");
+                                }
                                 /*
                                 selectedLibrary.setQpcrConcen(Double.parseDouble(corteComas[3]));
                                 selectedLibrary.setQubitConcen(Double.parseDouble(corteComas[4]));
@@ -4504,7 +4488,7 @@ public class LibraryController implements Serializable {
                                 selectedLibrary.setNanoConcen(selectedLibrary.getNanoConcen());
 
                                 ejbLib.edit(selectedLibrary);
-                                    */
+                                 */
                                 ejbLib.edit(selectedLibrary);
                                 System.out.println("se actualizo la biblioteca");
                             }
@@ -4555,20 +4539,19 @@ public class LibraryController implements Serializable {
             if (i > 0) {
 
                 String[] comaSeparated = listLibraries[i].replace("\"", "").split(",");
-                  //posicion0=idlib ;posicion1=nomlib ;posicion2=qpcr ;posicion3= qubit ;posicion4=sizelib                                       
-                  String idlib_ = comaSeparated[0].trim();
-                  String nombrelib_ = comaSeparated[1].trim();
-                  String cons_qpcr_ = comaSeparated[2].trim();
-                  String cons_qubit_ = comaSeparated[3].trim();
-                  String sizelib_ = comaSeparated[4].trim();    
-                  
-                  System.out.println(" Cadena...  para la fila:"+i+"id= "+idlib_+"  nom= "+nombrelib_+"  qpcr= "+cons_qpcr_+" qubit= "+cons_qubit_+" size= "+sizelib_);
-                             
-                            
+                //posicion0=idlib ;posicion1=nomlib ;posicion2=qpcr ;posicion3= qubit ;posicion4=sizelib                                       
+                String idlib_ = comaSeparated[0].trim();
+                String nombrelib_ = comaSeparated[1].trim();
+                String cons_qpcr_ = comaSeparated[2].trim();
+                String cons_qubit_ = comaSeparated[3].trim();
+                String sizelib_ = comaSeparated[4].trim();
+
+                System.out.println(" Cadena...  para la fila:" + i + "id= " + idlib_ + "  nom= " + nombrelib_ + "  qpcr= " + cons_qpcr_ + " qubit= " + cons_qubit_ + " size= " + sizelib_);
+
                 //para poder  comparar los nombres repetidos de biblioetcas agregamos ese campo a una lista  solo el nombre de la lib 
                 //posicion0=idlib ;posicion1=nomlib ;posicion2=qpcr ;posicion3= qubit ;posicion4=sizelib  
-                 names.add(nombrelib_);
-                 ids_excel.add(idlib_);
+                names.add(nombrelib_);
+                ids_excel.add(idlib_);
             }
         }
         for (Library selectedLibrary : selectedLibraries) {
@@ -4576,7 +4559,7 @@ public class LibraryController implements Serializable {
             //String line = selectedLibrary.getLibraryName() + selectedLibrary.getIdBarcode1().toString().replace("[", "").replace("]", "");
             String line = selectedLibrary.getIdLibrary().toString();
             //if (selectedLibrary.getIdBarcode2() != null) {
-              //  line += selectedLibrary.getIdBarcode2().toString().replace("[", "").replace("]", "").replace("null", "");
+            //  line += selectedLibrary.getIdBarcode2().toString().replace("[", "").replace("]", "").replace("null", "");
             //}
             //aqui deberia ser una lista de ids de bibliotecas 
             namesToCompare.add(line);
@@ -4673,7 +4656,7 @@ public class LibraryController implements Serializable {
                     bar.setKitName(parameters.get(4));
                     ejbBar.create(bar);
                     System.out.println("crea nueva biblioteca");
-                    */
+                     */
 
                 }
                 entrada.close();
@@ -4704,67 +4687,66 @@ public class LibraryController implements Serializable {
 
         }
     }
-    
-        public void DeleteLib(int idLi) {
-            //27 agosto chaos
-            //primero debo validar que no existan ligas de esa libreria con una corrida
-            int count=0;
-            for (Library lib_encontrada : libRun) {
+
+    public void DeleteLib(int idLi) {
+        //27 agosto chaos
+        //primero debo validar que no existan ligas de esa libreria con una corrida
+        int count = 0;
+        for (Library lib_encontrada : libRun) {
             List<LibraryRunLink> lr = ejbLibraryRun.findRunByLibrary(lib_encontrada.getIdLibrary());
             for (LibraryRunLink libs : lr) {
                 //ejbLibraryRun.remove(libs);
-                count=count+1;
+                count = count + 1;
                 System.out.println("Existe una liga a corrida, no se puede eliminar la biblioteca");
-            }           
-        }
-            if(count<=0){                             
-                //No hay liga a corridas
-                //debo buscar los registros en  SampleLibraryLink -->ejbSLLF
-                
-             //busca entre todas la bibliotecas registrdadas en library
-                RequestContext Context = RequestContext.getCurrentInstance();
-                List<Library> delLib =  ejbLib.findAll();
-                //comparo las filas que me devolvio la consulta y comparo con el id de las libs que seleecione
-                //si concide con la busqueda, mando a llamar el metodo remove
-                try {
-                    for (Library deleteLib : delLib) {
-                        if (deleteLib.getIdLibrary().equals(idLi)) {
-                            System.out.println("nombre de la biblioteca: " + deleteLib.getLibraryName());
-                            ejbLib.remove(deleteLib);
-                            System.out.println("biblioteca elminada");
-                        }
-                    }                                                                            
-                    
-                    Context.execute("PF('dialogDeleteSample').show();");
-
-                } catch (Exception e) {
-                    System.out.println(e);
-                } 
-            }else{
-                  System.out.println("Existe una liga a corrida, no se puede eliminar la biblioteca");
             }
-        
+        }
+        if (count <= 0) {
+            //No hay liga a corridas
+            //debo buscar los registros en  SampleLibraryLink -->ejbSLLF
+
+            //busca entre todas la bibliotecas registrdadas en library
+            RequestContext Context = RequestContext.getCurrentInstance();
+            List<Library> delLib = ejbLib.findAll();
+            //comparo las filas que me devolvio la consulta y comparo con el id de las libs que seleecione
+            //si concide con la busqueda, mando a llamar el metodo remove
+            try {
+                for (Library deleteLib : delLib) {
+                    if (deleteLib.getIdLibrary().equals(idLi)) {
+                        System.out.println("nombre de la biblioteca: " + deleteLib.getLibraryName());
+                        ejbLib.remove(deleteLib);
+                        System.out.println("biblioteca elminada");
+                    }
+                }
+
+                Context.execute("PF('dialogDeleteSample').show();");
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else {
+            System.out.println("Existe una liga a corrida, no se puede eliminar la biblioteca");
+        }
+
     }
 
-    
     public void checkSelectedLibraries() {
         FacesContext context = FacesContext.getCurrentInstance();
-        
-        for(Library itemLibrary : libRun){
+
+        for (Library itemLibrary : libRun) {
             //Validamos si la biblioteca contiene barcodes;
-                if (itemLibrary.getIdBarcode1() == null) {
-                    RequestContext rc = RequestContext.getCurrentInstance();
-                    rc.execute("PF('modulDialog').show();");
-                    messageDialog = "No se puede crear corrida con la biblioteca: "+itemLibrary.getLibraryName()+", debido a que no contiene tag 1 y 2.";
-                    return;
-                }
+            if (itemLibrary.getIdBarcode1() == null) {
+                RequestContext rc = RequestContext.getCurrentInstance();
+                rc.execute("PF('modulDialog').show();");
+                messageDialog = "No se puede crear corrida con la biblioteca: " + itemLibrary.getLibraryName() + ", debido a que no contiene tag 1 y 2.";
+                return;
+            }
         }
-        
+
         if (libRun.isEmpty()) {
             RequestContext rc = RequestContext.getCurrentInstance();
             messageDialog = "Debe seleccionar bibliotecas";
             rc.execute("PF('modulDialog').show();");
-            
+
         } else {
             RequestContext rc = RequestContext.getCurrentInstance();
             rc.execute("PF('DialogCreate').show()");
@@ -4861,10 +4843,10 @@ public class LibraryController implements Serializable {
             return true;
         } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - HiSeq")) {
             return true;
-        }else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - iSeq")) {
+        } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - iSeq")) {
             return true;
-       // }else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("NovaSeq 6000 - Oxford Nanopore")) {
-         //   return true;
+            // }else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("NovaSeq 6000 - Oxford Nanopore")) {
+            //   return true;
         }
 
         return false;
@@ -4992,6 +4974,7 @@ public class LibraryController implements Serializable {
         }
         return ejbQR.findQRByProject(proj, idRn);
     }
+
     public List<QualityReports> qualityReportByRunName(String runName) throws IOException {
         List<QualityReports> qrs;
         FacesContext context = FacesContext.getCurrentInstance();
@@ -5001,33 +4984,33 @@ public class LibraryController implements Serializable {
         for (Run rn : run) {
             idRn = rn;
         }
-        qrs= ejbQR.findQRByProject(proj, idRn);
+        qrs = ejbQR.findQRByProject(proj, idRn);
         return qrs;
         //context.getExternalContext().redirect("../library/runLibraries.xhtml");
         //String url=qrs.get(0).getUrlQualityReport();
         //context.getExternalContext().redirect(url);
         //String javaScriptText = "window.open('"+url+"', 'popupWindow', 'dependent=yes, menubar=no, toolbar=no');";
-    
+
         // Add the Javascript to the rendered page's header for immediate execution
         //AddResource addResource = AddResourceFactory.getInstance(context);
         //addResource.addInlineScriptAtPosition(context, AddResource.HEADER_BEGIN, javaScriptText);         
-
     }
+
     public String getQualityReportLink0(String runName) throws IOException {
-        List<QualityReports> qrs=qualityReportByRunName(runName);
-        if (qrs.isEmpty()){
+        List<QualityReports> qrs = qualityReportByRunName(runName);
+        if (qrs.isEmpty()) {
             return "";
         } else {
-            if (qrs.size()>1){
-                int i=2;
+            if (qrs.size() > 1) {
+                int i = 2;
             }
             //return  "<a target=\"_blank\" href=\"'+qrs.get(0).getUrlQualityReport()+'\" class=\"button\">Ver HTML</a>";
             return qrs.get(0).getUrlQualityReport();
         }
     }
-    
+
     //Método para limpiar la lista
-    public void cleanListSelectionLibrary(){
+    public void cleanListSelectionLibrary() {
         LibraryTable.clear();
         System.out.println("Se ejecuta limpieza de select");
     }
