@@ -75,7 +75,7 @@ public class PathFiles {
     // Raíces:
     //Si se hece una arquitectura donde se cambian las raìces según el entorno, y lo demàs se calcula
     // a partir de las raíces, se podría simplificar el código y evitar errores
-    //Rutas de red
+    //Rutas de red  
     //public static String dev_host="local.uusmb.unam.mx";//localhost?
     //leslie 12/02/2024
     //public static String dev_host="www.uusmb.unam.mx";//dev_host solo se ocupa 1 vez y es debe ser lo mismo que Xochi_IP produccion
