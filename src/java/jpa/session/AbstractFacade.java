@@ -222,6 +222,36 @@ public abstract class AbstractFacade<T> {
 
     }
 
+    // Método para localizar dependencias en base de datos Institucion, Nombre, Localizacion
+    public List<Dependency> findInstitutionByNameAndLocationAndDependencyName(String institution, String location, String dependencyName) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Dependency> cq = cb.createQuery(Dependency.class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        Predicate institutionPredicate = cb.equal(cb.upper(root.get("institution")), institution.toUpperCase());
+        Predicate locationPredicate = location != null && !location.isEmpty()
+                ? cb.equal(cb.upper(root.get("location")), location.toUpperCase())
+                : cb.isNull(root.get("location"));
+        Predicate dependencyNamePredicate = cb.equal(cb.upper(root.get("dependencyName")), dependencyName.toUpperCase());
+
+        cq.select(root).where(cb.and(institutionPredicate, locationPredicate, dependencyNamePredicate));
+
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    // Método para localizar dependencias en base de datos Institucion, Nombre
+    public List<Object[]> findAllInstitutionsAndDependencies() {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+        Root<Dependency> root = cq.from(Dependency.class);
+
+        // Seleccionar solo las columnas institution y dependencyName
+        cq.multiselect(root.get("institution"), root.get("dependencyName"));
+
+        // Ejecutar la consulta y devolver la lista de resultados
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
     public List<Comments> findCommentByType(String type) {
 
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();

@@ -94,103 +94,134 @@ public class DependencyController implements Serializable {
 
     public String create(ActionEvent event) {
         try {
-            
-            
-            getFacade().create(current);        
-            
+
+            getFacade().create(current);
+
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
- public void CreateDependency(){
-        try{
-            
-          
-            System.out.println("Entra al metodo de CreateDependency");
-            
-            FacesContext con = FacesContext.getCurrentInstance();
-       Users us = (Users) con.getExternalContext().getSessionMap().get("usuario");
-       
-       /*
-       String url = "jdbc:postgresql://localhost:5432/sisbi_db";
-       String usuario = "sisbi";
-       String pswd = "SISBI123@";
-       ////////conexion a la BD///
-       Class.forName("org.postgresql.Driver");
-       Connection conexion = DriverManager.getConnection(url, usuario, pswd);
-       java.sql.Statement st = conexion.createStatement(); 
-       
-       /////////////////////////////////////////////////////////////////////
-      
-       String consulta = "select unaccent(lower(institution))"
-               + "FROM dependency where unaccent(lower(institution))='"
-               + current.getInstitution().toLowerCase() + "';";
-       
-       */
-       String nombreDependencia = current.getInstitution().toLowerCase();
-       
-       nombreDependencia = Normalizer.normalize(nombreDependencia, Normalizer.Form.NFD);
-        nombreDependencia = nombreDependencia.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-       
-       List<Dependency> dependencies = ejbFacade.getDependencyByInstitution(nombreDependencia);
-            System.out.println("Tamaño de lista de coincidencias de dependencias: "+dependencies.size());
-       int x = dependencies.size();
-       //ResultSet rs = st.executeQuery(consulta);
-       /*
-       while (rs.next()) {  
-           x++;
-       }
-*/
-       //st.close();
-       //st.close();
-      if(x>1){
-          System.out.println("la institucion ya esta registrada");
-           RequestContext context = RequestContext.getCurrentInstance();
-               context.execute("PF('repeatDialog').show();");
-      }else{
-                getFacade().create(current); 
-                 RequestContext rc = RequestContext.getCurrentInstance();
-                 rc.execute("PF('CreateDialog').show();");
-      }     
-        }catch(Exception e){
-           System.out.println(e);
-            //return null;
+
+    //Metodo para autocompletado de dependencia
+    public List<String> completeInstitution(String query) {
+        List<String> results = new ArrayList<>();
+
+        // Obtener todas las instituciones registradas
+        List<Object[]> institutions = ejbFacade.findAllInstitutionsAndDependencies();
+
+        // Filtrar las instituciones que coincidan con la consulta del usuario
+        for (Object[] inst : institutions) {
+            String institutionName = (String) inst[0]; // Extraer el nombre de la institución
+            if (institutionName.toLowerCase().contains(query.toLowerCase())) {
+                results.add(institutionName);
+            }
         }
-        
+
+        return results;
     }
+
+    // Metodo para autocompletado de nombre de dependencia
+    public List<String> completeDependencyName(String query) {
+        List<String> results = new ArrayList<>();
+
+        // Obtener todas las instituciones registradas
+        List<Object[]> dependency = ejbFacade.findAllInstitutionsAndDependencies();
+
+        // Filtrar las instituciones que coincidan con la consulta del usuario
+        for (Object[] inst : dependency) {
+            String dependencyName = (String) inst[1]; // Extraer el nombre de la institución
+            if (dependencyName.toLowerCase().contains(query.toLowerCase())) {
+                results.add(dependencyName);
+            }
+        }
+
+        return results;
+
+    }
+
+    public void CreateDependency() {
+        try {
+            System.out.println("Entrando al método createDependency...");
+
+            // Obtener valores originales antes de la normalización
+            String originalInstitution = getSelected().getInstitution();
+            String originalDependencyName = getSelected().getDependencyName();
+
+            // Validar que los campos requeridos no sean nulos o vacíos
+            if (originalInstitution == null || originalInstitution.isEmpty()) {
+                JsfUtil.addErrorMessage("El nombre de la institución es obligatorio.");
+                return;
+            }
+            if (originalDependencyName == null || originalDependencyName.isEmpty()) {
+                JsfUtil.addErrorMessage("El nombre de la dependencia es obligatorio.");
+                return;
+            }
+
+            // Normalizar los datos ingresados
+            String normalizedInstitution = normalizeText(originalInstitution);
+            String normalizedDependencyName = normalizeText(originalDependencyName);
+
+            // Obtener todas las instituciones y dependencias existentes en la base de datos
+            List<Object[]> existingDependencies = ejbFacade.findAllInstitutionsAndDependencies();
+
+            // Validar si existe una coincidencia exacta
+            boolean exists = existingDependencies.stream().anyMatch(dep -> {
+                String dbInstitution = normalizeText((String) dep[0]);
+                String dbDependencyName = normalizeText((String) dep[1]);
+                return dbInstitution.equals(normalizedInstitution) && dbDependencyName.equals(normalizedDependencyName);
+            });
+
+            if (exists) {
+                System.out.println("La institución ya está registrada con el mismo nombre de dependencia.");
+                JsfUtil.addErrorMessage("La institución ya está registrada con el mismo nombre de dependencia.");
+                RequestContext.getCurrentInstance().execute("PF('repeatDialog').show();");
+            } else {
+                // Actualizar los valores normalizados en el objeto seleccionado
+                getSelected().setInstitution(normalizedInstitution);
+                getSelected().setDependencyName(normalizedDependencyName);
+
+                // Crear la nueva dependencia
+                getFacade().create(getSelected());
+                System.out.println("Institución registrada con éxito.");
+                JsfUtil.addSuccessMessage("La dependencia se ha registrado exitosamente.");
+                RequestContext.getCurrentInstance().execute("PF('CreateDialog').show();");
+            }
+        } catch (Exception e) {
+            System.err.println("Error al intentar registrar la dependencia: " + e.getMessage());
+            JsfUtil.addErrorMessage("Ocurrió un error al intentar registrar la dependencia. Por favor, inténtelo nuevamente.");
+        }
+    }
+
     public String prepareEdit() {
         current = (Dependency) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "Edit";
     }
-    
-    public String redirectDependency(){
-     
-      FacesContext context = FacesContext.getCurrentInstance();
-     Users us=(Users) context.getExternalContext().getSessionMap().get("usuario");
-        if (us!=null) {
-       return "/users/Edit.xhtml";
-        }else{
-        
-         return "/users/Create.xhtml";
-    
-    
-    }
-    }
-    
-    //Seguir editando nuevo proyecto
-    
-    public String redirectCreateProject(){
-     
-      FacesContext context = FacesContext.getCurrentInstance();
 
-       return "/project/Create.xhtml";
-    
-    
+    public String redirectDependency() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+        if (us != null) {
+            return "/users/Edit.xhtml";
+        } else {
+
+            return "/users/Create.xhtml";
+
+        }
     }
-    
+
+    //Seguir editando nuevo proyecto
+    public String redirectCreateProject() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        return "/project/Create.xhtml";
+
+    }
+
     public String update() {
         try {
             getFacade().edit(current);
@@ -233,22 +264,21 @@ public class DependencyController implements Serializable {
         }
     }
 
-    
-  public List <String> getInstitutions(){
-   
-       List <Dependency> inst=getFacade().findAllDependencies(2);
-       ArrayList <String> filtered= new ArrayList<>();
-       
-       for (int i = 0; i < inst.size()-2; i++) {
-           if (!inst.get(i).getInstitution().equals(inst.get(i+1).getInstitution())) {
-               filtered.add(inst.get(i).getInstitution()+" - "+ inst.get(i).getAcronym());
-           }
-       }
-       filtered.add(inst.get(inst.size()-1).getInstitution()+"-"+ inst.get(inst.size()-1).getAcronym());
-   return filtered;
-   
-   }
-    
+    public List<String> getInstitutions() {
+
+        List<Dependency> inst = getFacade().findAllDependencies(2);
+        ArrayList<String> filtered = new ArrayList<>();
+
+        for (int i = 0; i < inst.size() - 2; i++) {
+            if (!inst.get(i).getInstitution().equals(inst.get(i + 1).getInstitution())) {
+                filtered.add(inst.get(i).getInstitution() + " - " + inst.get(i).getAcronym());
+            }
+        }
+        filtered.add(inst.get(inst.size() - 1).getInstitution() + "-" + inst.get(inst.size() - 1).getAcronym());
+        return filtered;
+
+    }
+
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
@@ -342,11 +372,23 @@ public class DependencyController implements Serializable {
         }
 
     }
-    
+
     //Método para obtener las dependencias 7
-    public List<Dependency> getAllDependency(){
+    public List<Dependency> getAllDependency() {
         List<Dependency> dependencies = ejbFacade.getAllDependency();
         return dependencies;
+    }
+
+    //Metodo para normalizar texto de dependencia:
+    private String normalizeText(String text) {
+        if (text == null) {
+            return null;
+        }
+        text = text.trim(); // Eliminar espacios en blanco al inicio y al final
+        text = text.toUpperCase(); // Convertir a mayúsculas
+        text = java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", ""); // Eliminar acentos y caracteres especiales
+        return text;
     }
 
 }

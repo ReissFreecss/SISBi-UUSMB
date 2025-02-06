@@ -3195,7 +3195,7 @@ public class LibraryController implements Serializable {
             //Fin de la validacion del nombre
 
             /*Inicia la validacion del _numerico*/
-            /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
+ /*cadLibraryName = listSampleLibraries.get(i).getLibrary().getLibraryName().split("_");        
              for(int z=0; z<cadLibraryName.length-1; z++){
                  cad=cad+cadLibraryName[z];
              }
@@ -3567,7 +3567,7 @@ public class LibraryController implements Serializable {
         XSSFWorkbook workbook = new XSSFWorkbook(entrada);
         XSSFSheet sheet = workbook.getSheetAt(0);
 
-        //String url = "jdbc:postgresql://localhost:5432/sisbi_db";
+        //String url = "jdbc:postgresql://localhost:5432/sisbi_db"; CORRECCION DE LIBARY
         //String usuario = "sisbi";
         //String pswd = "SISBI123@";
         if (diferentKit == false) {
