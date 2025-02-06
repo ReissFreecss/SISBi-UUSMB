@@ -269,7 +269,7 @@
                         <p:outputLabel value="Método de entrega:"/>
                         <p:outputLabel value="#{projectController.selectedProject.deliveryMethod}" />
                         <p:outputLabel value="Entrega de resultados:"/>
-                        <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado">
+                        <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado" onclick="PF('accordionArchivosAsociados').unselect(-1); PF('accordionMuestrasAsociadas').unselect(-1); PF('accordionBibliotecasAsociadas').unselect(-1);">
                             <h:outputText value="Ver resultados" style="color: blue; text-decoration: underline" />
                         </h:outputLink>
                         <p:outputLabel value="Método de pago:"/>
@@ -649,7 +649,7 @@
 
 
                 <br />
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionArchivosAsociados">
                     <p:tab title="Archivos asociados al proyecto" titleStyle="font-size: large;font-family: 'politica'" >
                         <h:panelGrid columns="1" cellpadding="0">
                             <p:outputLabel value="Suba algún archivo referente a su proyecto en formato .pdf (cotizaciones, gel de agarosa, comprobantes de pago, etc)"  style="font-size: medium"  />
@@ -760,7 +760,7 @@
 
                 </p:dialog>
 
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionMuestrasAsociadas">
                     <p:tab title="Muestras asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" > 
                         <p:dataTable id="tbl" value="#{sampleController.listSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
                                      style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
@@ -1254,7 +1254,7 @@
                 </p:accordionPanel>
                 <br />
 
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionBibliotecasAsociadas">
                     <p:tab title="Bibliotecas asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" >   
                         <!--quite estas opciones del datatbale paginator="true" rows="20" para que fuera el scrollbar -->
                         <p:dataTable id="tblLibs"  value="#{libraryController.getLibsByProject()}" var="item" reflow="true"  sortMode="multiple"
