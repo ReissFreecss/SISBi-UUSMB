@@ -805,7 +805,7 @@
                                 <h:outputText value="#{item.idSample}"
                                               style="#{commentsController.hasCommentsByType(item) ? 'color: white; background-color: blue;' : ''}" />
                             </p:column>
-                                
+
                             <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
 
 
@@ -1436,7 +1436,11 @@
 
                             <p:column width="60" headerText="Reporte de calidad de las muestras" >
 
-                                <p:commandButton icon="ui-icon-circle-plus" value="Ver calidad de las muestras"  action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}" ajax="false"/>
+                                <p:commandButton icon="ui-icon-circle-plus"
+                                                 value="Ver calidad de las muestras"
+                                                 action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}"
+                                                 ajax="false"
+                                                 disabled="#{!reportProjectController.reportProjectControllerEx(sampleController)}" />
 
                             </p:column>
                             <p:column width="90" headerText="Reporte de calidad de secuenciación" >

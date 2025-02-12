@@ -774,7 +774,7 @@ public class ReportProjectController implements Serializable {
                 String currentStatusSample = currentSample.getStatus();
                 if (!currentStatusSample.equals("Entregado fastq")
                         && !currentStatusSample.startsWith("Analisis Bioinformatico")) {
-                    
+
                     // Se realiza un cambio de estatus sobre la muestra
                     currentSample.setStatus("Analisis Bioinformatico");
                     getEjbFacadeSample().edit(currentSample);
@@ -2452,6 +2452,30 @@ public class ReportProjectController implements Serializable {
         System.out.println("ejecutando elementos");
     }
 
+    public boolean reportProjectControllerEx(SampleController sampleController) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Project proj = (Project) context.getExternalContext().getSessionMap().get("project");
+
+        if (proj == null) {
+            return false; // Si no hay un proyecto seleccionado, el botón debe estar deshabilitado
+        }
+
+        // Obtener todas las muestras asociadas al proyecto
+        List<Sample> all_project_samples = sampleController.getItemsProj(proj);
+
+        // Verificar si hay al menos una muestra registrada
+        if (all_project_samples == null || all_project_samples.isEmpty()) {
+            return false;
+        }
+
+        // Validar datos críticos necesarios para el reporte
+        if (sampleController.getLastSampleAnalysisDate(all_project_samples) == null) {
+            return false;
+        }
+
+        // Puedes agregar más validaciones según sea necesario
+        return true; // Si todos los datos están presentes, el botón se habilita
+    }
     //Creacion de documento Word desde una plantilla --------------------------------Inicio
     public String createReportWordSampleQC(SampleController sampleController, Project proj, String format) throws IOException {
 
