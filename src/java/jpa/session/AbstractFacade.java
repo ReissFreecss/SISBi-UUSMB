@@ -2238,6 +2238,18 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
+    /*public List<Plataform> findUbicationByIdentifier(String index_kit){
+        javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Plataform> cq = cb.createQuery(Plataform.class);
+        
+        Predicate pre1 = cb.equal(BarcodesRoot.get(Barcodes_.indexName), index_name);
+        cq.select(BarcodesRoot);
+        cq.where(pre1);
+
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        
+        return q.getResultList();
+    }*/
 
 }
 

@@ -98,6 +98,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import jpa.entities.QualityReports;
 import jpa.entities.Run;
 import jpa.entities.SampleLibraryLink;
+import org.apache.commons.lang3.Range;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell.XWPFVertAlign;
 
 class SignatureException extends IOException {
@@ -1293,7 +1294,7 @@ public class ReportProjectController implements Serializable {
             case "Expresion Diferencial":
                 return "editFormExpresionDiferencial?faces-redirect=true&includeViewParams=true";
             case "Analisis Metagenomico":
-                return "editFormAnalisisMetagenomico?faces-redirect=true&includeViewParams=true";
+                return "editFormAnalisiGuardarsMetagenomico?faces-redirect=true&includeViewParams=true";
             case "Ensamble de Genoma":
                 return "editFormEnsambleGenoma?faces-redirect=true&includeViewParams=true";
             case "Transcriptoma de Novo y Expresion Diferencial":
@@ -2123,12 +2124,22 @@ public class ReportProjectController implements Serializable {
     private void resultados_ED(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         String IDEAMex_link;
         IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/" + itemFieldReport.getField17();//¿O 40?
+
+        // Carlos - Recorre todos los parrafos del documento origen
         for (XWPFParagraph p : doc.getParagraphs()) {
+
+            // Crea un nuevo parrafo en el documento destino
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
+
+            //Obtiene secuencia de texto con el mismo formato
             List<XWPFRun> runs = p.getRuns();
             int i = 0;
+
+            // Validamos que no haya runs vacias 
             if (runs != null) {
+
+                // Itera sobre cada run dentro del parrrafo aquí es donde se modifica el contenido del texto dentro del run
                 for (XWPFRun r : runs) {
                     String text = r.getText(0);
                     if (text != null) {
@@ -2194,6 +2205,7 @@ public class ReportProjectController implements Serializable {
                                 System.out.println("Error al cambiar el numero de muestras,no hay FIELDBDi");
                             }
                         }
+
                         if (text.contains("FIELDEDTABLE")) {
                             System.out.println("llego al FIELDTABLE");
                             text = text.replace("FIELDEDTABLE", "");
@@ -2476,6 +2488,7 @@ public class ReportProjectController implements Serializable {
         // Puedes agregar más validaciones según sea necesario
         return true; // Si todos los datos están presentes, el botón se habilita
     }
+
     //Creacion de documento Word desde una plantilla --------------------------------Inicio
     public String createReportWordSampleQC(SampleController sampleController, Project proj, String format) throws IOException {
 
@@ -2623,6 +2636,7 @@ public class ReportProjectController implements Serializable {
     }
     String messagelocation = "";
 
+    // CORRIDAS SELECCIONADAS
     public String findlocationseq(List<String> runnames) {
         System.out.println("obteniendo nombres de equipo segun la lista de corridas seleccionada");
         List<String> devices = new ArrayList<>();
@@ -2916,6 +2930,8 @@ public class ReportProjectController implements Serializable {
             XWPFDocument docEval = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Evaluacion_y_firmas.docx")));
             System.out.println("Se cargaron los machotes para el reporte bioinformático");
             doc = mergeMethodsIn(doc, docMethodol, proj);
+            agregaDatosSecuenciador(doc, "TYPEQUIP", "PRUEBA");
+
             //leslie 
             System.out.println("se hizo el merge en methodsin");
             doc = mergeQualityReportIn(doc, docCalidad, proj, itemFieldReport.getField3());
@@ -2945,6 +2961,9 @@ public class ReportProjectController implements Serializable {
             pasa_elementos(doc, docEval);
 
             System.out.println("paso pasa_elemetos");
+
+            agregaDatosSecuenciador(doc, "TYPEQUIP", " de la compañía " + " ubicado en ");
+
             /*
             ///doc.enforceUpdateFields();
             //doc.createTOC();
@@ -2970,6 +2989,39 @@ public class ReportProjectController implements Serializable {
         }
         return "";
         //return "menuReport?faces-redirect=true&includeViewParams=true";
+    }
+
+    private void agregaDatosSecuenciador(XWPFDocument doc, String originalText, String updatedText) {
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            List<XWPFRun> runs = p.getRuns();
+
+            if (runs != null) {
+                StringBuilder fullText = new StringBuilder();
+
+                // 🔹 1️⃣ Unir todo el texto del párrafo (por si está fragmentado)
+                for (XWPFRun r : runs) {
+                    String text = r.getText(0);
+                    if (text != null) {
+                        fullText.append(text);
+                    }
+                }
+
+                // 🔹 2️⃣ Reemplazar el texto si es necesario
+                String modifiedText = fullText.toString().replace(originalText, updatedText);
+
+                if (!modifiedText.equals(fullText.toString())) {
+                    // 🔹 3️⃣ Eliminar runs originales
+                    for (int i = runs.size() - 1; i >= 0; i--) {
+                        p.removeRun(i);
+                    }
+
+                    // 🔹 4️⃣ Agregar un nuevo run con el texto modificado
+                    XWPFRun newRun = p.createRun();
+                    newRun.setText(modifiedText);
+                    System.out.println("🔄 Reemplazo exitoso: " + originalText + " → " + updatedText);
+                }
+            }
+        }
     }
 
     private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples) {

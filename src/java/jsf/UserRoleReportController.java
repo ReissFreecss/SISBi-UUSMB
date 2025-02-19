@@ -405,8 +405,8 @@ public String uploadFile(FileUploadEvent event) {
         filep = event.getFile();
         FacesContext context = FacesContext.getCurrentInstance();
         ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
-        //String rootpath = scontext.getRealPath("../../web/resources/imgSign/");
-        String rootpath = DirectoryImageSing;
+        String rootpath = scontext.getRealPath("/home/carlos");
+        //String rootpath = DirectoryImageSing;
         
         try {
 

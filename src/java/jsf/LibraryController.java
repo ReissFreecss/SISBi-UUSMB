@@ -279,9 +279,9 @@ public class LibraryController implements Serializable {
         boolean basei5miseq = false;
         boolean basei5nextseq = false;
         //Verificamos el tipo de plataforma 
-        if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore") || platafrom.equals("NextSeq 2000")) {
+        if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore")) {
             basei5miseq = true;
-        } else if (platafrom.equals("NovaSeq") || platafrom.equals("NextSeq500") || platafrom.equals("iSeq")) { //leslie agregue la opcion iSeq Carlos agregue la opcion de Nextseq 2000
+        } else if (platafrom.equals("NovaSeq") || platafrom.equals("NextSeq500") || platafrom.equals("iSeq") || platafrom.equals("NextSeq 2000")) { //leslie agregue la opcion iSeq Carlos agregue la opcion de Nextseq 2000
             basei5nextseq = true;
         }
 
@@ -310,10 +310,10 @@ public class LibraryController implements Serializable {
     public String getIndexBasei5Create(Barcodes itemBarcode) {
         if (itemBarcode != null) {
             // Verificamos el tipo de plataforma 
-            if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore") || platafrom.equals("NextSeq 2000")) {
+            if (platafrom.equals("HiSeq") || platafrom.equals("MiSeq") || platafrom.equals("Oxford Nanopore")) {
                 System.out.println("Se recibe: " + itemBarcode);
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Miseq();
-            } else if (platafrom.equals("NovaSeq") || platafrom.equals("iSeq") || platafrom.equals("NextSeq500")) {
+            } else if (platafrom.equals("NovaSeq") || platafrom.equals("iSeq") || platafrom.equals("NextSeq500") || platafrom.equals("NextSeq 2000")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Nextseq();
             }
         }
@@ -325,9 +325,9 @@ public class LibraryController implements Serializable {
     public String getIndexBasei5View(Barcodes itemBarcode, String itemPlataform) {
         if (itemBarcode != null) {
             //Verificamos el tipo de plataforma 
-            if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore") || itemPlataform.equals("NextSeq 2000")) {
+            if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Miseq();
-            } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") || itemPlataform.equals("NextSeq500")) {
+            } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") || itemPlataform.equals("NextSeq500") || itemPlataform.equals("NextSeq 2000")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Nextseq();
             }
         }
@@ -2262,13 +2262,13 @@ public class LibraryController implements Serializable {
                                 } else {
 
                                     //Verificamos el tipo de plataforma 
-                                    if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("HiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("MiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("Oxford Nanopore") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NextSeq 2000")) {
+                                    if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("HiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("MiSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("Oxford Nanopore")) {
                                         barcode2 = runs.getLibrary().getIdBarcode2().getIndexName().replace("-", "_");
                                         barcode2Sec = runs.getLibrary().getIdBarcode2().getBasei5Miseq().replace("-", "_");
                                         System.out.println("la plataforma es hiseq/miseq, el barcode index 5 forward" + barcode2Sec);
                                         //leslie 22 agosto 2024: agrege la opcion de iseq y cambie minION por oxford
                                         //carlos 12 feb 2025: agregue la opcion de NextSeq 2000
-                                    } else if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NovaSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NextSeq500") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("iSeq")) {
+                                    } else if (runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NovaSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NextSeq500") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("iSeq") || runs.getLibrary().getPlataformLinkKit().getPlataform().getPlataformName().equals("NextSeq 2000")) {
                                         barcode2 = runs.getLibrary().getIdBarcode2().getIndexName().replace("-", "_");
                                         barcode2Sec = runs.getLibrary().getIdBarcode2().getBasei5Nextseq().replace("-", "_");
                                         System.out.println("la plataforma es novaseq/nextseq,iseq, el barcode index 5 reverse forward" + barcode2Sec);
@@ -3836,7 +3836,7 @@ public class LibraryController implements Serializable {
 
                                     //Se valida si el tag2 tiene valor en base i5 dependiendo de la plataforma seleccionada
                                     //Verificamos el tipo de plataforma 
-                                    if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore") || itemPlataform.equals("NextSeq 2000")) {
+                                    if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore")) {
                                         if (ejbBar.findBarcodeByIndexName(tag2).get(0).getBasei5Miseq() == null) {
                                             messageDialog = "Para la muestra " + NameLib + " no es correcto el TAG 2 basei5miseq: " + tag2 + "  , favor de revisarlo";
                                             closeStatusDialogUploadFile();
@@ -3844,7 +3844,7 @@ public class LibraryController implements Serializable {
                                             //rowSampleExcel.clear();
                                             return;
                                         }
-                                    } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") || itemPlataform.equals("NextSeq500")) {
+                                    } else if (itemPlataform.equals("NovaSeq") || platafrom.equals("iSeq") || itemPlataform.equals("NextSeq500") || itemPlataform.equals("NextSeq 2000")) {
                                         if (ejbBar.findBarcodeByIndexName(tag2).get(0).getBasei5Nextseq() == null) {
                                             messageDialog = "Para la muestra " + NameLib + " no es correcto el TAG 2 basei5nextSeq: " + tag2 + "  , favor de revisarlo";
                                             closeStatusDialogUploadFile();
