@@ -316,6 +316,8 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - iSeq");
         listPlatform.add("HiSeq X - Oxford Nanopore");
         listPlatform.add("Oxford Nanopore - HiSeq");
+        listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
+        listPlatform.add("Oxford Nanopore - NextSeq 2000");
         listPlatform.add("NovaSeq XPLUS");
         listPlatform.add("NextSeq 2000");
         // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
@@ -338,6 +340,8 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - iSeq");
         listPlatform.add("Oxford Nanopore - HiSeq");
         listPlatform.add("NovaSeq 6000 - Oxford Nanopore");
+        listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
+        listPlatform.add("Oxford Nanopore - NextSeq 2000");
         listPlatform.add("NovaSeq XPLUS");
         listPlatform.add("NextSeq 2000");
 // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
@@ -709,9 +713,15 @@ public class FileController implements Serializable {
                                 itemPlatform = "Oxford Nanopore - HiSeq";
                                 break;
                             case "j":
-                                itemPlatform = "NovaSeq XPLUS";
+                                itemPlatform = "Oxford Nanopore - NovaSeq XPLUS";
                                 break;
                             case "k":
+                                itemPlatform = "Oxford Nanopore - NextSeq 2000";
+                                break;
+                            case "l":
+                                itemPlatform = "NovaSeq XPLUS";
+                                break;
+                            case "m":
                                 itemPlatform = "NextSeq 2000";
                                 break;
                             case "na":
@@ -1204,9 +1214,15 @@ public class FileController implements Serializable {
                                 itemPlatform_insert = "Oxford Nanopore - HiSeq";
                                 break;
                             case "j":
-                                itemPlatform_insert = "NovaSeq XPLUS";
+                                itemPlatform_insert = "Oxford Nanopore - NovaSeq XPLUS";
                                 break;
                             case "k":
+                                itemPlatform_insert = "Oxford Nanopore - NextSeq 2000";
+                                break;
+                            case "l":
+                                itemPlatform_insert = "NovaSeq XPLUS";
+                                break;
+                            case "m":
                                 itemPlatform_insert = "NextSeq 2000";
                                 break;
                             case "na":
@@ -1239,7 +1255,7 @@ public class FileController implements Serializable {
                     //tamañogenoma
                     String sCont = parameters.get(colFuenteContaminacion).trim();
                     String metdeliv = parameters.get(colMetodoEntrega);  //new preform
-                    String Aptype=parameters.get(colAppType).trim();  //new preform
+                    String Aptype = parameters.get(colAppType).trim();  //new preform
                     //String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  //new preform
                     String kit_lib = parameters.get(colkitLib).trim();  //new preform
                     String tag_lib = parameters.get(coltagLib).trim();  //new preform
