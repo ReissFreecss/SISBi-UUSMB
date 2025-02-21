@@ -2636,122 +2636,6 @@ public class ReportProjectController implements Serializable {
     }
     String messagelocation = "";
 
-    // CORRIDAS SELECCIONADAS
-    public String findlocationseq(List<String> runnames) {
-        System.out.println("obteniendo nombres de equipo segun la lista de corridas seleccionada");
-        List<String> devices = new ArrayList<>();
-        //String []devices={};
-        String addlocationseq = "";
-        String device = "";
-        String company = "Illumina";
-        /*si se selecciono mas de una corrida entonces guarda los nombres del 
-        equipo en devices y usa el contador para despues recorrer con otro for y sacar las ubicaciones
-         */
-        for (int i = 0; i < runnames.size(); i++) {
-            System.out.println("entro al for para hacer el split en la vuelta" + i);
-            String[] devsplit = runnames.get(i).toString().split("_");
-            devices.add(devsplit[1]); //la posicion 0 es la fecha, la posicion 1 el nombre del equipo--> 220607_NS500502_0153_AHJWCNBGXL  
-            System.out.println("imprimo el nombre del equipo: " + devices.get(i));
-            System.out.println("agrego el valor a la lista devices");
-        }
-        System.out.println("fin el for que hace el split");
-
-        if (devices.size() > 0) {
-            System.out.println("entro al if del switch");
-            for (int i = 0; i <= devices.size(); i++) {
-                switch (devices.get(i).toUpperCase()) {
-                    case "A01314":
-                        addlocationseq = "del Instituto Tecnológico y de Estudios Superiores de Monterrey en Monterrey, Nuevo León, México";
-                        device = "NovaSeq X";
-                        break;
-                    case "M06162":
-                        addlocationseq = "del la compañia Abalat en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "M07836":
-                        addlocationseq = "del Instituto de Ecologia de la UNAM en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "M02676":
-                        addlocationseq = "de la Red de Apoyo a la Investigación la UNAM en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "FS10001306":
-                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
-                        device = "iSeq";
-                        break;
-                    case "M07079":
-                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "NB502037":
-                        addlocationseq = "del Laboratorio de Genética Genos Médica en la Ciudad de México";
-                        device = "NextSeq500";
-                        break;
-                    case "KHS0062":
-                        addlocationseq = "de la Unidad de Genómica Avanzada LANGEBIO del CINVESTAV IPN";
-                        device = "HiSeq";
-                        break;
-                    case "MG01HX05":
-                        addlocationseq = "de la compañia MACROGEN en los Estados Unidos";
-                        device = "HiSeq";
-                        break;
-                    case "LH00586":
-                        addlocationseq = "de la compañia PSOMAGEN en los Estados Unidos";
-                        device = "NovaSeq";
-                        break;
-                    case "NS500560":
-                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
-                        device = "NextSeq500";
-                        break;
-                    case "VH01014":
-                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
-                        device = "NextSeq2000";
-                        break;
-                    case "FS10002358":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "iSeq 100";
-                        break;
-                    case "NS500502":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "NextSeq 500";
-                        break;
-                    case "MN18784":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        break;
-                    case "MN22733":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    case "MN22784":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    case "MC-115680":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    default:
-                        addlocationseq = "[ubicacion]";
-                        device = "[equipo]";
-                        company = "[Illumina/Oxford nanopore]";
-                }
-
-                messagelocation = "La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq;
-                System.out.println("La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq);
-                /* La secuenciación se realizó en un equipo [MiSeq|NexSeq|..] 
-                   de la compañía Illumina ubicado en las instalaciones [ubicación] */
-
-            }
-        }
-        return messagelocation;
-        //fin leslie
-    }
-
     public String createReportWordFastQC(SampleController sampleController, ProjectController projc, ReportProjectController rpc) throws IOException {
         Project proj = projc.getSelectedProject();
         java.util.Date datePer = new Date();
@@ -2930,7 +2814,7 @@ public class ReportProjectController implements Serializable {
             XWPFDocument docEval = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Evaluacion_y_firmas.docx")));
             System.out.println("Se cargaron los machotes para el reporte bioinformático");
             doc = mergeMethodsIn(doc, docMethodol, proj);
-            agregaDatosSecuenciador(doc, "TYPEQUIP", "PRUEBA");
+            //agregaDatosSecuenciador(doc, "TYPEQUIP", "PRUEBA");
 
             //leslie 
             System.out.println("se hizo el merge en methodsin");
@@ -2962,7 +2846,7 @@ public class ReportProjectController implements Serializable {
 
             System.out.println("paso pasa_elemetos");
 
-            agregaDatosSecuenciador(doc, "TYPEQUIP", " de la compañía " + " ubicado en ");
+            //agregaDatosSecuenciador(doc, "TYPEQUIP", " de la compañía " + " ubicado en ");
 
             /*
             ///doc.enforceUpdateFields();
@@ -2991,14 +2875,138 @@ public class ReportProjectController implements Serializable {
         //return "menuReport?faces-redirect=true&includeViewParams=true";
     }
 
-    private void agregaDatosSecuenciador(XWPFDocument doc, String originalText, String updatedText) {
+    // Carlos Calderon - Localiza el id del aparato y le agrega la ubicacion
+    public String findlocationseq(List<String> runnames) {
+        System.out.println("obteniendo nombres de equipo segun la lista de corridas seleccionada");
+        List<String> devices = new ArrayList<>();
+        //String []devices={};
+        String addlocationseq = "";
+        String device = "";
+        String company = "Illumina";
+        
+        // Extraer los nombres de los equipos a partir de los nombres de las corridas
+        for (int i = 0; i < runnames.size(); i++) {
+            System.out.println("Procesando corrida: " + runnames.get(i));
+
+            String[] devSplit = runnames.get(i).split("_");
+            if (devSplit.length > 1) {
+                devices.add(devSplit[1]); // La posición 1 es el nombre del equipo
+                System.out.println("Equipo identificado: " + devSplit[1]);
+            } else {
+                System.out.println("Formato incorrecto en la corrida: " + runnames.get(i));
+            }
+        }
+
+        if (devices.size() > 0) {
+            System.out.println("entro al if del switch");
+            for (int i = 0; i <= devices.size(); i++) {
+                switch (devices.get(i).toUpperCase()) {
+                    case "A01314":
+                        addlocationseq = "del Instituto Tecnológico y de Estudios Superiores de Monterrey en Monterrey, Nuevo León, México";
+                        device = "NovaSeq X";
+                        break;
+                    case "M06162":
+                        addlocationseq = "del la compañia Abalat en la Ciudad de México";
+                        device = "MiSeq";
+                        break;
+                    case "M07836":
+                        addlocationseq = "del Instituto de Ecologia de la UNAM en la Ciudad de México";
+                        device = "MiSeq";
+                        break;
+                    case "M02676":
+                        addlocationseq = "de la Red de Apoyo a la Investigación la UNAM en la Ciudad de México";
+                        device = "MiSeq";
+                        break;
+                    case "FS10001306":
+                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
+                        device = "iSeq";
+                        break;
+                    case "M07079":
+                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
+                        device = "MiSeq";
+                        break;
+                    case "NB502037":
+                        addlocationseq = "del Laboratorio de Genética Genos Médica en la Ciudad de México";
+                        device = "NextSeq500";
+                        break;
+                    case "KHS0062":
+                        addlocationseq = "de la Unidad de Genómica Avanzada LANGEBIO del CINVESTAV IPN";
+                        device = "HiSeq";
+                        break;
+                    case "MG01HX05":
+                        addlocationseq = "de la compañia PSOMAGEN en Maryland, Estados Unidos";
+                        device = "HiSeq";
+                        break;
+                    case "LH00586":
+                        addlocationseq = "de la compañia PSOMAGEN en los Estados Unidos";
+                        device = "NovaSeq";
+                        break;
+                    case "NS500560":
+                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
+                        device = "NextSeq500";
+                        break;
+                    case "VH01014":
+                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
+                        device = "NextSeq2000";
+                        break;
+                    case "FS10002358":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "iSeq 100";
+                        break;
+                    case "NS500502":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "NextSeq 500";
+                        break;
+                    case "MN18784":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        break;
+                    case "MN22733":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                        break;
+                    case "MN22784":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                        break;
+                    case "MC-115680":
+                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                        break;
+                    case "M03468":
+                        addlocationseq = "de la instalacion FES IZTACALA del estado de mexico ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                    case "M03540":
+                        addlocationseq = "de la compañia INMEGEN en Tlalpan, Ciudad de Mexico ";
+                        device = "MinION";
+                        company = "Oxford Nanopore";
+                        break;
+                    default:
+                        addlocationseq = "[ubicacion]";
+                        device = "[equipo]";
+                        company = "[Illumina/Oxford nanopore]";
+                }
+
+                messagelocation = "La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq;
+                System.out.println("La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq);
+            }
+        }
+        return messagelocation;
+    }
+
+    /*private void agregaDatosSecuenciador(XWPFDocument doc, String originalText, String updatedText) {
         for (XWPFParagraph p : doc.getParagraphs()) {
             List<XWPFRun> runs = p.getRuns();
+            findlocationseq(runs);
 
             if (runs != null) {
                 StringBuilder fullText = new StringBuilder();
 
-                // 🔹 1️⃣ Unir todo el texto del párrafo (por si está fragmentado)
+                // 🔹 Unir todo el texto del párrafo (por si está fragmentado)
                 for (XWPFRun r : runs) {
                     String text = r.getText(0);
                     if (text != null) {
@@ -3006,23 +3014,23 @@ public class ReportProjectController implements Serializable {
                     }
                 }
 
-                // 🔹 2️⃣ Reemplazar el texto si es necesario
+                // 🔹 Reemplazar el texto si es necesario
                 String modifiedText = fullText.toString().replace(originalText, updatedText);
 
                 if (!modifiedText.equals(fullText.toString())) {
-                    // 🔹 3️⃣ Eliminar runs originales
+                    // 🔹 Eliminar runs originales
                     for (int i = runs.size() - 1; i >= 0; i--) {
                         p.removeRun(i);
                     }
 
-                    // 🔹 4️⃣ Agregar un nuevo run con el texto modificado
+                    // 🔹 Agregar un nuevo run con el texto modificado
                     XWPFRun newRun = p.createRun();
                     newRun.setText(modifiedText);
                     System.out.println("🔄 Reemplazo exitoso: " + originalText + " → " + updatedText);
                 }
             }
         }
-    }
+    }*/
 
     private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples) {
         // Agrega una leyenda al final del documento donde se invita al usuario a aceptar el procesamiento

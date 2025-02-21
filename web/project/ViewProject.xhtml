@@ -780,20 +780,20 @@
                             <p:ajax event="cellEdit" listener="#{sampleController.updateManySamplesView()}" update=":form"  />
                             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                             <f:facet name="footer">
-                                <h:panelGrid columns="4" style="border-color: transparent">
+                                <h:panelGrid columns="5" style="border-color: transparent">
 
                                     <p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
                                         <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
                                     </p:commandButton>
 
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Genera QC Mat.Genético" action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'docx')}" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" ajax="false"/>
+                                    Total de muestras: #{sampleController.itemsProj.size()}
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Subir QC Mat.Genético" oncomplete="PF('SampleQCDialog').show()" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" />
                                     <p:commandButton icon="ui-icon-circle-plus" value="Registrar muestra(s) para este proyecto" action="#{sampleController.redirectCreateSample()}" disabled="#{projectController.checkEstatusProj()}">
                                         <f:actionListener binding="#{commentsController.cleanStringComment()}"/>
                                     </p:commandButton>
 
                                 </h:panelGrid>
-                                <!--Total de muestras: #{sampleController.itemsProj.size()}-->
 
                             </f:facet>
 

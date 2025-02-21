@@ -316,6 +316,8 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - iSeq");
         listPlatform.add("HiSeq X - Oxford Nanopore");
         listPlatform.add("Oxford Nanopore - HiSeq");
+        listPlatform.add("NovaSeq XPLUS");
+        listPlatform.add("NextSeq 2000");
         // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
 
         if (listPlatform.indexOf(platform) < 0) {
@@ -336,6 +338,8 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - iSeq");
         listPlatform.add("Oxford Nanopore - HiSeq");
         listPlatform.add("NovaSeq 6000 - Oxford Nanopore");
+        listPlatform.add("NovaSeq XPLUS");
+        listPlatform.add("NextSeq 2000");
 // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
         if (listPlatform.indexOf(platform) < 0) {
             return false;
@@ -705,7 +709,7 @@ public class FileController implements Serializable {
                                 itemPlatform = "Oxford Nanopore - HiSeq";
                                 break;
                             case "j":
-                                itemPlatform = "NovaSeq XPlus";
+                                itemPlatform = "NovaSeq XPLUS";
                                 break;
                             case "k":
                                 itemPlatform = "NextSeq 2000";
@@ -731,7 +735,7 @@ public class FileController implements Serializable {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
                         messageDialog = "La opcion de plataforma no es válida:  " + itemPlatform + "    En la fila: " + countRowValidation + " del archivo";
-                        messageDialog2 = "Seleccione una letra dentro del rango a - i, Las plataformas válidas son:";
+                        messageDialog2 = "Seleccione una letra dentro del rango a - k, Las plataformas válidas son:";
                         for (String itemPlataformName : getAllPlataforms()) {
                             messageLongDialog = itemPlataformName + "\n" + messageLongDialog;
                         }
@@ -1235,8 +1239,8 @@ public class FileController implements Serializable {
                     //tamañogenoma
                     String sCont = parameters.get(colFuenteContaminacion).trim();
                     String metdeliv = parameters.get(colMetodoEntrega);  //new preform
-                    // String Aptype=parameters.get(colAppType).trim();  //new preform
-                    String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  //new preform
+                    String Aptype=parameters.get(colAppType).trim();  //new preform
+                    //String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  //new preform
                     String kit_lib = parameters.get(colkitLib).trim();  //new preform
                     String tag_lib = parameters.get(coltagLib).trim();  //new preform
                     //String sPlataform = parameters.get(colPlataforma).trim();
