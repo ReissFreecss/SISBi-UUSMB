@@ -8,9 +8,12 @@ package jpa.session;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
@@ -2224,7 +2227,7 @@ public abstract class AbstractFacade<T> {
     }
 
     //MÉTODOS USADOS PARA LA CREACIÓN DE BIBLIOTECAS POR MEDIO DEL EXCEL
-    //buscar barcode por medio del index_name
+    //Carlos - busqueda de barcode por medio del index_name
     public List<Barcodes> findBarcodeByIndexName(String index_name) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Barcodes> cq = cb.createQuery(Barcodes.class);
@@ -2238,6 +2241,72 @@ public abstract class AbstractFacade<T> {
 
         return q.getResultList();
     }
+
+    /*/Carlos - busqueda de los runs por medio del id del proyecto
+    public Map<String, String> findRunNamenbyIdPoject(List<String> IdProject) {
+        Map<String, String> runName = new HashMap<>();
+        
+        //Verificamos que no haya nulos
+        if (IdProject == null || IdProject.isEmpty()) {
+            return runName;
+        }
+        //Construccion de la sentencia 
+        String sql =  "SELECT r.run_name"
+                    + "FROM run r"
+                    + "JOIN library_run_link lrl ON lrl.id_run = r.id_run"
+                    + "JOIN sample_library_link sl ON lrl.id_library = sl.id_library"
+                    + "JOIN sample s ON sl.id_sample = s.id_sample"
+                    + "WHERE s.id_project = " 
+                    + IdProject.stream().map(id -> "'" + id + "'").collect(Collectors.joining(",")) + ")";;
+        
+        javax.persistence.Query q = getEntityManager().createQuery(sql);
+        
+        //Se usa un array ya que un sample puede tener varias corridas o ninguna dependiendo del proyecto
+        List<Object[]> results = q.getResultList();
+        for (int i = 0; i == results.size(); i++) {
+            if(results == null){
+                return runName.put(IdProject, "No se encotraron corridas");
+            }
+            
+            String identifier = (String) row[0];
+            String runName = row[1] + ;
+
+            runName.put(identifier, ubicacion);
+        }
+    }
+    
+
+    // Carlos - busqueda de las localizaciones de las instituciones por medio de id del secuenciador
+    public Map<String, String> obtenerUbicacionesDesdeBD(List<String> deviceIdentifiers) {
+        Map<String, String> ubicaciones = new HashMap<>();
+
+        if (deviceIdentifiers == null || deviceIdentifiers.isEmpty()) {
+            return ubicaciones;
+        }
+
+        // Construcción dinámica de la consulta SQL
+        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais "
+                + "FROM public.plataform_ubication WHERE identifier IN ("
+                + deviceIdentifiers.stream().map(id -> "'" + id + "'").collect(Collectors.joining(",")) + ")";
+
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+
+        List<Object[]> results = q.getResultList();
+        for (Object[] row : results) {
+            String identifier = (String) row[0];
+            String ubicacion = row[1] + ", "
+                    + (row[2] != null ? row[2] + ", " : "")
+                    + (row[3] != null ? row[3] + ", " : "")
+                    + (row[4] != null ? row[4] + ", " : "")
+                    + (row[5] != null ? row[5] + ", " : "")
+                    + row[6];
+
+            ubicaciones.put(identifier, ubicacion);
+        }
+
+        return ubicaciones;
+    }*/
+
     /*public List<Plataform> findUbicationByIdentifier(String index_kit){
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Plataform> cq = cb.createQuery(Plataform.class);
@@ -2250,7 +2319,6 @@ public abstract class AbstractFacade<T> {
         
         return q.getResultList();
     }*/
-
 }
 
 /*
