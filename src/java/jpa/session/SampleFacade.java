@@ -33,8 +33,7 @@ public class SampleFacade extends AbstractFacade<Sample> {
         super(Sample.class);
     }
     
-    public void sampleUpdateRealPerformance(String idProject, int idSample, String performance ) {
-        
+    public Boolean sampleUpdateRealPerformance(String idProject, int idSample, int performance ) {        
         //  javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Sample.class);
         //  javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Sample.class);        
         
@@ -52,17 +51,41 @@ public class SampleFacade extends AbstractFacade<Sample> {
         
         //  return updated > 0;
         
-        //  String sql_performance_null = "SELECT "
+        /*
+        String sql_performance = "SELECT real_performance from sample WHERE id_project=" + "'" + idProject + "' AND  id_sample = "+ idSample+";";
+        javax.persistence.Query qRealPerformance = getEntityManager().createNativeQuery(sql_performance, Sample.class);
+        Sample sample = (Sample) qRealPerformance.getSingleResult();
+        */        
+        String UpdateRealPerformance;
         
+        /*
+        if(sample.getRealPerformance() == null ){             
+          UpdateRealPerformance = performance; 
+        } else {            
+           UpdateRealPerformance = " CAST(real_performance as float) +" + performance+" )";
+        }
+        */       
+        //  25/02/2025  Juan Antonio Villalba Luna
+        //  String sql = "update sample set real_performance = ((CASE WHEN real_performance IS NULL THEN 0::varchar ELSE real_performance END)::int + "+ performance +")::varchar WHERE id_project='"+idProject+"' AND  id_sample ="+idSample+";";  // OK 25/02/2025
+        //  String sql = "Update sample set real_performance = ((COALESCE(real_performance,0::varchar))::int + performance)::varchar WHERE id_project=" + "'" + idProject + "' AND  id_sample = "+ idSample+";";
+        
+        String sql = "update sample "+ 
+                     "set real_performance = ((CASE "
+                        + "WHEN real_performance IS NULL THEN 0::varchar "
+                        + "WHEN real_performance~E'^\\\\d+$' = 'f' THEN 0::varchar "
+                        + "ELSE real_performance "
+                        + "END)::int + "+ performance +")::varchar WHERE id_project='"+idProject+"' AND  id_sample ="+idSample+";";  // OK 25/02/2025
+        
+        int executeUpdate = 0;
         try{
-            String sql = "Update sample set real_performance = '"+  performance +"' WHERE id_project=" + "'" + idProject + "' AND  id_sample = "+ idSample+";";
             javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
             
-            int executeUpdate = q.executeUpdate();
+            executeUpdate = q.executeUpdate();
         } catch(EJBException e) {
             System.out.print(e);
         }
         
+        return executeUpdate > 0;
     }
     
     public Sample sampleByIdProjectIdSample(String idProject, int idSample) {        

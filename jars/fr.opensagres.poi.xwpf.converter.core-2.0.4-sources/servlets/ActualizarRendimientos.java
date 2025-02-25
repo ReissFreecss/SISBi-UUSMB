@@ -51,45 +51,53 @@ public class ActualizarRendimientos extends HttpServlet {
                 jsonBuffer.append(line);
             }
         }
-
-        //  Type tipoWrapperSample = new TypeToken<Wrapper<Sample>>(){}.getType();
+        
         // Convertir JSON a un objeto Java        
         Gson gson = new Gson();
         
-        //  Wrapper<Sample> wrapperSample = gson.fromJson(jsonBuffer.toString(), tipoWrapperSample);
-        //  Wrapper<Sample> wrapperSample = gson.fromJson(jsonBuffer.toString(), tipoWrapperSample);
-        //  System.out.print(wrapperSample);
-        
         List list = new ArrayList<>();
-        JsonArray performance = gson.fromJson(jsonBuffer.toString(), JsonArray.class);
+        //  JsonArray performance = gson.fromJson(jsonBuffer.toString(), JsonArray.class);
+        JsonObject RequestJson = gson.fromJson(jsonBuffer.toString(), JsonObject.class);
         
         //  Project_id
         //  Sample_id
         //  sample_name
         //  Performance
-        
-        for(JsonElement element : performance) {
+        String nombre_archivo = RequestJson.get("archivo").getAsString(); // "240219_NS500502_0189_AHHTJYBGXJ_Rendimientos.js";
+        JsonArray Rendimientos = RequestJson.get("rendimientos").getAsJsonArray();
+        int total_muestras = Rendimientos.size();
+        int actualizadas = 0;
+        int no_actualizadas = 0;
+        String mensajeUpdateRendimientos = "";
+                        
+        for(JsonElement element : Rendimientos) {
             JsonObject item = gson.fromJson(element, JsonObject.class);            
             
-            //  21/feb/2025
-            //  Ok pero requiere ver por que marca error NullPointerException
+            //  21/feb/2025            
             String IdProject = item.get("Project_id").getAsString();
             int IdSample =  item.get("Sample_id").getAsInt();
+                        
+            Boolean real_performance_actualizada = sampleFacade.sampleUpdateRealPerformance(IdProject, IdSample, item.get("Performance").getAsInt());
             
-            //  System.out.print(item.get("Project_id"));            
-            
-            //  Sample sample = sampleFacade.sampleByIdProjectIdSample(IdProject, IdSample);
-            //  sample.setRealPerformance(item.get("Performance").getAsString());
-            sampleFacade.sampleUpdateRealPerformance(IdProject, IdSample, item.get("Performance").getAsString());
+            if( real_performance_actualizada ) {
+                actualizadas++;
+            }
+            else {
+                no_actualizadas++;
+                mensajeUpdateRendimientos +="\n- El REAL_PERFORMANCE de la muestra ID("+IdSample+") en el Projecto ID("+IdProject+") no se actualizo.";
+            }
         }
         
-        /*
-        // Guardar los datos usando el controlador
-        sampleController.actualizarSampleRealPerformance();
-        */
-        // Responder al cliente
+        mensajeUpdateRendimientos  = "Del archivo "+ nombre_archivo +"\n Se actualizaron "+ actualizadas + " de "+ total_muestras + " muestras.";
+        
+        if(no_actualizadas > 0) {
+            mensajeUpdateRendimientos += "\n\nNo se actualizaron "+no_actualizadas+" de "+ total_muestras +" muestras"
+                                      + mensajeUpdateRendimientos;
+        }
+                                     
+                
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"message\":\"Performance actualizados de las muestras solicitadas\"}");        
+        response.getWriter().write("{\"message\":\""+mensajeUpdateRendimientos+"\"}");        
     }       
 }
