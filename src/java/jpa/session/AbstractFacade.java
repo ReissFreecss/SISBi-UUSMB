@@ -6,6 +6,7 @@
 package jpa.session;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,6 +85,7 @@ import jpa.entities.UserSample_;
 import jpa.entities.Users;
 import jpa.entities.Users_;
 import jsf.util.JsfUtil;
+import static org.h2.api.H2Type.row;
 
 /**
  *
@@ -2242,41 +2244,62 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    /*/Carlos - busqueda de los runs por medio del id del proyecto
-    public Map<String, String> findRunNamenbyIdPoject(List<String> IdProject) {
-        Map<String, String> runName = new HashMap<>();
-        
-        //Verificamos que no haya nulos
-        if (IdProject == null || IdProject.isEmpty()) {
-            return runName;
-        }
-        //Construccion de la sentencia 
-        String sql =  "SELECT r.run_name"
-                    + "FROM run r"
-                    + "JOIN library_run_link lrl ON lrl.id_run = r.id_run"
-                    + "JOIN sample_library_link sl ON lrl.id_library = sl.id_library"
-                    + "JOIN sample s ON sl.id_sample = s.id_sample"
-                    + "WHERE s.id_project = " 
-                    + IdProject.stream().map(id -> "'" + id + "'").collect(Collectors.joining(",")) + ")";;
-        
-        javax.persistence.Query q = getEntityManager().createQuery(sql);
-        
-        //Se usa un array ya que un sample puede tener varias corridas o ninguna dependiendo del proyecto
-        List<Object[]> results = q.getResultList();
-        for (int i = 0; i == results.size(); i++) {
-            if(results == null){
-                return runName.put(IdProject, "No se encotraron corridas");
-            }
-            
-            String identifier = (String) row[0];
-            String runName = row[1] + ;
+    // Carlos - Búsqueda de los runs por medio del ID del proyecto
+    public List<String> findRunNamenbyIdPoject(String idProject) {
+        List<String> runNames = new ArrayList<>();
 
-            runName.put(identifier, ubicacion);
+        // Verificamos que el ID del proyecto no sea nulo o vacío
+        if (idProject == null || idProject.trim().isEmpty()) {
+            return Collections.emptyList();  // Devuelve una lista vacía en lugar de un string
         }
+
+        // Corrección de la sentencia SQL
+        String sql = "SELECT DISTINCT r.run_name " // DISTINCT ahora está en la posición correcta
+                + "FROM run r "
+                + "JOIN library_run_link lrl ON lrl.id_run = r.id_run "
+                + "JOIN sample_library_link sl ON lrl.id_library = sl.id_library "
+                + "JOIN sample s ON sl.id_sample = s.id_sample "
+                + "WHERE s.id_project = ? AND r.status = 'Complete';";
+
+        // Crear consulta nativa
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+        q.setParameter(1, idProject); // Se usa ? en la consulta y se setea como parámetro
+
+        // Obtener resultados
+        List<String> results = q.getResultList();
+        System.out.println("Las corridas del proyecto son: " + results);
+
+        // Si no hay resultados, retorna una lista vacía
+        return (results.isEmpty()) ? Collections.emptyList() : results;
     }
-    
 
-    // Carlos - busqueda de las localizaciones de las instituciones por medio de id del secuenciador
+    public List<String[]> obtenerUbicacionDesdeBD(String deviceIdentifier) {
+        List<String[]> ubicaciones = new ArrayList<>();
+
+        if (deviceIdentifier == null || deviceIdentifier.isEmpty()) {
+            return ubicaciones;
+        }
+
+        // Consulta SQL corregida usando "?"
+        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais "
+                + "FROM public.plataform_ubication WHERE identifier = ?";
+
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+        q.setParameter(1, deviceIdentifier); // Se usa índice en lugar de ":id"
+
+        List<Object[]> results = q.getResultList();
+        for (Object[] row : results) {
+            String[] fila = new String[row.length];
+            for (int i = 0; i < row.length; i++) {
+                fila[i] = row[i] != null ? row[i].toString() : "";
+            }
+            ubicaciones.add(fila);
+        }
+        System.out.println("La ubicacion es: " + ubicaciones);
+        return ubicaciones;
+    }
+
+    // Carlos - busqueda de varios secuenciadores correspondientes a las localizaciones de las instituciones por medio de id del secuenciador
     public Map<String, String> obtenerUbicacionesDesdeBD(List<String> deviceIdentifiers) {
         Map<String, String> ubicaciones = new HashMap<>();
 
@@ -2291,21 +2314,8 @@ public abstract class AbstractFacade<T> {
 
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
 
-        List<Object[]> results = q.getResultList();
-        for (Object[] row : results) {
-            String identifier = (String) row[0];
-            String ubicacion = row[1] + ", "
-                    + (row[2] != null ? row[2] + ", " : "")
-                    + (row[3] != null ? row[3] + ", " : "")
-                    + (row[4] != null ? row[4] + ", " : "")
-                    + (row[5] != null ? row[5] + ", " : "")
-                    + row[6];
-
-            ubicaciones.put(identifier, ubicacion);
-        }
-
         return ubicaciones;
-    }*/
+    }
 
     /*public List<Plataform> findUbicationByIdentifier(String index_kit){
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
