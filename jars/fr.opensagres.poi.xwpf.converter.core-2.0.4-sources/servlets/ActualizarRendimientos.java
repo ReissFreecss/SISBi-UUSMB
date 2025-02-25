@@ -22,8 +22,6 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import jpa.entities.Sample;
-import jpa.session.AbstractFacade;
 import jpa.session.SampleFacade;
 
 /**
