@@ -44,6 +44,7 @@ import jpa.session.SampleFacade;
 import jpa.session.SampleGenomeLinkFacade;
 import jpa.session.UserProjectLinkFacade;
 import jsf.util.JsfUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -558,6 +559,23 @@ public class FileController implements Serializable {
                     if (parameters.get(colNumeroMuestra) == "") {
                         break;
                     }
+                    /*/ Carlos - Validamos que se seleccione DNA o RNA
+                    String itemType = parameters.get(colTipo).trim();
+                    System.out.println("Tipo de material: " + colTipo);
+                    if (!itemType.equals("DNA")) {
+                        RequestContext cont = RequestContext.getCurrentInstance();
+                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        messageDialog = "Se requiere tipo de material genetico valido DNA o RNA:  " + itemAppType + "   En la fila: " + countRowValidation + " del archivo";
+                        cont.execute("PF('dialogDetailError').show();");
+                        return;
+                    }
+                    if (!itemType.equals("RNA")) {
+                        RequestContext cont = RequestContext.getCurrentInstance();
+                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        messageDialog = "Se requiere tipo de material genetico valido DNA o RNA:  " + itemAppType + "   En la fila: " + countRowValidation + " del archivo";
+                        cont.execute("PF('dialogDetailError').show();");
+                        return;
+                    }*/
 
                     //Validamos tamaño de las secuencias
                     //cachamos la opcion del usuario 
@@ -602,7 +620,7 @@ public class FileController implements Serializable {
 
                     //VALIDAMOS EL NOMBRE DEL TUBO
                     String itemNameTube = parameters.get(colEtiquetaTubo).trim();
-                    //System.out.println("itemName: " + itemNameTube);
+                    System.out.println("itemName: " + itemNameTube);
                     //Validamos que sea obligatorio
                     if (itemNameTube.equals("")) {
                         RequestContext cont = RequestContext.getCurrentInstance();
@@ -636,6 +654,7 @@ public class FileController implements Serializable {
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
+
                     //Validamos que no sea repetido
                     if (tubesName.indexOf(itemNameTube) >= 0) {
                         RequestContext cont = RequestContext.getCurrentInstance();
@@ -750,6 +769,17 @@ public class FileController implements Serializable {
                             messageLongDialog = itemPlataformName + "\n" + messageLongDialog;
                         }
                         //messageLongDialog = "NextSeq 500\nMiSeq\nHiSeq 2000/2500\nHiSeq X\nNovaSeq 6000\nOxford Nanopore\nNextSeq 500 - Oxford Nanopore\nMiSeq - Oxford Nanopore\nHiSeq X - Oxford Nanopore";
+                        cont.execute("PF('dialogDetailError').show();");
+                        return;
+                    }
+
+                    // Carlos - Validamos que se seleccione DNA o RNA
+                    String sType = parameters.get(colTipo).trim();
+                    if (!sType.equals("DNA") && !sType.equals("RNA")) {
+                        RequestContext cont = RequestContext.getCurrentInstance();
+                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        messageDialog = "Se requiere tipo de material genético válido (DNA o RNA): " + sType
+                                + " en la fila: " + countRowValidation + " del archivo";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
