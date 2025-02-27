@@ -98,6 +98,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
 import jpa.entities.QualityReports;
 import jpa.entities.Run;
 import jpa.entities.SampleLibraryLink;
+import org.apache.commons.lang3.Range;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell.XWPFVertAlign;
 
 class SignatureException extends IOException {
@@ -135,6 +136,9 @@ public class ReportProjectController implements Serializable {
     @EJB
     private jpa.session.QualityReportsFacade ejbQualityReportsFacade;
     private PaginationHelper pagination;
+    @EJB
+    private ProjectFacade projectFacade;
+
     private int selectedItemIndex;
     //Clases, variables y metodos para agregar campos a la tabla field_project   Inicio
     private FieldReport classFieldReport;
@@ -774,7 +778,7 @@ public class ReportProjectController implements Serializable {
                 String currentStatusSample = currentSample.getStatus();
                 if (!currentStatusSample.equals("Entregado fastq")
                         && !currentStatusSample.startsWith("Analisis Bioinformatico")) {
-                    
+
                     // Se realiza un cambio de estatus sobre la muestra
                     currentSample.setStatus("Analisis Bioinformatico");
                     getEjbFacadeSample().edit(currentSample);
@@ -1293,7 +1297,7 @@ public class ReportProjectController implements Serializable {
             case "Expresion Diferencial":
                 return "editFormExpresionDiferencial?faces-redirect=true&includeViewParams=true";
             case "Analisis Metagenomico":
-                return "editFormAnalisisMetagenomico?faces-redirect=true&includeViewParams=true";
+                return "editFormAnalisiGuardarsMetagenomico?faces-redirect=true&includeViewParams=true";
             case "Ensamble de Genoma":
                 return "editFormEnsambleGenoma?faces-redirect=true&includeViewParams=true";
             case "Transcriptoma de Novo y Expresion Diferencial":
@@ -2123,12 +2127,22 @@ public class ReportProjectController implements Serializable {
     private void resultados_ED(XWPFDocument doc, XWPFDocument destino, FieldReport itemFieldReport, Project proj, java.util.Date datePer) {
         String IDEAMex_link;
         IDEAMex_link = "http://www.uusmb.unam.mx/ideamex/" + itemFieldReport.getField17();//¿O 40?
+
+        // Carlos - Recorre todos los parrafos del documento origen
         for (XWPFParagraph p : doc.getParagraphs()) {
+
+            // Crea un nuevo parrafo en el documento destino
             XWPFParagraph destino_p = destino.createParagraph();
             destino_p.setStyle(p.getStyle());
+
+            //Obtiene secuencia de texto con el mismo formato
             List<XWPFRun> runs = p.getRuns();
             int i = 0;
+
+            // Validamos que no haya runs vacias 
             if (runs != null) {
+
+                // Itera sobre cada run dentro del parrrafo aquí es donde se modifica el contenido del texto dentro del run
                 for (XWPFRun r : runs) {
                     String text = r.getText(0);
                     if (text != null) {
@@ -2194,6 +2208,7 @@ public class ReportProjectController implements Serializable {
                                 System.out.println("Error al cambiar el numero de muestras,no hay FIELDBDi");
                             }
                         }
+
                         if (text.contains("FIELDEDTABLE")) {
                             System.out.println("llego al FIELDTABLE");
                             text = text.replace("FIELDEDTABLE", "");
@@ -2452,6 +2467,31 @@ public class ReportProjectController implements Serializable {
         System.out.println("ejecutando elementos");
     }
 
+    public boolean reportProjectControllerEx(SampleController sampleController) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Project proj = (Project) context.getExternalContext().getSessionMap().get("project");
+
+        if (proj == null) {
+            return false; // Si no hay un proyecto seleccionado, el botón debe estar deshabilitado
+        }
+
+        // Obtener todas las muestras asociadas al proyecto
+        List<Sample> all_project_samples = sampleController.getItemsProj(proj);
+
+        // Verificar si hay al menos una muestra registrada
+        if (all_project_samples == null || all_project_samples.isEmpty()) {
+            return false;
+        }
+
+        // Validar datos críticos necesarios para el reporte
+        if (sampleController.getLastSampleAnalysisDate(all_project_samples) == null) {
+            return false;
+        }
+
+        // Puedes agregar más validaciones según sea necesario
+        return true; // Si todos los datos están presentes, el botón se habilita
+    }
+
     //Creacion de documento Word desde una plantilla --------------------------------Inicio
     public String createReportWordSampleQC(SampleController sampleController, Project proj, String format) throws IOException {
 
@@ -2598,121 +2638,6 @@ public class ReportProjectController implements Serializable {
         }
     }
     String messagelocation = "";
-
-    public String findlocationseq(List<String> runnames) {
-        System.out.println("obteniendo nombres de equipo segun la lista de corridas seleccionada");
-        List<String> devices = new ArrayList<>();
-        //String []devices={};
-        String addlocationseq = "";
-        String device = "";
-        String company = "Illumina";
-        /*si se selecciono mas de una corrida entonces guarda los nombres del 
-        equipo en devices y usa el contador para despues recorrer con otro for y sacar las ubicaciones
-         */
-        for (int i = 0; i < runnames.size(); i++) {
-            System.out.println("entro al for para hacer el split en la vuelta" + i);
-            String[] devsplit = runnames.get(i).toString().split("_");
-            devices.add(devsplit[1]); //la posicion 0 es la fecha, la posicion 1 el nombre del equipo--> 220607_NS500502_0153_AHJWCNBGXL  
-            System.out.println("imprimo el nombre del equipo: " + devices.get(i));
-            System.out.println("agrego el valor a la lista devices");
-        }
-        System.out.println("fin el for que hace el split");
-
-        if (devices.size() > 0) {
-            System.out.println("entro al if del switch");
-            for (int i = 0; i <= devices.size(); i++) {
-                switch (devices.get(i).toUpperCase()) {
-                    case "A01314":
-                        addlocationseq = "del Instituto Tecnológico y de Estudios Superiores de Monterrey en Monterrey, Nuevo León, México";
-                        device = "NovaSeq X";
-                        break;
-                    case "M06162":
-                        addlocationseq = "del la compañia Abalat en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "M07836":
-                        addlocationseq = "del Instituto de Ecologia de la UNAM en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "M02676":
-                        addlocationseq = "de la Red de Apoyo a la Investigación la UNAM en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "FS10001306":
-                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
-                        device = "iSeq";
-                        break;
-                    case "M07079":
-                        addlocationseq = "de la compañia Analitek Life en la Ciudad de México";
-                        device = "MiSeq";
-                        break;
-                    case "NB502037":
-                        addlocationseq = "del Laboratorio de Genética Genos Médica en la Ciudad de México";
-                        device = "NextSeq500";
-                        break;
-                    case "KHS0062":
-                        addlocationseq = "de la Unidad de Genómica Avanzada LANGEBIO del CINVESTAV IPN";
-                        device = "HiSeq";
-                        break;
-                    case "MG01HX05":
-                        addlocationseq = "de la compañia MACROGEN en los Estados Unidos";
-                        device = "HiSeq";
-                        break;
-                    case "LH00586":
-                        addlocationseq = "de la compañia PSOMAGEN en los Estados Unidos";
-                        device = "NovaSeq";
-                        break;
-                    case "NS500560":
-                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
-                        device = "NextSeq500";
-                        break;
-                    case "VH01014":
-                        addlocationseq = "del Instituto Nacional de Medicina Genómica";
-                        device = "NextSeq2000";
-                        break;
-                    case "FS10002358":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "iSeq 100";
-                        break;
-                    case "NS500502":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "NextSeq 500";
-                        break;
-                    case "MN18784":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        break;
-                    case "MN22733":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    case "MN22784":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    case "MC-115680":
-                        addlocationseq = "de la Unidad Universitaria de Secuenciación Masiva y Bioinformática ";
-                        device = "MinION";
-                        company = "Oxford Nanopore";
-                        break;
-                    default:
-                        addlocationseq = "[ubicacion]";
-                        device = "[equipo]";
-                        company = "[Illumina/Oxford nanopore]";
-                }
-
-                messagelocation = "La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq;
-                System.out.println("La secuenciación se realizó en un equipo " + device + " de la compañía " + company + " ubicado en las instalaciones " + addlocationseq);
-                /* La secuenciación se realizó en un equipo [MiSeq|NexSeq|..] 
-                   de la compañía Illumina ubicado en las instalaciones [ubicación] */
-
-            }
-        }
-        return messagelocation;
-        //fin leslie
-    }
 
     public String createReportWordFastQC(SampleController sampleController, ProjectController projc, ReportProjectController rpc) throws IOException {
         Project proj = projc.getSelectedProject();
@@ -2892,6 +2817,8 @@ public class ReportProjectController implements Serializable {
             XWPFDocument docEval = new XWPFDocument(new FileInputStream(new File(DirectoryTemplateReport + "Evaluacion_y_firmas.docx")));
             System.out.println("Se cargaron los machotes para el reporte bioinformático");
             doc = mergeMethodsIn(doc, docMethodol, proj);
+            findlocationseqBD(doc, "TYPEQUIP");
+
             //leslie 
             System.out.println("se hizo el merge en methodsin");
             doc = mergeQualityReportIn(doc, docCalidad, proj, itemFieldReport.getField3());
@@ -2921,6 +2848,9 @@ public class ReportProjectController implements Serializable {
             pasa_elementos(doc, docEval);
 
             System.out.println("paso pasa_elemetos");
+
+            //agregaDatosSecuenciador(doc, "TYPEQUIP", " de la compañía " + " ubicado en ");
+
             /*
             ///doc.enforceUpdateFields();
             //doc.createTOC();
@@ -2946,6 +2876,114 @@ public class ReportProjectController implements Serializable {
         }
         return "";
         //return "menuReport?faces-redirect=true&includeViewParams=true";
+    }
+
+    // Carlos - método para insertar la ubicación del secuenciador
+    public void findlocationseqBD(XWPFDocument doc, String textoOrigen) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> sessmap = context.getExternalContext().getSessionMap();
+        Project proj = (Project) sessmap.get("project");
+
+        if (proj == null) {
+            System.out.println("Error: No se encontró un proyecto en la sesión.");
+            return;
+        }
+
+        // Obtener ID del proyecto
+        String proID = proj.getIdProject();
+        System.out.println("El id de proyecto es: " + proID);
+
+        // Obtener nombres de las corridas
+        List<String> runnames = projectFacade.findRunNamenbyIdPoject(proID);
+
+        // Validar si hay resultados
+        if (runnames == null || runnames.isEmpty()) {
+            System.out.println("No hay corridas asociadas al proyecto.");
+            return;
+        }
+
+        // Extraer los nombres de los equipos a partir de los nombres de las corridas
+        List<String> devices = new ArrayList<>();
+        for (String runname : runnames) {
+            System.out.println("Procesando corrida: " + runname);
+
+            String[] devSplit = runname.split("_");
+            if (devSplit.length > 1) {
+                devices.add(devSplit[1]); // La posición 1 es el nombre del equipo
+                System.out.println("Equipo identificado: " + devSplit[1]);
+            } else {
+                System.out.println("Formato incorrecto en la corrida: " + runname);
+            }
+        }
+
+        System.out.println("Lista de secuenciadores identificados: " + devices);
+
+        // Map para almacenar ubicaciones concatenadas
+        StringBuilder ubicacionesConcatenadas = new StringBuilder();
+
+        // Obtener ubicaciones de cada secuenciador
+        for (int i = 0; i < devices.size(); i++) {
+            String secuenciador = devices.get(i);
+            List<String[]> ubicacionesList = projectFacade.obtenerUbicacionDesdeBD(secuenciador);
+
+            // Obtener la descripción de la ubicación
+            String ubicacion = obtenerUbicacionTexto(ubicacionesList);
+
+            // Concatenar ubicaciones con el separador
+            if (i > 0) {
+                ubicacionesConcatenadas.append(" , y en el secuenciador numero " + i + " con el identificador ");
+            }
+            ubicacionesConcatenadas.append(ubicacion);
+        }
+
+        // Insertamos los datos en el documento Word
+        for (XWPFParagraph paragraph : doc.getParagraphs()) {
+            for (XWPFRun run : paragraph.getRuns()) {
+                String text = run.getText(0);
+                if (text != null && text.contains(textoOrigen)) {
+                    text = text.replace(textoOrigen, ubicacionesConcatenadas.toString());
+                    run.setText(text, 0);
+                }
+            }
+        }
+
+        System.out.println("Texto actualizado con la información de los secuenciadores.");
+    }
+
+    // Carlos - Método para construir el texto de la ubicación del secuenciador
+    private String obtenerUbicacionTexto(List<String[]> ubicacionesList) {
+        if (ubicacionesList == null || ubicacionesList.isEmpty()) {
+            return "Ubicación desconocida";
+        }
+
+        // Verificar si algún elemento tiene "UUSMB" en la posición 1 del array
+        boolean esSISBI = false;
+        for (String[] row : ubicacionesList) {
+            if (row.length > 1 && row[1] != null && row[1].equals("UUSMB")) {
+                esSISBI = true;
+                break;
+            }
+        }
+
+        StringBuilder ubicacionTexto = new StringBuilder();
+
+        for (String[] row : ubicacionesList) {
+            if (esSISBI) {
+                // Construcción especial si es UUSMB
+                ubicacionTexto.append("con el identificador ")
+                        .append(row[0] != null ? row[0] + ", en nuestras instalaciones de la " : "")
+                        .append(row[1] != null ? row[1] + " " : "");
+            } else {
+                // Construcción estándar
+                ubicacionTexto.append("con el identificador ")
+                        .append(row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                        .append(row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                        .append(row[4] != null ? row[4] + ", estado de " : "")
+                        .append(row[5] != null ? row[5] + ", " : "")
+                        .append(row[6] != null ? row[6] : "");
+            }
+        }
+        return ubicacionTexto.toString().trim();
     }
 
     private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples) {
@@ -2997,25 +3035,29 @@ public class ReportProjectController implements Serializable {
 
     //Metodos generales
     public void showMessage(String message) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.INFO, message);
+        java.util.logging.Logger.getLogger(ReportProjectController.class
+                .getName()).log(Level.INFO, message);
         FacesMessage message_obj = new FacesMessage(message);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showMessage(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.INFO, message + ": " + details);
+        java.util.logging.Logger.getLogger(ReportProjectController.class
+                .getName()).log(Level.INFO, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showWarning(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message + ": " + details);
+        java.util.logging.Logger.getLogger(ReportProjectController.class
+                .getName()).log(Level.SEVERE, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(FacesMessage.SEVERITY_WARN, message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showError(String message, Exception e) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class.getName()).log(Level.SEVERE, message + ":", e);
+        java.util.logging.Logger.getLogger(ReportProjectController.class
+                .getName()).log(Level.SEVERE, message + ":", e);
         email.sendEmailErrorTraceback(message, e);
         showError(message, e.getLocalizedMessage());
     }
@@ -3254,7 +3296,8 @@ public class ReportProjectController implements Serializable {
                 tipoReporte = "Análisis de variantes";
                 break;
             default:
-                Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, "Tipo de reporte no registrado: {0}", varTypeReport);
+                Logger.getLogger(UsersController.class
+                        .getName()).log(Level.SEVERE, "Tipo de reporte no registrado: {0}", varTypeReport);
                 showError("Error al generar el reporte", "E001");
                 //doc=null;
                 return "menuReport?faces-redirect=true&includeViewParams=true";
@@ -4560,7 +4603,8 @@ public class ReportProjectController implements Serializable {
         try {
             context.getExternalContext().redirect("../project/ViewProject.xhtml");
         } catch (IOException ex) {
-            Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProjectController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -4677,6 +4721,7 @@ public class ReportProjectController implements Serializable {
 
     public List<ReportProject> getReportProjectsByIdProject(String idProject) {
         return ejbFacade.findReportProjectByIdProject(idProject);
+
     }
 
     @FacesConverter(forClass = ReportProject.class)

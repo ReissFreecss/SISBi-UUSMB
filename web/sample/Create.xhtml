@@ -504,7 +504,7 @@
                      <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
                      </p:inputText>
                      
-                     <p:selectOneMenu   id="cantidad_ren" value="#{sampleController.unidades}" rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}" requiredMessage="Proporcione la unidad del rendimiento">
+                         <p:selectOneMenu   id="cantidad_ren" value="#{sampleController.unidades}" rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
                      <f:selectItem noSelectionOption="false" itemLabel=""/>
                      <f:selectItem itemLabel="mil" itemValue="mil"/>
                      <f:selectItem itemLabel="millones" itemValue="millones"/>
@@ -522,7 +522,7 @@
                      <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
                      </p:inputText>
                      
-                     <p:selectOneMenu   id="cantidad_ren_ox" value="#{sampleController.unidades}" requiredMessage="Proporcione la unidad del rendimiento">
+                           <p:selectOneMenu   id="cantidad_ren_ox" value="#{sampleController.unidades}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
                      <f:selectItem noSelectionOption="false" itemLabel=""/>
                      <f:selectItem itemLabel="Kb" itemValue="Kb"/>
                      <f:selectItem itemLabel="Mb" itemValue="Mb"/>
