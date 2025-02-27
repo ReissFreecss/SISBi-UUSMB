@@ -149,8 +149,9 @@ and open the template in the editor.
                                         <f:selectItem itemLabel="NextSeq" itemValue="1" />
                                         <f:selectItem itemLabel="MiSeq" itemValue="3" />
                                         <f:selectItem itemLabel="HiSeq" itemValue="2" />
-                                        <f:selectItem itemLabel="NovaSeq" itemValue="4" />
+                                        <f:selectItem itemLabel="NovaSeq XPlus" itemValue="4" />
                                         <f:selectItem itemLabel="Oxford Nanopore" itemValue="5" />
+                                        <f:selectItem itemLabel="Nextseq 2000" itemValue="7" />
                                         <f:selectItem itemLabel="Otro" itemValue="0" />
                                         <p:ajax  event="valueChange" update="type_sec,info_miseq,info_nextseq,info_novaseq,info_iseq,info_minion,otro_sec" />
                                     </p:selectOneRadio>   
@@ -182,6 +183,14 @@ and open the template in the editor.
                                 <f:selectItem itemLabel="NextSeq500 Lab Genos Médica" itemValue="NB502037" /> 
                                 <f:selectItem itemLabel="NextSeq500 INMEGEN" itemValue="NS500560" />   
                                 <!--<f:selectItem itemLabel="NextSeq2000 INMEGEN" itemValue="VH01014" />-->                               
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid  columns="1"  id="info_nextseq2000"  rendered="#{libraryController.plat_sequencing.equals('7')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_nextseq2000" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />  
+                                <f:selectItem itemLabel="NextSeq2000 INMEGEN" itemValue="VH01014" />
                                 </p:selectOneMenu>
                         </h:panelGrid>
                         
@@ -219,7 +228,7 @@ and open the template in the editor.
                                 <f:selectItem itemLabel="MinION UUSMB EQ-032" itemValue="MN22784" />
                                 <f:selectItem itemLabel="MinION UUSMB Mk1C" itemValue="MC-115680" /> 
                                 </p:selectOneMenu>                           
-                        </h:panelGrid> 
+                        </h:panelGrid>
                         
                         <h:panelGrid columns="1" id="otro_sec" rendered="#{libraryController.plat_sequencing.equals('0')}">                       
                             <p:outputLabel value="Nombre del secuenciador/equipo:"  for="equipo"/>
