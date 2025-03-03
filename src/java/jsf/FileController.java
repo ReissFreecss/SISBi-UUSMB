@@ -559,25 +559,7 @@ public class FileController implements Serializable {
                     if (parameters.get(colNumeroMuestra) == "") {
                         break;
                     }
-                    /*/ Carlos - Validamos que se seleccione DNA o RNA
-                    String itemType = parameters.get(colTipo).trim();
-                    System.out.println("Tipo de material: " + colTipo);
-                    if (!itemType.equals("DNA")) {
-                        RequestContext cont = RequestContext.getCurrentInstance();
-                        cont.execute("PF('statusDialogUploadFile').hide();");
-                        messageDialog = "Se requiere tipo de material genetico valido DNA o RNA:  " + itemAppType + "   En la fila: " + countRowValidation + " del archivo";
-                        cont.execute("PF('dialogDetailError').show();");
-                        return;
-                    }
-                    if (!itemType.equals("RNA")) {
-                        RequestContext cont = RequestContext.getCurrentInstance();
-                        cont.execute("PF('statusDialogUploadFile').hide();");
-                        messageDialog = "Se requiere tipo de material genetico valido DNA o RNA:  " + itemAppType + "   En la fila: " + countRowValidation + " del archivo";
-                        cont.execute("PF('dialogDetailError').show();");
-                        return;
-                    }*/
-
-                    //Validamos tamaño de las secuencias
+                    
                     //cachamos la opcion del usuario 
                     String opciontamseq = parameters.get(colTamanioSecuencia).toLowerCase().trim();
                     String itemsSequenceSize = parameters.get(colTamanioSecuencia).trim(); //inicializamos por si no entra en el switch
