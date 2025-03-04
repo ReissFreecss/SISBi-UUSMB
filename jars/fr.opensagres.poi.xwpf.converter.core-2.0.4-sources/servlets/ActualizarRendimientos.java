@@ -21,8 +21,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import jpa.session.SampleFacade;
+import java.util.regex.*;
+
 
 /**
  *
@@ -39,38 +43,46 @@ public class ActualizarRendimientos extends HttpServlet {
     @Inject
     private SampleController sampleController; // Inyectamos el controlador
 
-    @Override
+
+@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StringBuilder jsonBuffer = new StringBuilder();
         String line;
+        String nombreArchivo = "desconocido"; // Valor predeterminado si no se encuentra
 
+        // Leer el contenido del JSON en un String
         try (BufferedReader reader = request.getReader()) {
             while ((line = reader.readLine()) != null) {
                 jsonBuffer.append(line);
             }
         }
 
+        String jsonString = jsonBuffer.toString();
+
+        // Intentar extraer el nombre del archivo con una expresión regular
+        Pattern pattern = Pattern.compile("\"archivo\"\\s*:\\s*\"([^\"]+)\"");
+        Matcher matcher = pattern.matcher(jsonString);
+        if (matcher.find()) {
+            nombreArchivo = new File(matcher.group(1)).getName(); // Extraer solo el nombre del archivo
+        }
+
         Gson gson = new Gson();
         JsonObject requestJson;
-        
-        // Lectura del archivo JSON
-        try {
-            requestJson = gson.fromJson(jsonBuffer.toString(), JsonObject.class);
 
-            // Validar que el JSON contiene los campos esperados
+        try {
+            requestJson = gson.fromJson(jsonString, JsonObject.class);
+
             if (!requestJson.has("archivo") || !requestJson.has("rendimientos")) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"error\":\"El JSON debe contener los campos 'archivo' y 'rendimientos'.\"}");
                 return;
             }
 
-            // Obtener el nombre del archivo sin el path
-            String nombreArchivo = new File(requestJson.get("archivo").getAsString()).getName();
             JsonArray rendimientos = requestJson.getAsJsonArray("rendimientos");
 
             if (rendimientos == null || rendimientos.size() == 0) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\n  \"error\":\"El array 'rendimientos' esta vacio o no es valido en el archivo: " + nombreArchivo + "\"\n}\n");
+                response.getWriter().write("{\n  \"error\":\"El array 'rendimientos' está vacío o no es válido en el archivo: " + nombreArchivo + "\"\n}\n");
                 return;
             }
 
@@ -80,7 +92,6 @@ public class ActualizarRendimientos extends HttpServlet {
             StringBuilder errores = new StringBuilder();
             StringBuilder mensajeUpdateRendimientos = new StringBuilder();
 
-            // Recorremos el array para validar y actualizar en BD
             for (JsonElement element : rendimientos) {
                 if (!element.isJsonObject()) {
                     errores.append("\n- Uno de los elementos en 'rendimientos' no es un objeto JSON válido.");
@@ -89,17 +100,14 @@ public class ActualizarRendimientos extends HttpServlet {
 
                 JsonObject item = element.getAsJsonObject();
 
-                // Validaciones de los campos obligatorios
                 if (!item.has("Project_id") || !item.has("Sample_id") || !item.has("sample_name") || !item.has("Performance")) {
                     errores.append("\n- Faltan campos obligatorios en una muestra del archivo: ").append(nombreArchivo);
                     continue;
                 }
 
-                int idSample = -1; 
-                
-                // Update sobre la base de datos
+                int idSample = -1;
+
                 try {
-                    // Si "Project_id" no está presente, usamos el nombre del archivo
                     String idProject = item.has("Project_id") ? item.get("Project_id").getAsString() : nombreArchivo;
                     idSample = item.get("Sample_id").getAsInt();
                     String sampleName = item.get("sample_name").getAsString();
@@ -113,13 +121,12 @@ public class ActualizarRendimientos extends HttpServlet {
                         noActualizadas++;
                         errores.append(" Error en BD al actualizar sample ID=")
                                 .append(idSample)
-                                .append(" (No se encuentra el id de projecto asociado a la muestra). ");
+                                .append(" (No se encuentra el id de proyecto asociado a la muestra). ");
                     }
                 } catch (Exception e) {
-                    // Error al actualizar los campos
-                    noActualizadas++; 
+                    noActualizadas++;
                     errores.append(" Error en los valores de la muestra ID=")
-                            .append(idSample == -1 ? "desconocido" : idSample) // Si no se pudo extraer el ID, mostramos "desconocido"
+                            .append(idSample == -1 ? "desconocido" : idSample)
                             .append(" (conflictos en los valores de los campos del JSON-BD).");
                 }
             }
@@ -135,7 +142,6 @@ public class ActualizarRendimientos extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
-            // Respuesta JSON con formato más claro
             StringBuilder jsonResponse = new StringBuilder();
             jsonResponse.append("{\n")
                     .append("  \"message\": \"").append(mensajeUpdateRendimientos.toString().replace("\n", "\\n")).append("\"");
@@ -150,10 +156,11 @@ public class ActualizarRendimientos extends HttpServlet {
 
         } catch (JsonSyntaxException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\n  \"error\":\"Formato JSON invalido en el archivo recibido.\"\n}\n");
+            response.getWriter().write("{\n  \"error\":\"Formato JSON inválido en el archivo: " + nombreArchivo + "\"\n}\n");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\n  \"error\":\"Error interno al procesar el archivo JSON.\"\n}\n");
         }
     }
+
 }
