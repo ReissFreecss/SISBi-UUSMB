@@ -2281,7 +2281,7 @@ public abstract class AbstractFacade<T> {
         }
 
         // Consulta SQL corregida usando "?"
-        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais "
+        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais, id_plataform "
                 + "FROM public.plataform_ubication WHERE identifier = ?";
 
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
