@@ -4774,7 +4774,9 @@ public class LibraryController implements Serializable {
         } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - NextSeq 2000")){
             return true;
         }
-
+         else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - NovaSeq XPLUS")){
+            return true;
+        }
         return false;
 
     }
