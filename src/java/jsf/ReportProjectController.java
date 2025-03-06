@@ -2950,40 +2950,110 @@ public class ReportProjectController implements Serializable {
         System.out.println("Texto actualizado con la información de los secuenciadores.");
     }
 
-    // Carlos - Método para construir el texto de la ubicación del secuenciador
+    // Carlos - Método para construir el texto de la ubicación del secuenciador junto con su parrafo correspondiente
     private String obtenerUbicacionTexto(List<String[]> ubicacionesList) {
         if (ubicacionesList == null || ubicacionesList.isEmpty()) {
             return "Ubicación desconocida";
         }
 
-        // Verificar si algún elemento tiene "UUSMB" en la posición 1 del array
-        boolean esSISBI = false;
-        for (String[] row : ubicacionesList) {
-            if (row.length > 1 && row[1] != null && row[1].equals("UUSMB")) {
-                esSISBI = true;
-                break;
-            }
-        }
-
+        boolean esUUSMB = false;
+        boolean esCDMX = false;
         StringBuilder ubicacionTexto = new StringBuilder();
 
         for (String[] row : ubicacionesList) {
-            if (esSISBI) {
-                // Construcción especial si es UUSMB
-                ubicacionTexto.append("con el identificador ")
-                        .append(row[0] != null ? row[0] + ", en nuestras instalaciones de la " : "")
-                        .append(row[1] != null ? row[1] + " " : "");
-            } else {
-                // Construcción estándar
-                ubicacionTexto.append("con el identificador ")
-                        .append(row[0] != null ? row[0] + ", en las instalaciones de " : "")
-                        .append(row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                        .append(row[4] != null ? row[4] + ", estado de " : "")
-                        .append(row[5] != null ? row[5] + ", " : "")
-                        .append(row[6] != null ? row[6] : "");
+            if (row.length > 1 && row[1] != null) {
+                if (row[1].equals("UUSMB")) {
+                    esUUSMB = true;
+                } else if (row[1].equals("CDMX")) {
+                    esCDMX = true;
+                }
+            }
+
+            if (row.length > 7 && row[7] != null) {
+                switch (row[7]) {
+                    case "1":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
+                        break;
+                        
+                    case "2":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
+                        break;
+
+                    case "3":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación MiSeq de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un cartucho MiSeq v3. de 600 ciclos para una secuencia de 2x300 ciclos. Se utilizaron 0.6 ml de la solución con las bibliotecas a una concentración de 14 pM para cargar en el equipo de secuenciación");
+                        break;
+                        
+                    case "4":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
+                        break;
+                    
+                    case "5":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
+                        break;
+
+                    case "6":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración necesaria para este tipo de biblioteca y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación iSeq100 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un cartucho iSeq100 de 300 ciclos para una secuencia de 2x150 ciclos. Se utilizaron 0.02 ml de la solución con las bibliotecas a una concentración pM específica para cada tipo de biblioteca para cargar en el equipo de secuenciación");
+                        break;
+                        
+                    case "7":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
+                        break;
+
+                    case "8":
+                        ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración necesaria para este tipo de biblioteca y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq200 de la compañía Illumina, con el identificador ")
+                                .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
+                                .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
+                                .append(row.length > 6 && row[6] != null ? row[6] : "")
+                                .append(" utilizando un cartucho iSeq100 de 300 ciclos para una secuencia de 2x150 ciclos. Se utilizaron 0.024 ml de la solución con las bibliotecas a una concentración pM específica para cada tipo de biblioteca para cargar en el equipo de secuenciación");
+                        break;
+                }
             }
         }
-        return ubicacionTexto.toString().trim();
+        return ubicacionTexto.length() > 0 ? ubicacionTexto.toString().trim() : "ID del secuenciador desconocido";
     }
 
     private void agrega_leyenda_si_hay_muestras_rechazadas_o_condicionadas(XWPFDocument doc, List<Sample> all_project_samples) {
@@ -3035,29 +3105,41 @@ public class ReportProjectController implements Serializable {
 
     //Metodos generales
     public void showMessage(String message) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class
-                .getName()).log(Level.INFO, message);
+        java.util.logging.Logger.getLogger(ReportProjectController
+
+.class
+
+.getName()).log(Level.INFO, message);
         FacesMessage message_obj = new FacesMessage(message);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showMessage(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class
-                .getName()).log(Level.INFO, message + ": " + details);
+        java.util.logging.Logger.getLogger(ReportProjectController
+
+.class
+
+.getName()).log(Level.INFO, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showWarning(String message, String details) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class
-                .getName()).log(Level.SEVERE, message + ": " + details);
+        java.util.logging.Logger.getLogger(ReportProjectController
+
+.class
+
+.getName()).log(Level.SEVERE, message + ": " + details);
         FacesMessage message_obj = new FacesMessage(FacesMessage.SEVERITY_WARN, message, details);
         FacesContext.getCurrentInstance().addMessage(null, message_obj);
     }
 
     public void showError(String message, Exception e) {
-        java.util.logging.Logger.getLogger(ReportProjectController.class
-                .getName()).log(Level.SEVERE, message + ":", e);
+        java.util.logging.Logger.getLogger(ReportProjectController
+
+.class
+
+.getName()).log(Level.SEVERE, message + ":", e);
         email.sendEmailErrorTraceback(message, e);
         showError(message, e.getLocalizedMessage());
     }
@@ -3296,8 +3378,11 @@ public class ReportProjectController implements Serializable {
                 tipoReporte = "Análisis de variantes";
                 break;
             default:
-                Logger.getLogger(UsersController.class
-                        .getName()).log(Level.SEVERE, "Tipo de reporte no registrado: {0}", varTypeReport);
+                Logger.getLogger(UsersController
+
+.class
+
+.getName()).log(Level.SEVERE, "Tipo de reporte no registrado: {0}", varTypeReport);
                 showError("Error al generar el reporte", "E001");
                 //doc=null;
                 return "menuReport?faces-redirect=true&includeViewParams=true";
@@ -4349,12 +4434,12 @@ public class ReportProjectController implements Serializable {
             pagination = new PaginationHelper(10) {
 
                 @Override
-                public int getItemsCount() {
+        public int getItemsCount() {
                     return getFacade().count();
                 }
 
                 @Override
-                public DataModel createPageDataModel() {
+        public DataModel createPageDataModel() {
                     return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
@@ -4603,8 +4688,11 @@ public class ReportProjectController implements Serializable {
         try {
             context.getExternalContext().redirect("../project/ViewProject.xhtml");
         } catch (IOException ex) {
-            Logger.getLogger(ProjectController.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProjectController
+
+.class
+
+.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -4722,69 +4810,71 @@ public class ReportProjectController implements Serializable {
     public List<ReportProject> getReportProjectsByIdProject(String idProject) {
         return ejbFacade.findReportProjectByIdProject(idProject);
 
-    }
+    
+
+}
 
     @FacesConverter(forClass = ReportProject.class)
-    public static class ReportProjectControllerConverter implements Converter {
+public static class ReportProjectControllerConverter implements Converter {
 
-        @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-            if (value == null || value.length() == 0) {
-                return null;
-            }
-            ReportProjectController controller = (ReportProjectController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "reportProjectController");
-            return controller.getReportProject(getKey(value));
+    @Override
+    public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
         }
-
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
-            return key;
-        }
-
-        String getStringKey(java.lang.Integer value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof ReportProject) {
-                ReportProject o = (ReportProject) object;
-                return getStringKey(o.getIdReportProject());
-            } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + ReportProject.class.getName());
-            }
-        }
+        ReportProjectController controller = (ReportProjectController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "reportProjectController");
+        return controller.getReportProject(getKey(value));
     }
 
-    private static class SortQualityReportsByRecency implements Comparator<QualityReports> {
-
-        public SortQualityReportsByRecency() {
-        }
-
-        // Used for sorting in ascending order of
-        // roll number
-        public int compare(QualityReports a, QualityReports b) {
-            return b.getIdRun().getRunStartday().compareTo(a.getIdRun().getRunStartday());
-        }
+    java.lang.Integer getKey(String value) {
+        java.lang.Integer key;
+        key = Integer.valueOf(value);
+        return key;
     }
 
-    private static class DatesComparator implements Comparator<Date> {
+    String getStringKey(java.lang.Integer value) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(value);
+        return sb.toString();
+    }
 
-        public DatesComparator() {
-
+    @Override
+    public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+        if (object == null) {
+            return null;
         }
-
-        @Override
-        public int compare(Date datea, Date dateb) {
-            return datea.compareTo(dateb);
+        if (object instanceof ReportProject) {
+            ReportProject o = (ReportProject) object;
+            return getStringKey(o.getIdReportProject());
+        } else {
+            throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + ReportProject.class.getName());
         }
     }
+}
+
+private static class SortQualityReportsByRecency implements Comparator<QualityReports> {
+
+    public SortQualityReportsByRecency() {
+    }
+
+    // Used for sorting in ascending order of
+    // roll number
+    public int compare(QualityReports a, QualityReports b) {
+        return b.getIdRun().getRunStartday().compareTo(a.getIdRun().getRunStartday());
+    }
+}
+
+private static class DatesComparator implements Comparator<Date> {
+
+    public DatesComparator() {
+
+    }
+
+    @Override
+    public int compare(Date datea, Date dateb) {
+        return datea.compareTo(dateb);
+    }
+}
 
 }
