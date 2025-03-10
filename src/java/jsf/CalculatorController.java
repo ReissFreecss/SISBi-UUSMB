@@ -218,8 +218,6 @@ public class CalculatorController implements Serializable{
                who="other";
             
             }
-        
-        
         }
         
         

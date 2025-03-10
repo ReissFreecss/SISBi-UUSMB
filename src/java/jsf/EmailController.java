@@ -57,21 +57,21 @@ public class EmailController {
 //-------------------------------------------------------------------
 
 // Constantes para mandar el email
-    
+    /*
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "sisbi@ibt.unam.mx";
     private static final String USER = "sisbi@ibt.unam.mx";
     private static final String PASS = "0tr0C4b4ll0";
+    */
     
     
-    /* 
     //test
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "aaaaasisbi@ibt.unam.mx";
     private static final String USER = "aaaaasisbi@ibt.unam.mx";
     private static final String PASS = "aaaaa0tr0C4b4ll0";
-    */
     
+
 
     //private static final int PORT = 587;
     private final Properties properties = new Properties();
@@ -132,7 +132,7 @@ public class EmailController {
                 + "El usuario " + us.getUserName() + " ha dado de alta " + numSam + " muestra(s) para el proyecto \"" + pj.getProjectName() + "\" en el sistema SISBI\n\n"
                 + "\n"
                 + "Para mayor información consulte : http://www.uusmb.unam.mx/SISBI/ \n";
-        */
+        */ 
         //style web
          String codeMessagehtml = CABECERA+
                 "    <tr><td align='center' bgcolor='#FFFFFF'>"

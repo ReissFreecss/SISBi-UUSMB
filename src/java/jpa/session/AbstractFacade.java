@@ -6,11 +6,15 @@
 package jpa.session;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
@@ -81,6 +85,7 @@ import jpa.entities.UserSample_;
 import jpa.entities.Users;
 import jpa.entities.Users_;
 import jsf.util.JsfUtil;
+import static org.h2.api.H2Type.row;
 
 /**
  *
@@ -2224,7 +2229,7 @@ public abstract class AbstractFacade<T> {
     }
 
     //MÉTODOS USADOS PARA LA CREACIÓN DE BIBLIOTECAS POR MEDIO DEL EXCEL
-    //buscar barcode por medio del index_name
+    //Carlos - busqueda de barcode por medio del index_name
     public List<Barcodes> findBarcodeByIndexName(String index_name) {
         javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Barcodes> cq = cb.createQuery(Barcodes.class);
@@ -2239,6 +2244,91 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
+    // Carlos - Búsqueda de los runs por medio del ID del proyecto
+    public List<String> findRunNamenbyIdPoject(String idProject) {
+        List<String> runNames = new ArrayList<>();
+
+        // Verificamos que el ID del proyecto no sea nulo o vacío
+        if (idProject == null || idProject.trim().isEmpty()) {
+            return Collections.emptyList();  // Devuelve una lista vacía en lugar de un string
+        }
+
+        // Corrección de la sentencia SQL
+        String sql = "SELECT DISTINCT r.run_name " // DISTINCT ahora está en la posición correcta
+                + "FROM run r "
+                + "JOIN library_run_link lrl ON lrl.id_run = r.id_run "
+                + "JOIN sample_library_link sl ON lrl.id_library = sl.id_library "
+                + "JOIN sample s ON sl.id_sample = s.id_sample "
+                + "WHERE s.id_project = ? AND r.status = 'Complete';";
+
+        // Crear consulta nativa
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+        q.setParameter(1, idProject); // Se usa ? en la consulta y se setea como parámetro
+
+        // Obtener resultados
+        List<String> results = q.getResultList();
+        System.out.println("Las corridas del proyecto son: " + results);
+
+        // Si no hay resultados, retorna una lista vacía
+        return (results.isEmpty()) ? Collections.emptyList() : results;
+    }
+
+    public List<String[]> obtenerUbicacionDesdeBD(String deviceIdentifier) {
+        List<String[]> ubicaciones = new ArrayList<>();
+
+        if (deviceIdentifier == null || deviceIdentifier.isEmpty()) {
+            return ubicaciones;
+        }
+
+        // Consulta SQL corregida usando "?"
+        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais, id_plataform "
+                + "FROM public.plataform_ubication WHERE identifier = ?";
+
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+        q.setParameter(1, deviceIdentifier); // Se usa índice en lugar de ":id"
+
+        List<Object[]> results = q.getResultList();
+        for (Object[] row : results) {
+            String[] fila = new String[row.length];
+            for (int i = 0; i < row.length; i++) {
+                fila[i] = row[i] != null ? row[i].toString() : "";
+            }
+            ubicaciones.add(fila);
+        }
+        System.out.println("La ubicacion es: " + ubicaciones);
+        return ubicaciones;
+    }
+
+    // Carlos - busqueda de varios secuenciadores correspondientes a las localizaciones de las instituciones por medio de id del secuenciador
+    public Map<String, String> obtenerUbicacionesDesdeBD(List<String> deviceIdentifiers) {
+        Map<String, String> ubicaciones = new HashMap<>();
+
+        if (deviceIdentifiers == null || deviceIdentifiers.isEmpty()) {
+            return ubicaciones;
+        }
+
+        // Construcción dinámica de la consulta SQL
+        String sql = "SELECT identifier, instalation, calle_no, colonia, municipio, estado, pais "
+                + "FROM public.plataform_ubication WHERE identifier IN ("
+                + deviceIdentifiers.stream().map(id -> "'" + id + "'").collect(Collectors.joining(",")) + ")";
+
+        javax.persistence.Query q = getEntityManager().createNativeQuery(sql);
+
+        return ubicaciones;
+    }
+
+    /*public List<Plataform> findUbicationByIdentifier(String index_kit){
+        javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Plataform> cq = cb.createQuery(Plataform.class);
+        
+        Predicate pre1 = cb.equal(BarcodesRoot.get(Barcodes_.indexName), index_name);
+        cq.select(BarcodesRoot);
+        cq.where(pre1);
+
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        
+        return q.getResultList();
+    }*/
 }
 
 /*

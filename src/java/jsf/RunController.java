@@ -482,7 +482,7 @@ public class RunController implements Serializable {
             //Verificamos el tipo de plataforma 
             if (itemPlataform.equals("HiSeq") || itemPlataform.equals("MiSeq") || itemPlataform.equals("Oxford Nanopore")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Miseq();
-            } else if (itemPlataform.equals("NovaSeq") || itemPlataform.equals("NextSeq500")|| itemPlataform.equals("iSeq")) {
+            } else if (itemPlataform.equals("NovaSeq XPLUS") || itemPlataform.equals("NextSeq500")|| itemPlataform.equals("iSeq")|| itemPlataform.equals("NextSeq 2000")) {
                 return itemBarcode.getIndexName() + "-" + itemBarcode.getBasei5Nextseq();
             }
         }

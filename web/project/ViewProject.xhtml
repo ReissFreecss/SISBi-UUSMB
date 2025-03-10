@@ -269,7 +269,7 @@
                         <p:outputLabel value="Método de entrega:"/>
                         <p:outputLabel value="#{projectController.selectedProject.deliveryMethod}" />
                         <p:outputLabel value="Entrega de resultados:"/>
-                        <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado">
+                        <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado" onclick="PF('accordionArchivosAsociados').unselect(-1); PF('accordionMuestrasAsociadas').unselect(-1); PF('accordionBibliotecasAsociadas').unselect(-1);">
                             <h:outputText value="Ver resultados" style="color: blue; text-decoration: underline" />
                         </h:outputLink>
                         <p:outputLabel value="Método de pago:"/>
@@ -649,7 +649,7 @@
 
 
                 <br />
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionArchivosAsociados">
                     <p:tab title="Archivos asociados al proyecto" titleStyle="font-size: large;font-family: 'politica'" >
                         <h:panelGrid columns="1" cellpadding="0">
                             <p:outputLabel value="Suba algún archivo referente a su proyecto en formato .pdf (cotizaciones, gel de agarosa, comprobantes de pago, etc)"  style="font-size: medium"  />
@@ -760,7 +760,7 @@
 
                 </p:dialog>
 
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionMuestrasAsociadas">
                     <p:tab title="Muestras asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" > 
                         <p:dataTable id="tbl" value="#{sampleController.listSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
                                      style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
@@ -780,20 +780,20 @@
                             <p:ajax event="cellEdit" listener="#{sampleController.updateManySamplesView()}" update=":form"  />
                             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                             <f:facet name="footer">
-                                <h:panelGrid columns="4" style="border-color: transparent">
+                                <h:panelGrid columns="5" style="border-color: transparent">
 
                                     <p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
                                         <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
                                     </p:commandButton>
 
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Genera QC Mat.Genético" action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'docx')}" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" ajax="false"/>
+                                    Total de muestras: #{sampleController.itemsProj.size()}
                                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Subir QC Mat.Genético" oncomplete="PF('SampleQCDialog').show()" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" />
                                     <p:commandButton icon="ui-icon-circle-plus" value="Registrar muestra(s) para este proyecto" action="#{sampleController.redirectCreateSample()}" disabled="#{projectController.checkEstatusProj()}">
                                         <f:actionListener binding="#{commentsController.cleanStringComment()}"/>
                                     </p:commandButton>
 
                                 </h:panelGrid>
-                                <!--Total de muestras: #{sampleController.itemsProj.size()}-->
 
                             </f:facet>
 
@@ -805,7 +805,7 @@
                                 <h:outputText value="#{item.idSample}"
                                               style="#{commentsController.hasCommentsByType(item) ? 'color: white; background-color: blue;' : ''}" />
                             </p:column>
-                                
+
                             <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
 
 
@@ -1254,7 +1254,7 @@
                 </p:accordionPanel>
                 <br />
 
-                <p:accordionPanel  >
+                <p:accordionPanel widgetVar="accordionBibliotecasAsociadas">
                     <p:tab title="Bibliotecas asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" >   
                         <!--quite estas opciones del datatbale paginator="true" rows="20" para que fuera el scrollbar -->
                         <p:dataTable id="tblLibs"  value="#{libraryController.getLibsByProject()}" var="item" reflow="true"  sortMode="multiple"
@@ -1436,7 +1436,11 @@
 
                             <p:column width="60" headerText="Reporte de calidad de las muestras" >
 
-                                <p:commandButton icon="ui-icon-circle-plus" value="Ver calidad de las muestras"  action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}" ajax="false"/>
+                                <p:commandButton icon="ui-icon-circle-plus"
+                                                 value="Ver calidad de las muestras"
+                                                 action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}"
+                                                 ajax="false"
+                                                 disabled="#{!reportProjectController.reportProjectControllerEx(sampleController)}" />
 
                             </p:column>
                             <p:column width="90" headerText="Reporte de calidad de secuenciación" >
