@@ -491,7 +491,7 @@ public class CommentsController implements Serializable {
         Project proj = (Project) context.getExternalContext().getSessionMap().get("project");
         context.getExternalContext().getSessionMap().put("item", proj);
         List<Comments> commentsList = ejbFacade.commentsByProject(proj.getIdProject());
-        commentsList.sort(Comparator.comparing(Comments::getCommentDate));
+        commentsList.sort(Comparator.comparing(Comments::getCommentDate)); // Forza el ordenamiento por fecha
         return commentsList;
     }
 
