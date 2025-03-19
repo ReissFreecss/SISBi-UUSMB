@@ -1633,104 +1633,12 @@ public class LibraryController implements Serializable {
         }
         System.out.println("CSS Etapa 2: Sale de la validación exitosamente----------------------------------------------------------------   *******************");
 
-        /*
-        //reasignando valores con trim
-        Description = Description.trim();
-        run1 = run1.trim();
-        run2 = run2.trim();
-
-        //Validación de campos
-        System.out.println("Los variables son: -----------------------------------------------------");
-        System.out.println("description: " + Description);
-        System.out.println("readType: " + run1);
-        System.out.println("kitPerformance: " + run2);
-
-        System.out.println("Los variables son: -----------------------------------------------------");
-
-        if (Description.equals("") || Description == null) {
-            System.out.println("Existen campos vacíos");
-            messageDialog = "El campo descripción es obligatorio";
-            RequestContext rc = RequestContext.getCurrentInstance();
-            rc.execute("PF('dlgerrorcsvrepetido').show();");
-            return;
-        } else if (run1.equals("") || run1 == null) {
-            System.out.println("Existen campos vacíos");
-            messageDialog = "El campo Ciclo 1 es obligatorio";
-            RequestContext rc = RequestContext.getCurrentInstance();
-            rc.execute("PF('dlgerrorcsvrepetido').show();");
-            return;
-        } else if (run2.equals("") || run2 == null) {
-            System.out.println("Existen campos vacíos");
-            messageDialog = "El campo Ciclo 2 es obligatorio";
-            RequestContext rc = RequestContext.getCurrentInstance();
-            rc.execute("PF('dlgerrorcsvrepetido').show();");
-            return;
-        }
-        
-         */
         try {
             //Control para saber desde donde se ejecuta le método
             if (caseOrigin == 1) {//leslie: metodo ejecutado desde librray/runlibraries.xhtml =creacion corrida desde 0
                 //metodos para buscar las librerías de la corrida creada
                 System.out.println("CSS Etapa 3: Entramos en la condición caseOrigin----------------------------------------------------------------   *******************");
 
-                /*
-                System.out.println("CSS Etapa 4: Usamos la vista para obtener el arreglo de lasbibliotecas----------------------------------------------------------------   *******************");
-                //Usamos vistas para obetejer el objeto de las bibliotecas, solución a problema de registros null
-                List<Library> listLibrary = new ArrayList<>();
-                //Usamos vista para obtener registros de la tabla LibraryRunLink enviando id de corrida como parámetro
-                List<ViewIdLibraryLibraryRunLink> list = getFacade().findIdLibrariesByIdRun(idRun);
-                for (ViewIdLibraryLibraryRunLink viewLibrary : list) {
-                    System.out.println(" objeto ViewIdLibraryLibraryRunLink: " + viewLibrary);
-                    System.out.println(" id_library de ViewIdLibraryLibraryRunLink: " + viewLibrary.getIdLibrary());
-                    //Creamoe variable de tipo Library
-                    Library lib = new Library();
-                    //lib = ejbFacadeLibrary.findLibraryByIdLibrary(viewLibrary.getIdLibrary()).get(0);
-                    //asignamos valor de la consulta de biblioteca por medio del parámetro id de biblioteca de la vista anter creada
-                    lib = ejbLib.find(viewLibrary.getIdLibrary());
-                    
-                    System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                    //Consultamos desde la vista los id de biblioteca y barcodes 1 y 2
-                    ViewIdLibraryBarcodes12 vlb = ejbLib.finIdLibraryBarcodesByIdLibrary(viewLibrary.getIdLibrary()).get(0);
-
-                    System.out.println("------ Vista ViewBarcodes   ------------------");
-                    //consultamos la vista de barcode para obtener sus propiedades
-                    ViewBarcodes vBarcodes1 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-
-                    System.out.println("------ Barcodes barExp1   ------------------");
-                    //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag1
-                    Barcodes barExp1 = new Barcodes();
-                    barExp1.setIdIndex(vBarcodes1.getIdIndex());
-                    barExp1.setSequence(vBarcodes1.getSequence());
-                    barExp1.setIdBarcode(vBarcodes1.getIdBarcode());
-                    barExp1.setTagType(vBarcodes1.getTagType());
-                    barExp1.setKitName(vBarcodes1.getKitName());
-                    System.out.println("------ Barcodes barExp1   ------------------");
-
-                    System.out.println("------ Barcodes barExp2   ------------------");
-                    //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag2
-                    ViewBarcodes vBarcodes2 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-                    Barcodes barExp2 = new Barcodes();
-                    barExp2.setIdIndex(vBarcodes2.getIdIndex());
-                    barExp2.setSequence(vBarcodes2.getSequence());
-                    barExp2.setIdBarcode(vBarcodes2.getIdBarcode());
-                    barExp2.setTagType(vBarcodes2.getTagType());
-                    barExp2.setKitName(vBarcodes2.getKitName());
-                    System.out.println("------ Barcodes barExp2   ------------------");
-                    System.out.println("Biblioteca antes de asignar barcodes:" + lib);
-                    //Asignamos los barcodes 1 (tag1) y barcodes 2 (tag2) 
-                    lib.setIdBarcode1(barExp1);
-                    lib.setIdBarcode2(barExp2);
-                    System.out.println("Biblioteca después de asignar barcodes:" + lib);
-                    System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-
-                    //Agregamos la bilbioteca a la lista
-                    listLibrary.add(lib);
-                    //listLibrary.set(selectedItemIndex, lib);
-                    //listLibrary.add(lib);
-                }
-                
-                 */
                 System.out.println("CSS Etapa 5: Pasamos la vista para obtener el arreglo de lasbibliotecas----------------------------------------------------------------   *******************");
 
                 List<Library> librerias = new ArrayList<>();
@@ -1738,61 +1646,13 @@ public class LibraryController implements Serializable {
                 List<LibraryRunLink> libraryRun = ejbLibraryRun.getLibraryRunLinkByIdRun(idRun);
                 for (int i = 0; i < libraryRun.size(); i++) {
 
-                    /*
-                    //Validamos si la biblioteca contiene barcodes;
-                if (libraryRun.get(i).getLibrary().getIdBarcode1() == null) {
-                    RequestContext rc = RequestContext.getCurrentInstance();
-                    rc.execute("PF('modulDialog').show();");
-                    messageDialog = "No se puede crear el sampleSheet, la biblioteca "+libraryRun.get(i).getLibrary().getLibraryName()+", no contiene tag 1 y 2.";
-                    System.out.println("la bilbioteca no contiene barcodes 1");
-                    return null;
-                }
-                     */
                     System.out.println("Resultado de la iteracion: " + libraryRun.get(i));
                     System.out.println("id de Libreria: " + libraryRun.get(i).getLibraryRunLinkPK().getIdLibrary());
                     System.out.println("objeto libreria: " + ejbLib.find(libraryRun.get(i).getLibraryRunLinkPK().getIdLibrary()));
                     Library lib = ejbLib.getLibraryByIdLibrary(libraryRun.get(i).getLibraryRunLinkPK().getIdLibrary()).get(0);
 
-                    /*
-                    System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                    //Consultamos desde la vista los id de biblioteca y barcodes 1 y 2
-                    ViewIdLibraryBarcodes12 vlb = ejbLib.finIdLibraryBarcodesByIdLibrary(lib.getIdLibrary()).get(0);
-
-                    System.out.println("------ Vista ViewBarcodes   ------------------");
-                    //consultamos la vista de barcode para obtener sus propiedades
-                    ViewBarcodes vBarcodes1 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-
-                    System.out.println("------ Barcodes barExp1   ------------------");
-                    //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag1
-                    Barcodes barExp1 = new Barcodes();
-                    barExp1.setIdIndex(vBarcodes1.getIdIndex());
-                    barExp1.setSequence(vBarcodes1.getSequence());
-                    barExp1.setIdBarcode(vBarcodes1.getIdBarcode());
-                    barExp1.setTagType(vBarcodes1.getTagType());
-                    barExp1.setKitName(vBarcodes1.getKitName());
-                    System.out.println("------ Barcodes barExp1   ------------------");
-
-                    System.out.println("------ Barcodes barExp2   ------------------");
-                    //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag2
-                    ViewBarcodes vBarcodes2 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-                    Barcodes barExp2 = new Barcodes();
-                    barExp2.setIdIndex(vBarcodes2.getIdIndex());
-                    barExp2.setSequence(vBarcodes2.getSequence());
-                    barExp2.setIdBarcode(vBarcodes2.getIdBarcode());
-                    barExp2.setTagType(vBarcodes2.getTagType());
-                    barExp2.setKitName(vBarcodes2.getKitName());
-                    System.out.println("------ Barcodes barExp2   ------------------");
-                    System.out.println("Biblioteca antes de asignar barcodes:" + lib);
-                    //Asignamos los barcodes 1 (tag1) y barcodes 2 (tag2) 
-                    lib.setIdBarcode1(barExp1);
-                    lib.setIdBarcode2(barExp2);
-                    System.out.println("Biblioteca después de asignar barcodes:" + lib);
-                    System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                     */
                     librerias.add(i, lib); //agrega a la lista la posiicon y el objeto
-                    //libRun.add(libraryRun.get(i));
-                    //System.out.println("idLibrary: "+libraryRun.get(i).getLibrary().getIdLibrary());
-                    //libRun.add(ejbLib.find(libraryRun.get(i).getLibrary().getIdLibrary()));
+
                 }
 
                 libRun = new ArrayList<>();
@@ -1832,92 +1692,13 @@ public class LibraryController implements Serializable {
         try {
             for (Library libRuns : libRun) {
 
-                /*
-                //Validamos si la biblioteca contiene barcodes;
-                if (libRuns.getIdBarcode1() == null) {
-                    RequestContext rc = RequestContext.getCurrentInstance();
-                    rc.execute("PF('modulDialog').show();");
-                    messageDialog = "No se puede crear el sampleSheet, la biblioteca "+libRuns.getLibraryName()+", no contiene tag 1 y 2.";
-                    System.out.println("la bilbioteca no contiene barcodes 2");
-                    return null;
-                }
-                 */
                 System.out.println("CSS Etapa 8: Entramos al ciclo for (Library libRuns : libRun)  ----------------------------------------------------------------   *******************");
                 System.out.println("-----------------------------------------------------------");
                 System.out.println("Iterando libreria: " + libRun);
                 System.out.println("-----------------------------------------------------------");
                 List<SampleLibraryLink> runLib = getFacade().findRuns(libRuns.getIdLibrary());
                 //leslie 22 agosto aqui itero el orden en el metodo finRuns 
-                //System.out.println("Valor de objeto runLib: "+ runLib);
-                /*
-                 System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                //Consultamos desde la vista los id de biblioteca y barcodes 1 y 2
-                ViewIdLibraryBarcodes12 vlb = ejbLib.finIdLibraryBarcodesByIdLibrary(libRuns.getIdLibrary()).get(0);
 
-                System.out.println("------ Vista ViewBarcodes   ------------------");
-                //consultamos la vista de barcode para obtener sus propiedades
-                ViewBarcodes vBarcodes1 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-
-                System.out.println("------ Barcodes barExp1   ------------------");
-                //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag1
-                Barcodes barExp1 = new Barcodes();
-                barExp1.setIdIndex(vBarcodes1.getIdIndex());
-                barExp1.setSequence(vBarcodes1.getSequence());
-                barExp1.setIdBarcode(vBarcodes1.getIdBarcode());
-                barExp1.setTagType(vBarcodes1.getTagType());
-                barExp1.setKitName(vBarcodes1.getKitName());
-                System.out.println("------ Barcodes barExp1   ------------------");
-
-                System.out.println("------ Barcodes barExp2   ------------------");
-                //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag2
-                ViewBarcodes vBarcodes2 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-                Barcodes barExp2 = new Barcodes();
-                barExp2.setIdIndex(vBarcodes2.getIdIndex());
-                barExp2.setSequence(vBarcodes2.getSequence());
-                barExp2.setIdBarcode(vBarcodes2.getIdBarcode());
-                barExp2.setTagType(vBarcodes2.getTagType());
-                barExp2.setKitName(vBarcodes2.getKitName());
-                System.out.println("------ Barcodes barExp2   ------------------");
-                System.out.println("Biblioteca antes de asignar barcodes:" + libRuns);
-                //Asignamos los barcodes 1 (tag1) y barcodes 2 (tag2) 
-                libRuns.setIdBarcode1(barExp1);
-                libRuns.setIdBarcode2(barExp2);
-                System.out.println("Biblioteca después de asignar barcodes:" + libRuns);
-                System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-
-                 */
- /*      Eliminando consulta con método de vista de ViewSampleLibraryLink
-                //Eliminando join con valores nullos   -------------------------------------------------- Inicio
-                //Consultamos en la tabla SampleLibraryLink los registros que tengan el id de la biblioteca mediante la vista
-                List<ViewSampleLibraryLink> runLibView = ejbSll.findRunByIdLibrary(libRuns.getIdLibrary());
-                SampleLibraryLink runSLL = new SampleLibraryLink();
-                //variable runSLL se asigna el valor de la consulta con parámetros de id's obtenidos mediante la vista
-                runSLL = ejbSll.findRunByIdSampleIdLibrary(runLibView.get(0).getIdSample(), runLibView.get(0).getIdLibrary()).get(0);
-                //Creamos vairbale del tipo Library
-                Library lib = new Library();
-                //Variable lib se asigna el valor de consulta de biblioteca por medio del id de la vista
-                lib = ejbLib.find(runLibView.get(0).getIdLibrary());
-                //Agregamos las bibliotecas a la lista
-                runSLL.setLibrary(lib);
-                //Creamos variable del tipo Sample
-                Sample sample = new Sample();
-                //Variable sample se asigna el valor de consulta de biblioteca por medio del id de la vista
-                sample = ejbSam.find(runLibView.get(0).getIdSample());
-                //Se asigna el valor de las variables al runSLL mediante el set
-                runSLL.setLibrary(lib);
-                runSLL.setSample(sample);
-                List<SampleLibraryLink> runLib = new ArrayList<>();
-                //runSLL.getLibrary().setIdBarcode1(barExp1);
-                //runSLL.getLibrary().setIdBarcode2(barExp2);
-                //Agregamos el valor del SLL a la litsa runLib
-                runLib.add(runSLL);
-                System.out.println("obtener id de biblioteca: " + libRuns.getIdLibrary());
-                System.out.println("objeto SampleLibraryLink encontrado: " + runLib);
-                //Eliminando join con valores nullos  --------------------------------------------------- Final
-                System.out.println("obtener id de biblioteca: " + libRuns.getIdLibrary());
-                System.out.println("objeto SampleLibraryLink encontrado: " + runLib);
-                
-                 */
                 for (SampleLibraryLink runs : runLib) {
                     //Kit = runs.getLibrary().getKit();
                     Kit = runs.getLibrary().getPlataformLinkKit().getKit().getKitName();
@@ -1926,13 +1707,20 @@ public class LibraryController implements Serializable {
                     //leslie22 agosto
                     namelibrary = runs.getLibrary().getLibraryName().toString();
                     if (plataform.equals("Oxford Nanopore")) {
-                        rName = NameRun.substring(18, 21);
-                        Scode = NameRun.substring(9, 17);
+                        if (NameRun.length() >= 21) {
+                            rName = NameRun.substring(18, 21);
+                        }
+                        if (NameRun.length() >= 17) {
+                            Scode = NameRun.substring(9, 17);
+                        }
                     } else {
-                        rName = NameRun.substring(16, 18);
-                        Scode = NameRun.substring(7, 15);
+                        if (NameRun.length() >= 18) {
+                            rName = NameRun.substring(16, 18);
+                        }
+                        if (NameRun.length() >= 15) {
+                            Scode = NameRun.substring(7, 15);
+                        }
                     }
-
                     break;
                 }
 
@@ -2005,73 +1793,6 @@ public class LibraryController implements Serializable {
                     for (Library libRuns : libRun) {
                         List<SampleLibraryLink> runLib = getFacade().findRuns(libRuns.getIdLibrary());
 
-                        /*   Eliminamos la cosnulta de vistas de barcodes 1 y 2 
-                        System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                        //Consultamos desde la vista los id de biblioteca y barcodes 1 y 2
-                        ViewIdLibraryBarcodes12 vlb = ejbLib.finIdLibraryBarcodesByIdLibrary(libRuns.getIdLibrary()).get(0);
-
-                        System.out.println("------ Vista ViewBarcodes   ------------------");
-                        //consultamos la vista de barcode para obtener sus propiedades
-                        ViewBarcodes vBarcodes1 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-
-                        System.out.println("------ Barcodes barExp1   ------------------");
-                        //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag1
-                        Barcodes barExp1 = new Barcodes();
-                        barExp1.setIdIndex(vBarcodes1.getIdIndex());
-                        barExp1.setSequence(vBarcodes1.getSequence());
-                        barExp1.setIdBarcode(vBarcodes1.getIdBarcode());
-                        barExp1.setTagType(vBarcodes1.getTagType());
-                        barExp1.setKitName(vBarcodes1.getKitName());
-                        System.out.println("------ Barcodes barExp1   ------------------");
-
-                        System.out.println("------ Barcodes barExp2   ------------------");
-                        //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag2
-                        ViewBarcodes vBarcodes2 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-                        Barcodes barExp2 = new Barcodes();
-                        barExp2.setIdIndex(vBarcodes2.getIdIndex());
-                        barExp2.setSequence(vBarcodes2.getSequence());
-                        barExp2.setIdBarcode(vBarcodes2.getIdBarcode());
-                        barExp2.setTagType(vBarcodes2.getTagType());
-                        barExp2.setKitName(vBarcodes2.getKitName());
-                        System.out.println("------ Barcodes barExp2   ------------------");
-                        System.out.println("Biblioteca antes de asignar barcodes:" + libRuns);
-                        //Asignamos los barcodes 1 (tag1) y barcodes 2 (tag2) 
-                        libRuns.setIdBarcode1(barExp1);
-                        libRuns.setIdBarcode2(barExp2);
-                        System.out.println("Biblioteca después de asignar barcodes:" + libRuns);
-                        System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                        
-                        //Eliminando consultas para eliminar join nulos de ViewSampleLibraryLink
-                        
-                        //Eliminando join con valores nullos   -------------------------------------------------- Inicio
-                        //Consultamos en la tabla SampleLibraryLink los registros que tengan el id de la biblioteca mediante la vista
-                        List<ViewSampleLibraryLink> runLibView = ejbSll.findRunByIdLibrary(libRuns.getIdLibrary());
-                        SampleLibraryLink runSLL = new SampleLibraryLink();
-                        //variable runSLL se asigna el valor de la consulta con parámetros de id's obtenidos mediante la vista
-                        runSLL = ejbSll.findRunByIdSampleIdLibrary(runLibView.get(0).getIdSample(), runLibView.get(0).getIdLibrary()).get(0);
-                        //Creamos vairbale del tipo Library
-                        Library lib = new Library();
-                        //Variable lib se asigna el valor de consulta de biblioteca por medio del id de la vista
-                        lib = ejbLib.find(runLibView.get(0).getIdLibrary());
-                        //Agregamos las bibliotecas a la lista
-                        runSLL.setLibrary(lib);
-                        //Creamos variable del tipo Sample
-                        Sample sample = new Sample();
-                        //Variable sample se asigna el valor de consulta de biblioteca por medio del id de la vista
-                        sample = ejbSam.find(runLibView.get(0).getIdSample());
-                        //Se asigna el valor de las variables al runSLL mediante el set
-                        runSLL.setLibrary(lib);
-                        runSLL.setSample(sample);
-                        List<SampleLibraryLink> runLib = new ArrayList<>();
-                        runSLL.getLibrary().setIdBarcode1(barExp1);
-                        runSLL.getLibrary().setIdBarcode2(barExp2);
-                        //Agregamos el valor del SLL a la litsa runLib
-                        runLib.add(runSLL);
-                        System.out.println("obtener id de biblioteca: " + libRuns.getIdLibrary());
-                        System.out.println("objeto SampleLibraryLink encontrado: " + runLib);
-                        //Eliminando join con valores nullos  --------------------------------------------------- Final
-                        
-                         */
                         for (SampleLibraryLink runs : runLib) {
                             System.out.println("id del proyecto: " + runs.getSample().getIdProject());
                             //System.out.println("kit: " + runs.getLibrary().getKit());
@@ -2120,18 +1841,6 @@ public class LibraryController implements Serializable {
 
                                 if (!sam.getStatus().equals("Basecalling y QC en proceso")) {
                                     System.out.println("Nombre de la muestra: " + sam.getSampleName());
-
-                                    /* Comments commentsSample = new Comments();
-                            commentsSample.setComment("Estatus cambia de -" + sam.getStatus() + "- a -" + "Basecalling y QC en proceso" + "- por " + us.getUserName());
-                            commentsSample.setIdType(sam.getIdSample() + "");
-                            commentsSample.setType("Sample");
-                            commentsSample.setUserName("SISBI");
-                            commentsSample.setCommentDate(timestamp);
-
-                            commentFac.createComment(commentsSample);
-                            
-                            sam.setStatus("Basecalling y QC en proceso");
-                            ejbSam.edit(sam);*/
                                 }
 
                             }
@@ -2150,72 +1859,6 @@ public class LibraryController implements Serializable {
 
                     for (Library libRuns : libRun) {
                         List<SampleLibraryLink> runLib = getFacade().findRuns(libRuns.getIdLibrary());
-                        /*
-                        System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-                        //Consultamos desde la vista los id de biblioteca y barcodes 1 y 2
-                        ViewIdLibraryBarcodes12 vlb = ejbLib.finIdLibraryBarcodesByIdLibrary(libRuns.getIdLibrary()).get(0);
-
-                        System.out.println("------ Vista ViewBarcodes   ------------------");
-                        //consultamos la vista de barcode para obtener sus propiedades
-                        ViewBarcodes vBarcodes1 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-
-                        System.out.println("------ Barcodes barExp1   ------------------");
-                        //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag1
-                        Barcodes barExp1 = new Barcodes();
-                        barExp1.setIdIndex(vBarcodes1.getIdIndex());
-                        barExp1.setSequence(vBarcodes1.getSequence());
-                        barExp1.setIdBarcode(vBarcodes1.getIdBarcode());
-                        barExp1.setTagType(vBarcodes1.getTagType());
-                        barExp1.setKitName(vBarcodes1.getKitName());
-                        System.out.println("------ Barcodes barExp1   ------------------");
-
-                        System.out.println("------ Barcodes barExp2   ------------------");
-                        //Asignamos las propiedades de la vista de Barcodes a la entidad de Barcodes como tag2
-                        ViewBarcodes vBarcodes2 = ejbBar.finIdBarcodesByIdIndex(vlb.getIdIndex1()).get(0);
-                        Barcodes barExp2 = new Barcodes();
-                        barExp2.setIdIndex(vBarcodes2.getIdIndex());
-                        barExp2.setSequence(vBarcodes2.getSequence());
-                        barExp2.setIdBarcode(vBarcodes2.getIdBarcode());
-                        barExp2.setTagType(vBarcodes2.getTagType());
-                        barExp2.setKitName(vBarcodes2.getKitName());
-                        System.out.println("------ Barcodes barExp2   ------------------");
-                        System.out.println("Biblioteca antes de asignar barcodes:" + libRuns);
-                        //Asignamos los barcodes 1 (tag1) y barcodes 2 (tag2) 
-                        libRuns.setIdBarcode1(barExp1);
-                        libRuns.setIdBarcode2(barExp2);
-                        System.out.println("Biblioteca después de asignar barcodes:" + libRuns);
-                        System.out.println("Asignamos valor de los barcodes mediante vista y elimando valores nulos en relación ---------------------------------- *************+");
-
-                        //List<SampleLibraryLink> runLib = getFacade().findRuns(libRuns.getIdLibrary());
-                        //Eliminando join con valores nullos   -------------------------------------------------- Inicio
-                        //Consultamos en la tabla SampleLibraryLink los registros que tengan el id de la biblioteca mediante la vista
-                        List<ViewSampleLibraryLink> runLibView = ejbSll.findRunByIdLibrary(libRuns.getIdLibrary());
-                        SampleLibraryLink runSLL = new SampleLibraryLink();
-                        //variable runSLL se asigna el valor de la consulta con parámetros de id's obtenidos mediante la vista
-                        runSLL = ejbSll.findRunByIdSampleIdLibrary(runLibView.get(0).getIdSample(), runLibView.get(0).getIdLibrary()).get(0);
-                        //Creamos vairbale del tipo Library
-                        Library lib = new Library();
-                        //Variable lib se asigna el valor de consulta de biblioteca por medio del id de la vista
-                        lib = ejbLib.find(runLibView.get(0).getIdLibrary());
-                        //Agregamos las bibliotecas a la lista
-                        runSLL.setLibrary(lib);
-                        //Creamos variable del tipo Sample
-                        Sample sample = new Sample();
-                        //Variable sample se asigna el valor de consulta de biblioteca por medio del id de la vista
-                        sample = ejbSam.find(runLibView.get(0).getIdSample());
-                        //Se asigna el valor de las variables al runSLL mediante el set
-                        runSLL.setLibrary(lib);
-                        runSLL.setSample(sample);
-                        List<SampleLibraryLink> runLib = new ArrayList<>();
-                        runSLL.getLibrary().setIdBarcode1(barExp1);
-                        runSLL.getLibrary().setIdBarcode2(barExp2);
-                        //Agregamos el valor del SLL a la litsa runLib
-                        runLib.add(runSLL);
-                        System.out.println("obtener id de biblioteca: " + libRuns.getIdLibrary());
-                        System.out.println("objeto SampleLibraryLink encontrado: " + runLib);
-                        //Eliminando join con valores nullos  --------------------------------------------------- Final
-                        
-                         */
 
                         for (SampleLibraryLink runs : runLib) {
                             System.out.println("id del proyecto: " + runs.getSample().getIdProject());
@@ -2301,17 +1944,6 @@ public class LibraryController implements Serializable {
 
                                 //
                                 if (!sam.getStatus().equals("Basecalling y QC en proceso")) {
-                                    /*   Comments commentsSample = new Comments();
-                            commentsSample.setComment("Estatus cambia de -" + sam.getStatus() + "- a -" + "Basecalling y QC en proceso" + "- por " + us.getUserName());
-                            commentsSample.setIdType(sam.getIdSample() + "");
-                            commentsSample.setType("Sample");
-                            commentsSample.setUserName("SISBI");
-                            commentsSample.setCommentDate(timestamp);
-                            commentFac.createComment(commentsSample);
-                            
-                            sam.setStatus("Basecalling y QC en proceso");
-                              ejbSam.edit(runs.getSample());
-                                     */
 
                                 }
 
@@ -2323,10 +1955,6 @@ public class LibraryController implements Serializable {
                     pw.close();
                 }
             }
-
-            //RunController editRun= new RunController();
-            //editRun.editRun(SAMPLE_CSV_FILE);
-            // editRun(SAMPLE_CSV_FILE);
             //cleanFormCreateRun();
             resetValues();
             if (caseOrigin == 2) {
@@ -2343,12 +1971,7 @@ public class LibraryController implements Serializable {
                 //context.getExternalContext().redirect(file.getAbsolutePath().replaceAll("/var/www/html/sampleFiles/SampleSheetFiles/", "http://www.uusmb.unam.mx/sampleFiles/SampleSheetFiles/"));
                 System.out.println("ruta del archivo" + file.getPath());
             }
-            //cleanFormCreateSampleSheet();
 
-//Instancia de los metodos desarrollados por jerome, en donde la samplesheet se envia a su servidor para continuar con el proceso de copiado de datos.
-            //  ToRsync Call = new ToRsync();
-            //Call.ToRsync(file.toPath());
-            //System.out.println("Manda el archivo a la clase ToRSync");
         } catch (Exception e) {
             System.out.println("Ocurrio el siguiente error en método createSampleSheet:" + e.getMessage());
             return null;
@@ -4771,10 +4394,11 @@ public class LibraryController implements Serializable {
             return true;
             // }else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("NovaSeq 6000 - Oxford Nanopore")) {
             //   return true;
-        } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - NextSeq 2000")){
+        } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - NextSeq 2000")) {
+            return true;
+        } else if (listSampleLibraries.get(0).getSample().getSamplePlataform().equals("Oxford Nanopore - NovaSeq XPLUS")) {
             return true;
         }
-
         return false;
 
     }
