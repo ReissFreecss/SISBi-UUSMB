@@ -322,7 +322,7 @@
                             <p:column width="10" style="width:35px">
                                 <p:commandButton  id="btnEditComment" icon="ui-icon-pencil" actionListener="#{commentsController.prepareEditComment(item)}" disabled="#{commentsController.canEditComment(item.userName)}" update=":form:opEditComment"  oncomplete="PF('EditCommentDialog').show()"  ></p:commandButton> 
                             </p:column>
-                            <p:column width="40">
+                            <p:column width="40" sortBy="#{item.commentDate}">
                                 <f:facet name="header">
                                     <h:outputText value="Fecha"/>
                                 </f:facet>

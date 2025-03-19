@@ -724,6 +724,7 @@ public class FileController implements Serializable {
                                 break;
                             case "m":
                                 itemPlatform = "NextSeq 2000";
+                                System.out.println("Selecciono NextSeq 2000");
                                 break;
                             case "na":
                                 itemPlatform = "NA";
