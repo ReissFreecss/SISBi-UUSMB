@@ -3010,15 +3010,15 @@ public class LibraryController implements Serializable {
             String statusAnt = itemSample.getStatus();
             Comments commentsSample = new Comments();
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -En construccion de biblioteca- por " + us.getUserName());
+            commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -En espera de secuenciacion- por " + us.getUserName());
             commentsSample.setIdType(itemSample.getIdSample() + "");
             commentsSample.setType("Sample");
             commentsSample.setUserName("SISBI");
             commentsSample.setCommentDate(timestamp);
             commentFac.createComment(commentsSample);
 
-            //Al objeto de tipo sample le mandamos la propiedad de estatus como "En espera de secuenciacion"
-            itemSample.setStatus("En construccion de biblioteca");
+            // Carlos  Al objeto de tipo sample le mandamos la propiedad de estatus como "En espera de secuenciacion"
+            itemSample.setStatus("En espera de secuenciacion");
             //Editamos el objeto de tipo Sample
             ejbSam.edit(itemSample);
         }
