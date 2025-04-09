@@ -306,11 +306,14 @@ public class FileController implements Serializable {
         //Constantes para validar tamaños de secuencias
         List<String> listPlatform = new ArrayList<>();
         //Llenado de arreglos para validar
+        listPlatform.add("NextSeq 2000");
         listPlatform.add("NextSeq 500");
         listPlatform.add("MiSeq");
         listPlatform.add("HiSeq 2000/2500");
         listPlatform.add("HiSeq X ");
         listPlatform.add("NovaSeq 6000");
+        listPlatform.add("NovaSeq XPLUS");
+        
 
         listPlatform.add("Oxford Nanopore - NextSeq500");
         listPlatform.add("Oxford Nanopore - MiSeq");
@@ -319,8 +322,6 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - HiSeq");
         listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
         listPlatform.add("Oxford Nanopore - NextSeq 2000");
-        listPlatform.add("NovaSeq XPLUS");
-        listPlatform.add("NextSeq 2000");
         // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
 
         if (listPlatform.indexOf(platform) < 0) {
@@ -343,8 +344,6 @@ public class FileController implements Serializable {
         listPlatform.add("NovaSeq 6000 - Oxford Nanopore");
         listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
         listPlatform.add("Oxford Nanopore - NextSeq 2000");
-        listPlatform.add("NovaSeq XPLUS");
-        listPlatform.add("NextSeq 2000");
 // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
         if (listPlatform.indexOf(platform) < 0) {
             return false;
@@ -419,7 +418,7 @@ public class FileController implements Serializable {
         int col260230 = 14;                                      //14
         int colRendimientoIllumina = 15;                         //15
         int colRendimientoOxford = 16;                           //16
-         */
+        */
         //Variables que representan el tipo de análisis
         /*
         int colLimpiezaCalidad = 17;                             //17
@@ -724,6 +723,7 @@ public class FileController implements Serializable {
                                 break;
                             case "m":
                                 itemPlatform = "NextSeq 2000";
+                                System.out.println("Selecciono NextSeq 2000");
                                 break;
                             case "na":
                                 itemPlatform = "NA";

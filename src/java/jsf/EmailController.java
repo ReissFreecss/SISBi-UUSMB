@@ -56,21 +56,19 @@ public class EmailController {
     
 //-------------------------------------------------------------------
 
-// Constantes para mandar el email
-    /*
+    // Constantes para mandar el email
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "sisbi@ibt.unam.mx";
     private static final String USER = "sisbi@ibt.unam.mx";
     private static final String PASS = "0tr0C4b4ll0";
-    */
+    
     
     
     //test
-    private static final String HOST = "smtp.gmail.com";
-    private static final String SENDER = "aaaaasisbi@ibt.unam.mx";
-    private static final String USER = "aaaaasisbi@ibt.unam.mx";
-    private static final String PASS = "aaaaa0tr0C4b4ll0";
-    
+    /*private static final String HOST = "smtp.gmail.com";
+    private static final String SENDER = "NoEnviar_sisbi@ibt.unam.mx";
+    private static final String USER = "NoEnviar_sisbi@ibt.unam.mx";
+    private static final String PASS = "NoEnviar_0tr0C4b4ll0";*/
 
 
     //private static final int PORT = 587;
