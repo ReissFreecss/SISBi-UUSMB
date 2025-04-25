@@ -31,7 +31,7 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
- 
+
 @Named("usersController")
 @SessionScoped
 public class UsersController implements Serializable {
@@ -46,9 +46,9 @@ public class UsersController implements Serializable {
     private int selectedItemIndex;
     private Users selectedUser;
     private String email;
-    private boolean verifiedEmail=true;
+    private boolean verifiedEmail = true;
     private String varPLastName;
-    
+
     private String txtFilUserName;
     private String txtFilFirstName;
     private String txtFilMLastName;
@@ -57,9 +57,27 @@ public class UsersController implements Serializable {
     private String txtUserName;
     private String txtFildDepartment;
     private String txtFieldGeneralUser;
-    
+
     private String selectTypeUser;
 
+    private boolean termsAndConditions1Agreed;
+    private boolean termsAndConditions2Agreed;
+
+    public boolean isTermsAndConditions1Agreed() {
+        return termsAndConditions1Agreed;
+    }
+
+    public void setTermsAndConditions1Agreed(boolean termsAndConditions1Agreed) {
+        this.termsAndConditions1Agreed = termsAndConditions1Agreed;
+    }
+
+    public boolean isTermsAndConditions2Agreed() {
+        return termsAndConditions2Agreed;
+    }
+
+    public void setTermsAndConditions2Agreed(boolean termsAndConditions2Agreed) {
+        this.termsAndConditions2Agreed = termsAndConditions2Agreed;
+    }
     public String getSelectTypeUser() {
         return selectTypeUser;
     }
@@ -67,7 +85,6 @@ public class UsersController implements Serializable {
     public void setSelectTypeUser(String selectTypeUser) {
         this.selectTypeUser = selectTypeUser;
     }
-    
 
     public String getTxtFieldGeneralUser() {
         return txtFieldGeneralUser;
@@ -76,8 +93,6 @@ public class UsersController implements Serializable {
     public void setTxtFieldGeneralUser(String txtFieldGeneralUser) {
         this.txtFieldGeneralUser = txtFieldGeneralUser;
     }
-    
-    
 
     public String getTxtFildDepartment() {
         return txtFildDepartment;
@@ -90,9 +105,11 @@ public class UsersController implements Serializable {
     public String getTxtUserName() {
         return txtUserName = current.getUserName();
     }
+
     public void setTxtUserName(String txtUserName) {
         this.txtUserName = txtUserName;
     }
+
     public String getTxtFilEmail() {
         return txtFilEmail;
     }
@@ -108,8 +125,6 @@ public class UsersController implements Serializable {
     public void setTxtFilRegistrationName(Date txtFilRegistrationName) {
         this.txtFilRegistrationName = txtFilRegistrationName;
     }
-    
-    
 
     public String getTxtFilUserName() {
         return txtFilUserName;
@@ -135,10 +150,6 @@ public class UsersController implements Serializable {
         this.txtFilMLastName = txtFilMLastName;
     }
 
-    
-    
-    
-
     public String getVarPLastName() {
         return varPLastName;
     }
@@ -146,9 +157,6 @@ public class UsersController implements Serializable {
     public void setVarPLastName(String varPLastName) {
         this.varPLastName = varPLastName;
     }
-
-   
-    
 
     public boolean isVerifiedEmail() {
         return verifiedEmail;
@@ -180,17 +188,17 @@ public class UsersController implements Serializable {
         this.selectedUser = selectedUser;
     }
 
-    public void redirectProject(){
+    public void redirectProject() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().redirect("../project/ProjectList.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
+
     }
-    public void redirectBalance(){
+
+    public void redirectBalance() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().redirect("../balancePago/ListBalanceByUser.xhtml");
@@ -198,7 +206,7 @@ public class UsersController implements Serializable {
             Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public UsersController() {
     }
 
@@ -289,19 +297,20 @@ public class UsersController implements Serializable {
             a = UName.replace("ú", "u");
         }
         if (UName.contains("ñ")) {
-            a = UName.replace("ñ","n");
+            a = UName.replace("ñ", "n");
         }
 
         return a;
     }
-    
+
     //Metodo encargado de verificar que el email ya esta registrado en el sistema.
-        public void verifyEmail() { 
-        
+    public void verifyEmail() {
+
         if (current.getEmail() != null) {
             List<Users> usE = ejbFacade.findUserByEmail(current.getEmail().toLowerCase());
-           
-            if (usE.isEmpty()) { verifiedEmail = false;
+
+            if (usE.isEmpty()) {
+                verifiedEmail = false;
                 JsfUtil.addSuccessMessage("ESTIMADO USUARIO: El correo que proporcionó no esta registrado en una cuenta de este sistema, "
                         + "por favor continue con su registro");
             } else {
@@ -321,9 +330,10 @@ public class UsersController implements Serializable {
         }
 
     }
+
     public void create() {
         try {
-            
+
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String[] formated = current.getPLastName().split(" ");
             String apellido = "";
@@ -343,8 +353,8 @@ public class UsersController implements Serializable {
                 for (Users users : same) {
                     if (users.getUserName().equals(auxUname)) {
                         cont++;
-                        auxUname = processUName(current.getFirstName().substring(0, 1).toUpperCase()+current.getFirstName().substring(1, cont).toLowerCase() + apellido.substring(0, 1).toUpperCase() + apellido.toLowerCase().substring(1, apellido.length()));
-                        
+                        auxUname = processUName(current.getFirstName().substring(0, 1).toUpperCase() + current.getFirstName().substring(1, cont).toLowerCase() + apellido.substring(0, 1).toUpperCase() + apellido.toLowerCase().substring(1, apellido.length()));
+
                         change = true;
                         break;
                     } else {
@@ -356,8 +366,8 @@ public class UsersController implements Serializable {
                 }
             }
 
-            String UName= Normalizer.normalize(auxUname, Normalizer.Form.NFD);  
-            String FormatedUName=UName.replaceAll("[^\\p{ASCII}]", "");
+            String UName = Normalizer.normalize(auxUname, Normalizer.Form.NFD);
+            String FormatedUName = UName.replaceAll("[^\\p{ASCII}]", "");
             current.setUserName(FormatedUName);
             current.setRegistrationDate(timestamp);
             current.setUserType("Usuario");
@@ -366,24 +376,24 @@ public class UsersController implements Serializable {
             Users us = current;
             JsfUtil.addSuccessMessage(current.getUserName());
             System.out.println(us.getUserName());
-       ec.sendManagerNewUserEmail(us);
-       ec.sendNewUserEmail(us);
+            ec.sendManagerNewUserEmail(us);
+            ec.sendNewUserEmail(us);
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().redirect("AltaExitosa.xhtml");
             current.setEmail("");
-           current.setFirstName("");
-           current.setPLastName("");
-           current.setMLastName("");
-           current.setPhoneNumber("");
-           current.setIdDependency(null);
-           verifiedEmail=true;
+            current.setFirstName("");
+            current.setPLastName("");
+            current.setMLastName("");
+            current.setPhoneNumber("");
+            current.setIdDependency(null);
+            verifiedEmail = true;
         } catch (Exception e) {
             System.out.println(e);
             JsfUtil.addErrorMessage("ERROR AL CREAR USUARIO: El correo que proporcionó ya esta registrado en una cuenta de este sistema");
-           
+
         }
     }
-    
+
     public void prepareEdit() {
         current = (Users) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
@@ -413,94 +423,93 @@ public class UsersController implements Serializable {
     }
 
     public void restorePass() {
-        
+
         Users selected = null;
         List<Users> listUsr = ejbFacade.findUserByEmail(current.getEmail().toLowerCase());
-        if(email==null){
+        if (email == null) {
             RequestContext RC = RequestContext.getCurrentInstance();
-             RC.execute("PF('warnDialog').hide();");
-          for (Users users : listUsr) {
-            if (users.getEmail().toLowerCase().equals(current.getEmail().toLowerCase())) {
-                selected = users;
-            }  
-        }
-          if (selected != null) {
-            //FacesContext context = FacesContext.getCurrentInstance();
-            String newPass = PassGenerator.getPassword(
-                    PassGenerator.MINUSCULAS
-                    + PassGenerator.MAYUSCULAS
-                    + PassGenerator.ESPECIALES
-                    + PassGenerator.NUMEROS, 15);
+            RC.execute("PF('warnDialog').hide();");
+            for (Users users : listUsr) {
+                if (users.getEmail().toLowerCase().equals(current.getEmail().toLowerCase())) {
+                    selected = users;
+                }
+            }
+            if (selected != null) {
+                //FacesContext context = FacesContext.getCurrentInstance();
+                String newPass = PassGenerator.getPassword(
+                        PassGenerator.MINUSCULAS
+                        + PassGenerator.MAYUSCULAS
+                        + PassGenerator.ESPECIALES
+                        + PassGenerator.NUMEROS, 15);
 
-            selected.setPassword(newPass);
-            System.out.println(newPass);
-            ejbFacade.edit(selected);
-            ec.sendRestoreEmail(current.getEmail().toLowerCase(), selected.getUserName(), selected.getPassword());
+                selected.setPassword(newPass);
+                System.out.println(newPass);
+                ejbFacade.edit(selected);
+                ec.sendRestoreEmail(current.getEmail().toLowerCase(), selected.getUserName(), selected.getPassword());
 
-            try {
-                JsfUtil.addSuccessMessage("Se le ha enviado un correo electronico a la direccion proporcionada con la nueva contraseña. \n"
-                        + "Puede cambiar la contraseña cuando desee en la sección 'Mi Perfil'");
-                RequestContext rc = RequestContext.getCurrentInstance();
-             rc.execute("PF('passDialog').show();");
-             //rc.execute("PF('password').show();");
-            } catch (Exception ex) {
-                Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    JsfUtil.addSuccessMessage("Se le ha enviado un correo electronico a la direccion proporcionada con la nueva contraseña. \n"
+                            + "Puede cambiar la contraseña cuando desee en la sección 'Mi Perfil'");
+                    RequestContext rc = RequestContext.getCurrentInstance();
+                    rc.execute("PF('passDialog').show();");
+                    //rc.execute("PF('password').show();");
+                } catch (Exception ex) {
+                    Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+
+                JsfUtil.addErrorMessage("El correo proporcionado no ha sido dado de alta en este sistema");
+
             }
 
         } else {
+            for (Users users : listUsr) {
+                if (users.getEmail().equals(email.toLowerCase())) {
+                    selected = users;
+                }
+            }
+            if (selected != null) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                String newPass = PassGenerator.getPassword(
+                        PassGenerator.MINUSCULAS
+                        + PassGenerator.MAYUSCULAS
+                        + PassGenerator.ESPECIALES
+                        + PassGenerator.NUMEROS, 15);
 
-            JsfUtil.addErrorMessage("El correo proporcionado no ha sido dado de alta en este sistema");
+                selected.setPassword(newPass);
+                System.out.println(newPass);
+                ejbFacade.edit(selected);
+                ec.sendRestoreEmail(email.toLowerCase(), selected.getUserName(), selected.getPassword());
 
-        }
-        
-        
-        }else{
-        for (Users users : listUsr) {
-            if (users.getEmail().equals(email.toLowerCase())) {
-                selected = users;
+                try {
+                    context.getExternalContext().redirect("../Principal/Success.xhtml");
+                } catch (IOException ex) {
+                    Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+
+                JsfUtil.addErrorMessage("El correo proporcionado no ha sido dado de alta en este sistema");
+
             }
         }
-        if (selected != null) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            String newPass = PassGenerator.getPassword(
-                    PassGenerator.MINUSCULAS
-                    + PassGenerator.MAYUSCULAS
-                    + PassGenerator.ESPECIALES
-                    + PassGenerator.NUMEROS, 15);
-
-            selected.setPassword(newPass);
-            System.out.println(newPass);
-            ejbFacade.edit(selected);
-            ec.sendRestoreEmail(email.toLowerCase(), selected.getUserName(), selected.getPassword());
-
-            try {
-                context.getExternalContext().redirect("../Principal/Success.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(UsersController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } else {
-
-            JsfUtil.addErrorMessage("El correo proporcionado no ha sido dado de alta en este sistema");
-
-        }
-    }
     }
 
     public String update() {
         try {
-            if(0 == ejbFacade.getEmailUserByEmail(current.getEmail()).size()){
+            if (0 == ejbFacade.getEmailUserByEmail(current.getEmail()).size()) {
                 getFacade().edit(current);
                 return "ModificacionExitosa";
-            }else if(ejbFacade.getEmailUserByEmail(current.getEmail()).get(0).getIdUser() == current.getIdUser()){
+            } else if (ejbFacade.getEmailUserByEmail(current.getEmail()).get(0).getIdUser() == current.getIdUser()) {
                 getFacade().edit(current);
                 return "ModificacionExitosa";
-            }else{
+            } else {
                 //FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage("Error al editar", "El correo electrónico ya ha sido registrado"));
-                FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error al editar", "El correo electrónico ya ha sido registrado"));
+                FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al editar", "El correo electrónico ya ha sido registrado"));
                 return null;
             }
-            
+
         } catch (Exception e) {
             //JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             FacesContext.getCurrentInstance().addMessage("growl", new FacesMessage("Error al editar", "Revise los datos en el formulario"));
@@ -573,56 +582,52 @@ public class UsersController implements Serializable {
     public List<Users> getUsuarios() {
         return usuarios;
     }
-    public List<Users> getResponsibleUsers(){
+
+    public List<Users> getResponsibleUsers() {
         return ejbFacade.findResponsibleUsers();
     }
 
     public void setUsuarios(List<Users> usuarios) {
         this.usuarios = usuarios;
     }
-    
-    
-  
-     @PostConstruct
+
+    @PostConstruct
     public void init() {
-    
-    usuarios=new ArrayList<>();
-    usuarios=ejbFacade.findAllUsers();
-    
-    
+
+        usuarios = new ArrayList<>();
+        usuarios = ejbFacade.findAllUsers();
+
     }
-    
-    
-      public List<String> getImages(){
-    List <String> images=new ArrayList<>();
-    
-    images.add("miniseq.png");
-    images.add("miseq.png");
-    images.add("nextseq500.png");
-    
-   return images;
-    
-    
+
+    public List<String> getImages() {
+        List<String> images = new ArrayList<>();
+
+        images.add("miniseq.png");
+        images.add("miseq.png");
+        images.add("nextseq500.png");
+
+        return images;
+
     }
-      
-      public String getDescription(String image){
-      
-          String ans;
-          
-          switch (image) {
-              case "miniseq.png":
-                  ans ="Tecnologia miniseq de secuenciacion de DNA";
-                  break;
-              case "miseq.png":
-                   ans ="Tecnologia MiSeq de secuenciacion de DNA";
-                  break;
-              default:
-                  ans ="Tecnologia NextSeq500 de secuenciacion de DNA";
-          }
-      
-      return ans;
-      
-      }
+
+    public String getDescription(String image) {
+
+        String ans;
+
+        switch (image) {
+            case "miniseq.png":
+                ans = "Tecnologia miniseq de secuenciacion de DNA";
+                break;
+            case "miseq.png":
+                ans = "Tecnologia MiSeq de secuenciacion de DNA";
+                break;
+            default:
+                ans = "Tecnologia NextSeq500 de secuenciacion de DNA";
+        }
+
+        return ans;
+
+    }
 
     private void recreateModel() {
         items = null;
@@ -665,19 +670,18 @@ public class UsersController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAllUsers(), true);
     }
 
-    public List<String> getUsersSamples(){
-        List <Users> us=ejbFacade.findAllUsers();
-        List <String> lista = new ArrayList<>();
+    public List<String> getUsersSamples() {
+        List<Users> us = ejbFacade.findAllUsers();
+        List<String> lista = new ArrayList<>();
         for (Users nombre : us) {
             lista.add(nombre.getUserName());
-            
+
         }
-                
-    return lista;
-    
+
+        return lista;
+
     }
-    
-    
+
     public Users getUsers(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
@@ -721,32 +725,32 @@ public class UsersController implements Serializable {
         }
 
     }
-      public List<String> us(){
-        List<Users> Usuarios=ejbFacade.findAllUsers();
-        List<String> newList=new ArrayList();
-        for(Users U: Usuarios){
+
+    public List<String> us() {
+        List<Users> Usuarios = ejbFacade.findAllUsers();
+        List<String> newList = new ArrayList();
+        for (Users U : Usuarios) {
             newList.add(U.getUserName());
         }
         return newList;
     }
-      
-      
-      public void asignarValorCampos() {
-          current.getEmail();
-          current.getFirstName();
-          current.getPLastName();
-          current.getMLastName();
-          current.getPhoneNumber();
-          current.getPassword();
-          //current.setFirstName(selectedUser.getFirstName());
-          System.out.println("Se asigna valor al campo nombre "+current.getFirstName());
-          System.out.println("Se asigna valor al campo nombre "+current.getPLastName());
-          System.out.println("Se asigna valor al campo nombre "+current.getMLastName());
-          System.out.println("Se asigna valor al campo nombre "+current.getPhoneNumber());
-          System.out.println("Se asigna valor al campo nombre "+current.getPassword());
-          System.out.println("Se asigna valor al campo nombre "+current.getPassword());
+
+    public void asignarValorCampos() {
+        current.getEmail();
+        current.getFirstName();
+        current.getPLastName();
+        current.getMLastName();
+        current.getPhoneNumber();
+        current.getPassword();
+        //current.setFirstName(selectedUser.getFirstName());
+        System.out.println("Se asigna valor al campo nombre " + current.getFirstName());
+        System.out.println("Se asigna valor al campo nombre " + current.getPLastName());
+        System.out.println("Se asigna valor al campo nombre " + current.getMLastName());
+        System.out.println("Se asigna valor al campo nombre " + current.getPhoneNumber());
+        System.out.println("Se asigna valor al campo nombre " + current.getPassword());
+        System.out.println("Se asigna valor al campo nombre " + current.getPassword());
     }
-      
+
     /*
       Variables para las búsquedas
       
@@ -759,8 +763,8 @@ public class UsersController implements Serializable {
       
       
      */
-      public void cleanInputsFilterUsers(){
-          txtFilFirstName = "";
+    public void cleanInputsFilterUsers() {
+        txtFilFirstName = "";
         varPLastName = "";
         txtFilMLastName = "";
         txtFilUserName = "";
@@ -768,15 +772,14 @@ public class UsersController implements Serializable {
         txtFildDepartment = "";
         txtFilRegistrationName = null;
         txtFieldGeneralUser = "";
-        
-        
+
         usuarios = ejbFacade.findAllUsers();
-        
-          System.out.println("Se limpian los filtros");
-      }
-      
-      //Búsqueda de users por varios campos de la tabla de users
-      public void userGeneralFilter() {
+
+        System.out.println("Se limpian los filtros");
+    }
+
+    //Búsqueda de users por varios campos de la tabla de users
+    public void userGeneralFilter() {
         varPLastName = "";
         txtFilMLastName = "";
         txtFilFirstName = "";
@@ -791,11 +794,8 @@ public class UsersController implements Serializable {
             usuarios = ejbFacade.findAllUsers();
         }
     }
-      
-      
-      
-      
-         //Método buscar por nombre de usuario ignorando acentos
+
+    //Método buscar por nombre de usuario ignorando acentos
     public void usersFilterNameUser() {
         varPLastName = "";
         txtFilMLastName = "";
@@ -877,7 +877,7 @@ public class UsersController implements Serializable {
             usuarios = ejbFacade.findAllUsers();
         }
     }
-    
+
     //Método buscar por email ignorando acentos
     public void usersFilterDepartment() {
         varPLastName = "";
@@ -920,35 +920,34 @@ public class UsersController implements Serializable {
             usuarios = ejbFacade.findAllUsers();
         }
     }
-    
-    public void editTypeUser(Users itemUser, String selection){
+
+    public void editTypeUser(Users itemUser, String selection) {
         if (selection.equals("Usuario") || selection.equals("Admin")) {
             Users user = itemUser;
             user.setUserType(selection);
             ejbFacade.edit(user);
             selectTypeUser = "";
 
-            
-            showMessage("info", "Permiso cambiado","El permiso fue cambiado satisfactoriamente");
+            showMessage("info", "Permiso cambiado", "El permiso fue cambiado satisfactoriamente");
 
         }
-        
+
     }
-    
+
     public void showMessage(String type, String title, String detail) {
-        if(type == "info"){
+        if (type == "info") {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, title, detail);
             FacesContext.getCurrentInstance().addMessage("", message);
         }
-        if(type == "warn"){
+        if (type == "warn") {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, title, detail);
             FacesContext.getCurrentInstance().addMessage("", message);
         }
-        if(type == "error"){
+        if (type == "error") {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, title, detail);
             FacesContext.getCurrentInstance().addMessage("", message);
         }
-        if(type == "fatal"){
+        if (type == "fatal") {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, title, detail);
             FacesContext.getCurrentInstance().addMessage("", message);
         }

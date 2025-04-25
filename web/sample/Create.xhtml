@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    
+
 
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
@@ -44,8 +44,8 @@
             <h:form id="form">
 
 
-                 <div align="center">
-                <p:outputLabel value="Registro de un conjunto de muestras" style="font-size: 30px; font-style: italic" />
+                <div align="center">
+                    <p:outputLabel value="Registro de un conjunto de muestras" style="font-size: 30px; font-style: italic" />
                 </div>
 
                 <br /><br />
@@ -61,12 +61,12 @@
                 -->
                 <!-- <p:button target="_blank" href="#{sampleController.ligaPruebasFormatoMuestras()}" value="Descargar plantilla" /> -->
                 <br/>
-                 <!-- 
-                <p:button target="_blank" href="http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" value="Descargar plantilla" /> 
-                <h:outputLink value= "http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" style="color: yellowgreen; font-weight: bold" >RegistroOficialDeMuestras.xlsx</h:outputLink> <br/><br/>         
-                           
-                <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
-                 <h:outputLink value= "https://docs.google.com/spreadsheets/d/1dL_tXNztFnPlw3ccqqK-sZavbOGk44ZW/edit#gid=1202924776" target="_blank" style="color:orange; font-weight: bold" >RegistroOficialDeMuestras.xlsx</h:outputLink> <br/>
+                <!-- 
+               <p:button target="_blank" href="http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" value="Descargar plantilla" /> 
+               <h:outputLink value= "http://www.uusmb.unam.mx/F02_PG03_Registro_oficial_de_Muestras.xlsx" style="color: yellowgreen; font-weight: bold" >RegistroOficialDeMuestras.xlsx</h:outputLink> <br/><br/>         
+                          
+               <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+                <h:outputLink value= "https://docs.google.com/spreadsheets/d/1dL_tXNztFnPlw3ccqqK-sZavbOGk44ZW/edit#gid=1202924776" target="_blank" style="color:orange; font-weight: bold" >RegistroOficialDeMuestras.xlsx</h:outputLink> <br/>
                 --> 
 
                 <!-- Inicio del menú 
@@ -90,533 +90,539 @@
                 <h:outputText escape="false" style="color:yellow; font-size: 20px;font-weight: bold" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;■ Verifique que esta subiendo la ultima versión de la plantilla. Actualmente la plantilla es la versión 1." /><br/>  
 
 
-                 <h:panelGrid columns="2">
-                     <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>  
-                <p:fileUpload  fileUploadListener="#{fileController.procesFile}" mode="advanced" dragDropSupport="false" 
-                               fileLimit="3" allowTypes="/(\.|\/)(xlsx)$/"  auto="true" update="growl dialogDetailError"
-                               label="Seleccionar archivo Excel"  invalidFileMessage="Formato de archivo invalido"
-                               cancelLabel="Cancelar" uploadLabel="Subir archivo" onstart="PF('statusDialogUploadFile').show()" oncomplete="statusDialogUploadFile.hide()" style="align-content: center" />  <br/> <br/><br/> 
-                 </h:panelGrid> 
-                
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>  
+                    <p:fileUpload  fileUploadListener="#{fileController.procesFile}" mode="advanced" dragDropSupport="false" 
+                                   fileLimit="3" allowTypes="/(\.|\/)(xlsx)$/"  auto="true" update="growl dialogDetailError"
+                                   label="Seleccionar archivo Excel"  invalidFileMessage="Formato de archivo invalido"
+                                   cancelLabel="Cancelar" uploadLabel="Subir archivo" onstart="PF('statusDialogUploadFile').show()" oncomplete="statusDialogUploadFile.hide()" style="align-content: center" />  <br/> <br/><br/> 
+                </h:panelGrid> 
+
                 <hr size="5px" color="orange" /><br/>                              
-                 <div align="center"><p:outputLabel value="Registro de muestra individual " style="font-size: 30px; font-style: italic" /><br/><br/></div>
-                
+                <div align="center"><p:outputLabel value="Registro de muestra individual " style="font-size: 30px; font-style: italic" /><br/><br/></div>
+
                 <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estimado usuario: Con el siguiente formulario " style="font-size:20px; align-content: center  "/> 
                 <p:outputLabel value="'DATOS GENERALES  DE UNA MUESTRA' " style="color: white; font-weight: bold; font-size: 25px"/> 
                 <p:outputLabel value="podrá registrar muestras por separado" style="font-size:20px; align-content: center  "/>   <br/><br/>
 
 
                 <br/>
-                      <!--  ..................................................   PARTE  1 DEL FORMULARIO  ............................................ -->                 
-                                                                                <!-- PREGUNTAS(des_servicio)-->
-               <p:panelGrid columns="2" layout="grid" id="des_servicio" columnClasses="ui-grid-col-1, ui-grid-col-10" >
-                                           
-                   <h:panelGrid columns="1">
-                 
-                    <!-- <h:commandButton value="Reset" type="reset" /> -->
+                <!--  ..................................................   PARTE  1 DEL FORMULARIO  ............................................ -->                 
+                <!-- PREGUNTAS(des_servicio)-->
+                <p:panelGrid columns="2" layout="grid" id="des_servicio" columnClasses="ui-grid-col-1, ui-grid-col-10" >
+
+                    <h:panelGrid columns="1">
+
+                        <!-- <h:commandButton value="Reset" type="reset" /> -->
                     </h:panelGrid> 
-                                                 
+
                     <f:facet name="header">
                         Datos Generales de una muestra.
                     </f:facet>                                                 
-                         
-                            <h:panelGrid columns="1" id="preguntas">  <!-- medio INICIO PREGUNTAS-->
-                               <f:facet name="header">
-                              Descripción del servicio
-                               </f:facet>      
-                               
-                               
-                                    <p:outputLabel value="Seleccione la opción de acuerdo a la información que esta marcada en su cotización" for="just_ext" title=""  />
-                                    <p:selectOneRadio id="just_ext" value="#{sampleController.op_service}" required="true" requiredMessage="Seleccione el tipo de servicio a registrar"  >
-                                        <f:selectItem itemLabel="Sólo extracción de material genético" itemValue="1" />
-                                        <f:selectItem itemLabel="Sólo análisis de calidad" itemValue="2" />
-                                        <f:selectItem itemLabel="Sólo construcción de bibliotecas" itemValue="3" />
-                                        <f:selectItem itemLabel="Tengo bibliotecas, sólo requiero secuenciar" itemValue="4" />
-                                        <f:selectItem itemLabel="Varios servicios" itemValue="5" />
-                                        <p:ajax  event="valueChange" update="des_servicio,data_lab,libspre,req_library_sec,datoslibsyseq,anbio" listener="#{sampleController.opcion_service()}"/>
-                                    </p:selectOneRadio>                                                     
-                                <br/>
-                                     
-                              
-                              
-                              <h:panelGrid columns="2" id="req_ext"  rendered="#{sampleController.op_service.equals('5')}"> 
-                                
-                                <p:outputLabel value="Requiere extracción de material genético" for="requiero_ext" title="" />
-                                <p:selectOneRadio id="requiero_ext" value="#{sampleController.selected.geneticExtraction}" required="true" requiredMessage="Seleccione si desea el servicio de extración genetica">
+
+                    <h:panelGrid columns="1" id="preguntas">  <!-- medio INICIO PREGUNTAS-->
+                        <f:facet name="header">
+                            Descripción del servicio
+                        </f:facet>      
+
+
+                        <p:outputLabel value="Seleccione la opción de acuerdo a la información que esta marcada en su cotización" for="just_ext" title=""  />
+                        <p:selectOneRadio id="just_ext" value="#{sampleController.op_service}" required="true" requiredMessage="Seleccione el tipo de servicio a registrar"  >
+                            <f:selectItem itemLabel="Sólo extracción de material genético" itemValue="1" />
+                            <f:selectItem itemLabel="Sólo análisis de calidad" itemValue="2" />
+                            <f:selectItem itemLabel="Sólo construcción de bibliotecas" itemValue="3" />
+                            <f:selectItem itemLabel="Tengo bibliotecas, sólo requiero secuenciar" itemValue="4" />
+                            <f:selectItem itemLabel="Varios servicios" itemValue="5" />
+                            <p:ajax  event="valueChange" update="des_servicio,data_lab,libspre,req_library_sec,datoslibsyseq,anbio" listener="#{sampleController.opcion_service()}"/>
+                        </p:selectOneRadio>                                                     
+                        <br/>
+
+
+
+                        <h:panelGrid columns="2" id="req_ext"  rendered="#{sampleController.op_service.equals('5')}"> 
+
+                            <p:outputLabel value="Requiere extracción de material genético" for="requiero_ext" title="" />
+                            <p:selectOneRadio id="requiero_ext" value="#{sampleController.selected.geneticExtraction}" required="true" requiredMessage="Seleccione si desea el servicio de extración genetica">
                                 <f:selectItem itemLabel="Si" itemValue="Si" />
                                 <f:selectItem itemLabel="No" itemValue="No" />
                                 <p:ajax  event="valueChange" update="des_servicio,data_lab" listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>
-                                <br/>
-                                </h:panelGrid>
-                                
-                            </h:panelGrid> <!-- FIN des_servicio-->                        
-                            
-                  </p:panelGrid>
-                                                                  
-                                            <!--  ..................................................FIN PARTE 1 del formulario PREGUNTAS(des_servicio)............................................ --> 
-             
+                            </p:selectOneRadio>
+                            <br/>
+                        </h:panelGrid>
 
-                                            <!--  ..................................................   PARTE  2 DEL FORMULARIO  ............................................ -->                 
-                                                                                                    <!-- DATOS GENERALES (general_data)-->
+                    </h:panelGrid> <!-- FIN des_servicio-->                        
+
+                </p:panelGrid>
+
+                <!--  ..................................................FIN PARTE 1 del formulario PREGUNTAS(des_servicio)............................................ --> 
+
+
+                <!--  ..................................................   PARTE  2 DEL FORMULARIO  ............................................ -->                 
+                <!-- DATOS GENERALES (general_data)-->
                 <p:panelGrid columns="3" layout="grid" id="general_data">
-                    
+
                     <h:panelGrid columns="1"> <!-- iz vacio-->
-                    <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
                     </h:panelGrid>
-                    
-                     <h:panelGrid columns="1"> <!-- Medio -->
-                         <f:facet name="header">                         
-                              Descripción de la muestra                         
-                         </f:facet>
-                                <h:panelGrid columns="2" id="typesam"> 
-                                <p:outputLabel value="¿Tipo de material genético?" for="typemat" title="" />
-                                <p:selectOneRadio id="typemat" value="#{sampleController.selected.type}" required="true" requiredMessage="Proporcione el tipo de material genetico a entregar a la UUSMB" >
+
+                    <h:panelGrid columns="1"> <!-- Medio -->
+                        <f:facet name="header">                         
+                            Descripción de la muestra                         
+                        </f:facet>
+                        <h:panelGrid columns="2" id="typesam"> 
+                            <p:outputLabel value="¿Tipo de material genético?" for="typemat" title="" />
+                            <p:selectOneRadio id="typemat" value="#{sampleController.selected.type}" required="true" requiredMessage="Proporcione el tipo de material genetico a entregar a la UUSMB" >
                                 <f:selectItem itemLabel="DNA" itemValue="DNA" />
                                 <f:selectItem itemLabel="RNA" itemValue="RNA" />   
                                 <p:ajax  event="valueChange" update="general_data,datoslibsyseq" listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>
-                                </h:panelGrid>
-                                
-                                <h:panelGrid columns="1" id="tor" > <!-- rendered="{sampleController.delivery.equals('Hielo seco')||sampleController.delivery.equals('Hielo')|| sampleController.delivery.equals('Temperatura ambiente') }"-->  
-                                    <p:outputLabel value="¿Tipo de organismo?" for="typeorg" title="" />
-                                    <p:selectOneRadio id="typeorg" value="#{sampleController.selected.organism_type}" required="true" requiredMessage="Proporcione el tipo de organismo de la muestra">
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="1" id="tor" > <!-- rendered="{sampleController.delivery.equals('Hielo seco')||sampleController.delivery.equals('Hielo')|| sampleController.delivery.equals('Temperatura ambiente') }"-->  
+                            <p:outputLabel value="¿Tipo de organismo?" for="typeorg" title="" />
+                            <p:selectOneRadio id="typeorg" value="#{sampleController.selected.organism_type}" required="true" requiredMessage="Proporcione el tipo de organismo de la muestra">
                                 <f:selectItem itemLabel="Eucarionte" itemValue="Eucarionte" itemDescription="Plantas,animales,hongos y protozoos"/>
                                 <f:selectItem itemLabel="Procarionte" itemValue="Procarionte" itemDescription="Bacterias,archea y  algunas algas azulverdosas"/>
                                 <f:selectItem itemLabel="Virus" itemValue="Virus" />
-                                 <p:ajax  event="valueChange" update="general_data" listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>                         
-                                </h:panelGrid>
-                                
-                         <h:panelGrid columns="1" rendered="#{sampleController.selected.type.equals('RNA')and sampleController.selected.organism_type.equals('Procarionte')}">   
-                                <p:outputLabel value="¿Requiero depleción ribosomal?" for="re_dep"  />                           
-                                <p:selectOneRadio id="re_dep" value="#{sampleController.selected.deplesion}"  >
+                                <p:ajax  event="valueChange" update="general_data" listener="#{sampleController.asignarValorCampos()}"/>
+                            </p:selectOneRadio>                         
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="1" rendered="#{sampleController.selected.type.equals('RNA')and sampleController.selected.organism_type.equals('Procarionte')}">   
+                            <p:outputLabel value="¿Requiero depleción ribosomal?" for="re_dep"  />                           
+                            <p:selectOneRadio id="re_dep" value="#{sampleController.selected.deplesion}"  >
                                 <f:selectItem itemLabel="Si" itemValue="Si" />
-                                    <f:selectItem itemLabel="No" itemValue="No" />
-                                    <p:ajax  event="valueChange" update="general_data" listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>
-                                 </h:panelGrid> 
-                         
-                                     <br/>
-                         
-                                <h:panelGrid columns="2" id="data"  >
-                                <p:outputLabel value="Nombre de la muestra:" for="namesamplee" />
-                                <p:inputText id="namesamplee" value="#{sampleController.selected.sampleName}" a:placeholder="Ejemplo: Coleoptero_Dieta_1TX"  title="Solo letras,números y guion bajo" required="true" 
-                                                     requiredMessage="Proporcione un nombre a la muestra" >
+                                <f:selectItem itemLabel="No" itemValue="No" />
+                                <p:ajax  event="valueChange" update="general_data" listener="#{sampleController.asignarValorCampos()}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid> 
+
+                        <br/>
+
+                        <h:panelGrid columns="2" id="data"  >
+                            <p:outputLabel value="Nombre de la muestra:" for="namesamplee" />
+                            <p:inputText id="namesamplee" value="#{sampleController.selected.sampleName}" a:placeholder="Ejemplo: Coleoptero_Dieta_1TX"  title="Solo letras,números y guion bajo" required="true" 
+                                         requiredMessage="Proporcione un nombre a la muestra" >
                                 <p:keyFilter regEx="/[a-z0-9_]/i"/>
                                 <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
-                                </p:inputText>
+                            </p:inputText>
 
 
 
-                                <p:outputLabel value="Etiqueta del tubo de la muestra:" for="tube_id" />
-                                <p:inputText required="true" requiredMessage="Proporcione nombre del tubo" id="tube_id" value="#{sampleController.selected.idTube}" a:placeholder="Ejemplo: TX_1" title="Identifcador del tubo ephendor donde se entrega la muestra. Debe iniciar con una letra,no debe contener carácteres especiales como: ´+*.¨@{., ni guiones medios o espacios" >
+                            <p:outputLabel value="Etiqueta del tubo de la muestra:" for="tube_id" />
+                            <p:inputText required="true" requiredMessage="Proporcione nombre del tubo" id="tube_id" value="#{sampleController.selected.idTube}" a:placeholder="Ejemplo: TX_1" title="Identifcador del tubo ephendor donde se entrega la muestra. Debe iniciar con una letra,no debe contener carácteres especiales como: ´+*.¨@{., ni guiones medios o espacios" >
                                 <p:keyFilter regEx="/[a-z0-9_]/i"/> 
                                 <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
-                                </p:inputText>
+                            </p:inputText>
 
-                                <p:outputLabel value="Descripción de la muestra:" for="des_sam" />
-                                <p:inputTextarea   id="des_sam" required="#{sampleController.requireInput}" requiredMessage="Proporcione una descripción" value="#{sampleController.selected.description}" a:placeholder="Ejemplo: Intestino de insecto" title="Esta es una descripción libre, que puede ser util, para los análisis bioinformáticos posteriores, por ejemplo  Descripción de la muestra, tejido, tratamiento, wt, condición experimental, etc. " >
+                            <p:outputLabel value="Descripción de la muestra:" for="des_sam" />
+                            <p:inputTextarea   id="des_sam" required="#{sampleController.requireInput}" requiredMessage="Proporcione una descripción" value="#{sampleController.selected.description}" a:placeholder="Ejemplo: Intestino de insecto" title="Esta es una descripción libre, que puede ser util, para los análisis bioinformáticos posteriores, por ejemplo  Descripción de la muestra, tejido, tratamiento, wt, condición experimental, etc. " >
                                 <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
-                                </p:inputTextarea>
+                            </p:inputTextarea>
 
-                                <p:outputLabel value= "Medio de entrega:" for="delivery_met"   />
-                                <p:selectOneMenu id="delivery_met" value="#{sampleController.selected.delivery}" required="true" >
+                            <p:outputLabel value= "Medio de entrega:" for="delivery_met"   />
+                            <p:selectOneMenu id="delivery_met" value="#{sampleController.selected.delivery}" required="true" >
                                 <f:selectItem itemLabel="---" itemValue=""/>
                                 <f:selectItem itemLabel="Hielo seco" itemValue="Hielo seco"/>
                                 <f:selectItem itemLabel="Hielo" itemValue="Hielo"/>
                                 <f:selectItem itemLabel="Temperatura ambiente" itemValue="Temperatura ambiente"/>
                                 <p:ajax event="valueChange"  listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                                </p:selectOneMenu>
-                                <br/>
-                                </h:panelGrid>
-                         
-                                <h:panelGrid columns="1"   >
-                                <p:outputLabel value="Organismo Fuente:
-                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" for="fuente_org" />
-                                <p:autoComplete id="fuente_org" inputStyle="width: 500px" value="#{sampleController.orgName}" title="Organismo de origen de la muestra (nombre, de preferencia como aparece en https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi  o  el Accesion Number Id de NCBI, cuando existe).  Este dato es util solo cuando se solicita un análisis bioinformático posterior." 
-                                                        completeMethod="#{genomeController.getGenomes2}" maxResults="10" placeholder="Buscar">
+                            </p:selectOneMenu>
+                            <br/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="1"   >
+                            <p:outputLabel value="Organismo Fuente:
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" for="fuente_org" />
+                            <p:autoComplete id="fuente_org" inputStyle="width: 500px" value="#{sampleController.orgName}" title="Organismo de origen de la muestra (nombre, de preferencia como aparece en https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi  o  el Accesion Number Id de NCBI, cuando existe).  Este dato es util solo cuando se solicita un análisis bioinformático posterior." 
+                                            completeMethod="#{genomeController.getGenomes2}" maxResults="10" placeholder="Buscar">
                                 <p:ajax event="itemSelect"  listener="#{sampleGenomeLinkController.change()}" />
                                 <p:ajax  event="itemSelect" listener="#{sampleController.asignarValorCampos}"/>
-                                </p:autoComplete>
+                            </p:autoComplete>
 
-                                <p:outputLabel value="Organismo más cercano de referencia: " for="ref_org" />
-                                <p:autoComplete  id="ref_org"  disabled="#{sampleGenomeLinkController.haveref}" title="Organismo mas cercano a  la muestra, cuando el de origen no se encuentra secuenciado (nombre o Accesion Number ID).  Este dato solo es util, cuando se quiere hacer un ensamblado de novo con genoma de referencia de un organismo cercano.
-                                                         " inputStyle="width: 500px" value="#{sampleController.refName}" completeMethod="#{genomeController.getGenomes2}" maxResults="10" placeholder="Buscar"  >
+                            <p:outputLabel value="Organismo más cercano de referencia: " for="ref_org" />
+                            <p:autoComplete  id="ref_org"  disabled="#{sampleGenomeLinkController.haveref}" title="Organismo mas cercano a  la muestra, cuando el de origen no se encuentra secuenciado (nombre o Accesion Number ID).  Este dato solo es util, cuando se quiere hacer un ensamblado de novo con genoma de referencia de un organismo cercano.
+                                             " inputStyle="width: 500px" value="#{sampleController.refName}" completeMethod="#{genomeController.getGenomes2}" maxResults="10" placeholder="Buscar"  >
                                 <p:ajax  event="itemSelect" listener="#{sampleController.asignarValorCampos}"/>
-                                </p:autoComplete>
-                                </h:panelGrid>
-                                                 
-                     </h:panelGrid>
-                    
-                     <h:panelGrid columns="1"> <!-- der vacio-->
-                     <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
-                     </h:panelGrid>
-                                                                                                    
-                </p:panelGrid><!-- fin general_data-->        
-                                            <!--  ..................................................FIN PARTE 2 del formulario DATOS GENERALES (general_data)............................................ -->                 
-
-                                            <!--  ..................................................   PARTE  3 DEL FORMULARIO  ............................................ -->                 
-                                                                                                    <!-- METRICAS (metricas)-->          
-           <p:panelGrid columns="3" layout="grid" id="metricas"   >   <!-- inciio datos laboratorio-->
-               
-               <h:panelGrid columns="1" id="data_lab"> <!-- -->
-                                     <f:facet name="header">
-                                    Medición
-                                    </f:facet>
-                            <h:panelGrid columns="2">                                                                 
-                           <p:outputLabel value="Volumen total de la muestra (μl):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " for="sampleVolume" />
-                           <p:inputText id="sam_vol" a:placeholder="Ejemplo: 40" required="true" requiredMessage="Proporcione volumen" value="#{sampleController.selected.sampleVolume}" title="Volumen en microlitros" >
-                           <p:keyFilter regEx="/[0-9.]/i"/>
-                           <!--<p:ajax delay="800" event="keyup" listener="{sampleController.asignarValorCampos}"/>-->
-                           </p:inputText>
-                           </h:panelGrid>
-                           
-                           <!-- las concentraciones solo se piden cuando se construyen bibliotecas y o se va a secuenciar -->
-                            <h:panelGrid columns="2" rendered="#{sampleController.op_service.equals('3') or sampleController.op_service.equals('4') or (sampleController.op_service.equals('5') and sampleController.selected.geneticExtraction.equals('No')) }" >                                                                 
-                           <p:outputLabel value="Concentración mat.genético (ng/µL): " for="sampleQuan" />
-                            <p:inputText id="sampleQuan" a:placeholder="Ejemplo: 10.6" required="#{sampleController.requireInput}" requiredMessage="Proporcione concentración" value="#{sampleController.selected.sampleQuantity}" title="Para bibliotecas de gDNA requerimos cuando menos 2 μg de material genético de alto peso molecular, en un volumen no mayor a 100 uL de buffer de elución (Elution Buffer, EB). Para RNA, requerimos cuando menos 2 ug de RNA total de la más alta calidad, con un valor deRIN (RNA Integrity Number) de 8 o mayor, en un volumen no mayor a 50 uL de agualibre de RNAsas" >
-                               <p:keyFilter regEx="/[0-9.]/i"/>
-                               <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
-                               </p:inputText>
-                           
-                           
-                             <p:outputLabel value="Absorbancia 260/280: " for="Abs280" />
-                            <p:inputText id="Abs280" a:placeholder="Ejemplo: 1.91" required="#{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/280" value="#{sampleController.selected.abs260_280}" title="" >
-                                   <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
-                               </p:inputText>
-
-                               <p:outputLabel value="Absorbancia 260/230: " for="Abs230" />
-                               <p:inputText id="Abs230" a:placeholder="Ejemplo: 1.48"  required="#{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/230" value="#{sampleController.selected.abs260_230}" title="" >
-                                   <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
-                               </p:inputText>
-                           </h:panelGrid>
-                               <!-- 
-                               <p:outputLabel value="Tamaño del genoma (Mb): " for="size_gen" />
-                               <p:inputText id="size_gen" a:placeholder="Ejemplo: 11.9364"  required="{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/230" value="#{sampleController.selected.abs260_230}" title="" >
-                                   <p:ajax delay="800" event="keyup" listener="{sampleController.asignarValorCampos}"/>
-                               </p:inputText>-->
-                               
+                            </p:autoComplete>
                         </h:panelGrid>
-                   
-                        <h:panelGrid columns="1" id="dna_contaminantes"  >
-                            
-                          <f:facet name="header">
-                           Contaminantes
-                           </f:facet>
-                          <h:panelGrid columns="2">
-                          <p:outputLabel value="¿La muestra tiene un posible DNA contaminante? : " for="tiene_conta" title="Este dato sólo es útil cuando se solicita alguna análisis Bioinformático y se conoce que la muestra contiene un posible contaminanante de DNA.  Por ejemplo, cuando la muestra proviene del estomago de Aedes aegypti es conocido que la muestra continene wolbachia, que debe ser eliminada de los fastq antes de continuar con cualquier análisis."/>
-                          <p:selectOneRadio id="tiene_conta" value="#{sampleGenomeLinkController.haveCont}" >
-                          <f:selectItem itemLabel="Si" itemValue="true" />
-                          <f:selectItem itemLabel="No" itemValue="false" />
-                                             <!-- <p:ajax  event="click" update="grid_contaminant"  />-->
-                          <p:ajax  event="click" update="dna_contaminantes"/>
-                          </p:selectOneRadio> 
-                          </h:panelGrid>
 
-                          <h:panelGrid columns="1" id="grid_contaminant" rendered="#{sampleGenomeLinkController.haveCont}">
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1"> <!-- der vacio-->
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                    </h:panelGrid>
+
+                </p:panelGrid><!-- fin general_data-->        
+                <!--  ..................................................FIN PARTE 2 del formulario DATOS GENERALES (general_data)............................................ -->                 
+
+                <!--  ..................................................   PARTE  3 DEL FORMULARIO  ............................................ -->                 
+                <!-- METRICAS (metricas)-->          
+                <p:panelGrid columns="3" layout="grid" id="metricas"   >   <!-- inciio datos laboratorio-->
+
+                    <h:panelGrid columns="1" id="data_lab"> <!-- -->
+                        <f:facet name="header">
+                            Medición
+                        </f:facet>
+                        <h:panelGrid columns="2">                                                                 
+                            <p:outputLabel value="Volumen total de la muestra (μl):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " for="sampleVolume" />
+                            <p:inputText id="sam_vol" a:placeholder="Ejemplo: 40" required="true" requiredMessage="Proporcione volumen" value="#{sampleController.selected.sampleVolume}" title="Volumen en microlitros" >
+                                <p:keyFilter regEx="/[0-9.]/i"/>
+                                <!--<p:ajax delay="800" event="keyup" listener="{sampleController.asignarValorCampos}"/>-->
+                            </p:inputText>
+                        </h:panelGrid>
+
+                        <!-- las concentraciones solo se piden cuando se construyen bibliotecas y o se va a secuenciar -->
+                        <h:panelGrid columns="2" rendered="#{sampleController.op_service.equals('3') or sampleController.op_service.equals('4') or (sampleController.op_service.equals('5') and sampleController.selected.geneticExtraction.equals('No')) }" >                                                                 
+                            <p:outputLabel value="Concentración mat.genético (ng/µL): " for="sampleQuan" />
+                            <p:inputText id="sampleQuan" a:placeholder="Ejemplo: 10.6" required="#{sampleController.requireInput}" requiredMessage="Proporcione concentración" value="#{sampleController.selected.sampleQuantity}" title="Para bibliotecas de gDNA requerimos cuando menos 2 μg de material genético de alto peso molecular, en un volumen no mayor a 100 uL de buffer de elución (Elution Buffer, EB). Para RNA, requerimos cuando menos 2 ug de RNA total de la más alta calidad, con un valor deRIN (RNA Integrity Number) de 8 o mayor, en un volumen no mayor a 50 uL de agualibre de RNAsas" >
+                                <p:keyFilter regEx="/[0-9.]/i"/>
+                                <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
+                            </p:inputText>
+
+
+                            <p:outputLabel value="Absorbancia 260/280: " for="Abs280" />
+                            <p:inputText id="Abs280" a:placeholder="Ejemplo: 1.91" required="#{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/280" value="#{sampleController.selected.abs260_280}" title="" >
+                                <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
+                            </p:inputText>
+
+                            <p:outputLabel value="Absorbancia 260/230: " for="Abs230" />
+                            <p:inputText id="Abs230" a:placeholder="Ejemplo: 1.48"  required="#{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/230" value="#{sampleController.selected.abs260_230}" title="" >
+                                <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <!-- 
+                        <p:outputLabel value="Tamaño del genoma (Mb): " for="size_gen" />
+                        <p:inputText id="size_gen" a:placeholder="Ejemplo: 11.9364"  required="{sampleController.requireInput}" requiredMessage="Proporcione absorbancia 260/230" value="#{sampleController.selected.abs260_230}" title="" >
+                            <p:ajax delay="800" event="keyup" listener="{sampleController.asignarValorCampos}"/>
+                        </p:inputText>-->
+
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1" id="dna_contaminantes"  >
+
+                        <f:facet name="header">
+                            Contaminantes
+                        </f:facet>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="¿La muestra tiene un posible DNA contaminante? : " for="tiene_conta" title="Este dato sólo es útil cuando se solicita alguna análisis Bioinformático y se conoce que la muestra contiene un posible contaminanante de DNA.  Por ejemplo, cuando la muestra proviene del estomago de Aedes aegypti es conocido que la muestra continene wolbachia, que debe ser eliminada de los fastq antes de continuar con cualquier análisis."/>
+                            <p:selectOneRadio id="tiene_conta" value="#{sampleGenomeLinkController.haveCont}" >
+                                <f:selectItem itemLabel="Si" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                                <!-- <p:ajax  event="click" update="grid_contaminant"  />-->
+                                <p:ajax  event="click" update="dna_contaminantes"/>
+                            </p:selectOneRadio> 
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="1" id="grid_contaminant" rendered="#{sampleGenomeLinkController.haveCont}">
                             <p:outputLabel value="Posible DNA contaminante:
-                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " for="contamin" />
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " for="contamin" />
                             <p:autoComplete title="Cuando la pregunta anterior es definida a “si”  se solicita el nombre del organismo de donde proviene la posible contaminación,  continuando con el ejemplo,  se esperaría que aquí se definiera el nombre de:  “Wolbachia endosymbiont of Aedes aegypti”  que es como aparece en el sitio web "  
                                             id="contamin" inputStyle="width: 400px"  value="#{sampleController.contName}" completeMethod="#{genomeController.getGenomes}" maxResults="10" placeholder="Buscar"  />  
-                          </h:panelGrid>
-                            
                         </h:panelGrid>
-                   
-                 </p:panelGrid>   
-                                            <!--  ..................................................FIN PARTE 3 del formulario METRICAS(metricas)............................................ -->                 
 
-                                            <!--  ..................................................   PARTE  4 DEL FORMULARIO  ............................................ -->                 
-                                                                                                    <!-- BIBLIOTECAS PRECONSTRUIDAS (libspre)-->                                                      
-                                            
-                    
-                  <p:panelGrid columns="3" layout="grid" id="libspre"  >
-                    
+                    </h:panelGrid>
+
+                </p:panelGrid>   
+                <!--  ..................................................FIN PARTE 3 del formulario METRICAS(metricas)............................................ -->                 
+
+                <!--  ..................................................   PARTE  4 DEL FORMULARIO  ............................................ -->                 
+                <!-- BIBLIOTECAS PRECONSTRUIDAS (libspre)-->                                                      
+
+
+                <p:panelGrid columns="3" layout="grid" id="libspre"  >
+
                     <h:panelGrid columns="1"> <!-- iz vacio-->
-                    <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
                     </h:panelGrid>
-                    
-                     <h:panelGrid columns="1"  id="soloseq_data" rendered="#{sampleController.op_service.equals('4')}" > <!-- Medio -->
-                         <f:facet name="header">                         
-                              Bibliotecas preconstruidas                        
-                         </f:facet>
 
-                                <h:panelGrid columns="2"  >
-                                    
-                                    <p:outputLabel value="Kit con el que preconstruyo la biblioteca:" for="k1" />
-                                    <p:inputText id="k1" value="#{sampleController.selected.kit_lib}" a:placeholder="Ejemplo: Nextflex DNA prep"   required="true" 
-                                                         requiredMessage="Proporcione nombre del kit" >
-                                    <p:keyFilter regEx="/[a-z0-9_]/i"/>
-                                    <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
-                                    </p:inputText>
-
-                                    <p:outputLabel value="Tags usados en la construcción de la biblioteca:" for="k2" />
-                                    <p:inputText required="true" requiredMessage="Proporcione los tags o barcodes usados en la biblioteca" id="k2" value="#{sampleController.selected.tag_lib}" a:placeholder="Ejemplo: N701/S504" >
-                                    <p:keyFilter regEx="/[a-z0-9_]/i"/> 
-                                    <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
-                                    </p:inputText>    
-                                
-                               </h:panelGrid>                        
-                                                                                 
-                     </h:panelGrid>
-                    
-                     <h:panelGrid columns="1"> <!-- der vacio-->
-                     <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
-                     </h:panelGrid>
-                                                                                                    
-                </p:panelGrid><!-- fin general_data-->  
-                                                                                                                  
-                                            <!--  ..................................................FIN PARTE 4 del formulario PRECONSTRUIDAS (libspre)............................................ -->                 
-
-                                            <!--  ..................................................   PARTE  5 DEL FORMULARIO  ............................................ -->                 
-                                                                                                    <!-- PREGUNTAS LIBS Y SEC. (req_library_sec) -->                                                                                                                  
-              <p:panelGrid columns="3" layout="grid" id="req_library_sec" >
-                     
-                      <h:panelGrid columns="1"> 
-                      <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
-                       </h:panelGrid>                     
-                     
-                     <h:panelGrid columns="1" id="pregunta_libsec" rendered="#{sampleController.op_service.equals('5')}">
-                         
-                         <f:facet name="header">
-                        Servicio de construcción de bibliotecas y/o secuenciación
+                    <h:panelGrid columns="1"  id="soloseq_data" rendered="#{sampleController.op_service.equals('4')}" > <!-- Medio -->
+                        <f:facet name="header">                         
+                            Bibliotecas preconstruidas                        
                         </f:facet>
-                                                 
-                         
-                         <h:panelGrid columns="2"   > 
-                             
-                             <p:outputLabel value="Requiere construccion de bibliotecas" for="requiero_biblioteca" title="" />
-                             <p:selectOneRadio id="requiero_biblioteca" value="#{sampleController.selected.build_lib}">
-                                <f:selectItem itemLabel="Si" itemValue="Si" />
-                                <f:selectItem itemLabel="No" itemValue="No" />
-                                <p:ajax  event="valueChange"  listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>
-                               
-                        </h:panelGrid>
-                         
-                         <h:panelGrid columns="2"  > 
-                             
-                                <p:outputLabel value="Requiere secuenciación" for="requiero_secuencia" title="" />
-                                <p:selectOneRadio id="requiero_secuencia" value="#{sampleController.selected.do_seq}">
-                                <f:selectItem itemLabel="Si" itemValue="Si" />
-                                <f:selectItem itemLabel="No" itemValue="No" />
-                                <p:ajax  event="valueChange"  listener="#{sampleController.asignarValorCampos()}"/>
-                                </p:selectOneRadio>
-                             
-                             
-                        </h:panelGrid>
-                         
-                     </h:panelGrid>
-                     
-                     
-                      <h:panelGrid columns="1"> 
-                       <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
-                      </h:panelGrid>
-     
-              </p:panelGrid>   
-                                                                                                    
-                                            <!--  ..................................................FIN PARTE 5 del formulario PREGUNTAS LIBS Y SEC. (req_library_sec)............................................ -->                 
 
-                                            <!--  ..................................................   PARTE  6 DEL FORMULARIO  ............................................ -->                 
-                                                                                                    <!-- DATOS LIBS Y SEC. (datoslibsyseq) -->                                                                                                           
+                        <h:panelGrid columns="2"  >
 
+                            <p:outputLabel value="Kit con el que preconstruyo la biblioteca:" for="k1" />
+                            <p:inputText id="k1" value="#{sampleController.selected.kit_lib}" a:placeholder="Ejemplo: Nextflex DNA prep"   required="true" 
+                                         requiredMessage="Proporcione nombre del kit" >
+                                <p:keyFilter regEx="/[a-z0-9_]/i"/>
+                                <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
+                            </p:inputText>
 
-                 <p:panelGrid columns="3" layout="grid" id="datoslibsyseq"  >
-                     
-                     <h:panelGrid columns="1"> 
-                      <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
-                       </h:panelGrid>   
-                   
-                     <h:panelGrid columns="1" id="libseq_general"  rendered="#{sampleController.op_service.equals('3') or sampleController.op_service.equals('4') or sampleController.op_service.equals('5')}"> <!-- esta seccion es visible cuando  requiere construccion de bibliotecas y/o requiere secuenciacion-->
-                       <f:facet name="header">
-                        Datos para construcción de bibliotecas y/o secuenciación
-                    </f:facet>                      
-                      
-                         <h:panelGrid columns="1" id="dna_app" rendered="#{sampleController.selected.type.equals('DNA')}">
-                   <p:outputLabel value= "Tipo de aplicación DNA:" for="app_type"   /> 
-                   <p:selectOneMenu id="app_type" value="#{sampleController.selected.app_type}" required="true">                          
-                      <f:selectItem itemLabel="---" itemValue=""/>
-                      <f:selectItem itemLabel="Genómica" itemValue="Genómica"/>
-                      <f:selectItem itemLabel="Metagenómica" itemValue="Metagenómica"/>
-                      <f:selectItem itemLabel="Amplicón 16S" itemValue="Amplicón 16S"/>
-                      <f:selectItem itemLabel="Amplicón 18S" itemValue="Amplicón 18S"/>
-                      <f:selectItem itemLabel="Amplicón ITS" itemValue="Amplicón ITS"/>
-                      <f:selectItem itemLabel="Amplicón CO1" itemValue="Amplicón CO1"/>
-                      <f:selectItem itemLabel="Amplicón trnL" itemValue="Amplicón trnL"/>
-                      <f:selectItem itemLabel="Chipseq" itemValue="Chipseq"/>                  
-                      <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                      </p:selectOneMenu>
-                   </h:panelGrid>  
-                   
-                   
-                   <h:panelGrid columns="1" id="rna_app"  rendered="#{sampleController.selected.type.equals('RNA')}">
-                   <p:outputLabel value= "Tipo de aplicación RNA:" for="app_type_rna"   />
-                   <p:selectOneMenu id="app_type_rna" value="#{sampleController.selected.app_type}" required="true">                          
-                      <f:selectItem itemLabel="---" itemValue=""/>
-                      <f:selectItem itemLabel="RNAseq" itemValue="RNAseq"/>
-                      <f:selectItem itemLabel="RNA viral" itemValue="RNA viral"/>
-                      <f:selectItem itemLabel="mRNA" itemValue="mRNA"/>
-                      <f:selectItem itemLabel="smallRNA" itemValue="smallRNA"/>
-                      <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                      </p:selectOneMenu>
-                   </h:panelGrid> 
-                   
-                    <h:panelGrid columns="1" id="plataform_seq">
-                    <p:outputLabel value= "Plataforma de secuenciación:" for="plata"   />
-                    <p:selectOneMenu id="plata" value="#{sampleController.selected.samplePlataform}" required="true">                            
-                      <f:selectItem itemLabel="---" itemValue=""/>
-                      <f:selectItems value="#{sampleController.allPlataforms}" var="itemPlat" itemLabel="#{itemPlat}" itemValue="#{itemPlat}" />
-                      <p:ajax event="valueChange" update="datoslibsyseq,rendi_seq" listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                      </p:selectOneMenu>
+                            <p:outputLabel value="Tags usados en la construcción de la biblioteca:" for="k2" />
+                            <p:inputText required="true" requiredMessage="Proporcione los tags o barcodes usados en la biblioteca" id="k2" value="#{sampleController.selected.tag_lib}" a:placeholder="Ejemplo: N701/S504" >
+                                <p:keyFilter regEx="/[a-z0-9_]/i"/> 
+                                <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
+                            </p:inputText>    
+
+                        </h:panelGrid>                        
+
                     </h:panelGrid>
-                    
-                     <h:panelGrid columns="2">
-                         <p:outputLabel value="Tamaño de lectura (illumina):" for="read_size"  rendered="#{!sampleController.selected.samplePlataform.equals('Oxford Nanopore')}"/>
-                         <p:selectOneMenu   id="read_size" value="#{sampleController.readSize}" rendered="#{!sampleController.selected.samplePlataform.equals('Oxford Nanopore')}" >
-                      <f:selectItem itemLabel="---" itemValue=""/>
-                      <f:selectItem itemLabel="1x75" itemValue="1x75"/>
-                      <f:selectItem itemLabel="2x75" itemValue="2x75"/>
-                      <f:selectItem itemLabel="2x100" itemValue="2x100"/>
-                      <f:selectItem itemLabel="2x150" itemValue="2x150"/>
-                      <f:selectItem itemLabel="2x250" itemValue="2x250"/>
-                      <f:selectItem itemLabel="2x300" itemValue="2x300"/>
-                      <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}"   immediate="true" resetValues="true"/>
-                      </p:selectOneMenu>
-                      </h:panelGrid>                  
-                   </h:panelGrid>
-                                                                           
-                   
-                   <h:panelGrid columns="1" id="rendi_seq"  rendered="#{sampleController.op_service.equals('4') or sampleController.op_service.equals('5') }"> <!-- esta seccion es visible cuando  requiere solo secuenciacion y requiere secuenciacion-->
-                   
-                     <f:facet name="header">
-                        Datos para secuenciación
-                    </f:facet>
-                        
-                       <h:panelGrid columns="1" id="seq_illum"  rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}">
-                     <p:outputLabel value="Illumina: Rendimiento de secuenciación en número de lecturas pareadas solicitado en la cotización:" for="expected_per" />
-                     <h:panelGrid columns="2" >
-                         <p:inputText id="expected_per" value="#{sampleController.selected.expectedPerformance}" a:placeholder="Ejemplo: 10" title="Es la cantidad de secuencias que se desea obtener del proceso de secuenciación.  Para el caso de análisis de expresion diferencial lo deseable son 10 millones por muestra.  En el caso de Ensamblado de Novo, depende del tamaño estimado del organismo. " requiredMessage="La plataforma de la muestra es del tipo Illumina, entonces Illumina rendimiento es obligatorio">
-                     <p:keyFilter regEx="/[0-9]/i"/>
-                     <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
-                     </p:inputText>
-                     
-                         <p:selectOneMenu   id="cantidad_ren" value="#{sampleController.unidades}" rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
-                     <f:selectItem noSelectionOption="false" itemLabel=""/>
-                     <f:selectItem itemLabel="mil" itemValue="mil"/>
-                     <f:selectItem itemLabel="millones" itemValue="millones"/>
-                     <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                     </p:selectOneMenu>
-                       </h:panelGrid> 
-                       </h:panelGrid>  
-                       
-                       
-                       <h:panelGrid columns="1" id="seq_nanopore" rendered="#{sampleController.isOxford(sampleController.selected.samplePlataform)}"> <!-- agregar las demas opciones de oxford e illumina -->
-                     <p:outputLabel value="Oxford: Rendimiento de secuenciación en pares de bases solicitado en la cotización:" for="expectedOxford_per" />
-                       <h:panelGrid columns="2" >
-                           <p:inputText id="expectedOxford_per" value="#{sampleController.selected.expectedPerformanceOxford}"  a:placeholder="Ejemplo: 150"  title="Es la cantidad de secuencias que se desea obtener del proceso de secuenciación.  Para el caso de análisis de expresion diferencial lo deseable son 10 millones por muestra.  En el caso de Ensamblado de Novo, depende del tamaño estimado del organismo. " required="#{sampleController.isOxford(sampleController.selected.samplePlataform)}" requiredMessage="La plataforma de la muestra es del tipo Oxford, entonces Oxford rendimiento es obligatorio">
-                     <p:keyFilter regEx="/[0-9]/i"/>
-                     <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
-                     </p:inputText>
-                     
-                           <p:selectOneMenu   id="cantidad_ren_ox" value="#{sampleController.unidades}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
-                     <f:selectItem noSelectionOption="false" itemLabel=""/>
-                     <f:selectItem itemLabel="Kb" itemValue="Kb"/>
-                     <f:selectItem itemLabel="Mb" itemValue="Mb"/>
-                     <f:selectItem itemLabel="Gb" itemValue="Gb"/>
-                     <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
-                     </p:selectOneMenu>
-                           </h:panelGrid>
-                                                             
-                     <p:outputLabel value="Profundidad nanopore" />
-                     <p:inputText  value="#{sampleController.profundity}" >
-                     <p:keyFilter regEx="/[0-9]/i"/>
-                     </p:inputText>
-                     
-                     
-                     </h:panelGrid>
-      
-                   </h:panelGrid>
-                   
-                   
-                </p:panelGrid>
-                                                                                                    
-                                            <!--  ..................................................FIN PARTE 6 del formulario DATOS LIBS Y SEC. (datoslibsyseq)............................................ -->                 
 
-                                            <!--  ..................................................   PARTE  7 DEL FORMULARIO  COMENTARIOS (comme )............................................ -->                 
-                                                                                                                                                                                                          
+                    <h:panelGrid columns="1"> <!-- der vacio-->
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />
+                    </h:panelGrid>
+
+                </p:panelGrid><!-- fin general_data-->  
+
+                <!--  ..................................................FIN PARTE 4 del formulario PRECONSTRUIDAS (libspre)............................................ -->                 
+
+                <!--  ..................................................   PARTE  5 DEL FORMULARIO  ............................................ -->                 
+                <!-- PREGUNTAS LIBS Y SEC. (req_library_sec) -->                                                                                                                  
+                <p:panelGrid columns="3" layout="grid" id="req_library_sec" >
+
+                    <h:panelGrid columns="1"> 
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
+                    </h:panelGrid>                     
+
+                    <h:panelGrid columns="1" id="pregunta_libsec" rendered="#{sampleController.op_service.equals('5')}">
+
+                        <f:facet name="header">
+                            Servicio de construcción de bibliotecas y/o secuenciación
+                        </f:facet>
+
+
+                        <h:panelGrid columns="2"   > 
+
+                            <p:outputLabel value="Requiere construccion de bibliotecas" for="requiero_biblioteca" title="" />
+                            <p:selectOneRadio id="requiero_biblioteca" value="#{sampleController.selected.build_lib}">
+                                <f:selectItem itemLabel="Si" itemValue="Si" />
+                                <f:selectItem itemLabel="No" itemValue="No" />
+                                <p:ajax  event="valueChange"  listener="#{sampleController.asignarValorCampos()}"/>
+                            </p:selectOneRadio>
+
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2"  > 
+
+                            <p:outputLabel value="Requiere secuenciación" for="requiero_secuencia" title="" />
+                            <p:selectOneRadio id="requiero_secuencia" value="#{sampleController.selected.do_seq}">
+                                <f:selectItem itemLabel="Si" itemValue="Si" />
+                                <f:selectItem itemLabel="No" itemValue="No" />
+                                <p:ajax  event="valueChange"  listener="#{sampleController.asignarValorCampos()}"/>
+                            </p:selectOneRadio>
+
+
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+
+                    <h:panelGrid columns="1"> 
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
+                    </h:panelGrid>
+
+                </p:panelGrid>   
+
+                <!--  ..................................................FIN PARTE 5 del formulario PREGUNTAS LIBS Y SEC. (req_library_sec)............................................ -->                 
+
+                <!--  ..................................................   PARTE  6 DEL FORMULARIO  ............................................ -->                 
+                <!-- DATOS LIBS Y SEC. (datoslibsyseq) -->                                                                                                           
+
+
+                <p:panelGrid columns="3" layout="grid" id="datoslibsyseq"  >
+
+                    <h:panelGrid columns="1"> 
+                        <h:outputText  value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" /><br/>  
+                    </h:panelGrid>   
+
+                    <h:panelGrid columns="1" id="libseq_general"  rendered="#{sampleController.op_service.equals('3') or sampleController.op_service.equals('4') or sampleController.op_service.equals('5')}"> <!-- esta seccion es visible cuando  requiere construccion de bibliotecas y/o requiere secuenciacion-->
+                        <f:facet name="header">
+                            Datos para construcción de bibliotecas y/o secuenciación
+                        </f:facet>                      
+
+                        <h:panelGrid columns="1" id="dna_app" rendered="#{sampleController.selected.type.equals('DNA')}">
+                            <p:outputLabel value= "Tipo de aplicación DNA:" for="app_type"   /> 
+                            <p:selectOneMenu id="app_type" value="#{sampleController.selected.app_type}" required="true">                          
+                                <f:selectItem itemLabel="---" itemValue=""/>
+                                <f:selectItem itemLabel="Genómica" itemValue="Genómica"/>
+                                <f:selectItem itemLabel="Metagenómica" itemValue="Metagenómica"/>
+                                <f:selectItem itemLabel="Amplicón 16S" itemValue="Amplicón 16S"/>
+                                <f:selectItem itemLabel="Amplicón 18S" itemValue="Amplicón 18S"/>
+                                <f:selectItem itemLabel="Amplicón ITS" itemValue="Amplicón ITS"/>
+                                <f:selectItem itemLabel="Amplicón CO1" itemValue="Amplicón CO1"/>
+                                <f:selectItem itemLabel="Amplicón trnL" itemValue="Amplicón trnL"/>
+                                <f:selectItem itemLabel="Chipseq" itemValue="Chipseq"/>                  
+                                <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>  
+
+
+                        <h:panelGrid columns="1" id="rna_app"  rendered="#{sampleController.selected.type.equals('RNA')}">
+                            <p:outputLabel value= "Tipo de aplicación RNA:" for="app_type_rna"   />
+                            <p:selectOneMenu id="app_type_rna" value="#{sampleController.selected.app_type}" required="true">                          
+                                <f:selectItem itemLabel="---" itemValue=""/>
+                                <f:selectItem itemLabel="RNAseq" itemValue="RNAseq"/>
+                                <f:selectItem itemLabel="RNA viral" itemValue="RNA viral"/>
+                                <f:selectItem itemLabel="mRNA" itemValue="mRNA"/>
+                                <f:selectItem itemLabel="smallRNA" itemValue="smallRNA"/>
+                                <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
+                            </p:selectOneMenu>
+                        </h:panelGrid> 
+
+                        <h:panelGrid columns="1" id="plataform_seq">
+                            <p:outputLabel value= "Plataforma de secuenciación:" for="plata"   />
+                            <p:selectOneMenu id="plata" value="#{sampleController.selected.samplePlataform}" required="true">                            
+                                <f:selectItem itemLabel="---" itemValue=""/>
+                                <f:selectItems value="#{sampleController.allPlataforms}" var="itemPlat" itemLabel="#{itemPlat}" itemValue="#{itemPlat}" />
+                                <p:ajax event="valueChange" update="datoslibsyseq,rendi_seq" listener="#{sampleController.asignarValorCampos}" immediate="true" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Tamaño de lectura (illumina):" for="read_size"  rendered="#{!sampleController.selected.samplePlataform.equals('Oxford Nanopore')}"/>
+                            <p:selectOneMenu id="read_size"
+                                             value="#{sampleController.selected.readSize}"
+                                             rendered="#{!sampleController.selected.samplePlataform.equals('Oxford Nanopore')}"
+                                             required="#{!sampleController.selected.samplePlataform.equals('Oxford Nanopore')}"
+                                             requiredMessage="El tamaño de lectura es obligatorio">
+
+                                <f:selectItem itemLabel="---" itemValue=""/>
+                                <f:selectItem itemLabel="1x75" itemValue="1x75"/>
+                                <f:selectItem itemLabel="2x75" itemValue="2x75"/>
+                                <f:selectItem itemLabel="2x100" itemValue="2x100"/>
+                                <f:selectItem itemLabel="2x150" itemValue="2x150"/>
+                                <f:selectItem itemLabel="2x250" itemValue="2x250"/>
+                                <f:selectItem itemLabel="2x300" itemValue="2x300"/>
+
+                                <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" resetValues="true"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>                  
+                    </h:panelGrid>
+
+
+                    <h:panelGrid columns="1" id="rendi_seq"  rendered="#{sampleController.op_service.equals('4') or sampleController.op_service.equals('5') }"> <!-- esta seccion es visible cuando  requiere solo secuenciacion y requiere secuenciacion-->
+
+                        <f:facet name="header">
+                            Datos para secuenciación
+                        </f:facet>
+
+                        <h:panelGrid columns="1" id="seq_illum"  rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}">
+                            <p:outputLabel value="Illumina: Rendimiento de secuenciación en número de lecturas pareadas solicitado en la cotización:" for="expected_per" />
+                            <h:panelGrid columns="2" >
+                                <p:inputText id="expected_per" value="#{sampleController.selected.expectedPerformance}" a:placeholder="Ejemplo: 10" title="Es la cantidad de secuencias que se desea obtener del proceso de secuenciación.  Para el caso de análisis de expresion diferencial lo deseable son 10 millones por muestra.  En el caso de Ensamblado de Novo, depende del tamaño estimado del organismo. " requiredMessage="La plataforma de la muestra es del tipo Illumina, entonces Illumina rendimiento es obligatorio">
+                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                    <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
+                                </p:inputText>
+
+                                <p:selectOneMenu   id="cantidad_ren" value="#{sampleController.unidades}" rendered="#{sampleController.isIllumina(sampleController.selected.samplePlataform)}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
+                                    <f:selectItem noSelectionOption="false" itemLabel=""/>
+                                    <f:selectItem itemLabel="mil" itemValue="mil"/>
+                                    <f:selectItem itemLabel="millones" itemValue="millones"/>
+                                    <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
+                                </p:selectOneMenu>
+                            </h:panelGrid> 
+                        </h:panelGrid>  
+
+
+                        <h:panelGrid columns="1" id="seq_nanopore" rendered="#{sampleController.isOxford(sampleController.selected.samplePlataform)}"> <!-- agregar las demas opciones de oxford e illumina -->
+                            <p:outputLabel value="Oxford: Rendimiento de secuenciación en pares de bases solicitado en la cotización:" for="expectedOxford_per" />
+                            <h:panelGrid columns="2" >
+                                <p:inputText id="expectedOxford_per" value="#{sampleController.selected.expectedPerformanceOxford}"  a:placeholder="Ejemplo: 150"  title="Es la cantidad de secuencias que se desea obtener del proceso de secuenciación.  Para el caso de análisis de expresion diferencial lo deseable son 10 millones por muestra.  En el caso de Ensamblado de Novo, depende del tamaño estimado del organismo. " required="#{sampleController.isOxford(sampleController.selected.samplePlataform)}" requiredMessage="La plataforma de la muestra es del tipo Oxford, entonces Oxford rendimiento es obligatorio">
+                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                    <p:ajax event="blur" listener="#{sampleController.requireUnidades()}"/>
+                                </p:inputText>
+
+                                <p:selectOneMenu   id="cantidad_ren_ox" value="#{sampleController.unidades}" required="true" requiredMessage="Proporcione la unidad del rendimiento">
+                                    <f:selectItem noSelectionOption="false" itemLabel=""/>
+                                    <f:selectItem itemLabel="Kb" itemValue="Kb"/>
+                                    <f:selectItem itemLabel="Mb" itemValue="Mb"/>
+                                    <f:selectItem itemLabel="Gb" itemValue="Gb"/>
+                                    <p:ajax event="valueChange" listener="#{sampleController.asignarValorCampos}" immediate="true" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="Profundidad nanopore" />
+                            <p:inputText  value="#{sampleController.profundity}" >
+                                <p:keyFilter regEx="/[0-9]/i"/>
+                            </p:inputText>
+
+
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+
+                </p:panelGrid>
+
+                <!--  ..................................................FIN PARTE 6 del formulario DATOS LIBS Y SEC. (datoslibsyseq)............................................ -->                 
+
+                <!--  ..................................................   PARTE  7 DEL FORMULARIO  COMENTARIOS (comme )............................................ -->                 
+
                 <p:panelGrid columns="3" layout="grid" id="comme">
                     <h:panelGrid columns="1">
-                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+                        <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
                     </h:panelGrid> 
-                    
-                    <h:panelGrid columns="2" >
-                         <f:facet name="header">
-                        Sección de comentarios
-                    </f:facet>
-                     <p:outputLabel value="Comentarios adicionales:" for="commen" />
-                     <p:inputTextarea id="commen" value="#{commentsController.comment}"  a:placeholder="Agregue información relevante acerca de la muestra"  title="Cualquier comentario que considere pertinente sobre esta muestra ">
-                     <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
-                     </p:inputTextarea> 
-                  </h:panelGrid>   
-                    
-                   <h:panelGrid columns="1">
-                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
-                    </h:panelGrid>  
-                                       
-                </p:panelGrid>                                                                                                   
-                                                                                                    
-                                                                                                    
-                                            <!--  ..................................................FIN PARTE 7 del formulario COMENTARIOS (comme )............................................ -->                 
 
-                                            <!--  ..................................................   PARTE  8 DEL FORMULARIO  ............................................ -->                 
-                                                                                                                                                                                                          
-                                           
-               <!-- inicio analisis bioinformatico-->
-               <p:panelGrid columns="2" layout="grid" id="anbio"  columnClasses="ui-grid-col-2, ui-grid-col-8"   >                                                                 
-                   
-                   <h:panelGrid columns="1">
-                    <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+                    <h:panelGrid columns="2" >
+                        <f:facet name="header">
+                            Sección de comentarios
+                        </f:facet>
+                        <p:outputLabel value="Comentarios adicionales:" for="commen" />
+                        <p:inputTextarea id="commen" value="#{commentsController.comment}"  a:placeholder="Agregue información relevante acerca de la muestra"  title="Cualquier comentario que considere pertinente sobre esta muestra ">
+                            <p:ajax  event="blur" listener="#{sampleController.asignarValorCampos}"/>
+                        </p:inputTextarea> 
+                    </h:panelGrid>   
+
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+                    </h:panelGrid>  
+
+                </p:panelGrid>                                                                                                   
+
+
+                <!--  ..................................................FIN PARTE 7 del formulario COMENTARIOS (comme )............................................ -->                 
+
+                <!--  ..................................................   PARTE  8 DEL FORMULARIO  ............................................ -->                 
+
+
+                <!-- inicio analisis bioinformatico-->
+                <p:panelGrid columns="2" layout="grid" id="anbio"  columnClasses="ui-grid-col-2, ui-grid-col-8"   >                                                                 
+
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
                     </h:panelGrid> 
-                   
-                   <h:panelGrid id="grid_analysis" columns="1"  rendered="#{sampleController.op_service.equals('5')}"> 
-                                
-                                <f:facet name="header">
-                                Análisis Bioinformaticos 
-                                </f:facet>
-                                
-                                <h:panelGrid id="gridRender1" columns="1">
-                                 <p:outputLabel value="¿Requiere análisis bioinformático?:
-                                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" for="radioRender1" />
-                                <p:selectOneRadio id="radioRender1" value="#{sampleGenomeLinkController.haveBioAn}" >
+
+                    <h:panelGrid id="grid_analysis" columns="1"  rendered="#{sampleController.op_service.equals('5')}"> 
+
+                        <f:facet name="header">
+                            Análisis Bioinformaticos 
+                        </f:facet>
+
+                        <h:panelGrid id="gridRender1" columns="1">
+                            <p:outputLabel value="¿Requiere análisis bioinformático?:
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" for="radioRender1" />
+                            <p:selectOneRadio id="radioRender1" value="#{sampleGenomeLinkController.haveBioAn}" >
                                 <f:selectItem itemLabel="Si" itemValue="true" />
                                 <f:selectItem itemLabel="No" itemValue="false" />
                                 <p:ajax  event="click" update="grid_analysis" listener="#{bioinformaticAnalysisSampleLinkController.cleanFormSample()}"/>
-                                </p:selectOneRadio>
-                                </h:panelGrid>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
 
 
-                                <h:panelGrid id="gridBioin1" columns="1" rendered="#{sampleGenomeLinkController.haveBioAn}"> 
-                                <p:outputLabel value="Análisis Bioinformáticos con costo adicional" style="font-size: medium; font-style: italic"/>
-                                
-                                <p:selectManyCheckbox id="gridCheckCost1" value="#{bioinformaticAnalysisSampleLinkController.analysisCost}" layout="responsive" columns="1">
+                        <h:panelGrid id="gridBioin1" columns="1" rendered="#{sampleGenomeLinkController.haveBioAn}"> 
+                            <p:outputLabel value="Análisis Bioinformáticos con costo adicional" style="font-size: medium; font-style: italic"/>
+
+                            <p:selectManyCheckbox id="gridCheckCost1" value="#{bioinformaticAnalysisSampleLinkController.analysisCost}" layout="responsive" columns="1">
                                 <f:selectItems value="#{bioinformaticAnalysisController.bioAnCost}" var="analysis1" itemLabel="#{analysis1.note}" itemValue="#{analysis1}"      />
-                                </p:selectManyCheckbox>
-                                </h:panelGrid>
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
 
-                             </h:panelGrid>  
-                       
-                 
+                    </h:panelGrid>  
+
+
                 </p:panelGrid> 
-               
-                                                                                                    
-                                            <!--  ..................................................FIN PARTE 8 del formulario ANALISIS BIOINFO (anbio)........................................... -->                 
-               
+
+
+                <!--  ..................................................FIN PARTE 8 del formulario ANALISIS BIOINFO (anbio)........................................... -->                 
+
 
 
                 <p:panelGrid columns="2" layout="grid" id="principal" rendered="false">
@@ -628,7 +634,7 @@
                             <p:ajax delay="800" event="keyup" listener="#{sampleController.asignarValorCampos}"/>
                         </p:inputText>
                     </h:panelGrid>
-             </p:panelGrid><!-- termina grid principal!-->
+                </p:panelGrid><!-- termina grid principal!-->
 
 
 
@@ -636,7 +642,7 @@
 
 
                 <br /><p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
-                    <p:commandButton  id="createButton"  value="Guardar Muestra" icon="ui-icon-disk" update="@(form:last), growl, growl_success, :form:principal"  action="#{sampleGenomeLinkController.create}"  styleClass="ui-priority-primary"> 
+                <p:commandButton  id="createButton"  value="Guardar Muestra" icon="ui-icon-disk" update="@(form:last), growl, growl_success, :form:principal"  action="#{sampleGenomeLinkController.create}"  styleClass="ui-priority-primary"> 
                     <f:actionListener binding="#{sampleController.create()}"/>
                     <f:actionListener binding="#{bioinformaticAnalysisSampleLinkController.createBioanSamLink()}"/>
                     <f:actionListener binding="#{commentsController.create4Sample()}"/>
@@ -673,14 +679,14 @@
                             </h:panelGrid>
 
                         </f:facet>
-                        
+
                         <p:column  width="100" filterBy="#{item.idSample}" filterMatchMode="contains">
-                                <f:facet name="header">
-                                    <p:outputLabel value="ID de la muestra"/>
-                                </f:facet>
-                                <h:outputText value="#{item.idSample}"/>
-                            </p:column>
-                        
+                            <f:facet name="header">
+                                <p:outputLabel value="ID de la muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idSample}"/>
+                        </p:column>
+
                         <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
                             <f:facet name="header">
                                 <p:outputLabel value="Nombre de la muestra"/>
@@ -696,78 +702,78 @@
                             <h:outputText value="#{item.idTube}"/>
                         </p:column>
 
-                          <p:column width="95" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="Tipo de muestra"/>
-                                </f:facet>
-                                <h:outputText value="#{item.type}"/>
-                            </p:column>      
-                            
-                            <p:column width="110" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Depleción rRNA?" />
-                                </f:facet>
-                                <h:outputText value="#{item.deplesion}"/>
-                            </p:column>
-                            
-                            <p:column width="110" exportable="false">
-                                <f:facet name="header"> 
-                                    <p:outputLabel value="¿Sólo extracción?" />
-                                </f:facet>
-                                <h:outputText value="#{item.just_genextrac}"/>
-                            </p:column>
-                            
-                            <p:column width="110" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Sólo Análisis Cal.?" />
-                                </f:facet>  
-                                <h:outputText value="#{item.just_qanalysis}"/>
-                            </p:column>
-                            
-                            <p:column width="140" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Sólo Const. biblioteca?" />
-                                </f:facet>
-                                <h:outputText value="#{item.just_lib}"/>
-                            </p:column>
-                            
-                            <p:column width="130" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Sólo secuenciación?" />
-                                </f:facet>
-                                <h:outputText value="#{item.just_seq}"/>
-                            </p:column>
+                        <p:column width="95" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tipo de muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.type}"/>
+                        </p:column>      
+
+                        <p:column width="110" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Depleción rRNA?" />
+                            </f:facet>
+                            <h:outputText value="#{item.deplesion}"/>
+                        </p:column>
+
+                        <p:column width="110" exportable="false">
+                            <f:facet name="header"> 
+                                <p:outputLabel value="¿Sólo extracción?" />
+                            </f:facet>
+                            <h:outputText value="#{item.just_genextrac}"/>
+                        </p:column>
+
+                        <p:column width="110" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Sólo Análisis Cal.?" />
+                            </f:facet>  
+                            <h:outputText value="#{item.just_qanalysis}"/>
+                        </p:column>
+
+                        <p:column width="140" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Sólo Const. biblioteca?" />
+                            </f:facet>
+                            <h:outputText value="#{item.just_lib}"/>
+                        </p:column>
+
+                        <p:column width="130" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Sólo secuenciación?" />
+                            </f:facet>
+                            <h:outputText value="#{item.just_seq}"/>
+                        </p:column>
 
 
-                            <p:column width="150" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel  value="¿Requiere extrac genética?" />
-                                </f:facet>
-                                <h:outputText value="#{item.geneticExtraction}"/>
-                            </p:column>
-                            
-                            <p:column width="150" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Requiere cons.biblioteca?" />
-                                </f:facet>
-                                <h:outputText value="#{item.build_lib}"/>
-                            </p:column>
-                            
-                            <p:column width="150" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="¿Requiere secuenciación?" />
-                                </f:facet>
-                                <h:outputText value="#{item.do_seq}"/>
-                            </p:column>
-                        
-                         <p:column width="115" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="Tipo de organismo"/>
-                                </f:facet>
-                                <h:outputText value="#{item.organism_type}"/>
-                            </p:column>  
-                        
-                        
+                        <p:column width="150" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel  value="¿Requiere extrac genética?" />
+                            </f:facet>
+                            <h:outputText value="#{item.geneticExtraction}"/>
+                        </p:column>
+
+                        <p:column width="150" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Requiere cons.biblioteca?" />
+                            </f:facet>
+                            <h:outputText value="#{item.build_lib}"/>
+                        </p:column>
+
+                        <p:column width="150" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="¿Requiere secuenciación?" />
+                            </f:facet>
+                            <h:outputText value="#{item.do_seq}"/>
+                        </p:column>
+
+                        <p:column width="115" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tipo de organismo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.organism_type}"/>
+                        </p:column>  
+
+
                         <p:column width="130" exportable="false">
                             <f:facet name="header">
                                 <p:outputLabel value="Organismo fuente"/>
@@ -786,7 +792,7 @@
                             </f:facet>
                             <h:outputText value="#{item.contaminantName}"/>
                         </p:column>
-                        
+
                         <p:column width="150" exportable="false">
                             <f:facet name="header">
                                 <p:outputLabel value="Descripcion"/>
@@ -869,13 +875,13 @@
 
                                         <p:outputLabel value="Recibida" style="text-align: center"/>  
                                         <p:outputLabel value="La unidad recibió la muestra." />  
-                                        
+
                                         <p:outputLabel value="Entrega solo extración de material genético" style="text-align: center"/>  
                                         <p:outputLabel value="Se entrego al usuario solo la extraccion" />  
-                                        
+
                                         <p:outputLabel value="Entrega solo análisis de calidad" style="text-align: center"/>  
                                         <p:outputLabel value="Se entrego al usuario solo el analisis de calidad" />  
-                                            
+
 
                                         <p:outputLabel value="En análisis de calidad" style="text-align: center"/>  
                                         <h:panelGrid columns="1" style="padding-left: 0px">
@@ -885,15 +891,15 @@
 
                                         <p:outputLabel value="En construcción de biblioteca" style="text-align: center"/>  
                                         <p:outputLabel value="La muestra esta siendo procesada para su secuenciación." /> 
-                                        
+
                                         <p:outputLabel value="Entrega solo const. biblioteca" style="text-align: center"/>
-                                            <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
-                                            
-                                            <p:outputLabel value="Biblioteca entregada" style="text-align: center"/>
-                                            <h:panelGrid columns="1" style="padding-left: 0px" styleClass="innerpanelgrid">
-                                                <p:outputLabel value="La biblioteca correspondiente a la muestra ha sido construida " style="text-align: center"/> 
-                                                <p:outputLabel value="y entregada al usuario" style="text-align: center"/> 
-                                            </h:panelGrid>
+                                        <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
+
+                                        <p:outputLabel value="Biblioteca entregada" style="text-align: center"/>
+                                        <h:panelGrid columns="1" style="padding-left: 0px" styleClass="innerpanelgrid">
+                                            <p:outputLabel value="La biblioteca correspondiente a la muestra ha sido construida " style="text-align: center"/> 
+                                            <p:outputLabel value="y entregada al usuario" style="text-align: center"/> 
+                                        </h:panelGrid>
 
 
                                         <p:outputLabel value="Construcción inficiente" style="text-align: center"/>  
@@ -904,9 +910,9 @@
 
                                         <p:outputLabel value="En espera de secuenciación" style="text-align: center"/>  
                                         <p:outputLabel value="La muestra esta en fila para ser secuenciada." />  
-                                        
-                                         <p:outputLabel value="Secuenciándose" style="text-align: center"/>
-                                            <p:outputLabel value="La muestra se encuentra en el procesó de secuenciación " style="text-align: center"/>
+
+                                        <p:outputLabel value="Secuenciándose" style="text-align: center"/>
+                                        <p:outputLabel value="La muestra se encuentra en el procesó de secuenciación " style="text-align: center"/>
 
 
                                         <p:outputLabel value="Secuenciada" style="text-align: center"/>  
@@ -920,14 +926,14 @@
                                         <p:outputLabel value="Rechazada (forsake)" style="text-align: center"/>  
                                         <p:outputLabel value="La muestra fue abandonada por decisión de la unidad o del usuario." />  
 
-                                        
-                                         <p:outputLabel value="Basecalling Y QC en proceso" style="text-align: center"/>
-                                            <h:panelGrid columns="1" style="padding-left: 0px">
-                                                <p:outputLabel value="El proceso de secuenciación ha concluido y se esta llevando a cabo" style="text-align: center"/>
-                                                <p:outputLabel value="los análisis de calidad de las secuencias." style="text-align: center"/>
-                                            </h:panelGrid>
-                                            <p:outputLabel value="Basecalling y QC terminado" style="text-align: center"/> 
-                                            <p:outputLabel value="El llamado de bases y análisis de calidad ha concluido" style="text-align: center"/> 
+
+                                        <p:outputLabel value="Basecalling Y QC en proceso" style="text-align: center"/>
+                                        <h:panelGrid columns="1" style="padding-left: 0px">
+                                            <p:outputLabel value="El proceso de secuenciación ha concluido y se esta llevando a cabo" style="text-align: center"/>
+                                            <p:outputLabel value="los análisis de calidad de las secuencias." style="text-align: center"/>
+                                        </h:panelGrid>
+                                        <p:outputLabel value="Basecalling y QC terminado" style="text-align: center"/> 
+                                        <p:outputLabel value="El llamado de bases y análisis de calidad ha concluido" style="text-align: center"/> 
 
                                         <p:outputLabel value="Entregado fastq" style="text-align: center"/>  
                                         <p:outputLabel value="Los archivos fastq fueron entregados al usuario." />  
@@ -977,22 +983,22 @@
                             </f:facet>
                             <h:outputText value="#{item.aceptation}"/>
                         </p:column>
-                        
-                        
+
+
                         <p:column width="150" exportable="false">
                             <f:facet name="header">
                                 <p:outputLabel value="Medio de entrega"/>
                             </f:facet>
                             <h:outputText value="#{item.delivery}"/>
                         </p:column>
-                        
-                       
-                            <p:column width="130" exportable="false">
-                                <f:facet name="header">
-                                    <p:outputLabel value="Tipo de aplicación"/>
-                                </f:facet>
-                                <h:outputText value="#{item.app_type}"/>
-                            </p:column>  
+
+
+                        <p:column width="130" exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tipo de aplicación"/>
+                            </f:facet>
+                            <h:outputText value="#{item.app_type}"/>
+                        </p:column>  
 
                         <p:column width="160" exportable="false">
                             <f:facet name="header">
@@ -1021,8 +1027,8 @@
                             </f:facet>
                             <h:outputText value="#{item.readSize}"/>
                         </p:column>
-                        
-                        
+
+
 
                         <p:column width="150" exportable="false">
                             <f:facet name="header">
@@ -1156,15 +1162,15 @@
                     <h:outputText value="Solo se reciben  muestras en la UUSMB  en el siguiente horario:" /><br/>
 
                     <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lunes     de 10:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
-                    
+
                     <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martes    de 09:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
-                    
+
                     <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Miércoles de 09:00 am a 12:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
-                    
+
                     <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jueves    de 09:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
-                    
+
                     <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Viernes NO HAY RECEPCIÓN DE MUESTRAS" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
-                    
+
                     <h:outputText value="No se aceptan muestras que no contengan el Id de la muestra con el que se registró en SISBi" style="color: black;font-weight: bold; text-align: right"/><br/>
                     <h:outputText value="Las muestras se reciben en tubos de 1.5 ml" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
 

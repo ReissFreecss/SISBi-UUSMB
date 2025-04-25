@@ -306,11 +306,14 @@ public class FileController implements Serializable {
         //Constantes para validar tamaños de secuencias
         List<String> listPlatform = new ArrayList<>();
         //Llenado de arreglos para validar
+        listPlatform.add("NextSeq 2000");
         listPlatform.add("NextSeq 500");
         listPlatform.add("MiSeq");
         listPlatform.add("HiSeq 2000/2500");
         listPlatform.add("HiSeq X ");
         listPlatform.add("NovaSeq 6000");
+        listPlatform.add("NovaSeq XPLUS");
+        
 
         listPlatform.add("Oxford Nanopore - NextSeq500");
         listPlatform.add("Oxford Nanopore - MiSeq");
@@ -319,8 +322,6 @@ public class FileController implements Serializable {
         listPlatform.add("Oxford Nanopore - HiSeq");
         listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
         listPlatform.add("Oxford Nanopore - NextSeq 2000");
-        listPlatform.add("NovaSeq XPLUS");
-        listPlatform.add("NextSeq 2000");
         // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
 
         if (listPlatform.indexOf(platform) < 0) {
@@ -343,8 +344,6 @@ public class FileController implements Serializable {
         listPlatform.add("NovaSeq 6000 - Oxford Nanopore");
         listPlatform.add("Oxford Nanopore - NovaSeq XPLUS");
         listPlatform.add("Oxford Nanopore - NextSeq 2000");
-        listPlatform.add("NovaSeq XPLUS");
-        listPlatform.add("NextSeq 2000");
 // cambie el nombre de las platafromas de acuerdo a lo que esta en la base de datos 
         if (listPlatform.indexOf(platform) < 0) {
             return false;
@@ -419,7 +418,7 @@ public class FileController implements Serializable {
         int col260230 = 14;                                      //14
         int colRendimientoIllumina = 15;                         //15
         int colRendimientoOxford = 16;                           //16
-         */
+        */
         //Variables que representan el tipo de análisis
         /*
         int colLimpiezaCalidad = 17;                             //17
@@ -475,6 +474,11 @@ public class FileController implements Serializable {
         //Variable para omitir validacion de rendimiento
         //boolean saveDataIllumina = false;
         //boolean saveDataOxford = false;
+        
+        // 24/abr/2025 Carlos Perez Calderon
+        // Nos aseguramos de convertir el numero a String
+        
+        
         //  08/ene/2025     Juan Antonio Villalba Luna
         //  Array asociativo aplicado como diccionario y validar 
         //  tipo de aplicacion
@@ -724,6 +728,7 @@ public class FileController implements Serializable {
                                 break;
                             case "m":
                                 itemPlatform = "NextSeq 2000";
+                                System.out.println("Selecciono NextSeq 2000");
                                 break;
                             case "na":
                                 itemPlatform = "NA";
@@ -897,6 +902,7 @@ public class FileController implements Serializable {
                                 return;
                             }
                         }
+                        
 
                         //Si se aplicará las operaciones al momento de registrar en la BD
                         //saveDataOxford = true;
@@ -923,7 +929,7 @@ public class FileController implements Serializable {
                             cont.execute("PF('dialogDetailError').show();");
                             return;
                         }
-
+                        
                         //  Verificando que el valor numerico tecleado en el archivo de excel se encuentre en el rango de indices del diccionario
                         if (appType.get(opcionAppType).equals("")) {
                             RequestContext cont = RequestContext.getCurrentInstance();
@@ -933,15 +939,18 @@ public class FileController implements Serializable {
                             cont.execute("PF('dialogDetailError').show();");
                             return;
                         }
-
-                        //  itemAppType = appType.get(String.format("%s", opcionAppType));
-                        /*
+                        
+                        
+                        // 24/abr/2025 Carlos Perez Calderon codigo de prueba para corroborar que esta cachando correctamente 
+                        /* Obtenemos nuestro nombre de APP de acuerdo a nuestro hashmap para mandarlo a guardar en BD 
+                        itemAppType = appType.get(String.format("%s", opcionAppType));
+                        
                         RequestContext cont = RequestContext.getCurrentInstance();
-                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        cont.execute("PF('statusDialogUploadFile').hide();"); 
                         messageDialog = "Tipo de aplicacion ";
                         messageDialog2 = "La opcion para el tipo de aplicacion en la fila " + (countRowValidation)  +" es: " + itemAppType;
                         cont.execute("PF('dialogDetailError').show();");
-                         */
+                        currentSample.setApp_type(itemAppType);*/
                     }
 
                 } //fin del primer if
@@ -1267,8 +1276,8 @@ public class FileController implements Serializable {
                     //tamañogenoma
                     String sCont = parameters.get(colFuenteContaminacion).trim();
                     String metdeliv = parameters.get(colMetodoEntrega);  //new preform
-                    String Aptype = parameters.get(colAppType).trim();  //new preform
-                    //String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  //new preform
+                    String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  // 240425CPC Registramos el tipo de aplicacion por el numero
+                    //String Aptype = parameters.get(colAppType).trim();  // 240425CPC Comento la linea para registrar los tipos de aplicacion por numero en preforma
                     String kit_lib = parameters.get(colkitLib).trim();  //new preform
                     String tag_lib = parameters.get(coltagLib).trim();  //new preform
                     //String sPlataform = parameters.get(colPlataforma).trim();
