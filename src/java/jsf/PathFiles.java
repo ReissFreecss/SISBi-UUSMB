@@ -82,7 +82,7 @@ public class PathFiles {
     public static String dev_host= Xochi_IP;//dev_host solo se ocupa 1 vez y es debe ser lo mismo que Xochi_IP
 
     //leslie 12/02/2024 estas no podria comentarlas... revisar si se usan en otra clase 
-//public static String dev_host=Xochi_IP;
+    //public static String dev_host=Xochi_IP;
     public static String protocol="http";
    // public static String dev_port="8000";
     //public static String root_path="/SISBI";
@@ -371,6 +371,4 @@ public class PathFiles {
     public static String LinkDirectoryImageSing = "http://localhost:8080/SISBI/reportProjects/imgSign/";
     
     */
-    
-
 }

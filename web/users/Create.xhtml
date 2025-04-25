@@ -86,6 +86,9 @@
                                 >
                         <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
                     </p:password>
+
+
+
                 </h:panelGrid>
 
 
@@ -117,19 +120,40 @@
                         <p:keyFilter regEx="/[a-z0-9_ñ ]/i" preventPaste="false"/>
                     </p:inputText>
                 </h:panelGrid>
-
-
-
             </p:panelGrid>
             <br />
-            <p:commandButton  icon="ui-icon-disk" action="#{usersController.create}" value="Guardar nuevo" disabled="#{usersController.verifiedEmail}" >
-                <p:confirm header="Guardar Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta?  Presione 'Aceptar' 
-                           para guardar los cambios. Presione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" 
 
-                           />
+            <!--Carlos: Aceptacion de terminos y condiciones:-->
+            <h:panelGrid columns="1" style="text-align: center;">
+                <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+                    <p:selectBooleanCheckbox id="terms2" value="#{usersController.termsAndConditions2Agreed}" 
+                                             required="true" requiredMessage="Debe aceptar los términos y condiciones del registro de usuario y servicio." 
+                                             disabled="#{usersController.verifiedEmail}">
+                        <p:ajax update="saveButton" process="@this" />
+                    </p:selectBooleanCheckbox>
+                    <h:outputLink value="https://docs.google.com/document/d/13y2f53h-gqNjbMMIG9DniM7EgULq4nr8/edit" target="_blank">
+                        <h:outputText value="Acepto los términos y condiciones del registro de usuario y servicio" />
+                    </h:outputLink>
+                </h:panelGroup>
+
+            </h:panelGrid>
+            <br />
+            <h:panelGrid style="text-align: center">
+                <p:commandButton id="saveButton" icon="ui-icon-disk" action="#{usersController.create}"  
+                                 value="Guardar nuevo" update="form" 
+                                 disabled="#{!(usersController.termsAndConditions2Agreed)}">
+                    <p:confirm header="Aviso Usuario" 
+                               message="¿Esta seguro que los datos que proporcionaste son correctos? De ser asi precione aceptar para registrarse"
+                               icon="ui-icon-alert"/>
+                </p:commandButton><br/>
+
+                <p:outputLabel>Aviso de privacidad</p:outputLabel>
+                <p:outputLabel>El LNATCG, a través de la UUSMB, es el responsable del tratamiento de los datos personales que nos proporcione, &#10; los cuales serán protegidos conforme a lo dispuesto por la Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados y demás normatividad que resulte aplicable.</p:outputLabel>
+            </h:panelGrid>
 
 
-            </p:commandButton> <br/><br/><br/>
+
+
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
