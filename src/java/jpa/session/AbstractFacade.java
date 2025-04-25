@@ -2038,7 +2038,7 @@ public abstract class AbstractFacade<T> {
 
     //Obtener usuarios por coincidencia nombre de usuario (first name)
     public List<Users> getUersByFirstName(String firstName) {
-        String sql = "select * from users where unaccent(lower(fiCAriasrst_name)) like '%" + firstName + "%';";
+        String sql = "select * from users where unaccent(lower(first_name)) like '%" + firstName + "%';";
         javax.persistence.Query q = getEntityManager().createNativeQuery(sql, Users.class);
         return q.getResultList();
     }

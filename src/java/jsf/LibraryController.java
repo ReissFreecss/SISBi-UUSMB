@@ -3450,7 +3450,7 @@ public class LibraryController implements Serializable {
                                 if (!itemKit.equals("TruSeq HT")) {
                                     // Se valida si el tag2 escrito en el excel es correcto
                                     if (ejbBar.findBarcodeByIndexName(tag2).isEmpty()) {
-                                        messageDialog = "Para la muetsra " + NameLib + " no se reconoce el TAG 2, favor de revisarlo";
+                                        messageDialog = "Para la muestra " + NameLib + " no se reconoce el TAG 2, favor de revisarlo";
                                         closeStatusDialogUploadFile();
                                         dialog.execute("PF('biblioErrDialog').show();");
                                         //rowSampleExcel.clear();
@@ -3488,7 +3488,7 @@ public class LibraryController implements Serializable {
                                 if (!itemKit.equals("TruSeq HT")) {
                                     // Se valida si el tag2 escrito en el excel es correcto
                                     if (ejbBar.findBarcodeByIndexName(tag2).isEmpty()) {
-                                        messageDialog = "Para la muetsra " + NameLib + " no se reconoce el TAG 2, favor de revisarlo";
+                                        messageDialog = "Para la muestra " + NameLib + " no se reconoce el TAG 2, favor de revisarlo";
                                         closeStatusDialogUploadFile();
                                         dialog.execute("PF('biblioErrDialog').show();");
                                         //rowSampleExcel.clear();
