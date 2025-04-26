@@ -1,0 +1,98 @@
+#📘 README – Reglas de colaboración y estructura del repositorio
+Proyecto: Sistema de Información de Secuenciación y Bioinformática (SISBi)
+Versión actual: 1.7.1
+Dirigido a: Personal técnico y administrativo encargado del mantenimiento, actualización y documentación del sistema.
+
+🧾 1. Descripción del proyecto
+Este repositorio contiene el código fuente del Sistema de Información de Secuenciación y Bioinformática (SISBi), una herramienta desarrollada para la gestión, seguimiento y control de muestras y rendimientos en plataformas de secuenciación como Illumina y Oxford Nanopore.
+
+El sistema automatiza flujos de trabajo para bibliotecas, valida rendimientos, administra estados de muestras y genera informes. Su diseño está orientado a facilitar la trazabilidad, mantenimiento y evolución del sistema en el tiempo.
+
+🛠️ 2. Reglas del repositorio
+🔁 Trazabilidad y ramas
+No borrar ramas personales: Para mantener la trazabilidad de los cambios, no elimines tu rama, aunque ya hayas hecho merge.
+
+Al realizar un Merge Request, desactiva la casilla que elimina automáticamente la rama al hacer merge.
+
+🔒 GitLab tiene esta opción activada por defecto: desactívala manualmente.
+
+🔀 Control de merges
+Solo se permite hacer merge a la rama developer.
+
+Las ramas test y producción están protegidas y solo el administrador del repositorio puede hacer merge en ellas.
+
+👥 Colaboración y comunicación
+Si otro desarrollador está trabajando sobre la misma clase o vista, comunícate primero para evitar sobreescribir o eliminar cambios ajenos.
+
+Revisa frecuentemente el historial de developer y sincroniza tu rama para evitar conflictos.
+
+🌱 Estructura de ramas personales
+Usa únicamente tu rama personal principal. Si necesitas una rama extra por alguna urgencia:
+
+Nómbrala usando tu nombre completo en camelCase, seguido de un número consecutivo.
+
+Ejemplo: PepitoGutierrezSanchez1
+
+La rama principal personal no debe llevar número (por ejemplo: PepitoGutierrezSanchez).
+
+💬 Commits claros y específicos
+Cada commit debe contener:
+
+El número de ticket que estás resolviendo.
+
+Una descripción clara y específica de los cambios.
+
+Ejemplo:
+
+less
+Copiar
+Editar
+#5234 Se corrigió el envío de correos en el módulo de recuperación de contraseña.
+🔄 Sincronización
+Antes de trabajar, realiza un git pull desde developer a tu rama personal para mantenerla actualizada y evitar conflictos.
+
+📌 3. Información técnica útil
+El sistema utiliza tecnologías como Java EE, JSF y JSON para el manejo de datos.
+
+El entorno de pruebas cuenta con una estructura específica de carpetas y plantillas necesarias para la generación de informes.
+
+Las validaciones de rendimientos están adaptadas a las plataformas NextSeq 2000 y NovaSeq X Plus.
+
+La lógica de negocio incluye flujos automatizados de estados, control de vistas, validación de campos por preforma y generación de reportes.
+
+📈 4. Reglas adicionales sugeridas
+✅ Nuevas buenas prácticas sugeridas:
+Uso de etiquetas (labels) en Merge Requests para identificar: tipo de cambio (bugfix, feature, refactor), módulo afectado, prioridad.
+
+Plantilla estandarizada de Merge Request que incluya:
+
+Número de ticket.
+
+Breve descripción.
+
+Archivos afectados.
+
+Capturas (si aplica).
+
+Documentar pruebas manuales realizadas al subir cambios funcionales.
+
+Uso de CHANGELOG.md para registrar versiones, cambios, fixes y mejoras.
+
+Establecer días de revisión cruzada (code review) para fomentar calidad en el código y trabajo colaborativo.
+
+📂 5. Estructura recomendada del repositorio
+bash
+Copiar
+Editar
+.
+├── src/                       # Código fuente
+├── docs/
+│   ├── README.txt             # Este documento
+│   ├── pruebas/
+│   │   ├── test-aviso-privacidad_v1.7.1.md
+│   │   ├── test-flujo-bibliotecas_v1.7.1.md
+│   │   └── ...
+│   └── changelog/
+│       └── CHANGELOG.md
+├── scripts/                   # Scripts útiles para despliegue o test
+└── .gitlab-ci.yml             # (opcional) Pipeline de CI/CD
