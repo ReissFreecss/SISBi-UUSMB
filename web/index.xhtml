@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+     >
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><ui:insert name="title">SISBi</ui:insert></title>
+        <h:outputStylesheet name="css/jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+<link rel="icon" type="image/png" href="../resources/images/logoch.png" />
+ 
+<div class="ui-g" style="background-color: #ffffff">
+    <div class="ui-g-12 ui-md-4" align="rigth"> 
+        <p:graphicImage id="img" style="padding-top: 16px;width: 279px;" library="images" name="new_logo.png"  />
+    </div>
+    
+    <div class="ui-g-12 ui-md-4 ui-g-nopad"></div>
+    
+    <div class="ui-g-12 ui-md-4" style="float: right"> 
+    
+        <p:graphicImage  id="img2" style="width: 250px; float: right" library="images" name="lnatcg.png"   />
+        
+    </div>
+    
+    
+    
+</div>
+
+    </h:head>
+
+    <h:body>
+        <h:form>
+            
+		 <p:dialog  widgetVar="dlgInfo"  header="AVISO IMPORTANTE"  style=" top: auto"  visible="true" responsive="true">
+
+                    <h:outputText value="Estimado usuario:" /> <br/><br/>
+                    
+                    <!-- Solicitud de acta de recepcion, documento expendido por division de estudios
+                    <h:outputText value="Miércoles 15 de Mayo :" style="color: black;font-weight: bold;" /><br/><br/>
+                    <h:outputText value="NO HABRÁ RECEPCIÓN DE MUESTRAS" style="color: darkred;font-weight: bold;"/><br/><br/>
+                    <h:outputText value="SE REANUDARÁ LA RECEPCIÓN DE MUESTRAS HASTA EL 16 DE MAYO 2024" style="color: darkblue;font-weight: bold;" /><br/><br/><br/>
+                    -->
+
+                   <h:outputText value="Solo se reciben  muestras en la UUSMB  en el siguiente horario:" /><br/>
+
+                    <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lunes     de 10:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
+                    
+                    <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martes    de 10:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
+                    
+                    <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Miércoles de 09:00 am a 12:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
+                    
+                    <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jueves    de 09:00 am a 14:00 pm" style="color: black;font-weight: bold; text-align: right"/><br/>
+                    
+                    <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Viernes NO HAY RECEPCIÓN DE MUESTRAS" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
+                    
+                    <h:outputText value="No se aceptan muestras que no contengan el Id de la muestra con el que se registró en SISBi" style="color: black;font-weight: bold; text-align: right"/><br/>
+                    <h:outputText value="Las muestras se reciben en tubos de 1.5 ml" style="color: black;font-weight: bold; text-align: right"/><br/><br/>
+                    
+                    <p:commandButton value="Aceptar"  onclick="PF('dlgInfo').hide();"/>
+
+                </p:dialog>
+		
+             <p:growl id="growl" showDetail="false" sticky="true"  />
+        
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-2"> </div>
+    
+    <div class="ui-g-12 ui-md-8 ui-g-nopad">
+       
+        <div class="ui-g-12 ui-g-nopad">
+          
+            
+            <div class="ui-g-12" >
+               
+                
+                <div class="ui-g-12 ui-md-4" align="center">
+                      <p:graphicImage   id="img2" style="width: 150px;
+                                        float:start" library="images" name="sisbi.png" />
+                    
+                </div>
+                
+                <div class="ui-g-12 ui-md-4"  >
+                  
+                    <h1> Sistema de Información de Secuenciación y Bioinformática</h1>
+                        
+                </div>
+                 <div class="ui-g-12 ui-md-1">  </div>
+                
+                <div class="ui-g-12 ui-md-3" align="center" > 
+              
+                  
+                    <div class="ui-g-12 ">  </div>
+               
+               
+                    <div class="ui-g-12 ui-md-3"  >
+                        <p:commandButton style="font-size: 19px;
+                                                padding-left:  22px;
+                                                padding-right: 22px;
+                                         font-family: 'politica'" id="dialog" oncomplete="PF('sesionDialog').show()"  value="Iniciar sesión"/>  
+                         <div class="ui-g-12 ">
+                               
+                   </div>
+                       <p:button style="font-size: 19px;
+                                                padding-left:  10px;
+                                                padding-right: 10px;
+                                                font-family: 'politica'" 
+                                                id="createDialog" outcome="/users/Create.xhtml"  value="Regístrate"/>             
+                                     
+                   </div>
+                      
+                    
+                  </div>
+                
+                 
+               
+            </div>
+            </div>
+            <div class="ui-g-12" align="center">
+                
+                                     
+                 <p:galleria effectSpeed="750"  effect="fade"  value="#{indexController.images()}" var="image" panelWidth="900" panelHeight="513" >
+                <p:graphicImage library="images" name="bannerIndex/#{image}" style="width: 900px" />
+                    </p:galleria>
+
+                
+            </div>
+            
+              
+            
+       
+    </div>
+   <div class="ui-g-12 ui-md-2"> </div>  
+</div>  
+            
+            
+                 <p:dialog header="Iniciar sesión" widgetVar="sesionDialog" showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false">
+                     <h:panelGrid columns="1">                    
+                    
+                     <p:outputLabel for="txtUsuario" value="Usuario o correo electrónico:"/>
+                    <p:inputText id="txtUsuario" value="#{indexController.usuario.userName}" required="true" autocomplete="username"
+                                  
+                                 requiredMessage="Introduzca su nombre de usuario" />
+                 
+                                  
+ 
+                    <p:outputLabel for="txtPass" value="Contraseña"/>
+                    
+                    
+                    <p:remoteCommand name="iniciarSesion" action="#{indexController.iniciarSesion()}" update="growl"/>
+                    <p:password id="txtPass" value="#{indexController.usuario.password}" required="true" requiredMessage="Introduzca su contraseña" onkeypress="if (event.keyCode == 13) { iniciarSesion(); return false; }" autocomplete="password"/>
+               
+                     </h:panelGrid>
+                         <div align="center">
+                       <h:panelGrid columns="1">
+                         
+                           <p:commandButton id="btnLogin" icon="ui-icon-key" value="Iniciar sesión" update="growl" action="#{indexController.iniciarSesion()}"/>
+                       <p:link outcome="/Principal/forgottenPassword" value="Olvidé mi contraseña"/>
+
+                   </h:panelGrid>
+                    </div>
+                   </p:dialog> 
+                   
+            <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Versión 1.7.2 TEST" /><br/>
+            <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asistencia técnica: sisbisupport @ibt.unam.mx " /><br/>
+              
+              <div align="right">
+             <p:outputLabel value="" style="color: white; font-size:20px;"/>
+             <h:outputLink value= "http://www.uusmb.unam.mx/Manual_de_usuario.pdf"  target="_blank" style="color: white; font-weight:bold  " >Manual de usuario</h:outputLink>
+                </div>
+                    
+</h:form>
+
+
+
+        <br />
+
+        <br />
+       
+    </h:body>   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
+
+
