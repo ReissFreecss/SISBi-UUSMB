@@ -48,7 +48,7 @@ public class EmailController {
     private static final String MANAGER2 = "yoyis@ibt.unam.mx"; //gloria
     private static final String MANAGER3 = "rgrande@ibt.unam.mx";//ricardo
     private static final String MANAGER4 = "uusmb@ibt.unam.mx "; //todo uusmb
-    private static final String MANAGER5 = "kleslie.matias@gmail.com";//leslie
+    private static final String MANAGER5 = "carlos.perez@ibt.unam.mx";//carlos
     private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
     private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
     private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
@@ -56,19 +56,21 @@ public class EmailController {
     
 //-------------------------------------------------------------------
 
-    // Constantes para mandar el email
+    // Carlos Perez Calderon - 29-04-2025
+    // Contraseñas actualizadas a versiones más seguras
+    /*/ Evitando exponer directamente estas credenciales sensibles en el código fuente.
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "sisbi@ibt.unam.mx";
     private static final String USER = "sisbi@ibt.unam.mx";
-    private static final String PASS = "0tr0C4b4ll0";
+    private static final String PASS = "whyn zcci kxbx lhpd";*/
     
     
     
     //test
-    /*private static final String HOST = "smtp.gmail.com";
+    private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "NoEnviar_sisbi@ibt.unam.mx";
     private static final String USER = "NoEnviar_sisbi@ibt.unam.mx";
-    private static final String PASS = "NoEnviar_0tr0C4b4ll0";*/
+    private static final String PASS = "NoEnviar_whyn zcci kxbx lhpd";
 
 
     //private static final int PORT = 587;
@@ -1159,7 +1161,7 @@ public class EmailController {
     }
     public void sendEmailErrorTraceback(String mensaje, Exception e){
         init();
-        String email = "kleslie.matias@gmail.com";//Correo del desarrollador
+        String email = "carlos.perez@ibt.unam.mx";
         StringWriter writer = new StringWriter();
         e.printStackTrace(new PrintWriter(writer));
         String stackTrace = writer.toString();

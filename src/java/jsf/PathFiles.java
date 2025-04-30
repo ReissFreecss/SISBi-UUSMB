@@ -66,9 +66,9 @@ public class PathFiles {
     */
 
     //Constantes:
-    //public static String Xochi_IP="132.248.32.95:37703";
+    public static String Xochi_IP="132.248.32.95";
     //cambiar a produccion leslie 12/02/2024
-    public static String Xochi_IP="www.uusmb.unam.mx";
+    //public static String Xochi_IP="www.uusmb.unam.mx";
     // Separador de rutas (Ahora windows acepta el slash derecho , entonces se vaa a usar ese siempre)
     public static String separatorPath = "/";
 
