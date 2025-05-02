@@ -11,7 +11,7 @@
 
             <h:outputText value="Muestras del Proyecto - #{projectController.projectName()} -"></h:outputText>
             <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
-                        
+
         </ui:define>
         <ui:define name="body">
             <h:form styleClass="jsfcrud_list_form" id="form">
@@ -55,11 +55,11 @@
                     <f:facet name="footer">
 
                         <h:panelGrid columns="3" style="border-color: transparent">
-                                <!--leslie 06 mayo-->
+                            <!--leslie 06 mayo-->
                             <p:commandButton  process="tbl"  id="createComment" icon="ui-icon-pencil"  oncomplete="PF('SampleDialog').show()"  value="Modificar muestras seleccionadas" update=":form:SampleDetail form:samplesStateBefore"></p:commandButton>          
                             <p:commandButton  process="tbl"  id="createBiblo"   icon="ui-icon-pencil" rendered="#{sampleController.canEdit()}"   action="#{sampleController.redirectLibrary()}"  actionListener="#{libraryController.limpiaLista()}"  value="Construir bibliotecas" update="form:biblioErrDialog form:samplesEmptyError"></p:commandButton>
                         </h:panelGrid>
-                        
+
                     </f:facet>
 
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
@@ -98,21 +98,21 @@
                         </f:facet>
                         <h:outputText value="#{item.idTube}"/>
                     </p:column>
-                     
-                     <p:column width="150" filterMatchMode="contains" filterBy="#{item.idTube}" exportable="false" >
+
+                    <p:column width="150" filterMatchMode="contains" filterBy="#{item.idTube}" exportable="false" >
                         <f:facet name="header">
                             <p:outputLabel value="Tipo de muestra"/>
                         </f:facet>
-                         <h:outputText value="#{item.type}"/>
+                        <h:outputText value="#{item.type}"/>
                     </p:column>
-                    
+
                     <p:column width="110" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="Depleción rRNA" style="text-align:left;color: black "/>
                         </f:facet>
                         <h:outputText value="#{item.deplesion}"/>
                     </p:column>
-                    
+
                     <p:column width="110" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="¿Solo extracción?" style="text-align:left;color: black "/>
@@ -125,21 +125,21 @@
                         </f:facet>
                         <h:outputText value="#{item.just_qanalysis}"/>
                     </p:column>
-                    
+
                     <p:column width="140" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="¿Solo Cons. bilbioteca?" style="text-align:left;color: black"/>
                         </f:facet>
                         <h:outputText value="#{item.just_lib}"/>
                     </p:column>
-                    
+
                     <p:column width="130" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="¿Solo secuenciación?" style="text-align:left;color: black "/>
                         </f:facet>
                         <h:outputText value="#{item.just_seq}"/>
                     </p:column>
-                    
+
 
                     <p:column width="150" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
@@ -147,22 +147,22 @@
                         </f:facet>
                         <h:outputText value="#{item.geneticExtraction}"/>
                     </p:column>
-                    
+
                     <p:column width="150" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="¿Requiere cons.biblioteca?" style="text-align:left;color: black "/>
                         </f:facet>
                         <h:outputText value="#{item.build_lib}"/>
                     </p:column>
-                    
+
                     <p:column width="150" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="¿Requiere secuenciación?" style="text-align:left;color: black "/>
                         </f:facet>
                         <h:outputText value="#{item.do_seq}"/>
                     </p:column>
-                    
-                    
+
+
                     <p:column width="115" exportable="false" style="text-align:left;color: red ">
                         <f:facet name="header">
                             <p:outputLabel value="Tipo de organismo" style="text-align:left;color: black "/>
@@ -185,7 +185,7 @@
                         <h:outputText value="#{item.referenceName}"/>
 
                     </p:column>
-                    
+
                     <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Posible contaminante"/>
@@ -194,7 +194,7 @@
                         <h:outputText value="#{item.contaminantName}"/>
 
                     </p:column>
-                    
+
                     <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Descripción"/>
@@ -306,8 +306,8 @@
 
                         <h:outputText value="#{item.sampleQuality}"/>
                     </p:column>
-                     
-                    
+
+
                     <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <h:outputLink id="content" value="#">
@@ -327,27 +327,27 @@
 
                                     <p:outputLabel value="Recibida" style="text-align: center"/>  
                                     <p:outputLabel value="La unidad recibió la muestra." />  
-                                    
-                                    
+
+
                                     <p:outputLabel value="Entrega solo extración de material genético" style="text-align: center"/>  
                                     <p:outputLabel value="Se entrego al usuario solo la extraccion" />  
 
                                     <p:outputLabel value="Entrega solo análisis de calidad" style="text-align: center"/>  
                                     <p:outputLabel value="Se entrego al usuario solo el analisis de calidad" />  
-                                            
-                                      
+
+
 
                                     <p:outputLabel value="En análisis de calidad" style="text-align: center"/>  
                                     <h:panelGrid columns="1" style="padding-left: 0px">
                                         <p:outputLabel value="La muestra esta siendo analizada en cuanto a calidad" />  
                                         <p:outputLabel value="y concentación total del material genético." />  
                                     </h:panelGrid>
-                                    
-                                     <p:outputLabel value="En espera de instrucciones por parte del usuario" style="text-align: center"/>  
-                                            <h:panelGrid columns="1" style="padding-left: 0px">
-                                                <p:outputLabel value="La muestra está en espera, mientras el usuario comunica si desea continuar" />  
-                                                <p:outputLabel value="realizará remplazo o rechazará las muestras para su procesamiento." />  
-                                            </h:panelGrid>
+
+                                    <p:outputLabel value="En espera de instrucciones por parte del usuario" style="text-align: center"/>  
+                                    <h:panelGrid columns="1" style="padding-left: 0px">
+                                        <p:outputLabel value="La muestra está en espera, mientras el usuario comunica si desea continuar" />  
+                                        <p:outputLabel value="realizará remplazo o rechazará las muestras para su procesamiento." />  
+                                    </h:panelGrid>
                                     <!--
                                      <p:outputLabel value="Calidad Aceptada" style="text-align: center"/>
                                    <h:panelGrid columns="1" style="padding-left: 0px">
@@ -363,9 +363,9 @@
 
                                     <p:outputLabel value="En construcción de biblioteca" style="text-align: center"/>  
                                     <p:outputLabel value="La muestra está siendo procesada para su secuenciación." />  
-                                    
-                                     <p:outputLabel value="Entrega solo const. biblioteca" style="text-align: center"/>
-                                     <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
+
+                                    <p:outputLabel value="Entrega solo const. biblioteca" style="text-align: center"/>
+                                    <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
 
                                     <p:outputLabel value="Biblioteca entregada" style="text-align: center"/>
                                     <h:panelGrid columns="1" style="padding-left: 0px" styleClass="innerpanelgrid">
@@ -456,17 +456,17 @@
                         </f:facet>
 
                         <h:outputText value="#{item.aceptation}"/>
-                        
-                        </p:column>
-                        
-                        <p:column width="140" exportable="false">
+
+                    </p:column>
+
+                    <p:column width="140" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Medio de entrega"/>
                         </f:facet>
 
                         <h:outputText value="#{item.delivery}"/>
                     </p:column>
-                    
+
                     <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Tipo de aplicación"/>
@@ -475,21 +475,21 @@
                         <h:outputText value="#{item.app_type}"/>
 
                     </p:column>
-                     
-                      <p:column width="150" exportable="false">
+
+                    <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Kit biblioteca"/>
                         </f:facet>
 
-                          <h:outputText value="#{item.kit_lib}"/>
+                        <h:outputText value="#{item.kit_lib}"/>
 
                     </p:column>                    
-                      <p:column width="150" exportable="false">
+                    <p:column width="150" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Tag biblioteca"/>
                         </f:facet>
 
-                          <h:outputText value="#{item.tag_lib}"/>
+                        <h:outputText value="#{item.tag_lib}"/>
 
                     </p:column>
 
@@ -502,8 +502,8 @@
 
 
                     </p:column>
-                    
-                     
+
+
                     <p:column width="300" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="Illumina: Rendimiento solicitado en millones de lecturas"/>
@@ -532,7 +532,7 @@
                         <h:outputText value="#{item.readSize}"/>
 
                     </p:column>
-                    
+
                     <p:column width="80" exportable="false">
                         <f:facet name="header">
                             <p:outputLabel value="No. Folio"/>
@@ -673,8 +673,8 @@
 
 
                 </p:dialog>
-                
-                
+
+
                 <!--leslie06 mayo-->
                 <!--
                  <p:dialog id="samplesStateBefore" header="Error al actualizar estatus de las muestras" widgetVar="samplesStateBefore" modal="true" style="font-size: large; text-align: center; font-size: 13px" >
@@ -684,7 +684,7 @@
                         <br></br>
                     </h:panelGrid>
                 </p:dialog> -->
-                
+
 
                 <p:dialog id="samplesEmptyError" header="Error al seleccionar muestras" widgetVar="samplesEmptyError" modal="true" style="font-size: large; text-align: center; font-size: 13px" >
                     <h:panelGrid columns="1" >
@@ -771,11 +771,11 @@
                                 <h:outputText value="#{sampleDiferent.type}"/>
                             </p:column>
                         </p:dataTable>
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
                         <p:dataTable id="tblSam2" value="#{sampleController.sampleTable}"  var="samplei" reflow="true">
                             <f:facet name="header">
                                 Muestras
@@ -811,13 +811,13 @@
                                 <h:outputText value="#{samplei.labVolume}"/>
                             </p:column>
                         </p:dataTable>
-                       
+
                     </h:panelGrid>
 
 
 
                 </p:dialog>
- - 
+                - 
                 <p:dialog header="Editar Muestra" height="500" widgetVar="SampleDialog" modal="true" resizable="true">
 
 
@@ -846,22 +846,22 @@
                         <p:tabView rendered="#{sampleController.sampleTable.size()!=0}"> 
                             <p:tab title="1">
                                 <h:panelGrid columns="2" >
-                                    
-                                    
+
+
                                     <p:outputLabel value="¿Requiere extracción genética?" for="genExtr"/>
                                     <p:selectOneRadio id="genExtr" value="#{sampleController.genExtra}">
                                         <f:selectItem itemLabel="Si" itemValue="Si" />
                                         <f:selectItem itemLabel="No" itemValue="No" />
                                     </p:selectOneRadio>
-                                    
+
                                     <p:outputLabel value="¿Requiere const. biblioteca?" for="doLib"/>
                                     <p:selectOneRadio id="doLib" value="#{sampleController.bulib}">
                                         <f:selectItem itemLabel="Si" itemValue="Si" />
                                         <f:selectItem itemLabel="No" itemValue="No" />
                                     </p:selectOneRadio>
-                                    
-                                      <p:outputLabel value="¿Requiere secuenciación?" for="doSeq"/>
-                                      <p:selectOneRadio id="doSeq" value="#{sampleController.doseq}">
+
+                                    <p:outputLabel value="¿Requiere secuenciación?" for="doSeq"/>
+                                    <p:selectOneRadio id="doSeq" value="#{sampleController.doseq}">
                                         <f:selectItem itemLabel="Si" itemValue="Si" />
                                         <f:selectItem itemLabel="No" itemValue="No" />
                                     </p:selectOneRadio>
@@ -876,8 +876,8 @@
                                     <p:inputText id="sampleLabVolume" value="#{sampleController.labVolume}"  rendered="#{sampleController.canEdit()}">
                                         <p:keyFilter regEx="/[0-9.]/i" preventPaste="false"/>
                                     </p:inputText>
-                                    
-                                    
+
+
                                     <p:outputLabel value="Cantidad  de muestra (ng):" for="sampleQuantity" rendered="{sampleController.canEdit()}"/>
                                     <p:inputText id="sampleQuantity" value="{sampleController.samConcent}"  rendered="{sampleController.canEdit()}">
                                         <p:keyFilter regEx="/[0-9.]/i" preventPaste="false"/>
@@ -887,7 +887,7 @@
                                     <p:inputText id="sampleVolume" value="{sampleController.samVolume}"  rendered="{sampleController.canEdit()}">
                                         <p:keyFilter regEx="/[0-9.]/i" preventPaste="false"/>
                                     </p:inputText> 
-                                    
+
                                     <p:outputLabel value= "Medio de entrega:" for="entrega"   />
                                     <p:selectOneMenu id="entrega" value="#{sampleController.delivery}" >
                                         <f:selectItem itemLabel="---" itemValue=""/>
@@ -910,7 +910,7 @@
 
                                     <p:outputLabel value="Calidad:" for="sampleQuality"  rendered="#{sampleController.canEdit()}"/>
                                     <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="sampleQuality" value="#{sampleController.samQuality}" style="width:125px">
-                                         <f:selectItem itemLabel="---" itemValue="---" />
+                                        <f:selectItem itemLabel="---" itemValue="---" />
                                         <f:selectItem itemLabel="Buena/Aceptable" itemValue="Buena/Aceptable" />
                                         <f:selectItem itemLabel="Buena/Poco volumen" itemValue="Buena/Poco volumen" />
                                         <f:selectItem itemLabel="Baja concentración" itemValue="Baja concentración" />
@@ -922,7 +922,7 @@
 
                                     <p:outputLabel rendered="#{sampleController.canEdit()}" value="Estatus:" for="status" />
                                     <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{sampleController.samStat}" style="width:125px">
-                                      <f:selectItem itemLabel="---" itemValue="---" />
+                                        <f:selectItem itemLabel="---" itemValue="---" />
                                         <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
                                         <f:selectItem itemLabel="Entrega sólo extracción" itemValue="Entrega solo extraccion" />
                                         <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
@@ -973,7 +973,7 @@
                                         <f:selectItem itemLabel="DNA" itemValue="DNA"/>
                                         <f:selectItem itemLabel="RNA" itemValue="RNA"/>                                      
                                     </p:selectOneMenu>
-                                    
+
                                     <p:outputLabel value="Tipo de aplicacion" for="app_type"  />
                                     <p:selectOneMenu   id="app_type" value="#{sampleController.apptype}" >
                                         <f:selectItem itemLabel="---" itemValue=""/>
@@ -990,7 +990,7 @@
                                         <f:selectItem itemLabel="Amplicón CO1" itemValue="amplicon co1"/>
                                         <f:selectItem itemLabel="Amplicón trnL" itemValue="amplicon trnl"/>
                                     </p:selectOneMenu> 
-                                    
+
 
 
                                     <p:outputLabel value="Plataformas para las bibliotecas:" for="plataform"  />
@@ -1035,7 +1035,7 @@
                                 <!--<p:outputLabel  value="¿Se requiere análisis bioinformático?" />-->
                                 <h:panelGrid id="grid3" columns="1"> 
                                     <h:panelGrid id="gridRender" columns="1">
-                                        
+
                                         <p:outputLabel value="¿Requiere análisis bioinformatico?:
                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1048,18 +1048,18 @@
                                         </p:selectOneRadio>
                                     </h:panelGrid>
                                     <div align="left">
-                                    <h:panelGrid id="gridBioin" columns="1" rendered="#{sampleController.haveBioAn}"> 
-                                        <p:outputLabel value="Análisis Bioinformáticos con costo adicional" style="font-size: medium; font-style: italic" /> <br />
-                                        
-                                         
-                                        <p:selectManyCheckbox id="gridCheckCost" value="#{sampleController.analysisCost}" layout="pageDirection" columns="1" style="text-align: left">>
-                                            <f:selectItems value="#{bioinformaticAnalysisController.bioAnCost}" var="analysis" itemLabel="#{analysis}" itemValue="#{analysis}"  />
-                                        </p:selectManyCheckbox>
-                                        
-                                        
-                                        <br/>
-                                    </h:panelGrid>
-                                         </div>
+                                        <h:panelGrid id="gridBioin" columns="1" rendered="#{sampleController.haveBioAn}"> 
+                                            <p:outputLabel value="Análisis Bioinformáticos con costo adicional" style="font-size: medium; font-style: italic" /> <br />
+
+
+                                            <p:selectManyCheckbox id="gridCheckCost" value="#{sampleController.analysisCost}" layout="pageDirection" columns="1" style="text-align: left">>
+                                                <f:selectItems value="#{bioinformaticAnalysisController.bioAnCost}" var="analysis" itemLabel="#{analysis}" itemValue="#{analysis}"  />
+                                            </p:selectManyCheckbox>
+
+
+                                            <br/>
+                                        </h:panelGrid>
+                                    </div>
                                 </h:panelGrid> 
                             </p:tab>
                             <!-- Linabat Maintenance  ********************************************************** End -->
@@ -1067,12 +1067,12 @@
 
                         </p:tabView>
                         <div align="center">
-                            <h:panelGrid  rendered="#{sampleController.sampleTable.size()!=0}"  columns="2" style="text-align: center">
-
-                                <p:outputLabel  value="Mandar correo de notificación al usuario"  />
-                                <p:selectBooleanCheckbox value="#{sampleController.sendMail}" />
-
-
+                            <h:panelGrid rendered="#{sampleController.sampleTable.size() != 0}" columns="2" style="text-align: center">
+                                <p:outputLabel value="¿Mandar correo de notificación al usuario?" />
+                                <p:selectOneRadio value="#{sampleController.sendMail}">
+                                    <f:selectItem itemLabel="Sí" itemValue="true" />
+                                    <f:selectItem itemLabel="No" itemValue="false" />
+                                </p:selectOneRadio>
                             </h:panelGrid>
                         </div>
                         <div align="center">
@@ -1091,10 +1091,10 @@
                 </p:dialog>
 
                 <br />
-                
-                                <!--leslie06 mayo-->
-                
-                 <p:dialog id="samplesStateBefore" header="Error al actualizar estatus de las muestras" widgetVar="samplesStateBefore" modal="true" style="font-size: large; text-align: center; font-size: 13px" dynamic="true" draggable="false">
+
+                <!--leslie06 mayo-->
+
+                <p:dialog id="samplesStateBefore" header="Error al actualizar estatus de las muestras" widgetVar="samplesStateBefore" modal="true" style="font-size: large; text-align: center; font-size: 13px" dynamic="true" draggable="false">
                     <h:panelGrid columns="1" >
                         <br></br>
                         <p:outputLabel value="#{sampleController.getMessageDialog()}" style="font-weight: bold"/>
