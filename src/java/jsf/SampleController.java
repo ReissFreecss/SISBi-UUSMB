@@ -36,13 +36,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -182,12 +186,29 @@ public class SampleController implements Serializable {
 
     private List<Sample> samplesRedirect;
 
-    String[] all_stat = {"Registrada", "Recibida", "Entrega solo extraccion", "En analisis de calidad", "Entrega solo analisis de calidad",
-        "En espera de instrucciones del usuario", "En construccion de biblioteca", "Biblioteca entregada",
-        "Construccion ineficiente", "En espera de secuenciacion", "Secuenciandose", "Secuenciada", "Basecalling y QC en proceso",
-        "Basecalling y QC terminado", "Para resecuenciar", "Rechazada (Forsake)", "Entregado fastq", "En Analisis Bioinformatico",
-        "Analisis Bioinformatico Entregado"};
+    String[] all_stat = {
+        "Registrada", //0
+        "Recibida", //1
+        "En espera de instrucciones del usuario", //2
+        "Entrega solo extraccion", //3
+        "En analisis de calidad", //4
+        "Entrega solo analisis de calidad", //5
+        "En construccion de biblioteca", //6
+        "Biblioteca entregada", //7
+        "Construccion ineficiente", //8
+        "En espera de secuenciacion", //9
+        "Secuenciandose", //10
+        "Secuenciada", //11
+        "Basecalling y QC en proceso", //12
+        "Basecalling y QC terminado", //13
+        "Para resecuenciar", //14
+        "Rechazada (Forsake)", //15
+        "Entregado fastq", //16
+        "En Analisis Bioinformatico", //17
+        "Analisis Bioinformatico Entregado"//18
+    };
     //posiciones del 0-18
+    // Carlos Perez Calderon 30/03/2025
 
     List<String> lista_status = Arrays.asList(all_stat);
     //fin leslie
@@ -472,7 +493,6 @@ public class SampleController implements Serializable {
 
     @PostConstruct
     public void init() {
-
         sampleList = new ArrayList<>();
         sampleList = ejbFacade.findAll();
 
@@ -1956,8 +1976,8 @@ public class SampleController implements Serializable {
         delivery = null;
 
     }
-    //Actaulizar muestras ...cambio estatus
 
+    // Metodo para actualizar muestras y generar los cambios de status
     public void updateManySamples() {
         FacesContext context = FacesContext.getCurrentInstance();
         Project pj = (Project) context.getExternalContext().getSessionMap().get("project");
@@ -1974,21 +1994,12 @@ public class SampleController implements Serializable {
 
                 String[] name = sample.getSampleName().split("_");
 
-                if (name.length >= 1) {
-
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String[] tiempo = timestamp.toString().split(":");
-                    String[] tiempo2 = tiempo[0].split("-");
-                    String[] dia = tiempo2[2].split(" ");
-                    String año = tiempo2[0].substring(2, 4);
-                    String fecha = año + tiempo2[1] + dia[0];
-
-                    String[] formated = pj.getIdProject().split("_");
-                    String manager = formated[1];
+                // ——— Renombrado de muestra si aplica ———
+                if (samName != null && !samName.isEmpty()) {
+                    String[] nameParts = sample.getSampleName().split("_");
+                    String fecha = new SimpleDateFormat("yyMMdd").format(new Date());
+                    String manager = pj.getIdProject().split("_")[1];
                     sample.setSampleName(manager + "_" + fecha + "_" + samName);
-
-                } else {
-                    sample.setSampleName(name[0] + "_" + name[1] + "_" + samName);
                 }
             }
             if (tube != null && !tube.isEmpty()) {
@@ -2029,67 +2040,51 @@ public class SampleController implements Serializable {
             if (genExtra != null && !genExtra.isEmpty()) {
                 sample.setGeneticExtraction(genExtra);
             }
-
             if (Bulib != null && !Bulib.isEmpty()) {
                 sample.setBuild_lib(Bulib);
             }
-
             if (Doseq != null && !Doseq.isEmpty()) {
                 sample.setDo_seq(Doseq);
             }
-
             if (labVolume != null && !labVolume.isEmpty()) {
-
                 sample.setLabVolume(Double.parseDouble(labVolume));
             }
             if (samVolume != null && !samVolume.isEmpty()) {
-
                 sample.setSampleVolume(samVolume);
             }
             if (Abs260_280 != null && !Abs260_280.isEmpty()) {
-
                 sample.setAbs260_280(Abs260_280);
             }
             if (Abs260_230 != null && !Abs260_230.isEmpty()) {
-
                 sample.setAbs260_230(Abs260_230);
             }
             if (folio != null && !folio.isEmpty()) {
-
                 sample.setFolio(folio);
             }
             if (Abs260_280_usmb != null && !Abs260_280_usmb.isEmpty()) {
-
                 sample.setAbs260_280_usmb(Abs260_280_usmb);
             }
             if (Abs260_230_usmb != null && !Abs260_230_usmb.isEmpty()) {
-
                 sample.setAbs260_230_usmb(Abs260_230_usmb);
             }
             if (delivery != null && !delivery.equals("---")) {
-
                 sample.setDelivery(delivery);
             }
             if (labConcent != null && !labConcent.isEmpty()) {
-
                 sample.setLabConcen(Double.parseDouble(labConcent));
             }
             if (samConcent != null && !samConcent.isEmpty()) {
                 sample.setSampleQuantity(samConcent);
             }
-
             if (apptype != null && !apptype.isEmpty()) {
                 sample.setApp_type(apptype);
             }
-
             if (plataform != null && !plataform.isEmpty()) {
                 sample.setSamplePlataform(plataform);
             }
-
             if (readSize != null && !readSize.equals("---")) {
                 sample.setReadSize(readSize);
             }
-
             if (inSize != null && !inSize.equals("---")) {
                 sample.setInsertSize(inSize);
             }
@@ -2128,17 +2123,13 @@ public class SampleController implements Serializable {
                 }
 
             }
+            // Inicio de los cambios de status 
             if (samStat != null && !samStat.equals("---")) {
                 statusAnt = sample.getStatus();
                 //leslie06 mayo 2024                              
                 int pos_stat_ant = 0;
                 int pos_stat_nuevo = 0;
-                int fin_viejo = 0;
 
-                //veo las posiciones y sus elementos de la lista que contiene todos los status en sisbi
-                /*for(int i=0;i<lista_status.size();i++){
-                    System.out.println("posicion: "+i+" = "+lista_status.get(i));                    
-                }*/
                 //calcula la posicion del viejo status vs la lista ordenada de status
                 for (int i = 0; i < lista_status.size(); i++) {
                     if (statusAnt.equals(lista_status.get(i))) {
@@ -2146,6 +2137,7 @@ public class SampleController implements Serializable {
                         pos_stat_ant = i;
                     }
                 }
+
                 //calcula la posicion del nuevo status vs la lista ordenada de status
                 for (int i = 0; i < lista_status.size(); i++) {
                     if (samStat.equals(lista_status.get(i))) {
@@ -2154,8 +2146,12 @@ public class SampleController implements Serializable {
                     }
                 }
 
-                if (pos_stat_nuevo == 5) {//en espera de instrucciones por parte del usuario
-                    System.out.println("--> EN ESPERA DE INSTRUCCIONES: Se actualiza el status");
+                // Carlos Perez Calderon 02/04/2025
+                // Se reestructuro la validacion de los cambios de estatus respetando la logica anterior del codigo
+                if (pos_stat_nuevo == 2) {
+                    // Siempre aplica para “En espera de instrucciones” (5) y 
+                    // “Entrega solo análisis de calidad” (4)
+                    System.out.println("--> EXCEPCIÓN o EN ESPERA DE INSTRUCCIONES: Se actualiza el status");
                     sample.setStatus(samStat);
                     statusChange = true;
                     Comments commentsSample = new Comments();
@@ -2167,88 +2163,61 @@ public class SampleController implements Serializable {
                     commentsSample.setUserName("SISBI");
                     commentsSample.setCommentDate(timestamp);
                     commentFac.createComment(commentsSample);
+
+                } else if (pos_stat_ant == 15) {
+                    // Prohibido si está Rechazada (Forsake)
+                    System.out.println(" xX  FORSAKE: No se va actualizar el status item " + iteracion);
+                    RequestContext dialog = RequestContext.getCurrentInstance();
+                    strMessage = "¡No se puede realizar el cambio de estatus, la muestra con ID "
+                            + sample.getIdSample() + " está RECHAZADA (Forsake)!";
+                    setMessageDialog(strMessage);
+                    dialog.execute("PF('samplesStateBefore').show();");
+                    return;
+
+                } else if (pos_stat_ant == 14) {
+                    // Siempre permitir desde “Para resecuenciar”
+                    System.out.println("--> RESECUENCIACIÓN: Se actualiza el status");
+                    sample.setStatus(samStat);
+                    statusChange = true;
+                    Comments commentsSample = new Comments();
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+                    commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
+                    commentsSample.setIdType(sample.getIdSample() + "");
+                    commentsSample.setType("Sample");
+                    commentsSample.setUserName("SISBI");
+                    commentsSample.setCommentDate(timestamp);
+                    commentFac.createComment(commentsSample);
+
+                } else if (pos_stat_nuevo <= pos_stat_ant) {
+                    // No permitir retroceder ni mismo estatus
+                    System.out.println("xX INTENTO CAMBIO ANTERIOR O MISMO ESTATUS: No se va actualizar el estatus");
+                    RequestContext dialog = RequestContext.getCurrentInstance();
+                    strMessage = "¡La muestra con ID " + sample.getIdSample()
+                            + " no se puede cambiar al mismo estatus o a uno anterior!";
+                    setMessageDialog(strMessage);
+                    dialog.execute("PF('samplesStateBefore').show();");
+                    return;
+
                 } else {
-                    if (pos_stat_ant == 15) {
-                        System.out.println(" xX  FOSRSAKE:  No se va actualizar el status item " + iteracion);
-
-                        //setMessageDialog("¡No se puede realizar el cambio de estatus, la muestra con ID "+ sample.getIdSample() +" esta RECHAZADA (Forsake)!");                                                                        
-                        RequestContext dialog_stat = RequestContext.getCurrentInstance();
-                        strMessage = "¡No se puede realizar el cambio de estatus, la muestra con ID " + sample.getIdSample() + " esta RECHAZADA (Forsake)!";
-                        setMessageDialog(strMessage);
-                        //  dialog_stat.update("samplesStateBefore");
-                        dialog_stat.execute("PF('samplesStateBefore').show();");
-
-                        return;
-
-                    } else {
-                        if (pos_stat_ant == 14) {
-                            System.out.println("--> RESECUENCIACION: Se actualiza el status");
-                            sample.setStatus(samStat);
-                            statusChange = true;
-                            Comments commentsSample = new Comments();
-                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                            Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-                            commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
-                            commentsSample.setIdType(sample.getIdSample() + "");
-                            commentsSample.setType("Sample");
-                            commentsSample.setUserName("SISBI");
-                            commentsSample.setCommentDate(timestamp);
-                            commentFac.createComment(commentsSample);
-                        } else {
-                            if (pos_stat_nuevo <= pos_stat_ant) {
-                                System.out.println("xX INTENTO CAMBIO DE ESTADO ANTERIOR O MISMO ESTATUS : No se va actualizar el estatus");
-
-                                RequestContext dialog_stat = RequestContext.getCurrentInstance();
-                                // messageDialog="¡No se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
-                                strMessage = "¡La muestra con ID " + sample.getIdSample() + " no se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
-                                setMessageDialog(strMessage);
-                                dialog_stat.execute("PF('samplesStateBefore').show();");
-
-                                return;
-
-                            } else {
-                                System.out.println("--> SE SIGUE EL FLUJO: Se actualiza el status ");
-                                sample.setStatus(samStat);
-                                statusChange = true;
-                                if (samStat.equals("Recibida")) {
-                                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                    sample.setReceptionDate(timestamp);
-                                }
-                                Comments commentsSample = new Comments();
-                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-                                commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
-                                commentsSample.setIdType(sample.getIdSample() + "");
-                                commentsSample.setType("Sample");
-                                commentsSample.setUserName("SISBI");
-                                commentsSample.setCommentDate(timestamp);
-                                commentFac.createComment(commentsSample);
-                            }
-
-                        }
+                    // Flujo normal
+                    System.out.println("--> SE SIGUE EL FLUJO: Se actualiza el status");
+                    sample.setStatus(samStat);
+                    statusChange = true;
+                    if ("Recibida".equals(samStat)) {
+                        sample.setReceptionDate(new Timestamp(System.currentTimeMillis()));
                     }
+                    Comments commentsSample = new Comments();
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+                    commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
+                    commentsSample.setIdType(sample.getIdSample() + "");
+                    commentsSample.setType("Sample");
+                    commentsSample.setUserName("SISBI");
+                    commentsSample.setCommentDate(timestamp);
+                    commentFac.createComment(commentsSample);
                 }
 
-                //fin leslie 06 mayo 2024
-                /*if (!statusAnt.equals(samStat)) {
-                    sample.setStatus(samStat);
-                    statusChange = true;
-                    if (samStat.equals("Recibida")) {
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        sample.setReceptionDate(timestamp);
-                    }
-                    Comments commentsSample = new Comments();
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-                    commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
-                    commentsSample.setIdType(sample.getIdSample() + "");
-                    commentsSample.setType("Sample");
-                    commentsSample.setUserName("SISBI");
-                    commentsSample.setCommentDate(timestamp);
-
-                    commentFac.createComment(commentsSample);
-
-                }*/
             } else if (recepDate != null && !recepDate.toString().isEmpty()) {
                 //validar el cambio de estatus
                 statusAnt = sample.getStatus();
@@ -2316,9 +2285,7 @@ public class SampleController implements Serializable {
                 comment = null;
 
             }
-
-            getFacade().edit(sample);
-
+            //sendMail = false;
         }
 
         // add maintenance ------------------------------------------Start 
@@ -2412,7 +2379,7 @@ public class SampleController implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        sendMail = false;;
     }
 
     public void updateManySamplesView() {
@@ -2469,41 +2436,31 @@ public class SampleController implements Serializable {
             if (genExtra != null && !genExtra.isEmpty()) {
                 sample.setGeneticExtraction(genExtra);
             }
-
             if (labVolume != null && !labVolume.isEmpty()) {
-
                 sample.setLabVolume(Double.parseDouble(labVolume));
             }
             if (samVolume != null && !samVolume.isEmpty()) {
-
                 sample.setSampleVolume(samVolume);
             }
             if (Abs260_280 != null && !Abs260_280.isEmpty()) {
-
                 sample.setAbs260_280(Abs260_280);
             }
             if (Abs260_230 != null && !Abs260_230.isEmpty()) {
-
                 sample.setAbs260_230(Abs260_230);
             }
             if (folio != null && !folio.isEmpty()) {
-
                 sample.setFolio(folio);
             }
             if (Abs260_280_usmb != null && !Abs260_280_usmb.isEmpty()) {
-
                 sample.setAbs260_280_usmb(Abs260_280_usmb);
             }
             if (Abs260_230_usmb != null && !Abs260_230_usmb.isEmpty()) {
-
                 sample.setAbs260_230_usmb(Abs260_230_usmb);
             }
             if (delivery != null && !delivery.equals("---")) {
-
                 sample.setDelivery(delivery);
             }
             if (labConcent != null && !labConcent.isEmpty()) {
-
                 sample.setLabConcen(Double.parseDouble(labConcent));
             }
             if (samConcent != null && !samConcent.isEmpty()) {
@@ -2512,7 +2469,6 @@ public class SampleController implements Serializable {
             if (plataform != null && !plataform.isEmpty()) {
                 sample.setSamplePlataform(plataform);
             }
-
             if (readSize != null && !readSize.equals("---")) {
                 sample.setReadSize(readSize);
             }
@@ -2615,26 +2571,6 @@ public class SampleController implements Serializable {
                         }
                     }
                 }
-
-                /* if (!statusAnt.equals(samStat)) {
-                    sample.setStatus(samStat);
-                    statusChange = true;
-
-                    if (samStat.equals("Recibida")) {
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        sample.setReceptionDate(timestamp);
-                    }
-
-                    Comments commentsSample = new Comments();
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
-                    commentsSample.setComment("Estatus cambia de -" + statusAnt + "- a -" + samStat + "- por " + us.getUserName());
-                    commentsSample.setIdType(sample.getIdSample() + "");
-                    commentsSample.setType("Sample");
-                    commentsSample.setUserName("SISBI");
-                    commentsSample.setCommentDate(timestamp);
-                    commentFac.createComment(commentsSample);
-                }*/
             }
 
             if (des != null && !des.isEmpty()) {

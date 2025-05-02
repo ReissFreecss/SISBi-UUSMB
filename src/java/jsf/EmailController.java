@@ -742,7 +742,7 @@ public class EmailController {
         
          String codeMessagehtml = CABECERA
                 +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado uSUARIO<br></font>"
+                +"            <font color='#454545' size='3'>Estimado Usuario<br></font>"
                 +"            <font color='#454545' size='2'>"
                 +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
                 +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
@@ -751,7 +751,7 @@ public class EmailController {
                 +"La unidad Universitaria de secuenciacón Masiva y Bionformatica le informa que<br>"               
                 + "las siguientes <strong>"+samples.size()+" muestras</strong><br>"
                 +"pertenecientes al proyecto <strong>"+projectName+"</strong>"
-                +"han cambiado de etstaus de <strong>"+statusAnt+ "a"+estatus
+                +" han cambiado de etstaus de <strong>"+statusAnt+ " a "+estatus
                 +sampleNames +"</strong><br>";
                 
 
