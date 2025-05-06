@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -705,177 +706,60 @@ public abstract class AbstractFacade<T> {
 
     }
 
-    public List<UserSample> findUserSampByName(String userName, Date fechaInicio, Date fechaTermino, String estatus, Integer id, String NomMuestra, String NomIdTubo) {
+    // Carlos Perez Calderon
+    // Se elimino las estructuras switch y se construyo array de predicados para la la busqueda de muestras
+    public List<UserSample> findUserSampByName(
+            String userName,
+            Date fechaInicio,
+            Date fechaTermino,
+            String estatus,
+            Integer id,
+            String nomMuestra,
+            String nomIdTubo) {
 
-        javax.persistence.criteria.CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<UserSample> cq = cb.createQuery(UserSample.class);
-        Root<UserSample> u = cq.from(UserSample.class);
+        // Generamos nuestra conexion con criteria
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<UserSample> cq = cb.createQuery(UserSample.class).distinct(true);
+        Root<UserSample> root = cq.from(UserSample.class);
 
-        javax.persistence.Query q = getEntityManager().createQuery(cq);
-        Predicate restrictUserName = cb.equal(u.get("userName"), userName);
-        Predicate predicFechas = cb.between(u.get("receptionDate"), fechaInicio, fechaTermino);
-        // Predicate restrictFechas = cb.or(predicFechas, u.get("receptionDate").isNull()); original
-        Predicate restrictFechas = cb.or(predicFechas, u.get("receptionDate").isNotNull());
-        Predicate restrictStatus = cb.equal(u.get("status"), estatus);
-        // Predicate restrictNomMuestra=cb.like(u.get("sampleName"), "%"+NomMuestra); original cambio leslie 30/11/23
-        Predicate restrictNomMuestra = cb.like(cb.lower(u.get("sampleName")), "%" + NomMuestra.toLowerCase() + "%");
-        // Predicate restrictNomIdTubo=cb.equal(u.get("idTube"), NomIdTubo); original cambio leslie 30/11/23
-        Predicate restrictNomIdTubo = cb.like(cb.lower(u.get("idTube")), "%" + NomIdTubo.toLowerCase() + "%");
+        // Lista donde se vaciara los resultados de la busqueda
+        List<Predicate> preds = new ArrayList<>();
 
-        Predicate restrictID = cb.equal(u.get(UserSample_.idSample), id);
-
-        cq.select(u);
-        int var = 17;
-        /* System.out.println("El estatus es: "+estatus+" y su predicate es: "+restrictStatus);
-        System.out.println("El username es: "+userName+" y su predicate es: "+restrictUserName);
-          System.out.println("El nombre de la muestra es: "+NomMuestra+" y el predicate es: "+restrictNomMuestra);*/
-
-        if (userName.equals("---")) {
-            var = 1;
+        // Filtramos de acuerdo a los parametros seleccionados por el usuario
+        if (id != null) {
+            preds.add(cb.equal(root.get(UserSample_.idSample), id));
+        }
+        if (userName != null && !userName.trim().isEmpty() && !"---".equals(userName)) {
+            preds.add(cb.equal(root.get("userName"), userName));
+        }
+        if (estatus != null && !estatus.trim().isEmpty() && !"---".equals(estatus)) {
+            preds.add(cb.equal(root.get("status"), estatus));
+        }
+        if (nomMuestra != null && !nomMuestra.trim().isEmpty()) {
+            preds.add(cb.like(cb.lower(root.get("sampleName")),
+                    "%" + nomMuestra.toLowerCase() + "%"));
+        }
+        if (nomIdTubo != null && !nomIdTubo.trim().isEmpty()) {
+            preds.add(cb.like(cb.lower(root.get("idTube")),
+                    "%" + nomIdTubo.toLowerCase() + "%"));
+        }
+        if (fechaInicio != null && fechaTermino != null) {
+            preds.add(cb.between(root.get("receptionDate"),
+                    fechaInicio,
+                    fechaTermino));
         }
 
-        if (estatus.equals("---")) {
-            var = 2;
-        }
+        // Construimos el where para la consulta 
+        cq.select(root).where(preds.toArray(new Predicate[0]));
 
-        if (NomMuestra.equals("")) {
-            var = 3;
-        }
+        // Ejecutamos la consulta usando la firma que solo recibe el CriteriaQuery
+        TypedQuery<UserSample> query = getEntityManager().createQuery(cq);
+        List<UserSample> lista = query.getResultList();
 
-        if (NomIdTubo.equals("")) {
-            var = 4;
-        }
+        // Eliminamos duplicados usando un LinkedHashSet
+        List<UserSample> sinDuplicados = new ArrayList<>(new LinkedHashSet<>(lista));
 
-        if (estatus.equals("---") && userName.equals("---") && NomMuestra.equals("") && NomIdTubo.equals("")) {
-            var = 5;
-        }
-
-        if (estatus.equals("---") && userName.equals("---") && NomMuestra.equals("") && !NomIdTubo.equals("")) {
-            var = 6;
-        }
-
-        if (estatus.equals("---") && userName.equals("---") && NomIdTubo.equals("") && !NomMuestra.equals("")) {
-            var = 7;
-        }
-
-        if (estatus.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("") && !userName.equals("---")) {
-            var = 8;
-        }
-
-        if (NomIdTubo.equals("") && userName.equals("---") && NomMuestra.equals("") && !estatus.equals("---")) {
-            var = 9;
-        }
-
-        if (estatus.equals("---") && NomIdTubo.equals("") && !userName.equals("---") && !NomMuestra.equals("")) {
-            var = 10;
-        }
-
-        if (estatus.equals("---") && NomMuestra.equals("") && !NomIdTubo.equals("") && !userName.equals("---")) {
-            var = 11;
-        }
-
-        if (estatus.equals("---") && userName.equals("---") && !NomIdTubo.equals("") && !NomMuestra.equals("")) {
-            var = 12;
-        }
-
-        if (NomIdTubo.equals("") && NomMuestra.equals("") && !estatus.equals("---") && !userName.equals("---")) {
-            var = 13;
-        }
-
-        if (NomIdTubo.equals("") && userName.equals("---") && !estatus.equals("---") && !NomMuestra.equals("")) {
-            var = 14;
-        }
-
-        if (NomMuestra.equals("") && userName.equals("---") && !estatus.equals("---") && !NomIdTubo.equals("")) {
-            var = 15;
-        }
-
-        if (id != null && estatus.equals("---") && userName.equals("---") && NomIdTubo.equals("") && NomMuestra.equals("")) {
-            var = 16;
-        }
-
-        /*Empiezan las nuevas condicionales*/
-        //System.out.println("Fecha inicio: "+ fechaInicio+ " - "+"Fecha termino: "+fechaTermino );
-        System.out.println("La opcion es: " + var);
-
-        switch (var) {
-            case 17:
-                cq.where(cb.and(cb.and(cb.and(restrictUserName, restrictFechas), restrictStatus, restrictNomMuestra), restrictNomIdTubo));
-                q = getEntityManager().createQuery(cq);
-                //cq.distinct(true);
-                break;
-            case 1:
-                cq.where(cb.and(cb.and(restrictFechas, restrictStatus), restrictNomIdTubo, restrictNomMuestra));
-                q = getEntityManager().createQuery(cq);
-                //cq.distinct(true);
-                break;
-            case 2:
-                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo, restrictNomMuestra));
-                q = getEntityManager().createQuery(cq);
-                //cq.distinct(true);
-                break;
-            case 3:
-                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo, restrictStatus));
-                q = getEntityManager().createQuery(cq);
-                //cq.distinct(true);
-                break;
-            case 4:
-                cq.where(cb.and(cb.and(restrictFechas, restrictUserName), restrictNomMuestra, restrictStatus));
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 5:
-                cq.where(restrictFechas);
-                q = getEntityManager().createQuery(cq);
-                //cq.distinct(true);
-                break;
-            case 6:
-                cq.where(restrictFechas, restrictNomIdTubo);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 7:
-                cq.where(restrictFechas, restrictNomMuestra);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 8:
-                cq.where(restrictFechas, restrictUserName);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 9:
-                cq.where(restrictFechas, restrictStatus);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 10:
-                cq.where(cb.and(restrictFechas, restrictUserName), restrictNomMuestra);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 11:
-                cq.where(cb.and(restrictFechas, restrictUserName), restrictNomIdTubo);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 12:
-                cq.where(cb.and(restrictFechas, restrictNomMuestra), restrictNomIdTubo);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 13:
-                cq.where(cb.and(restrictFechas, restrictStatus), restrictUserName);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 14:
-                cq.where(cb.and(restrictFechas, restrictStatus), restrictNomMuestra);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 15:
-                cq.where(cb.and(restrictFechas, restrictStatus), restrictNomIdTubo);
-                q = getEntityManager().createQuery(cq);
-                break;
-            case 16:
-                cq.where(restrictID);
-                q = getEntityManager().createQuery(cq).setMaxResults(1);
-                break;
-        }
-
-        return q.getResultList();
-
+        return sinDuplicados;
     }
 
     public List<BioinformaticAnalysis> findBionformaticAnalysisBySample(Sample id) {

@@ -1,43 +1,23 @@
 package jsf;
 
 import java.io.IOException;
-import jpa.entities.UserProjectLink;
-import jsf.util.JsfUtil;
-import jsf.util.PaginationHelper;
-import jpa.session.UserProjectLinkFacade;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
 
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
-import javax.faces.event.ActionEvent;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
-import javax.faces.model.SelectItem;
-import jpa.entities.Comments;
-
-import jpa.entities.Project;
 import jpa.entities.UserSample;
-import jpa.entities.Users;
-import jpa.session.CommentsFacade;
 import jpa.session.UserSampleFacade;
-import org.primefaces.context.RequestContext;
+
 
 @Named("userSampleController")
 @SessionScoped
@@ -184,6 +164,11 @@ public class UserSampleController implements Serializable {
     
     }
     
+    // Carlos Perez Calderon 05/mayo/2025
+    // Metodo para hacer las busquedas de acuerdo a los campos seleccionados por el usuario
+    
+    
+    
     public void reset(){
    /* estatus = "---";
     user = "---";
@@ -211,11 +196,5 @@ public class UserSampleController implements Serializable {
             fechaIncio=minDate;
             fechaTermino=maxDate;  
         }
-   
-   
     }
-           
-    
-   
-
 }
