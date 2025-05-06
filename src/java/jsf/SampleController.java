@@ -189,10 +189,10 @@ public class SampleController implements Serializable {
     String[] all_stat = {
         "Registrada", //0
         "Recibida", //1
-        "En espera de instrucciones del usuario", //2
-        "Entrega solo extraccion", //3
-        "En analisis de calidad", //4
-        "Entrega solo analisis de calidad", //5
+        "Entrega solo extraccion", //2
+        "En analisis de calidad", //3
+        "Entrega solo analisis de calidad", //4
+        "En espera de instrucciones del usuario", //5
         "En construccion de biblioteca", //6
         "Biblioteca entregada", //7
         "Construccion ineficiente", //8
