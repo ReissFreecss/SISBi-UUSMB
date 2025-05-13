@@ -1974,7 +1974,7 @@ public class SampleController implements Serializable {
         labConcent = null;
         plataform = null;
         delivery = null;
-
+        sampleTable.clear();
     }
 
     // Metodo para actualizar muestras y generar los cambios de status
@@ -1987,6 +1987,8 @@ public class SampleController implements Serializable {
         boolean qualityChange = false;
         int iteracion = 0;
         String strMessage = "";
+        
+        List<Sample> samplesParaCorreo = new ArrayList<>(sampleTable);
 
         for (Sample sample : sampleTable) {
             iteracion++;
@@ -2350,7 +2352,7 @@ public class SampleController implements Serializable {
             }
             EmailController ec = new EmailController();
             System.out.println("Manda email de cambio de estatus");
-            ec.sendUpdateStatusSamplesEmail(sampleTable, samStat, statusAnt, emails, pj.getProjectName());
+            ec.sendUpdateStatusSamplesEmail(samplesParaCorreo, samStat, statusAnt, emails, pj.getProjectName());
 
         }
 
@@ -2367,7 +2369,7 @@ public class SampleController implements Serializable {
             }
             EmailController ec = new EmailController();
             System.out.println("Manda email de cambio de calidad");
-            ec.sendUpdateQualitySamplesEmail(sampleTable, samQuality, emails, pj.getProjectName());
+            ec.sendUpdateQualitySamplesEmail(samplesParaCorreo, samQuality, emails, pj.getProjectName());
 
         }
 
