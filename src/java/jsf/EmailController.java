@@ -42,37 +42,31 @@ import jpa.session.UserProjectLinkFacade;
  */
 public class EmailController {
 
-    
 // Constantes que indican los emails de cada uno de las responsables   
-    private static final String MANAGER1 = "sisbi@ibt.unam.mx";
-    private static final String MANAGER2 = "yoyis@ibt.unam.mx"; //gloria
-    private static final String MANAGER3 = "rgrande@ibt.unam.mx";//ricardo
-    private static final String MANAGER4 = "uusmb@ibt.unam.mx "; //todo uusmb
+    //private static final String MANAGER1 = "sisbi@ibt.unam.mx";
+    //private static final String MANAGER2 = "yoyis@ibt.unam.mx"; //gloria
+    //private static final String MANAGER3 = "rgrande@ibt.unam.mx";//ricardo
+    //private static final String MANAGER4 = "uusmb@ibt.unam.mx "; //todo uusmb
     private static final String MANAGER5 = "carlos.perez@ibt.unam.mx";//carlos
-    private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
-    private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
-    private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
-    private static final String MANAGER9 = "estefania.herrera@ibt.unam.mx "; //fani
-    
-//-------------------------------------------------------------------
+    //private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
+    //private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
+    //private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
+    //private static final String MANAGER9 = "estefania.herrera@ibt.unam.mx "; //fani
 
+//-------------------------------------------------------------------
     // Carlos Perez Calderon - 29-04-2025
     // Contraseñas actualizadas a versiones más seguras
-    /*/ Evitando exponer directamente estas credenciales sensibles en el código fuente.
+    // Evitando exponer directamente estas credenciales sensibles en el código fuente.
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "sisbi@ibt.unam.mx";
     private static final String USER = "sisbi@ibt.unam.mx";
-    private static final String PASS = "whyn zcci kxbx lhpd";*/
-    
-    
-    
-    //test
+    private static final String PASS = "whyn zcci kxbx lhpd";
+
+    /*/test
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "NoEnviar_sisbi@ibt.unam.mx";
     private static final String USER = "NoEnviar_sisbi@ibt.unam.mx";
-    private static final String PASS = "NoEnviar_whyn zcci kxbx lhpd";
-
-
+    private static final String PASS = "NoEnviar_whyn zcci kxbx lhpd";*/
     //private static final int PORT = 587;
     private final Properties properties = new Properties();
     private Session session;
@@ -84,28 +78,25 @@ public class EmailController {
             + "http://www.uusmb.unam.mx/contacto.html";
     private static final String WARNING = "\n(Este mensaje se genera automáticamente y con "
             + "fines exclusivamente informativos y no debe ser contestado dado que su respuesta no será revisada)";
-    
-    private static final String CABECERA=
-            " <table  cellspacing='5' cellpadding='15'>"
-            +"<tr><td  bgcolor='#FFFFFF'>"
-            +"            <a href='http://www.uusmb.unam.mx/'><img src='http://www.uusmb.unam.mx/SISBI/uusmb/javax.faces.resource/new_logo.png?ln=images' align='left' height='70px'></a>"
-            +"            <a href='http://www.uusmb.unam.mx/SISBI/'><img src='http://www.uusmb.unam.mx/imagenes/IR_SISBI.png' align='right' height='50px'></a>"
-            +"</td></tr> "
-            ;
-    private static final String REDES=
-            "        <strong>Síguenos:</strong>"
-            +"        <a href='https://www.facebook.com/profile.php?id=100086445368260'><img src='http://www.uusmb.unam.mx/imagenes/facebook-rounded-gray.png' height='30px' align='center'></a>"
-            +"        <a href='https://twitter.com/uusmb_unam'><img src='http://www.uusmb.unam.mx/imagenes/twitter-rounded-gray.png' height='30px' align='center'></a>"
-            +"        <a href='https://www.instagram.com/uusmb_unam/''><img src='http://www.uusmb.unam.mx/imagenes/instagram-rounded-gray.png' height='30px' align='center'></a>"
-            +"        <a href='https://www.youtube.com/@unidaduniversitariadesecue2021'><img src='http://www.uusmb.unam.mx/imagenes/youtube-rounded-gray.png' height='30px' align='center'></a>"
-            +"        <a href='https://www.linkedin.com/company/unidad-universitaria-de-secuenciaci%C3%B3n-masiva-y-bioinform%C3%A1tica-unam/about/'><img src='http://www.uusmb.unam.mx/imagenes/linkedin-rounded-gray.png' height='30px' align='center'></a>"
-            ;
-    private static final String PIEPAG=
-            "    <tr><td align='center' bgcolor='#FFFFFF'> <font color='#454545' size='3'>Contáctanos +52 (777) 3291777 Ext 38151 | <strong>uusmb@ibt.unam.mx</strong></font></td> </tr>"
-            +"    <tr><td align='center' bgcolor='#0b5394' ><font color='white'><strong> Asistencia técnica SISBI:</strong> <br>sisbisupport@ibt.<span></span>unam.<span></span>mx</font></td></tr>"
-            +"    <tr><td align='center' bgcolor='#FFFFFF'> <font color='#454545' size='2'>Este mensaje se genera automáticamente con fines exclusivamente informativos <br> y no debe ser contestado dado que su respuesta no sera revisada</font></td> </tr>"
-            +"</table>"
-            ;
+
+    private static final String CABECERA
+            = " <table  cellspacing='5' cellpadding='15'>"
+            + "<tr><td  bgcolor='#FFFFFF'>"
+            + "            <a href='http://www.uusmb.unam.mx/'><img src='http://www.uusmb.unam.mx/SISBI/uusmb/javax.faces.resource/new_logo.png?ln=images' align='left' height='70px'></a>"
+            + "            <a href='http://www.uusmb.unam.mx/SISBI/'><img src='http://www.uusmb.unam.mx/imagenes/IR_SISBI.png' align='right' height='50px'></a>"
+            + "</td></tr> ";
+    private static final String REDES
+            = "        <strong>Síguenos:</strong>"
+            + "        <a href='https://www.facebook.com/profile.php?id=100086445368260'><img src='http://www.uusmb.unam.mx/imagenes/facebook-rounded-gray.png' height='30px' align='center'></a>"
+            + "        <a href='https://twitter.com/uusmb_unam'><img src='http://www.uusmb.unam.mx/imagenes/twitter-rounded-gray.png' height='30px' align='center'></a>"
+            + "        <a href='https://www.instagram.com/uusmb_unam/''><img src='http://www.uusmb.unam.mx/imagenes/instagram-rounded-gray.png' height='30px' align='center'></a>"
+            + "        <a href='https://www.youtube.com/@unidaduniversitariadesecue2021'><img src='http://www.uusmb.unam.mx/imagenes/youtube-rounded-gray.png' height='30px' align='center'></a>"
+            + "        <a href='https://www.linkedin.com/company/unidad-universitaria-de-secuenciaci%C3%B3n-masiva-y-bioinform%C3%A1tica-unam/about/'><img src='http://www.uusmb.unam.mx/imagenes/linkedin-rounded-gray.png' height='30px' align='center'></a>";
+    private static final String PIEPAG
+            = "    <tr><td align='center' bgcolor='#FFFFFF'> <font color='#454545' size='3'>Contáctanos +52 (777) 3291777 Ext 38151 | <strong>uusmb@ibt.unam.mx</strong></font></td> </tr>"
+            + "    <tr><td align='center' bgcolor='#0b5394' ><font color='white'><strong> Asistencia técnica SISBI:</strong> <br>sisbisupport@ibt.<span></span>unam.<span></span>mx</font></td></tr>"
+            + "    <tr><td align='center' bgcolor='#FFFFFF'> <font color='#454545' size='2'>Este mensaje se genera automáticamente con fines exclusivamente informativos <br> y no debe ser contestado dado que su respuesta no sera revisada</font></td> </tr>"
+            + "</table>";
 //------------------------------------------------------- 
     @EJB
     private UserProjectLinkFacade UserProjFac;
@@ -126,39 +117,39 @@ public class EmailController {
 //Email que se manda al personal de la unidad cuando un usuario de de alta muestras**
     public void sendManagerSamEmail(Users us, Project pj, int numSam) {
         init();
-        
-       /* String textManagerMessage = "Estimados miembros del Laboratorio de Secuenciación Masiva.\n"
+
+        /* String textManagerMessage = "Estimados miembros del Laboratorio de Secuenciación Masiva.\n"
                 + "\n"
                 + "El usuario " + us.getUserName() + " ha dado de alta " + numSam + " muestra(s) para el proyecto \"" + pj.getProjectName() + "\" en el sistema SISBI\n\n"
                 + "\n"
                 + "Para mayor información consulte : http://www.uusmb.unam.mx/SISBI/ \n";
-        */ 
+         */
         //style web
-         String codeMessagehtml = CABECERA+
-                "    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque está registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  </tr>"
-                +"    <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"El usuario <strong>"+ us.getUserName() + "</strong> ha dado de alta <strong>"+numSam+"muestra(s) </strong><br>"                 
-                +"en el proyecto <strong>" + pj.getProjectName() + "</strong><br>"                     
-                +" </font></td></tr>"
-                +"    <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                + "Para mayor información consulte la plataforma SISBI<br>" 
-                +REDES
-                +"        </font></td>"
-                +PIEPAG;
+        String codeMessagehtml = CABECERA
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque está registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  </tr>"
+                + "    <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "El usuario <strong>" + us.getUserName() + "</strong> ha dado de alta <strong>" + numSam + "muestra(s) </strong><br>"
+                + "en el proyecto <strong>" + pj.getProjectName() + "</strong><br>"
+                + " </font></td></tr>"
+                + "    <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Para mayor información consulte la plataforma SISBI<br>"
+                + REDES
+                + "        </font></td>"
+                + PIEPAG;
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
 
             message.setSubject("Registro de muestras para el proyecto: " + pj.getProjectName());
             //message.setText(textManagerMessage);
@@ -168,7 +159,7 @@ public class EmailController {
             t.sendMessage(message, message.getAllRecipients());
             t.close();
         } catch (MessagingException me) {
-            
+
             System.out.println(me);
         }
     }
@@ -242,36 +233,34 @@ public class EmailController {
         } catch (MessagingException me) {
             System.out.println(me);
         }*/
-        
+
         //inicio leslie correo html
         init();
         //style web
-        String codeMessagehtml = CABECERA+
-                "    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque está registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+        String codeMessagehtml = CABECERA
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque está registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
                 + "Se ha registrado una nueva cuenta en el sistema SISBI con los siguientes datos:<br>"
                 + "<strong>Nombre de usuario: </strong>" + us.getUserName() + "<br>"
                 + "<strong>Nombre completo: </strong>" + us.getFirstName() + " " + us.getPLastName() + " " + us.getMLastName() + "<br>"
                 + "<strong>Departamento: </strong>" + us.getDepartment() + "<br>"
                 + "<strong>Dependencia: </strong>" + us.getIdDependency().getDependencyName() + "<br>"
-                + "<strong>Correo electrónico:</strong> " + us.getEmail() 
-                +" </font></td></tr>"
-                +"    <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +REDES
-                +"        </font></td>"
-                +PIEPAG;
-                
-                
-                
+                + "<strong>Correo electrónico:</strong> " + us.getEmail()
+                + " </font></td></tr>"
+                + "    <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + REDES
+                + "        </font></td>"
+                + PIEPAG;
+
         try {
             MimeMessage messagehtml = new MimeMessage(session);
             messagehtml.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            //messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER5));
             messagehtml.setSubject("Registro de Usuario: " + us.getUserName());
             messagehtml.setContent(codeMessagehtml, "text/html");
@@ -304,33 +293,33 @@ public class EmailController {
                 + "-Recepción de resultados\n"
                 + "\n"
                 + FOOTER + WARNING;
-        */
-        
+         */
+
         //style web
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  </tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"Le damos la bienvenida al Sistema de Información de Secuenciación y Bioinformática (SISBI)<br>"
-                +"<strong>Su nombre de usuario:</strong><br>" + us.getUserName()                 
-                +"     </font></td></tr>"
-                +"        <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
-                +"Le mantendremos informado por esta vía las actualizaciones de sus proyectos registrados en SISBI.<br>"
-                +"Con su nueva cuenta, usted podrá realizar lo siguiente dentro de nuestro sistema:<br>"
-                +"<ul><li>Registro de proyectos</li>"
-                +"<li>Registro de muestras</li>"
-                +"<li>Recepción de resultados</li></ul>"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-        
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  </tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "Le damos la bienvenida al Sistema de Información de Secuenciación y Bioinformática (SISBI)<br>"
+                + "<strong>Su nombre de usuario:</strong><br>" + us.getUserName()
+                + "     </font></td></tr>"
+                + "        <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Le mantendremos informado por esta vía las actualizaciones de sus proyectos registrados en SISBI.<br>"
+                + "Con su nueva cuenta, usted podrá realizar lo siguiente dentro de nuestro sistema:<br>"
+                + "<ul><li>Registro de proyectos</li>"
+                + "<li>Registro de muestras</li>"
+                + "<li>Recepción de resultados</li></ul>"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
+
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -368,35 +357,33 @@ public class EmailController {
                 + "Usted tambien puede cambiar su contraseña o datos personales en la seccion 'Mi Perfil' en su cuenta \n"
                 + "\n"
                 + FOOTER + WARNING;*/
-         //style web
+        //style web
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  </tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"Le damos la bienvenida al Sistema de Información de Secuenciación y Bioinformática (SISBI)<br>"
-                +"Su nombre de usuario:<strong>" + us.getUserName()+"</strong><br>"
-                +"Su contraseña por default:<strong>"+ us.getPassword()+"</strong><br>"
-                +"Usted puede cambiar la contraseña o datos personales <br> en el apartado <strong>Mi Perfil</strong> dentro de SISBI"
-                +"     </font></td></tr>"
-                +"        <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
-                +"Le mantendremos informado por esta vía las actualizaciones de sus proyectos registrados en SISBI.<br>"
-                +"Con su nueva cuenta, usted podrá realizar lo siguiente dentro de nuestro sistema:<br>"
-                +"<ul><li>Registro de proyectos</li>"
-                +"<li>Registro de muestras</li>"
-                +"<li>Recepción de resultados</li></ul>"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-        
-        
-        
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  </tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "Le damos la bienvenida al Sistema de Información de Secuenciación y Bioinformática (SISBI)<br>"
+                + "Su nombre de usuario:<strong>" + us.getUserName() + "</strong><br>"
+                + "Su contraseña por default:<strong>" + us.getPassword() + "</strong><br>"
+                + "Usted puede cambiar la contraseña o datos personales <br> en el apartado <strong>Mi Perfil</strong> dentro de SISBI"
+                + "     </font></td></tr>"
+                + "        <tr><td align='left' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Le mantendremos informado por esta vía las actualizaciones de sus proyectos registrados en SISBI.<br>"
+                + "Con su nueva cuenta, usted podrá realizar lo siguiente dentro de nuestro sistema:<br>"
+                + "<ul><li>Registro de proyectos</li>"
+                + "<li>Registro de muestras</li>"
+                + "<li>Recepción de resultados</li></ul>"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
+
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -417,7 +404,7 @@ public class EmailController {
     public void sendRestoreEmail(String email, String userName, String pass) {
         init();
 
-       /* String textMessage = "Estimado Usuario\n"
+        /* String textMessage = "Estimado Usuario\n"
                 + "\n"
                 + "Se ha restablecido la contraseña de su cuenta en el Sistema de Secuenciación y Bioinformatica (SISBI)\n"
                 + "\n"
@@ -432,26 +419,25 @@ public class EmailController {
                 + WARNING;*/
         //style web
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"           Se ha restablecido la contraseña de su cuenta en el sistema SISBI <br></font>"            
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"Su nombre de usuario es: <strong>" + userName +"</strong><br>"
-                +"Su nueva contraseña es: <strong>"+pass+"</strong><br>"
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
-                +"Por favor, utilize este nombre de usuario y nueva contraseña para acceder a su cuenta en nuestro sistema SISBI. <br>"
-                +"Usted puede cambiar esta contraseña en el apartado 'Mi prefil' dentro de SISBI"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-        
-        
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "           Se ha restablecido la contraseña de su cuenta en el sistema SISBI <br></font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "Su nombre de usuario es: <strong>" + userName + "</strong><br>"
+                + "Su nueva contraseña es: <strong>" + pass + "</strong><br>"
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Por favor, utilize este nombre de usuario y nueva contraseña para acceder a su cuenta en nuestro sistema SISBI. <br>"
+                + "Usted puede cambiar esta contraseña en el apartado 'Mi prefil' dentro de SISBI"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
+
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -480,29 +466,29 @@ public class EmailController {
                 + "Su rol en el proyecto es como \"" + role + "\" por lo que apartir de esta fecha recibirá notificaciones del estatus del servicio como colaborador ademas de cotizaciones y solicitudes de pago como responsable.\n"
                 + "\nPuede verificar y estar al tanto de su proyecto en su cuenta de la UUSMB http://www.uusmb.unam.mx/SISBI/ "
                 + "\n" + FOOTER + WARNING;*/
-        
+
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"Usted ha sido dado de alta en un proyecto en la Unidad Universitaria de Secuenciación Masiva y Bioinformática <br>"
-                + "con las siguientes especificaciones: </font>"            
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"Nombre de proyecto: <strong>" +  pj.getProjectName()+"</strong><br>"
-                +"ID de proyecto: <strong>"+pj.getIdProject()+"</strong><br>"
-                +"Su rol en el proyecto es: <strong>"+role+"</strong>.<br>"
-                +"A partir de esta fecha, usted recibirá notificaciones del estatus del servicio,cotizaciones <br>"
-                +" y solicitudes de pago (Sólo en caso de que haya sido designado como responsable del pago)."
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
-                +"Por favor, utilize su cuenta en nuestro sistema SISBI para estar al tanto de las actualizaciones de su proyecto. <br>"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "Usted ha sido dado de alta en un proyecto en la Unidad Universitaria de Secuenciación Masiva y Bioinformática <br>"
+                + "con las siguientes especificaciones: </font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "Nombre de proyecto: <strong>" + pj.getProjectName() + "</strong><br>"
+                + "ID de proyecto: <strong>" + pj.getIdProject() + "</strong><br>"
+                + "Su rol en el proyecto es: <strong>" + role + "</strong>.<br>"
+                + "A partir de esta fecha, usted recibirá notificaciones del estatus del servicio,cotizaciones <br>"
+                + " y solicitudes de pago (Sólo en caso de que haya sido designado como responsable del pago)."
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Por favor, utilize su cuenta en nuestro sistema SISBI para estar al tanto de las actualizaciones de su proyecto. <br>"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -534,40 +520,38 @@ public class EmailController {
                 + "Descripción: " + pj.getProjectDescription() + "\n"
                 + "\n"
                 + "Para mayor información consulte : http://www.uusmb.unam.mx/SISBI/ \n";*/
-        
+
         //style web 
-        
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"El usuario " + userName+"con el rol de "+ role +"<br>"
-                +"ha registrado un nuevo proyecto en el sistema SISBI con los siguientes datos: <br>"
-                +"Nombre del proyecto: " + pj.getProjectName() +"<br>"
-                +"ID del proyecto: " + pj.getIdProject() + "<br>"
-                +"Método de entrega: " + pj.getDeliveryMethod() +"<br>"
-                +"Descripción: " + pj.getProjectDescription() +"<br>"
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"           
-                +"Para mayor información sobre el proyecto consulte su cuenta SISBI"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-        
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimados miembros del Laboratorio de Secuenciación Masiva<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "El usuario " + userName + "con el rol de " + role + "<br>"
+                + "ha registrado un nuevo proyecto en el sistema SISBI con los siguientes datos: <br>"
+                + "Nombre del proyecto: " + pj.getProjectName() + "<br>"
+                + "ID del proyecto: " + pj.getIdProject() + "<br>"
+                + "Método de entrega: " + pj.getDeliveryMethod() + "<br>"
+                + "Descripción: " + pj.getProjectDescription() + "<br>"
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Para mayor información sobre el proyecto consulte su cuenta SISBI"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
 
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER5));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
 //            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER4));
             message.setSubject("Registro de proyecto: " + pj.getProjectName());
             //message.setText(textMessage);
@@ -581,6 +565,7 @@ public class EmailController {
         }
     }
 //Email que se manda a los usuarios para notificar la falta de cotizacion y/o comprobante de pago
+
     public void sendWarningProject(List<String> emails, int opt, String projName) {
 
         init();
@@ -644,7 +629,7 @@ public class EmailController {
             for (String email : emails) {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             }
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             message.setSubject("Aviso sobre el proyecto: " + projName);
             message.setText(textMessage);
             Transport t = session.getTransport("smtp");
@@ -658,58 +643,58 @@ public class EmailController {
         }
 
     }
- //email enviados cuando se agrega un comentario al proyecto
+    //email enviados cuando se agrega un comentario al proyecto
 
-	public void sendCommentsProject(List<String> email,String projId,String Comment, String usEmail){
-		init();
-                //texo log 
-                /*System.out.println("Estimado usuario:\n"
+    public void sendCommentsProject(List<String> email, String projId, String Comment, String usEmail) {
+        init();
+        //texo log 
+        /*System.out.println("Estimado usuario:\n"
 		+ "La unidad Universitaria de secuenciacón Masiva y Bionformatica (UUSMB) le informa:\n"
 		+Comment+
 		"\nPara mayor información consulte en su cuenta de la UUSMB: http://www.uusmb.unam.mx/SISBI/ \n");
-                */
-                 // texto del correo 
-		/*String textMessage="Estimado usuario:\n\n"
+         */
+        // texto del correo 
+        /*String textMessage="Estimado usuario:\n\n"
 		+ "La unidad Universitaria de secuenciacón Masiva y Bionformatica (UUSMB) le informa:\n\n"
 		+Comment+
 		"\n\nPara mayor información consulte en su cuenta de la UUSMB: http://www.uusmb.unam.mx/SISBI/ \n"
 		+ FOOTER + WARNING;*/
-                
-                String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"La unidad Universitaria de secuenciacón Masiva y Bionformatica (UUSMB) le informa:<br>"               
-                + Comment+"<br>"
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"           
-                +"Para mayor información sobre el proyecto consulte su cuenta SISBI"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-                               
-	try{
-	MimeMessage message= new MimeMessage(session);
-	
-	message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-	for(String emails: email){
-		message.addRecipient(Message.RecipientType.TO, new InternetAddress(emails));
-	}
-	    message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
-	    message.addRecipient(Message.RecipientType.TO, new InternetAddress(usEmail));
-	    message.setSubject("Comentarios sobre el proyecto: " + projId);
+
+        String codeMessagehtml = CABECERA
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "La unidad Universitaria de secuenciacón Masiva y Bionformatica (UUSMB) le informa:<br>"
+                + Comment + "<br>"
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Para mayor información sobre el proyecto consulte su cuenta SISBI"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+            for (String emails : email) {
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(emails));
+            }
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
+            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(usEmail));
+            message.setSubject("Comentarios sobre el proyecto: " + projId);
             //message.setText(textMessage);
             message.setContent(codeMessagehtml, "text/html");
             Transport t = session.getTransport("smtp");
@@ -723,37 +708,36 @@ public class EmailController {
         }
     }
 
-//Email que se manda a los usuarios involucrados a cierto proyecto para que se enteren del estado de sus muestras 
+    //Email que se manda a los usuarios involucrados a cierto proyecto para que se enteren del estado de sus muestras 
     public void sendUpdateStatusSamplesEmail(List<Sample> samples, String estatus, String statusAnt, List<String> recipients, String projectName) {
         init();
 
         String sampleNames = "";
+        int count = 0;
         for (Sample sample : samples) {
-
-            sampleNames += sample.getSampleName() + "\n";
-
+            if (sample != null && sample.getSampleName() != null && !sample.getSampleName().trim().isEmpty()) {
+                sampleNames += sample.getSampleName() + "\n";
+                System.out.println("Nombre de muestra válida: " + sample.getSampleName());
+                count++;
+            } else {
+                System.out.println("Muestra inválida o vacía detectada: " + sample);
+            }
         }
-       /* String textMessage = "Estimado usuario:\n"
-                + "La Unidad Universitaria de Secuenciación Masiva y Bioinformática (UUSMB) le informa "
-                + "que las siguientes " + samples.size() + " muestras \n"
-                + "pertenecientes al proyecto \"" + projectName + "\" "
-                + "han cambiado de estatus de \"" + statusAnt + "\" a \"" + estatus + "\": \n\n"
-                + sampleNames;*/
-        
-         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  <tr>"
-                +"        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"La unidad Universitaria de secuenciacón Masiva y Bionformatica le informa que<br>"               
-                + "las siguientes <strong>"+samples.size()+" muestras</strong><br>"
-                +"pertenecientes al proyecto <strong>"+projectName+"</strong>"
-                +" han cambiado de etstaus de <strong>"+statusAnt+ " a "+estatus
-                +sampleNames +"</strong><br>";
-                
+        System.out.println("Número de muestras válidas: " + count);
+
+        String codeMessagehtml = CABECERA
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  <tr>"
+                + "        <td align='left' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "La unidad Universitaria de secuenciacón Masiva y Bionformatica le informa que las muestras "
+                + "pertenecientes al proyecto <strong>" + projectName + "</strong>"
+                + " han cambiado de estatus de <strong>" + statusAnt + " </strong> - a - <strong>" + estatus + "</strong><br>"
+                + "Listado de las <strong>" + samples.size() + " muestras:</strong><br>"
+                + sampleNames.replace("\n", "<br>");
 
         switch (estatus) {
             case "Recibida":
@@ -776,17 +760,17 @@ public class EmailController {
 
         }
 
-        codeMessagehtml +="<br>" 
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"           
-                +"Para mayor información sobre el proyecto consulte su cuenta SISBI"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
-                /*
+        codeMessagehtml += "<br>"
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Para mayor información sobre el proyecto consulte su cuenta SISBI"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
+        /*
                 + "Para mayor información consulte en su cuenta de la UUSMB: http://www.uusmb.unam.mx/SISBI/ \n"
                 + FOOTER + WARNING;*/
         try {
@@ -795,7 +779,7 @@ public class EmailController {
             for (String recipient : recipients) {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             }
-           // message.addRecipient(Message.RecipientType.TO, new InternetAddress("fherdsnop@gmail.com"));
+            // message.addRecipient(Message.RecipientType.TO, new InternetAddress("fherdsnop@gmail.com"));
             message.setSubject("Actualizacion de proyecto: " + projectName);
             //message.setText(textMessage);
             message.setContent(codeMessagehtml, "text/html");
@@ -808,11 +792,10 @@ public class EmailController {
             System.out.println(me);
         }
     }
-    
-    
+
     //Leslie: manda correo cuando cambia el estatus 
     //Email que se manda a los usuarios involucrados a cierto proyecto para que se enteren del estado de sus muestras 
-    public void sendUpdateStatusProjEmail(  List<String> recipients, String projectID) {
+    public void sendUpdateStatusProjEmail(List<String> recipients, String projectID) {
         init();
 
         /*
@@ -831,32 +814,31 @@ public class EmailController {
                 + "Para mayor información consulte en su cuenta de la UUSMB: http://www.uusmb.unam.mx/SISBI/ \n"
                 + FOOTER + WARNING;*/
         //style web
-        
         String codeMessagehtml = CABECERA
-                +"    <tr><td align='center' bgcolor='#FFFFFF'>"
-                +"            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
-                +"            <font color='#454545' size='2'>"
-                +"            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
-                +"            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
-                +"    </td>  <tr>"
-                +"        <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
-                +"La Unidad Universitaria de Secuenciación Masiva y Bioinformática le informa:<br>"
-                +"El proyecto con identificador <strong>"+projectID+"</strong> <br>Cambio del estatus:<br>"
-                +"<strong>-- En proceso -- a -- Terminado -- </strong><br>"                 
-                +"        </font></td></tr>"
-                +"        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
-                +"Con el objetivo de mejorar la calidad del servicio de la UUSMB <br>"
-                +"y siendo la opinión de los usuarios lo más importante para nosotros,<br>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'>"
+                + "            <font color='#454545' size='3'>Estimado Usuario:<br></font>"
+                + "            <font color='#454545' size='2'>"
+                + "            Usted está recibiendo este correo porque se ha registrado en nuestro <br>"
+                + "            Sistema de Información de Secuenciación y Bioinformática SISBI.</font>"
+                + "    </td>  <tr>"
+                + "        <td align='center' bgcolor='#FFFFFF'><font color='#454545' size='3'>"
+                + "La Unidad Universitaria de Secuenciación Masiva y Bioinformática le informa:<br>"
+                + "El proyecto con identificador <strong>" + projectID + "</strong> <br>Cambio del estatus:<br>"
+                + "<strong>-- En proceso -- a -- Terminado -- </strong><br>"
+                + "        </font></td></tr>"
+                + "        <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2'>"
+                + "Con el objetivo de mejorar la calidad del servicio de la UUSMB <br>"
+                + "y siendo la opinión de los usuarios lo más importante para nosotros,<br>"
                 + "le agradeceríamos su participación en la siguiente encuesta<br>"
-                +"<a href='https://forms.gle/KWxR2ksNBddW6pmKA'>Encuesta de satisfacción</a> <br>"                
-                +"La UUSMB está comprometida con la imparcialidad y la confidencialidad de los datos que aquí se entregan.<br><br>"
-                +"Para mayor información sobre el proyecto consulte su cuenta SISBI"
-                +"          </font></td></tr>"
-                +"    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
-                +"Atte. El equipo UUSMB<br>"            
-                +REDES
-                +"        </font></td></tr>"
-                +PIEPAG;
+                + "<a href='https://forms.gle/KWxR2ksNBddW6pmKA'>Encuesta de satisfacción</a> <br>"
+                + "La UUSMB está comprometida con la imparcialidad y la confidencialidad de los datos que aquí se entregan.<br><br>"
+                + "Para mayor información sobre el proyecto consulte su cuenta SISBI"
+                + "          </font></td></tr>"
+                + "    <tr><td align='center' bgcolor='#FFFFFF'><font color='#454545' size='2' >"
+                + "Atte. El equipo UUSMB<br>"
+                + REDES
+                + "        </font></td></tr>"
+                + PIEPAG;
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -875,12 +857,8 @@ public class EmailController {
             System.out.println(me);
         }
     }
-    
-    
-    
-    
-    //fin 
 
+    //fin 
 //Email que se manda a los usuarios involucrados a cierto proyecto para que se enteren de la calidad de sus muestras 
     public void sendUpdateQualitySamplesEmail(List<Sample> samples, String calidad, List<String> recipients, String projectName) {
         init();
@@ -925,8 +903,9 @@ public class EmailController {
         for (Sample sample : samples) {
 
             sampleNames += sample.getSampleName() + "\n";
-
+            System.out.println("Nombre de muestra: " + sampleNames);
         }
+        System.out.println("Numero de muestras: " + samples.size());
         String textMessage = "Estimado usuario:\n"
                 + "La Unidad Universitaria de Secuenciación Masiva y Bioinformática (UUSMB) le informa "
                 + "que las siguientes " + samples.size() + " muestras pertenecientes al proyecto \"" + projectName + "\" "
@@ -941,7 +920,7 @@ public class EmailController {
             for (String recipient : recipients) {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             }
-           // message.addRecipient(Message.RecipientType.TO, new InternetAddress("fherdsnop@gmail.com"));
+            // message.addRecipient(Message.RecipientType.TO, new InternetAddress("fherdsnop@gmail.com"));
             message.setSubject("Actualización de proyecto: " + projectName);
             message.setText(textMessage);
             Transport t = session.getTransport("smtp");
@@ -971,7 +950,7 @@ public class EmailController {
 
         String performanceDNA = "";
         String performanceRNA = "";
-        
+
         String performanceDNAOxford = "";
         String performanceRNAOxford = "";
         int dna = 0;
@@ -980,13 +959,13 @@ public class EmailController {
 
             if (sample.getType().toLowerCase().equals("dna genómico") || sample.getType().toLowerCase().equals("dna genomico") || sample.getType().toLowerCase().equals("dna metagenomico") || sample.getType().toLowerCase().equals("amplicon 16s") || sample.getType().toLowerCase().equals("amplicon its")) {
                 performanceDNA = sample.getExpectedPerformance();//rendimiento esperado
-                if(sample.getExpectedPerformanceOxford() != null){
+                if (sample.getExpectedPerformanceOxford() != null) {
                     performanceDNAOxford = sample.getExpectedPerformanceOxford();
                 }
                 dna++;
             } else {
                 performanceRNA = sample.getExpectedPerformance();//rendimiento esperado
-                if(sample.getExpectedPerformanceOxford() != null){
+                if (sample.getExpectedPerformanceOxford() != null) {
                     performanceRNAOxford = sample.getExpectedPerformanceOxford();
                 }
                 rna++;
@@ -996,14 +975,13 @@ public class EmailController {
         String textMessage = "Estimados miembros del Laboratorio de Secuenciación Masiva.\n"
                 + "\n"
                 + "El Proyecto: " + Project + " requiere una cotización, cuyo costo estara en función de la siguiente información:\n\n"
-                + "Id del proyecto: "+idProj+".\nUsuario:" +User+".\nTipo de usuario: "+Type+"\n"  
-                + "No. muestras DNA: " + dna +". Rendimiento solicitado Illumina: "+ performanceDNA +". "+ ((!performanceDNAOxford.equals(""))? "Rendimiento solicitado Oxford: " + performanceDNAOxford : "" ) +"  .Tipo de muestra: " +DNA+". Plataforma: "+ PlatDNA +"\n"
-                + "No. muestras RNA: " +rna+". Rendimiento solicitado ILlumina: "+performanceRNA+". "+ ((!performanceRNAOxford.equals(""))? "Rendimiento solicitado Oxford: " + performanceRNAOxford : "" ) +" .Tipo de muestra: "+RNA+". Plataforma: "+ PlatRNA+ "\n" +"total de muestras: "+(dna+rna)+"\n\n"
-                + "y los siguientes analisis bioinformaticos:\n"+ BioInformatic +"\n\n"
-                +"Estimado "+ User+ " si la información descrita en este correo es erronea háganoslo saber por este medio"+"\n\n"
+                + "Id del proyecto: " + idProj + ".\nUsuario:" + User + ".\nTipo de usuario: " + Type + "\n"
+                + "No. muestras DNA: " + dna + ". Rendimiento solicitado Illumina: " + performanceDNA + ". " + ((!performanceDNAOxford.equals("")) ? "Rendimiento solicitado Oxford: " + performanceDNAOxford : "") + "  .Tipo de muestra: " + DNA + ". Plataforma: " + PlatDNA + "\n"
+                + "No. muestras RNA: " + rna + ". Rendimiento solicitado ILlumina: " + performanceRNA + ". " + ((!performanceRNAOxford.equals("")) ? "Rendimiento solicitado Oxford: " + performanceRNAOxford : "") + " .Tipo de muestra: " + RNA + ". Plataforma: " + PlatRNA + "\n" + "total de muestras: " + (dna + rna) + "\n\n"
+                + "y los siguientes analisis bioinformaticos:\n" + BioInformatic + "\n\n"
+                + "Estimado " + User + " si la información descrita en este correo es erronea háganoslo saber por este medio" + "\n\n"
                 + "Para mayor información consulte : http://www.uusmb.unam.mx/SISBI/ \n";
 
-        
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -1091,11 +1069,11 @@ public class EmailController {
                     Transport t = session.getTransport("smtp");
                     t.connect((String) properties.get("gmail.smtp.user"), PASS);
                     //t.sendMessage(message, message.getAllRecipients());
-                    showMessage("Correo supuesto mandado con éxito a "+emails.get(i)+".");
+                    showMessage("Correo supuesto mandado con éxito a " + emails.get(i) + ".");
                     t.close();
                 } catch (MessagingException me) {
                     System.out.println(me);
-                    showMessage("Error al mandar correo a : "+emails.get(i)+": "+me.toString());
+                    showMessage("Error al mandar correo a : " + emails.get(i) + ": " + me.toString());
                 }
             }
         } else if (typeRole.equals("authorize")) {
@@ -1116,11 +1094,11 @@ public class EmailController {
                     Transport t = session.getTransport("smtp");
                     t.connect((String) properties.get("gmail.smtp.user"), PASS);
                     //t.sendMessage(message, message.getAllRecipients());
-                    showMessage("Correo supuesto mandado con éxito a "+emails.get(i)+".");
+                    showMessage("Correo supuesto mandado con éxito a " + emails.get(i) + ".");
                     t.close();
                 } catch (MessagingException me) {
                     System.out.println(me);
-                    showMessage("Error al mandar correo a : "+emails.get(i)+": "+me.toString());
+                    showMessage("Error al mandar correo a : " + emails.get(i) + ": " + me.toString());
                 }
             }
         }
@@ -1129,16 +1107,16 @@ public class EmailController {
 
     public void sendEmailRoleCorrect(String idProject, String typeReport, String emailUser) {
         init();
-        String mensaje = "Estimado Tec. Bioinfo"+ "\n"
-                +"Se necesita una correción para el reporte bioinformático con id del proyecto: " + idProject + "\n"
-                +"Con tipo de reporte: " + typeReport;
-        String asunto = "Corrección para reporte bioinformático"+idProject;
+        String mensaje = "Estimado Tec. Bioinfo" + "\n"
+                + "Se necesita una correción para el reporte bioinformático con id del proyecto: " + idProject + "\n"
+                + "Con tipo de reporte: " + typeReport;
+        String asunto = "Corrección para reporte bioinformático" + idProject;
 
         //System.out.println("::::::::::::::::::::::::::::::::::::::::::: ");
         System.out.println("Correo Enviado a " + emailUser);
         System.out.println("Asunto: " + asunto);
         System.out.println("Mensaje: " + mensaje);
-        
+
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
@@ -1148,7 +1126,7 @@ public class EmailController {
             Transport t = session.getTransport("smtp");
             t.connect((String) properties.get("gmail.smtp.user"), PASS);
             t.sendMessage(message, message.getAllRecipients());
-            showMessage("Correo mandado con éxito a "+emailUser);
+            showMessage("Correo mandado con éxito a " + emailUser);
             t.close();
 
             t.close();
@@ -1156,21 +1134,21 @@ public class EmailController {
             System.out.println(me);
             //showMessage("Error al mandar correo : "+me.toString());
         }
-         
 
     }
-    public void sendEmailErrorTraceback(String mensaje, Exception e){
+
+    public void sendEmailErrorTraceback(String mensaje, Exception e) {
         init();
         String email = "carlos.perez@ibt.unam.mx";
         StringWriter writer = new StringWriter();
         e.printStackTrace(new PrintWriter(writer));
         String stackTrace = writer.toString();
-        String message_body = "Error en SISBI: "+mensaje+"\nStack trace:\n"+stackTrace;
+        String message_body = "Error en SISBI: " + mensaje + "\nStack trace:\n" + stackTrace;
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(properties.get("mail.smtp.mail.sender").toString()));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            message.setSubject("Error SISBI "+mensaje);
+            message.setSubject("Error SISBI " + mensaje);
             message.setText(message_body);
             Transport t = session.getTransport("smtp");
             t.connect((String) properties.get("gmail.smtp.user"), PASS);
@@ -1178,7 +1156,7 @@ public class EmailController {
             t.close();
             //showMessage("Correo mandado con éxito a "+email);
         } catch (MessagingException me) {
-            showMessage("Error al mandar correo con el reporte de error: "+me.toString());
+            showMessage("Error al mandar correo con el reporte de error: " + me.toString());
             System.out.println(me);
         }
 
@@ -1188,12 +1166,12 @@ public class EmailController {
     public void sendEmailRespoablesColaboradores(String asuntoFinal, String mensajeFinal, String nameProject, ReportProject reportProject, String doc_base_name, String downloaded_base_name, ArrayList emails) {
         String asunto;
         String mensaje;
-        String typeReport=reportProject.getName();
+        String typeReport = reportProject.getName();
         init();
 
         if (mensajeFinal.equals("")) {
-            asunto = "Su reporte del proyecto " + nameProject + " esta en fase "+reportProject.getStatus();
-            mensaje = "Su reporte con nombre " + nameProject + " con tipo de reporte: " + typeReport + ", esta disponible desde la plataforma de SISBI, en fase "+reportProject.getStatus();
+            asunto = "Su reporte del proyecto " + nameProject + " esta en fase " + reportProject.getStatus();
+            mensaje = "Su reporte con nombre " + nameProject + " con tipo de reporte: " + typeReport + ", esta disponible desde la plataforma de SISBI, en fase " + reportProject.getStatus();
         } else {
             asunto = asuntoFinal;
             mensaje = mensajeFinal;
@@ -1209,7 +1187,7 @@ public class EmailController {
                 MimeMessage message = new MimeMessage(session);
                 MimeBodyPart messageBodyPart = new MimeBodyPart();
                 MimeMultipart multipart = new MimeMultipart();
-                FileDataSource source = new FileDataSource(PathFiles.DirectoryreportDocuments+doc_base_name);
+                FileDataSource source = new FileDataSource(PathFiles.DirectoryreportDocuments + doc_base_name);
                 messageBodyPart.setDataHandler(new DataHandler(source));
                 messageBodyPart.setFileName(doc_base_name);
                 multipart.addBodyPart(messageBodyPart);
@@ -1222,14 +1200,13 @@ public class EmailController {
                 t.connect((String) properties.get("gmail.smtp.user"), PASS);
                 t.sendMessage(message, message.getAllRecipients());
                 t.close();
-                showMessage("Correo mandado con éxito a "+emails.get(i));
+                showMessage("Correo mandado con éxito a " + emails.get(i));
             } catch (MessagingException me) {
-                showMessage("Error al mandar correo a "+emails.get(i)+": "+me.toString());
+                showMessage("Error al mandar correo a " + emails.get(i) + ": " + me.toString());
                 System.out.println(me);
             }
         }
     }
-
 
     //correo prueba Linabat
     public void enviarCorreoPrueba() {
@@ -1248,23 +1225,22 @@ public class EmailController {
             t.close();
             showMessage("Correo mandado con éxito");
         } catch (MessagingException me) {
-            showMessage("Error al mandar correo: "+me.toString());
+            showMessage("Error al mandar correo: " + me.toString());
             System.out.println(me);
         }
     }
 //Añadido Team   -----------------------------------------------------   Linabat Final
-    
+
     //Métodos generales
     public void showMessage(String mensaje) {
         FacesMessage message = new FacesMessage(mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void showError(StackTraceElement[] mensajes) {
         for (StackTraceElement mensaje : mensajes) {
-            System.out.print(mensaje.toString());           
+            System.out.print(mensaje.toString());
         }
     }
-
 
 }
