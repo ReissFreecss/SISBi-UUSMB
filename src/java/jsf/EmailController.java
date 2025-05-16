@@ -43,15 +43,15 @@ import jpa.session.UserProjectLinkFacade;
 public class EmailController {
 
 // Constantes que indican los emails de cada uno de las responsables   
-    //private static final String MANAGER1 = "sisbi@ibt.unam.mx";
-    //private static final String MANAGER2 = "yoyis@ibt.unam.mx"; //gloria
-    //private static final String MANAGER3 = "rgrande@ibt.unam.mx";//ricardo
-    //private static final String MANAGER4 = "uusmb@ibt.unam.mx "; //todo uusmb
+    private static final String MANAGER1 = "sisbi@ibt.unam.mx";
+    private static final String MANAGER2 = "yoyis@ibt.unam.mx"; //gloria
+    private static final String MANAGER3 = "rgrande@ibt.unam.mx";//ricardo
+    private static final String MANAGER4 = "uusmb@ibt.unam.mx "; //todo uusmb
     private static final String MANAGER5 = "carlos.perez@ibt.unam.mx";//carlos
-    //private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
-    //private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
-    //private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
-    //private static final String MANAGER9 = "estefania.herrera@ibt.unam.mx "; //fani
+    private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
+    private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
+    private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
+    private static final String MANAGER9 = "estefania.herrera@ibt.unam.mx "; //fani
 
 //-------------------------------------------------------------------
     // Carlos Perez Calderon - 29-04-2025
@@ -144,12 +144,12 @@ public class EmailController {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
 
             message.setSubject("Registro de muestras para el proyecto: " + pj.getProjectName());
             //message.setText(textManagerMessage);
@@ -260,7 +260,7 @@ public class EmailController {
         try {
             MimeMessage messagehtml = new MimeMessage(session);
             messagehtml.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            //messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             messagehtml.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER5));
             messagehtml.setSubject("Registro de Usuario: " + us.getUserName());
             messagehtml.setContent(codeMessagehtml, "text/html");
@@ -549,10 +549,10 @@ public class EmailController {
         try {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER5));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
-//            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER4));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER4));
             message.setSubject("Registro de proyecto: " + pj.getProjectName());
             //message.setText(textMessage);
             message.setContent(codeMessagehtml, "text/html");
@@ -629,7 +629,7 @@ public class EmailController {
             for (String email : emails) {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             }
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
             message.setSubject("Aviso sobre el proyecto: " + projName);
             message.setText(textMessage);
             Transport t = session.getTransport("smtp");
@@ -687,12 +687,12 @@ public class EmailController {
             for (String emails : email) {
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(emails));
             }
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER1));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER2));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER7));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER8));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER9));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(usEmail));
             message.setSubject("Comentarios sobre el proyecto: " + projId);
             //message.setText(textMessage);
@@ -986,10 +986,10 @@ public class EmailController {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
             message.setSubject("Solicitud de cotizacion del proyecto: " + Project);
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));//correo del miembro de la uusmb
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER3));//correo del miembro de la uusmb
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER5));//correo del miembro de la uusmb
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER6));//correo del miembro de la uusmb
-            //message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));//correo del usuario
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(MANAGER6));//correo del miembro de la uusmb
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));//correo del usuario
             message.setText(textMessage);
             Transport t = session.getTransport("smtp");
             t.connect(USER, PASS);
