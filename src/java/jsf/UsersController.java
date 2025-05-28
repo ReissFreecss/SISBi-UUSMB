@@ -317,7 +317,7 @@ public class UsersController implements Serializable {
 
                 for (Users em : usE) {
                     System.out.println("Entra al for");
-                    if (em.getEmail().toLowerCase().equals(current.getEmail().toLowerCase())) {
+                    if (em.getEmail().toLowerCase().equals(current.getEmail().toLowerCase().trim())) {
 
                         RequestContext rc = RequestContext.getCurrentInstance();
                         rc.execute("PF('warnDialog').show();");

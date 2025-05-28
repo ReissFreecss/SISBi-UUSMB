@@ -1279,7 +1279,7 @@ public class UserProjectLinkController implements Serializable {
 
     public void exist1() {
         if (email1 != null) {
-            List<Users> u = ejbUsr.findUserByEmail(email1.toLowerCase());
+            List<Users> u = ejbUsr.findUserByEmail(email1.toLowerCase().trim());
 
             if (email1.isEmpty() | email1.equals("")) {//1
                 existCheck = false;
