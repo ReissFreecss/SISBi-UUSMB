@@ -1,8 +1,9 @@
 /build/
 /dist/
-/doc/snapshots/sisbidb_20230623.sql
+/doc/
 /venv/
 /.env
 /nbproject/private/
 *.pyc
 *.pyo
+*.war
