@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -258,19 +259,65 @@ public class LibraryController implements Serializable {
         }
     }
      */
-    //Nuevo método para la consulta a la BD
+    // Nuevo método para la consulta a la BD en ordenamiento 
     public List<Barcodes> getListBarcodesi7() {
         List<Barcodes> listBarcodes = new ArrayList<>();
-        if (ejbKit.findKitByName(kit).size() > 0) {
+        if (!ejbKit.findKitByName(kit).isEmpty()) {
             Kit objectKit = ejbKit.findKitByName(kit).get(0);
             for (Barcodes itemBarcode : objectKit.getBarcodesList()) {
                 if (itemBarcode.getBasei7() != null) {
-                    //Agregamos los que tengan valores en el campo de basei7
                     listBarcodes.add(itemBarcode);
                 }
             }
+            if ("IDT-ILMN-TruSeq-DNA-and-RNA-UD".equals(objectKit.getKitName())) {
+                // Ordenamos por indexName de forma natural (A1, A2, ..., C1, C1_v2, etc.)
+                Collections.sort(listBarcodes, (b1, b2)
+                        -> naturalCompare(b1.getIndexName(), b2.getIndexName())
+                );
+            }
+
         }
         return listBarcodes;
+    }
+
+    // Carlos Perez Calderon 29-04-2025
+    // Método para ordenar los barcodes de acuerdo al numero de los tags y la version
+    private static int naturalCompare(String s1, String s2) {
+        // Varialbes Patern y Matcher 
+        Pattern p = Pattern.compile("(\\D*)(\\d*)");
+        Matcher m1 = p.matcher(s1);
+        Matcher m2 = p.matcher(s2);
+
+        while (m1.find() && m2.find()) {
+            // Compara la parte no numérica [A-Z]
+            int textCmp = m1.group(1).compareTo(m2.group(1));
+            if (textCmp != 0) {
+                return textCmp;
+            }
+
+            // Compara la parte numérica (si existe)
+            String num1 = m1.group(2);
+            String num2 = m2.group(2);
+
+            if (num1.isEmpty() && num2.isEmpty()) {
+                continue;  // seguimos al siguiente fragmento
+            }
+            if (num1.isEmpty()) {
+                return -1;
+            }
+            if (num2.isEmpty()) {
+                return 1;
+            }
+
+            // Hacemos la diferencia entre cada numero ingresado de acuerdo a la version
+            int diff = Integer.parseInt(num1) - Integer.parseInt(num2);
+            if (diff != 0) {
+                return diff;
+            }
+        }
+
+        // Si uno de los strings es prefijo del otro
+        return s1.length() - s2.length();
     }
 
     public List<Barcodes> getListBarcodesi5() {
@@ -301,12 +348,20 @@ public class LibraryController implements Serializable {
                         listBarcodes.add(itemBarcode);
                     }
                 }
+                if ("IDT-ILMN-TruSeq-DNA-and-RNA-UD".equals(objectKit.getKitName())) {
+                    Collections.sort(listBarcodes, (b1, b2)
+                            -> naturalCompare(
+                                    getIndexBasei5Create(b1),
+                                    getIndexBasei5Create(b2)
+                            )
+                    );
+                }
             }
         }
         return listBarcodes;
     }
-
     // Método para obtener el basei5 en la vista, al momento de crear las bibliotecas en la vista CreateL.xhtml
+
     public String getIndexBasei5Create(Barcodes itemBarcode) {
         if (itemBarcode != null) {
             // Verificamos el tipo de plataforma 

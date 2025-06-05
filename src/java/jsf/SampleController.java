@@ -36,6 +36,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1954,10 +1955,10 @@ public class SampleController implements Serializable {
         labConcent = null;
         plataform = null;
         delivery = null;
-
+        sampleTable.clear();
     }
-    //Actaulizar muestras ...cambio estatus
 
+    // Metodo para actualizar muestras y generar los cambios de status
     public void updateManySamples() {
         FacesContext context = FacesContext.getCurrentInstance();
         Project pj = (Project) context.getExternalContext().getSessionMap().get("project");
@@ -1968,27 +1969,20 @@ public class SampleController implements Serializable {
         int iteracion = 0;
         String strMessage = "";
 
+        List<Sample> samplesParaCorreo = new ArrayList<>(sampleTable);
+
         for (Sample sample : sampleTable) {
             iteracion++;
             if (samName != null && !samName.isEmpty()) {
 
                 String[] name = sample.getSampleName().split("_");
 
-                if (name.length >= 1) {
-
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    String[] tiempo = timestamp.toString().split(":");
-                    String[] tiempo2 = tiempo[0].split("-");
-                    String[] dia = tiempo2[2].split(" ");
-                    String año = tiempo2[0].substring(2, 4);
-                    String fecha = año + tiempo2[1] + dia[0];
-
-                    String[] formated = pj.getIdProject().split("_");
-                    String manager = formated[1];
+                // ——— Renombrado de muestra si aplica ———
+                if (samName != null && !samName.isEmpty()) {
+                    String[] nameParts = sample.getSampleName().split("_");
+                    String fecha = new SimpleDateFormat("yyMMdd").format(new Date());
+                    String manager = pj.getIdProject().split("_")[1];
                     sample.setSampleName(manager + "_" + fecha + "_" + samName);
-
-                } else {
-                    sample.setSampleName(name[0] + "_" + name[1] + "_" + samName);
                 }
             }
             if (tube != null && !tube.isEmpty()) {
@@ -2383,7 +2377,7 @@ public class SampleController implements Serializable {
             }
             EmailController ec = new EmailController();
             System.out.println("Manda email de cambio de estatus");
-            ec.sendUpdateStatusSamplesEmail(sampleTable, samStat, statusAnt, emails, pj.getProjectName());
+            ec.sendUpdateStatusSamplesEmail(samplesParaCorreo, samStat, statusAnt, emails, pj.getProjectName());
 
         }
 
@@ -2400,7 +2394,7 @@ public class SampleController implements Serializable {
             }
             EmailController ec = new EmailController();
             System.out.println("Manda email de cambio de calidad");
-            ec.sendUpdateQualitySamplesEmail(sampleTable, samQuality, emails, pj.getProjectName());
+            ec.sendUpdateQualitySamplesEmail(samplesParaCorreo, samQuality, emails, pj.getProjectName());
 
         }
 
@@ -2412,7 +2406,7 @@ public class SampleController implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        sendMail = false;;
     }
 
     public void updateManySamplesView() {
