@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Calculadora de costos"></h:outputText> 
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                <p:messages id="messages"  showDetail="false" autoUpdate="true" />
+            </h:panelGroup>
+            <h:form id="form">
+                <h:panelGrid columns="2" id="grid0">
+                    <p:outputLabel for="type" value="Tipo de proyecto:" />
+                    <p:selectOneRadio id="type" value="#{calculatorSelectedController.type}">
+                        <f:selectItem itemLabel="Amplicon 16s" itemValue="1" />
+                        <f:selectItem itemLabel="gDNA" itemValue="2" />
+                        <f:selectItem itemLabel="RNAseq" itemValue="3" />
+                        <f:selectItem itemLabel="Metagenomica" itemValue="4" />
+                        <p:ajax event="click" update="form" listener="#{calculatorSelectedController.witchCal()}" /> 
+
+
+                    </p:selectOneRadio>
+                </h:panelGrid>
+                <br/>
+                <br/>
+
+                <h:panelGrid columns="2" id="grid" rendered="${calculatorSelectedController.dna}">
+
+                    <h:panelGrid columns="2" id="Genoma" style="width: 500px">
+
+                        <p:outputLabel for="size" value="Longitud del genoma en mega bases (mb):"/>
+                        <p:inputText value="#{calculatorController.size}" id="size" required="true" title="Longitud del genoma a secuenciar en mega-bases (mb)" requiredMessage="Proporcione la longitud del genoma">
+
+                            <p:ajax event="keyup" update="costos" listener="#{calculatorController.genomicCalculator()}" />  
+                        </p:inputText>
+
+                        <p:outputLabel value="Tamaño de la lectura: " for="len"/>
+                        <p:selectOneMenu  value="#{calculatorController.len}" required="true" id="len" requiredMessage="Proporcione el tamaño de lectura deseado">
+                            <f:selectItem itemLabel="75" itemValue="75" />
+                            <f:selectItem itemLabel="100" itemValue="100" />
+                            <f:selectItem itemLabel="300" itemValue="300" />
+                            <p:ajax event="itemSelect" update="costos" listener="#{calculatorController.genomicCalculator()}" />  
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Numero de muestras:" for="genomes"/>
+                        <p:inputText title="Numero de muestras de su proyecto" value="#{calculatorController.genomes}" id="genomes" required="true" requiredMessage="Proporcione el numero de muestras de su proyecto">
+
+                            <p:ajax event="keyup" update="costos" listener="#{calculatorController.genomicCalculator()}" />  
+                        </p:inputText>
+
+                        <p:outputLabel value="Profundidad de las lecturas:" for="depth"  title="Numero de secuencias esperadas por par de bases"/>
+                        <p:selectOneMenu  value="#{calculatorController.depth}"  id="depth" required="true" requiredMessage="Proporcione la profundidad de la lectura" >
+                            <f:selectItem itemLabel="100" itemValue="100" />
+                            <f:selectItem itemLabel="150" itemValue="150" />
+                            <p:ajax event="itemSelect" update="costos" listener="#{calculatorController.genomicCalculator()}" /> 
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="¿Requiere extracción de material genético?" for="genExtr"/>
+                        <p:selectOneRadio id="genExtr" value="#{calculatorController.extract}" required="true" requiredMessage="Indique si sus muetras requieren extracción genética"  >
+                            <f:selectItem itemLabel="Si" itemValue="true" />
+                            <f:selectItem itemLabel="No" itemValue="false" />
+                            <p:ajax event="click" update="costos" listener="#{calculatorController.genomicCalculator()}" /> 
+                        </p:selectOneRadio>
+
+                        <p:outputLabel value="¿Requiere analisis bioinformatico?" for="bio"/>
+                        <p:selectOneRadio id="bio" value="#{calculatorController.analysis}" required="true" requiredMessage="Indique si requiere análisis bioinformático" >
+                            <f:selectItem itemLabel="Si" itemValue="true" />
+                            <f:selectItem itemLabel="No" itemValue="false" />
+                            <p:ajax event="click" update="costos" listener="#{calculatorController.genomicCalculator()}" />   
+                        </p:selectOneRadio>
+
+
+
+                    </h:panelGrid>
+
+                    <p:panelGrid columns="2" id="costos">
+                        
+                         <f:facet name="header">
+                           Costo aproximado
+                        </f:facet>
+
+                        
+                        <p:outputLabel style="font-size: medium;" value="Costo de preparación de biblioteca gDNA:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.costoBiblioteca}"/>
+                        <p:outputLabel style="font-size: medium;" value="Secuenciación:"  />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.seq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de la secuenciación por muestra:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.costoSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total de la secuenciación:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.totalSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de análisis bioinformático por muestra:" rendered="#{calculatorController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.costoBioinfo}" rendered="#{calculatorController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total por análisis bioinformático:" rendered="#{calculatorController.analysis}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.totalBioinfo}" rendered="#{calculatorController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo por muestra de extraccción de DNA:" rendered="#{calculatorController.extract}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.costoExtrac}" rendered="#{calculatorController.extract}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total por la extracción de DNA:" rendered="#{calculatorController.extract}"/>
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorController.totalExtrac}" rendered="#{calculatorController.extract}"/>
+
+                        <p:outputLabel style="font-size: medium;" value="Costo total del servicio:" />
+                        <p:outputLabel  style="font-size: large; color: red; text-decoration: underline " value="#{calculatorController.greatTotal}" />
+
+
+                    </p:panelGrid>
+
+
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" id="gridRNA" rendered="${calculatorSelectedController.rna}">
+
+
+
+                    <h:panelGrid columns="2" id="RNA" style="width: 500px">
+
+                        <p:outputLabel for="RNAtype" value="Tipo de muestra:"/>
+                        <p:selectOneRadio  value="#{calculatorRNAController.small}"  id="RNAtype" required="true" >
+                            <f:selectItem itemLabel="RNA" itemValue="false" />
+                            <f:selectItem itemLabel="smallRNA" itemValue="true" />
+                            <p:ajax event="click" update="costosRNA" listener="#{calculatorRNAController.rnaCalculator()}" /> 
+                        </p:selectOneRadio>
+
+                        <p:outputLabel value="Numero de muestras:" for="muestrasRNA"/>
+                        <p:inputText title="Numero de muestras de su proyecto" value="#{calculatorRNAController.numsamples}" id="muestrasRNA" required="true" requiredMessage="Proporcione el numero de muestras de su proyecto">
+
+                            <p:ajax event="keyup" update="costosRNA" listener="#{calculatorRNAController.rnaCalculator()}" />  
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Numero de reads:" for="readsRNA"/>
+                        <p:inputText title="Numero de reads en el proyecto" value="#{calculatorRNAController.numreads}" id="readsRNA" required="true" requiredMessage="Proporcione el numero de reads para cada muestra">
+
+                            <p:ajax event="keyup" update="costosRNA" listener="#{calculatorRNAController.rnaCalculator()}" />  
+                        </p:inputText>
+
+
+                        <p:outputLabel value="¿Requiere analisis bioinformatico?" for="bioRNA"/>
+                        <p:selectOneRadio id="bioRNA" value="#{calculatorRNAController.analysis}" required="true" requiredMessage="Indique si requiere análisis bioinformático" >
+                            <f:selectItem itemLabel="Si" itemValue="true" />
+                            <f:selectItem itemLabel="No" itemValue="false" />
+                            <p:ajax event="click" update="costosRNA" listener="#{calculatorRNAController.rnaCalculator()}" />   
+                        </p:selectOneRadio>
+
+
+
+                    </h:panelGrid>
+
+                    <p:panelGrid columns="2" id="costosRNA">
+                        
+                          <f:facet name="header">
+                           Costo aproximado
+                        </f:facet>
+
+
+                        <p:outputLabel style="font-size: medium;" value="Costo de preparación de biblioteca RNAseq por muestra:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.costoBiblioteca}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total de preparación de bibliotecas:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.costoTotalBiblioteca}"/>
+                        <p:outputLabel style="font-size: medium;" value="Para la secuenciación:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.seq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de la secuenciación por muestra:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.costoSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total de la secuenciación:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.totalSeq}"/>
+
+                        <p:outputLabel style="font-size: medium;" value="Costo de análisis bioinformático por muestra:" rendered="#{calculatorRNAController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.costoBioinfo}" rendered="#{calculatorRNAController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total por análisis bioinformático:" rendered="#{calculatorRNAController.analysis}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorRNAController.totalBioinfo}" rendered="#{calculatorRNAController.analysis}"/>
+
+
+                        <p:outputLabel style="font-size: medium;" value="Costo total del servicio:" />
+                        <p:outputLabel  style="font-size: large; color: red; text-decoration: underline " value="#{calculatorRNAController.greatTotal}" />
+
+
+                    </p:panelGrid>
+
+
+
+                </h:panelGrid>  
+
+                <h:panelGrid columns="2" id="gridAmpl"  rendered="${calculatorSelectedController.amplicon}" >
+
+
+
+                    <h:panelGrid columns="2" id="Ampl" style="width: 500px">
+
+
+                        <p:outputLabel value="Numero de muestras:" for="muestrasAmpl"/>
+                        <p:inputText title="Numero de muestras de su proyecto" value="#{calculatorAmpliconController.numsamples}" id="muestrasAmpl" required="true" requiredMessage="Proporcione el numero de muestras de su proyecto">
+
+                            <p:ajax event="keyup" update="costosAmpl" listener="#{calculatorAmpliconController.ampliconCalculator()}" />  
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Numero de amplicones por muestra:" for="amplicon"/>
+                        <p:inputText title="Numero de reads en el proyecto" value="#{calculatorAmpliconController.numampli}" id="amplicon" required="true" requiredMessage="Proporcione el numero de amplicones para cada muestra">
+
+                            <p:ajax event="keyup" update="costosAmpl" listener="#{calculatorAmpliconController.ampliconCalculator()}" />  
+                        </p:inputText>
+                        <p:outputLabel value="Numero de reads:" for="readsAmpl"/>
+                        <p:inputText title="Numero de reads en el proyecto" value="#{calculatorAmpliconController.numreads}" id="readsAmpl" required="true" requiredMessage="Proporcione el numero de reads para cada muestra">
+
+                            <p:ajax event="keyup" update="costosAmpl" listener="#{calculatorAmpliconController.ampliconCalculator()}" />  
+                        </p:inputText>
+
+
+                        <p:outputLabel value="¿Requiere analisis bioinformatico?" for="bioAmpl"/>
+                        <p:selectOneRadio id="bioAmpl" value="#{calculatorAmpliconController.analysis}" required="true" requiredMessage="Indique si requiere análisis bioinformático" >
+                            <f:selectItem itemLabel="Si" itemValue="true" />
+                            <f:selectItem itemLabel="No" itemValue="false" />
+                            <p:ajax event="click" update="costosAmpl" listener="#{calculatorAmpliconController.ampliconCalculator()}" />   
+                        </p:selectOneRadio>
+
+
+
+                    </h:panelGrid>
+
+                    <p:panelGrid columns="2" id="costosAmpl">
+                          <f:facet name="header">
+                           Costo aproximado
+                        </f:facet>
+
+
+                        <p:outputLabel style="font-size: medium;" value="Total de amplicones:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.totalAmpl}"/>
+
+                        <p:outputLabel style="font-size: medium;" value="Costo de la secuenciación por muestra:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.costoSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de la preparacion de amplicones:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.costoAmpl}"/>
+
+                        <p:outputLabel style="font-size: medium;" value="Lecturas solicitadas:" rendered="${calculatorAmpliconController.numreads > 1}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.seq}" rendered="${calculatorAmpliconController.numreads>1}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total de la secuenciación:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.totalSeq}"/>
+
+
+                        <p:outputLabel style="font-size: medium;" value="Total de aplicon(es) + secuenciacion por muestras:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.totalSeqAmpl}"/>
+
+
+
+
+                        <p:outputLabel style="font-size: medium;" value="Costo de análisis bioinformático por muestra:" rendered="#{calculatorAmpliconController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.costoBioinfo}" rendered="#{calculatorAmpliconController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total por análisis bioinformático:" rendered="#{calculatorAmpliconController.analysis}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorAmpliconController.totalBioinfo}" rendered="#{calculatorAmpliconController.analysis}"/>
+
+
+                        <p:outputLabel style="font-size: medium;" value="Costo total del servicio:" />
+                        <p:outputLabel style="font-size: large; color: red; text-decoration: underline " value="#{calculatorAmpliconController.greatTotal}" />
+
+
+                    </p:panelGrid>
+
+
+
+                </h:panelGrid>  
+
+
+                <h:panelGrid columns="2" id="gridMeta"  rendered="${calculatorSelectedController.meta}" >
+
+
+
+                    <h:panelGrid columns="2" id="Meta" style="width: 500px">
+
+
+                        <p:outputLabel value="Numero de muestras:" for="muestrasAmpl"/>
+                        <p:inputText title="Numero de muestras de su proyecto" value="#{calculatorMetaController.numsamples}" id="muestrasMeta" required="true" requiredMessage="Proporcione el numero de muestras de su proyecto">
+
+                            <p:ajax event="keyup" update="costosMeta" listener="#{calculatorMetaController.metagenomicCalculator()}" />  
+                        </p:inputText>
+                        
+                          <p:outputLabel value="Tamaño de la lectura: " for="lenMeta"/>
+                          <p:selectOneMenu  value="#{calculatorMetaController.len}" required="true" id="lenMeta" requiredMessage="Proporcione el tamaño de lectura deseado">
+                            <f:selectItem itemLabel="75" itemValue="75" />
+                            <f:selectItem itemLabel="100" itemValue="100" />
+                            <f:selectItem itemLabel="150" itemValue="150" />
+                            <f:selectItem itemLabel="300" itemValue="300" />
+                            <p:ajax event="itemSelect" update="costosMeta" listener="#{calculatorMetaController.metagenomicCalculator()}" />  
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Numero de reads:" for="readsMeta"/>
+                        <p:inputText title="Numero de reads en el proyecto" value="#{calculatorMetaController.numreads}" id="readsMeta" required="true" requiredMessage="Proporcione el numero de reads para cada muestra">
+
+                            <p:ajax event="keyup" update="costosMeta" listener="#{calculatorMetaController.metagenomicCalculator()}" />  
+                        </p:inputText>
+
+
+                        <p:outputLabel value="¿Requiere analisis bioinformatico?" for="bioMeta"/>
+                        <p:selectOneRadio id="bioMeta" value="#{calculatorMetaController.analysis}" required="true" requiredMessage="Indique si requiere análisis bioinformático" >
+                            <f:selectItem itemLabel="Si" itemValue="true" />
+                            <f:selectItem itemLabel="No" itemValue="false" />
+                            <p:ajax event="click" update="costosMeta" listener="#{calculatorMetaController.metagenomicCalculator()}" />   
+                        </p:selectOneRadio>
+
+
+
+                    </h:panelGrid>
+
+                    <p:panelGrid columns="2" id="costosMeta">
+                          <f:facet name="header">
+                           Costo aproximado
+                        </f:facet>
+
+
+                      <p:outputLabel style="font-size: medium;" value="Costo de preparación de biblioteca gDNA:" />
+                      <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.costoBiblioteca}"/>
+                        <p:outputLabel style="font-size: medium;" value="Secuenciación:"  />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.seq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de la secuenciación por muestra:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.costoSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total de la secuenciación:" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.totalSeq}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo de análisis bioinformático por muestra:" rendered="#{calculatorMetaController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.costoBioinfo}" rendered="#{calculatorMetaController.analysis}"/>
+                        <p:outputLabel style="font-size: medium;" value="Costo total por análisis bioinformático:" rendered="#{calculatorMetaController.analysis}" />
+                        <p:outputLabel style="font-size: medium;" value="#{calculatorMetaController.totalBioinfo}" rendered="#{calculatorMetaController.analysis}"/>
+                     
+                        <p:outputLabel style="font-size: medium;" value="Costo total del servicio:" />
+                        <p:outputLabel style="font-size: large; color: red; text-decoration: underline " value="#{calculatorMetaController.greatTotal}" />
+
+
+                    </p:panelGrid>
+
+
+
+                </h:panelGrid>    
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"> 
+
+    <ui:composition template="/template.xhtml"> 
+        <ui:define name="title">
+            <h:outputText value="Crear Bibliotecas"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+            <f:event type="preRenderView" listener="#{libraryController.changeDiferentsKits()}"></f:event>      
+
+
+        </ui:define>
+        <ui:define name="body">
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="" life="10000"  />
+
+
+
+                <h:panelGrid id="grid3" columns="2">
+
+
+                    <p:outputLabel value="Volver a seleccionar muestras"/>
+                    <p:commandButton   icon="ui-icon-arrow-2-e-w" value="Seleccionar muestras" action="#{libraryController.viewSampleList()}"/>
+
+                    
+                    <p:outputLabel  value="Tipo de lectura:&nbsp;" for="type" rendered="#{libraryController.render()}" />
+
+                    <p:selectOneRadio id="type" value="#{libraryController.libraryType}" rendered="#{libraryController.render()}" required="true" requiredMessage="Especifique el tipo de biblioteca" >
+                        <f:selectItem itemLabel="Paired End" itemValue="Paired End"/>    
+
+                        <p:ajax event="click" update="tableLib,form" />
+                    </p:selectOneRadio>
+
+                    <p:outputLabel  value="Fecha de preparación:" for="preparation" />
+                    <p:calendar  id="preparation" value="#{libraryController.fechaPrep}" 
+                                 title="Fecha que en la que se contruyó o construira la biblioteca" navigator="true" pattern="yyyy-MM-dd" 
+                                 >
+                        <p:ajax event="valueChange" update="grid3,tableLib,form" />
+                    </p:calendar>
+
+
+
+                    <p:outputLabel  value="Numero de bibliotecas:" for="num" />
+
+                    <p:spinner disabled="true" id="num"  value="#{libraryController.numLib}" min="0" max="100">
+                        <p:keyFilter regEx="/[0-9]/i"/>
+                        <p:ajax event="valueChange" update="tableLib" listener="#{libraryController.init()}" />
+                        <p:ajax event="keyup" update="tableLib" listener="#{libraryController.init()}" />
+
+                    </p:spinner> 
+                    <p:fileUpload  fileUploadListener="#{libraryController.procesFile}"  mode="advanced" dragDropSupport="false" 
+                                   invalidFileMessage="Archivo invalido, se requiere un archivo de excel" label="Registrar bibliotecas con archivo excel" 
+                                   auto="true" allowTypes="/(\.|\/)(xlsx)$/" update="growl, :form:biblioErrDialog" onstart="PF('statusDialogUploadFile').show()" oncomplete="statusDialogUploadFile.hide()"/>
+
+
+
+                </h:panelGrid> 
+                <h:panelGrid  id="tableLib" columns="1">
+                    <h:commandLink value="Descargar Excel para crear bibliotecas con diferente kit" style="float: left" >
+                        <p:graphicImage library="images" name="xls.png" />
+                        <p:dataExporter type="xlsx" target="tbl" fileName="libraries" />
+                    </h:commandLink>
+
+
+                    <p:dataTable id="tbl" value="#{libraryController.listSampleLibraries}" editable="true"  var="item"  widgetVar="table" 
+                                 style="border:solid 1px; border-color: transparent"  >
+
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Muestras para las nuevas bibliotecas" />
+
+                            </p:outputPanel>
+                        </f:facet> 
+                        
+                        <p:ajax event="rowEdit" immediate="true" process="@this" listener="#{libraryController.updateListSampleLibraryKits(item,item.library.idBarcode1.idIndex,item.library.idBarcode2.idIndex, item.library.libraryName, item.library.kit)}" update="tbl"/>
+                        <f:facet name="footer" >
+
+                        </f:facet>
+
+
+                        <p:column style="width:32px" exportable="false" >
+                            <p:rowEditor  />
+                        </p:column>
+
+
+                        <p:column width="60">
+                            <f:facet name="header">
+                                <p:outputLabel value="Id muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sample.idSample}" />
+                        </p:column>
+                        
+                        <p:column exportable="false">
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre de tubo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sample.idTube}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre de la biblioteca"/>
+                            </f:facet>
+
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.library.libraryName}" /></f:facet>
+                               <f:facet name="input">
+                                   <p:inputText value="#{item.library.libraryName}" style="width:100%" />
+                                   </f:facet>
+                            </p:cellEditor>
+
+
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Tag 1"/>
+                            </f:facet>
+
+
+                            <p:cellEditor id="editorBarcodes7">
+                                <f:facet name="output"><h:outputText value="#{item.library.idBarcode1.idBarcode}" /></f:facet>
+                                <f:facet name="input" rendered="#{libraryController.kit == '' }">
+                                    <p:selectOneMenu value="#{item.library.idBarcode1}" style="width:100%">
+                                        <f:selectItems value="#{libraryController.getListBarcodesi7DiferentKits(item.library.kit)}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+
+                        </p:column>
+                        <p:column  visible="#{!libraryController.platafrom.endsWith('Oxford Nanopore')}">
+                            <f:facet name="header">
+                                <p:outputLabel value="Tag 2 "/>
+                            </f:facet>
+
+                            <p:cellEditor id="editorBarcodes5">
+                                <f:facet name="output"><h:outputText id="barcodes7" value="#{item.library.idBarcode2.idBarcode}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu value="#{item.library.idBarcode2}" style="width:100%" >
+                                        <f:selectItems value="#{libraryController.getListBarcodesi5Kits(item.library.kit, item.sample.samplePlataform)}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor> 
+
+
+                        </p:column>
+
+                        <p:column style="width: 130px">
+                            <f:facet name="header">
+                                <p:outputLabel value="Plataforma"/>
+                            </f:facet>
+
+                            <h:outputText value="#{item.sample.samplePlataform}" />
+                        </p:column>
+
+                        <p:column >
+                            <f:facet name="header">
+                                <p:outputLabel value="Kit"/>
+                            </f:facet>
+                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText id="outputKit" value="#{item.library.kit}"/></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu value="#{item.library.kit}" style="width:100%">
+                                        <p:ajax event="change" update="outputKit, editorBarcodes7, editorBarcodes5" listener="#{libraryController.updateListSampleLibraryKits(item,item.library.idBarcode1.idIndex,item.library.idBarcode2.idIndex, item.library.libraryName, item.library.kit)}" />
+                                        <f:selectItems value="#{libraryController.getDiferentsKits(item.sample.samplePlataform)}" var="itemKitV" itemLabel="#{itemKitV}" itemValue="#{itemKitV}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        
+                        <p:column exportable="false" style="width: 55px">
+                            <f:facet name="header">
+                                <p:outputLabel value="Eliminar"/>
+                            </f:facet>
+                            
+                            <p:commandButton  icon="ui-icon-close" action="#{libraryController.deleteItemListSampleLibrary(item)}" style="height: 18px; width: 18px" update="tbl, form:num"/>
+                        </p:column>
+
+
+
+
+                    </p:dataTable>
+                </h:panelGrid>
+                <br />
+                <p:commandButton action="#{libraryController.createLibraryL(actionEvent)}" process="@form"  icon="ui-icon-disk" style="font-size: large" 
+                                 value="Registrar Bibliotecas" update="form:tableLib, form:dlg1, :form:biblioErrDialog" />
+
+                
+
+
+                <p:commandButton action="#{libraryController.showDialog(2)}" value="Bibliotecas preparadas" style="font-size: large"  update="form"/>
+
+                
+
+
+
+                <p:dialog   header="Error al crear bibliotecas" modal="true" style="font-size: large" widgetVar="dlg1" minHeight="40" resizable="dlg2">
+                    <h:panelGrid columns="1" id="dlg1" style="text-align: center">
+                        <p:outputLabel value="Se encontró el siguiente tag o nombre de biblioteca repetido:" />
+                        <p:outputLabel value="#{libraryController.nameRepeted}" style="color: red; "  />
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="Actualizacion exitosa" widgetVar="libCreateDialog" modal="true" resizable="false">
+
+                    <p:outputPanel id="LibAcep" style="text-align:center;"> 
+                        <h:panelGrid columns="1">  
+                            <div align="center">
+
+                                <img src="../resources/images/ok.png"></img>
+
+                                <p:outputLabel  value="BIBLIOTECAS CREADAS EXITOSAMENTE"  style="font-size: large; font-family:'politica'" />
+
+                                <p:commandButton id="aceptEditLibs" action="#{libraryController.redirectToProj()}"  value="Aceptar"/> 
+
+                            </div>
+
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+                <p:dialog header="Bibliotecas en espera de secuenciacion" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg2" minHeight="40" resizable="false">
+
+                    <p:dataTable value="#{libraryController.getLibrariesByKit()}" var="item" reflow="true">
+                        <f:facet name="header">
+
+                            Bibliotecas
+
+                        </f:facet>
+                        <f:facet name="footer">
+                            <h:outputText value=""/>
+
+                        </f:facet>
+
+                        <p:column width="300" sortBy="#{item.libraryName}" >
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.libraryName}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Plataforma"/>
+                            </f:facet>
+                            <h:outputText value="#{item.plataform}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Kit"/>
+                            </f:facet>
+                            <h:outputText value="#{item.kit}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tipo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.type}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Ciclos de primera lectura"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cycles_1}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Ciclos de segunda lectura"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cycles_2}"/>
+                        </p:column>
+
+
+                        <p:column sortBy="#{item.idBarcode1.idBarcode}">
+                            <f:facet name="header">
+                                <h:outputText value="Tag 1"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idBarcode1.idBarcode}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.idBarcode2.idBarcode}">
+                            <f:facet name="header">
+                                <h:outputText value="Tag 2"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idBarcode2.idBarcode}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tamaño del inserto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.insertSize}"/>
+                        </p:column>
+                        <p:column headerText="Concentración por qPCR">
+
+                            <h:outputText value="#{item.qpcrConcen}"/>
+                        </p:column>
+                        <p:column headerText="Concentración por Qubit">
+
+                            <h:outputText value="#{item.qubitConcen}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Concentración Nanomolar"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nanoConcen}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Status"/>
+                            </f:facet>
+                            <h:outputText value="#{item.preparationStatus}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                            <h:outputText value="#{item.preparationDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+
+
+
+                    </p:dataTable>
+
+
+                </p:dialog>
+
+                <!-- Mensajes modulares -->
+
+                <p:dialog id="biblioErrDialog" header="Creación de bibliotecas" widgetVar="biblioErrDialog" modal="true" style="font-size: large; text-align: center; font-size: 13px" >
+
+                    <h:panelGrid columns="1" >
+                        <br></br>
+                        <p:outputLabel value="#{libraryController.messageDialog}"/>
+                        <br></br>
+
+                    </h:panelGrid>
+
+
+
+                </p:dialog>
+                
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                     <p:dialog header="Procesando" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" >
+                        <div class="p-text-center">
+                         <i class="pi pi-spinner loading-icon" aria-hidden="true"></i>
+                         </div>
+                    </p:dialog>
+                
+                <p:dialog header="Guardando, por favor espere..." widgetVar="statusDialogUploadFile" modal="true" draggable="false" closable="false" resizable="false" >
+                    <div align="center">
+                        <div align="center">
+                            <p:graphicImage value="../resources/images/upload1.gif" width="240" height="240"></p:graphicImage>
+                        </div>
+                    </div>
+                </p:dialog>
+
+            </h:form>
+
+
+
+        </ui:define>
+    </ui:composition>
+
+</html>

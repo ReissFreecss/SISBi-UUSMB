@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditLibraryRunLinkTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditLibraryRunLinkLabel_note}" for="note" />
+                    <h:inputText id="note" value="#{libraryRunLinkController.selected.note}" title="#{bundle.EditLibraryRunLinkTitle_note}" />
+                    <h:outputLabel value="#{bundle.EditLibraryRunLinkLabel_library}" for="library" />
+                    <h:selectOneMenu id="library" value="#{libraryRunLinkController.selected.library}" title="#{bundle.EditLibraryRunLinkTitle_library}" required="true" requiredMessage="#{bundle.EditLibraryRunLinkRequiredMessage_library}">
+                        <f:selectItems value="#{libraryController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditLibraryRunLinkLabel_run}" for="run" />
+                    <h:selectOneMenu id="run" value="#{libraryRunLinkController.selected.run}" title="#{bundle.EditLibraryRunLinkTitle_run}" required="true" requiredMessage="#{bundle.EditLibraryRunLinkRequiredMessage_run}">
+                        <f:selectItems value="#{runController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{libraryRunLinkController.update}" value="#{bundle.EditLibraryRunLinkSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditLibraryRunLinkViewLink}"/>
+                <br />
+                <h:commandLink action="#{libraryRunLinkController.prepareList}" value="#{bundle.EditLibraryRunLinkShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditLibraryRunLinkIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

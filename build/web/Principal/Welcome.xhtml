@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+     >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+          
+             
+ <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event> 
+        </ui:define>
+        <ui:define name="body"><h:outputText rendered="false" value="SISBI"></h:outputText>
+            <div align="center">
+                <p:outputLabel value="Bienvenido(a) #{plantillaController.nombreLogin()}" style="font-size: 30px; font-style: italic" />
+            <h:form>
+                
+                <p:messages id="messages"  showDetail="false" autoUpdate="true" />
+           
+           <br />
+            <br />
+          
+        <h:panelGrid columns="3">
+                       
+          <p:outputLabel  value="Buscar proyecto" for="search" />
+          <p:inputText id="search" style="width: 300px" value="#{projectController.idProject}" placeholder="ID o nombre del proyecto" />
+          <p:commandButton action="#{projectController.existProject()}"  icon="ui-icon-search" value="Buscar"/>
+          
+      </h:panelGrid>
+            
+            <br/>
+            <br/>
+        <h:panelGrid columns="2">
+        
+            <p:outputLabel style="font-size: medium;" value="Para dar de alta su proyecto dando click " />
+               <h:outputLink style="font-size: medium;" value= "/SISBI/uusmb/project/Create.xhtml" >AQUÍ</h:outputLink>                
+                
+        </h:panelGrid> 
+            <br/>
+            <br/>
+            
+               <p:accordionPanel  activeIndex="-1">
+                <p:tab title="¿Cómo registrar un proyecto?"  titleStyle="font-size: 20px; font-style: italic"  >
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/rpTxY-GPOLY" title="YouTube video player" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  
+                                allowfullscreen="true"></iframe>
+            </p:tab>
+                
+                
+        </p:accordionPanel>
+            <p:accordionPanel  activeIndex="-1">
+            <p:tab title="¿Cómo registrar una muestra al proyecto?"  titleStyle="font-size: 20px; font-style: italic" >
+                       <iframe width="560" height="315" src="https://www.youtube.com/embed/qSbQC6RLpH8" title="YouTube video player" 
+                               frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+            </p:tab>
+               </p:accordionPanel>
+            <p:accordionPanel  activeIndex="-1">
+                <p:tab title="¿Cómo registrar un conjunto de muestras al proyecto?"  titleStyle="font-size: 20px; font-style: italic" >
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_AB6ZY9_Z9Q" title="YouTube video player" 
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true"></iframe>
+                </p:tab>
+            </p:accordionPanel>
+
+                
+            
+             </h:form>
+             </div>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>

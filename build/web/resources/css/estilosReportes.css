@@ -1,0 +1,96 @@
+
+/* Estilos Globales */
+.bg-c1{
+    background-color: #3B88BD;
+}
+.bg-c2{
+    background-color: #DBD051;
+}
+.mbottom1{
+    margin-bottom: 10px;
+}
+.text-center{
+    text-align: center;
+}
+
+.text-report{
+    font-size: 20px;
+}
+.input-report input{
+    margin: 0;
+    padding: 0;
+}
+.inFontSize input{
+    font-size: 15px;
+}
+.inFontSize .btn-form{
+    font-size: 15px;
+}
+.insize50{
+    width: 50px;
+}
+.insize1{
+    width: 100px;
+}
+.insize2{
+    width: 200px;
+}
+.insize3{
+    width: 300px;
+}
+.insize4{
+    width: 400px;
+}
+.insize5{
+    width: 500px;
+}
+.insize6{
+    width: 600px;
+}
+.insize7{
+    width: 600px;
+}
+.insize8{
+    width: 600px;
+}
+.table1{
+    border: white 2px solid;
+}
+
+.table1 td{
+    border: white 2px solid;
+}
+
+/*Estilos para la seleccion de reportes */
+.boton-s1{
+    height: 60px;
+    width: 150px;
+    margin: 0 10px 0 10px;
+}
+.boton-m1{
+    height: 60px;
+    width: 200px;
+    margin: 0 10px 0 10px;
+}
+.center-gridp{
+    justify-content: center;
+}
+.end-gridp{
+    justify-content: flex-end;
+}
+
+/* Estilos para el contenedor de los formularios de los reportes */
+.maxdesk{
+    max-width: 1200px;
+}
+.center-container{
+    margin: 0 auto;
+}
+
+/*Estilos Tablas Formularios */
+#formReportExpresion table,
+#formReportExpresion2 table{
+font-size: 15px !important;
+margin: auto;
+text-align: center;    
+}

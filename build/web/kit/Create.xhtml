@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">>
+    
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title" >
+            <h:outputText value="Kits de Secuenciación" ></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        
+        
+        <ui:define name="body">
+            
+           
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            
+            <p:growl id="growl_success" for="msgSuccess" showDetail="true" life="4000" severity="info"/>
+            <p:growl  id="growl" showDetail="true" sticky="true" severity="error,fatal,warn"/>
+            
+         <h:form id="principal">
+	    <div align="center">
+                <p:outputLabel value="Registro de nuevos kits de secuenciación" style="font-size: 30px; font-style: italic" />
+                 <br/><br/>
+
+	 
+                 <p:dataTable id="tblkit" value="#{kitjpaController.allkits}" var="item" reflow="true" multiViewState="table"  resizableColumns="true" 
+                             scrollable="true" scrollHeight="220" rows="20" rowsPerPageTemplate="10,20,30"  paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             sortMode="multiple">
+                        <f:facet name="header">                           
+                                Kits Registrados                              
+                        </f:facet>
+                        <f:facet name="footer">
+                           <h:outputText value=""/>
+                              
+                        </f:facet>
+                   
+                          <p:column headerText="Id Kit" width="100"  >
+                           
+                              <h:outputText value="#{item.idKit}"/>
+                        </p:column>
+                   
+                          <p:column headerText="Nombre Plataforma" width="300" >
+                           
+                              <h:outputText value="#{item.kitName}"/>
+                        </p:column>
+                        
+                   <p:column headerText="Notas del kit" >
+                        
+                       <h:outputText value="#{item.note}"/>
+                        </p:column>
+                  
+                                                                 
+                    </p:dataTable> <br/><br/>
+                 
+                 
+                      <p:panelGrid columns="1"  id="gral_data"  >                                                
+                    <f:facet name="header">
+                        Registro de nuevo kit.
+                    </f:facet>    
+
+		<h:panelGrid columns="2">
+                    <p:outputLabel value="Nombre del kit" for="kitName" />
+                    <p:inputText id="kitName" value="#{kitjpaController.selected.kitName}" required="true" requiredMessage="El nombre del kit es obligatorio" a:placeholder="Ejemplo: Nextera XT"> 
+                    <p:ajax delay="800" event="keyup" listener="#{kitjpaController.asignarValorCampos}" immediate="true" />
+                    </p:inputText>
+                    
+                    
+                    <p:outputLabel value="Nota del kit" for="kitNotes" />
+                    <p:inputText id="kitNotes" value="#{kitjpaController.selected.note}" >
+                     <p:ajax delay="800" event="keyup" listener="#{kitjpaController.asignarValorCampos}"  />
+                    </p:inputText>
+                    
+                     <h:panelGrid id="plats" columns="1" > 
+                                <p:outputLabel value="Seleccione las plataformas que utilizan este kit:" />
+                                
+                                <p:selectManyCheckbox id="gridCheckplat" value="#{PlataformLinkKitJpaController.listaPlats}" layout="responsive" columns="1">
+                                    <f:selectItems value="#{plataformjpaController.allplataforms}" var="plataformas" itemLabel="#{plataformas.plataformName}" itemValue="#{plataformas.plataformName}"      />
+                                </p:selectManyCheckbox>
+                                </h:panelGrid>
+                    
+                    
+                </h:panelGrid>
+              </p:panelGrid>   
+		<br/>
+                <p:commandButton  id="createButton" style="text-align: center" value="Guardar kit" update="growl, growl_success,tblkit" icon="ui-icon-disk"  action="#{kitjpaController.create_kit()}"  styleClass="ui-priority-primary">
+                    <f:actionListener binding="#{PlataformLinkKitJpaController.createPlaKitLink()}"/>
+                </p:commandButton>
+
+                      <br/><br/>
+                      
+            </div>
+                
+                
+         </h:form>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>

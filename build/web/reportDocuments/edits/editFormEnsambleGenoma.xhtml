@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Formulario Report Ensamble de Genoma"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToCreateReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages style="font-size: 24px;font-weight: bolder" errorStyle="color: red" infoStyle="color: green" warnStyle="color: white" layout="table"/>
+            </h:panelGroup>
+           <div class="card maxdesk center-container">
+                <div class="ui-g">
+                    <div  class="bg-c1 ui-g-12ui-g-nopad text-report">
+                        <h:form id="formReportExpresion" class="inFontSize input-report">
+                            <h2 class="text-center">REPORTE ENTREGA DEL PROYECTO : #{reportProjectController.projectSampleReportProject().projectName} </h2>
+                            
+                            <h3>IDENTIFICACIÓN DEL REPORTE O PROYECTO: #{reportProjectController.projectSampleReportProject().idProject} </h3>
+                            <p>Fecha de Solicitud:</p>
+                            <p:calendar value="#{reportProjectController.selectedRepoProject.requestDate}" pattern="dd/MM/yyyy"/>
+                            <p>Fecha de Informe:</p>
+                            <p:calendar value="#{reportProjectController.selected.dateCreate}" pattern="dd/MM/yyyy"/>
+                            <p>Fecha de Análisis:</p>
+                            <p:calendar value="#{reportProjectController.bioinfoAnalysisDate}" pattern="dd/MM/yyyy"/>
+                            
+                            <h3>REVISIÓN y AUTORIZACIÓN:</h3>
+                            El revisor actual es: #{reportProjectController.selected.idUserRevise.fullName}<br/>
+                            Asignar revisor:<h:selectOneMenu value="#{reportProjectController.selected.idUserRevise}" title="Revisor:">
+                                <f:selectItems value="#{reportProjectController.usersRevise}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                            El autorizador actual es: #{reportProjectController.selected.idUserAuthorize.fullName}<br/>
+                            Asignar autorizador<h:selectOneMenu value="#{reportProjectController.selected.idUserAuthorize}" title="Autorizador">
+                                <f:selectItems value="#{reportProjectController.usersAuthorize}" var="user" itemLabel="#{user.fullName}"/>
+                            </h:selectOneMenu><br/>
+                            <p:commandButton action="#{reportProjectController.btnCambiarRevisorOAutorizador('revisor')}" icon="ui-icon-arrowreturn-1-w" value="Cambiar revisor y autorizador"  update="@form"/>
+
+                            <h3>IDENTIFICACIÓN DEL USUARIO Y COLABORADORES:</h3>
+                            
+                            <p>En esta sección se describen los responsables y colaboradores ligados a este proyecto:</p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.userRole()}" var="us">
+                                    <p:column headerText="Usuario">
+                                        <h:outputText value="#{us.getUserName()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{us.getFirstName()} #{us.getPLastName()} #{us.getMLastName()}" />
+                                    </p:column>
+                                    <p:column headerText="Dependencia">
+                                        <h:outputText value="#{us.getDependencyName()}" />
+                                    </p:column>
+                                    <p:column headerText="Teléfono">
+                                        <h:outputText value="#{us.getPhoneNumber()}" />
+                                    </p:column>
+                                    <p:column headerText="Email">
+                                        <h:outputText value="#{us.getEmail()}" />
+                                    </p:column>
+                                    <p:column headerText="Rol">
+                                        <h:outputText value="#{us.getRole()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN HISTÓRICA DE LAS MUESTRAS</h3>
+                            
+                            <p>
+                                En esta sección se definen los identificadores únicos de cada muestra, su nombre, identificación
+                                del tubo, fecha de recepción, fecha de análisis de calidad y evaluación de Aceptación:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Recepcion">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Analisis">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Estatus de Aceptación">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se define el volumen reportado por el usuario y el volumen y concentración
+                                encontrados por los miembros de la unidad:
+                            </p>
+                            
+                            <p>
+                                <p:dataTable  value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;" >
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) Usuario">
+                                        <h:outputText value="#{sampleM.getReceptionDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Vol(µL) UUSMB">
+                                        <h:outputText value="#{sampleM.getDeliveryDate()}" />
+                                    </p:column>
+                                    <p:column headerText="Concentracion Total (ng)">
+                                        <h:outputText value="#{sampleM.getAceptation()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <p>
+                                En esta sección se reportan los valores de absorbancia reportados por el usuario y los
+                                encontrados por la Unidad. El tipo de muestra, rendimiento esperado y observaciones o comentarios
+                            </p>
+                            
+                            <p>
+                                <p:dataTable value="#{reportProjectController.sampleBySRP()}" var="sampleM" emptyMessage="No hay muestras registradas en este proyecto" >
+                                    <p:column headerText="Numero Consecutivo" style="width:60px;">
+                                        <h:outputText value="#{sampleM.getIdSample()}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre de la Muestra" style="width:210px;">
+                                        <h:outputText value="#{sampleM.getSampleName()}" />
+                                    </p:column>
+                                    <p:column headerText="Identificador del Tubo">
+                                        <h:outputText value="#{sampleM.getIdTube()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_280 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs Usuario (260_230 1.8 a 2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_280 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_280_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Abs UUSMB (260_230 2 a 2.2)" style="width:95px;">
+                                        <h:outputText value="#{sampleM.getAbs260_230_usmb()}" />
+                                    </p:column>
+                                    <p:column headerText="Tipo"  style="width:40px;">
+                                        <h:outputText value="#{sampleM.getType()}" />
+                                    </p:column>
+                                    <p:column headerText="Rendimiento">
+                                        <h:outputText value="#{sampleM.expectedPerformance}" />
+                                    </p:column>
+                                    <p:column headerText="Comentario">
+                                        <h:outputText value="#{sampleM.getComments()}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p>
+                            
+                            <h3>DESCRIPCIÓN METODOLÓGICA </h3>
+                            
+                            <p>#{reportProjectController.selected.typeMethodology}</p>
+                            
+                            <h3>REPORTE DE CALIDAD</h3>
+                            
+                            <p>El siguiente reporte de calidad reporta el % de GC, rendimiento y % de nucleótidos por base:</p>
+                            
+                            <p><a href="#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}">#{reportProjectController.urlQualityReports(reportProjectController.selectedRepoProject.idProject)}</a></p>
+                            
+                            <p>
+                                En este reporte se aprecia que el rendimiento cumple con el compromiso de entregar
+                                al menos 75% de 10 millones de secuencias solicitadas.
+                                Como resultado de la revisión de estos reportes de calidad, y dado que el promedio
+                                de calidad se encuentra para todas las muestras a lo largo de todas las secuencias
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field3}"/>
+                                de Q30, el porcentaje de GC se apega al teórico y los porcentajes de nucleótidos a lo largo de
+                                todas las bases se comparten dentro de lo esperado, no se realizó ninguna limpieza por calidad
+                                o de adaptadores o para eliminar secuencias repetidas.  
+                            </p>
+                            
+                            <h3>ANÁLISIS BIOINFORMÁTICO DE ENSAMBLE DE GENOMA</h3>
+                            
+                            <p>
+                                Para el ensamble de los genomas se utilizó el programa Canu (v2.1)y se realizó una correción posterior de errores
+                                con el programa Pilon (v1.24). Posteriormente se realizó la anotación de los genes utilizando el programa Prokka
+                                (v.1.14.6) y finalmente hicimos la clasificación taxonómica utilizando el programa Genomescanner (v1.0).
+                                
+                            </p>
+                            
+                            
+                            
+                            <h3>RESULTADOS</h3>
+                            
+                            <p>
+                                Estadísticas básicas de cada ensamble:
+                                organism: 
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field4}"/>
+                                ->
+                                <p:inputText class="insize3" value="#{reportProjectController.selectedFieldReport.field5}"/>
+                                
+                            </p>
+                            
+                            <ul>
+                                <li>Total de bases en el ensamble</li>
+                                <li>No. de scaffolds </li>
+                                <li>N50/L50 de los scaffolds </li>
+                                <li>Tamaño del mayor scaffold</li>
+                                <li> GC% </li>
+                                <li># de CDs</li>
+                            </ul>
+                            
+                            <p>Resumen de archivos que encontrará para cada muestra:</p>
+                            
+                            <p>                              
+                                .fsa == Archivo en formato fasta del genoma ensamblado<br></br>
+                                .ffn == Archivo en formato fasta de todas las secuencias codificantes (CDs)<br></br>
+                                .faa == Archivo en formato fasta de las secuencias peptídicas traducidas a partir de las secuencias codificantes (CDs) del .ffn<br></br>
+                                .gff == Archivo en formato GFF3 de anotación<br></br>
+                                .gbk == Archivo en formato Genbank de anotación<br></br>
+                                .tsv == Archivo en formato tsv de anotación<br></br>
+                                .tbl == Archivo en formato tbl de anotación<br></br>
+                                .sqn == Archivo en formato sqn de anotación<br></br>
+                            </p>
+                            <p>
+                                Opcion2: Resumen de programas utilizados y archivos que encontrará para cada muestra:<br></br></br>
+                                .fna == Archivo en formato fasta del genoma ensamblado utilizando el programa RAMPART (v0.12.2) y el programa Spades (v3.14.1)<br></br>
+                                .ffn == Archivo en formato fasta de todos los transcritos anotados utilizando el pipeline PAT (v0.3) desarrollado en la UUSMB para transferir la anotación de la referencia "Phlebiosis gigantea (GCA_000832265.1)" al genoma ensamblado.<br></br>
+                                .faa == Archivo en formato fasta de las secuencias peptídicas traducidas a partir de las secuencias codificantes (CDs) del archivo .ffn<br></br>
+                                .gff == Archivo de anotación en formato GFF3<br></br>
+                                .gbk == Archivo de anotación en formato Genbank<br></br>
+                                .tbl == Archivo en formato tabular de la anotación funcional automática del archivo de proteínas ".faa" utilizando el pipeline PAP (v1.0) desarrollado en la UUSMB.<br></br>
+                                _rRNA.fna == Archivo en formato fasta de los RNA ribosomales predichos con el programa rnammer (v.1.2).<br></br>
+                            </p>
+
+                            <div class="container-btn-report ui-g center-gridp btn-form">
+                                <div class="ui-g-2">
+                                    <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{reportProjectController.editFieldReport()}"/>
+                                </div>
+                                <div class="ui-g-2">
+                                    <p:commandButton icon="ui-icon-closethick" value="Cancelar" action="#{reportProjectController.redirectMenuReportCreate}"  />
+                                </div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

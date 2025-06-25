@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Muestras del Proyecto - #{projectController.projectName()} -"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+     <f:event type="preRenderView" listener="#{sampleController.recreate()}"></f:event>
+                 
+         
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:panelGrid columns="2">
+                      
+                    <p:button icon="ui-icon-circle-arrow-w" outcome="/project/ListAll" value="Volver"/>
+            <p:button icon="ui-icon-circle-plus" outcome="#{sampleController.prepareCreate()}" value="Registrar muestra para este proyecto"/>
+               
+                    <br/>
+                   
+                </h:panelGrid>
+                
+                        <p:dataTable id="tbl" value="#{sampleController.itemsProj}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto"
+                             style="border:solid 1px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="11" reflow="true"
+                             selectionMode="single" selection="#{sampleController.selectedSample}" rowKey="#{item.idSample}">
+                 
+                    <f:facet name="footer">
+                        
+                        <h:outputText value="Total de muestras: #{sampleController.itemsProj.size()}"/>
+                        
+                    </f:facet>
+
+                    <p:ajax event="rowSelect" update=":form:SampleDetail" oncomplete="PF('SampleDialog').show()" />     
+                    
+              
+                    
+                    <p:column >
+                           
+                       <f:facet name="header">
+                                <p:outputLabel value="Nombre de la muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleName}"/>
+                        </p:column>
+                          <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Etiqueta del tubo"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idTube}"/>
+                        </p:column>
+                  
+                        <p:column>
+                            <f:facet name="header">
+                               <p:outputLabel value="Cantidad de muestra (ng)"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleQuantity}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                               <p:outputLabel value="Calidad de muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sampleQuality}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Descripcion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.description}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                               <p:outputLabel value="Estatus"/>
+                            </f:facet>
+                            <h:outputText value="#{item.status}"/>
+                        </p:column>
+                
+                       <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Tipo de muestra"/>
+                            </f:facet>
+                            <h:outputText value="#{item.type}"/>
+                        </p:column>
+                       <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Rendimiento esperado en PB"/>
+                            </f:facet>
+                            <h:outputText value="#{item.expectedPerformance}"/>
+                        </p:column>
+                        
+                    
+                       <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de inserto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.insertSize}"/>
+                        </p:column>
+                        
+                       <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Tamaño de lectura"/>
+                            </f:facet>
+                            <h:outputText value="#{item.readSize}"/>
+                        </p:column>
+                      
+                       <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Fecha de recepcion"/>
+                            </f:facet>
+                           <h:outputText value="#{item.receptionDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                           </h:outputText>
+                              
+                        </p:column>
+                    
+                    
+                     <p:column style="width: 25px"  exportable="false"   >
+                          <f:facet name="header">
+                                <p:outputLabel value="Más Info"/>
+                            </f:facet>
+                        <p:rowToggler/> 
+                    </p:column>
+                    
+                    <p:rowExpansion  id="expansion">
+                        <p:panelGrid id="detail" columns="2" >
+                            <p:dataTable value="#{genomeSampleController.getGnmSmp(item)}" var="item4" style="border:solid 1px" reflow="true">
+
+                                <f:facet name="header">
+                                    Genomas asociados a la muestra
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre de usuario"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item4.genomeName}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item4.type}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        
+                        
+                            <p:dataTable value="#{bioinformaticAnalysisController.getBioAn(item)}" var="item5" style="border:solid 1px" reflow="true">
+                            
+                              <f:facet name="header">
+                                   Análisis bioinformáticos solicitados
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Analisis"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item5.analysisName}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:panelGrid>
+                        
+                          <p:dataTable   value="#{commentsController.getSamplesItems(item)}" scrollable="true" scrollHeight="75" var="item2"  style="border:solid 1px; border-color: transparent" reflow="true" emptyMessage="No se han hecho comentarios a esta muestra">
+                     
+                       
+                        <f:facet name="header">
+                         Comentarios
+                        </f:facet>
+                       
+                       <p:column width="100" >
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                           <h:outputText value="#{item2.commentDate}">
+                                <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                            </h:outputText>
+                        </p:column>
+                       <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                             <h:outputText value="#{item2.userName}"/>
+                        </p:column>
+                     
+                     <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Comentario"/>
+                            </f:facet>
+                            <h:outputText value="#{item2.comment}"/>
+                        </p:column>
+                    
+                  
+                     
+                    </p:dataTable>
+                 
+
+                        
+                    </p:rowExpansion>
+                    
+                    
+                     
+                    </p:dataTable>
+               
+                 <p:dialog header="Editar Muestra" widgetVar="SampleDialog" modal="true" resizable="false">
+                    <p:outputPanel id="SampleDetail" style="text-align:center;">
+                        <h:panelGrid columns="2">
+
+                            <p:outputLabel value="Nombre de la muestra:" for="sampleName" />
+                            <p:inputText id="sampleName" value="#{sampleController.selectedSample.sampleName}"  required="true" requiredMessage="#{bundle.EditSampleRequiredMessage_sampleName}"/>
+
+                            <p:outputLabel value="Etiqueta del tubo:" for="tube" />
+                            <p:inputText id="tube" value="#{sampleController.selectedSample.idTube}" required="true" requiredMessage="#{bundle.EditSampleRequiredMessage_sampleName}"/>
+
+                            <p:outputLabel value="Cantidad de muestra:" for="sampleQuantity" />
+                            <p:inputText id="sampleQuantity" value="#{sampleController.selectedSample.sampleQuantity}"  />
+
+                            <p:outputLabel value="Calidad de muestra:" for="sampleQuality"  rendered="#{sampleController.canEdit()}"/>
+                            <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="sampleQuality" value="#{sampleController.selectedSample.sampleQuality}" style="width:125px">
+                                <f:selectItem itemLabel="Aun no determinada" itemValue="Aun no determinada" />
+                                <f:selectItem itemLabel="Buena" itemValue="Buena" />
+                                <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente degradada" />
+                                <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel rendered="#{sampleController.canEdit()}" value="Estado de la muestra:" for="status" />
+                            <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{sampleController.selectedSample.status}" style="width:125px">
+                                <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+                                <f:selectItem itemLabel="En espera" itemValue="En espera" />
+                                <f:selectItem itemLabel="En construcción" itemValue="En construccion" />
+                                <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                <f:selectItem itemLabel="Entregada" itemValue="Entregada" />
+                                <f:selectItem itemLabel="Forsake" itemValue="Forsake" />
+                            </p:selectOneMenu>
+                           
+                            <p:outputLabel value="Descripcion:" for="desc" />
+                            <p:inputTextarea id="desc" value="#{sampleController.selectedSample.description}"  />
+
+         
+                            <p:outputLabel rendered="#{sampleController.canEdit()}" value="Fecha de recepcion:" for="reception" />
+                            <p:calendar rendered="#{sampleController.canEdit()}" id="reception" value="#{sampleController.selectedSample.receptionDate}" title="Fecha que en la que se recibio la muestra" />
+
+                            <p:outputLabel rendered="#{sampleController.canEdit()}" value="Fecha de entrega:" for="delivery" />
+                            <p:calendar rendered="#{sampleController.canEdit()}" id="delivery" value="#{sampleController.selectedSample.deliveryDate}" title="Fecha que en la que se recibio la muestra" />
+
+
+                            <p:outputLabel value="Tipo:" for="type" />
+                            <p:selectOneRadio id="type" value="#{sampleController.selectedSample.type}"  required="true" requiredMessage="#{bundle.CreateSampleRequiredMessage_type}">
+                                <f:selectItem itemLabel="DNA" itemValue="DNA"/>
+                                <f:selectItem itemLabel="RNA" itemValue="RNA"/>
+                                <f:selectItem itemLabel="smallRNA" itemValue="smallRNA"/>
+                            </p:selectOneRadio>
+
+                            <p:outputLabel value="Rendimiento esperado:" for="expected" />
+                            <p:inputText id="expected" value="#{sampleController.selectedSample.expectedPerformance}" />
+
+                            <p:outputLabel rendered="#{sampleController.canEdit()}" value="Rendimiento real:" for="real" />
+                            <p:inputText rendered="#{sampleController.canEdit()}" id="real" value="#{sampleController.selectedSample.realPerformance}"  />
+
+                          <p:outputLabel value="Comentarios:" for="comments" />
+                            <p:inputTextarea id="comments" value="#{commentsController.comment}"  />
+
+                        </h:panelGrid>
+                        <p:commandButton icon="ui-icon-disk" action="#{sampleController.updateView()}" actionListener="#{commentsController.create4Sample(sampleController.selectedSample)}" value="Actualizar"/>
+            
+
+                    </p:outputPanel>
+                </p:dialog>
+          
+          
+                
+                
+                   <h:panelGrid columns="3">
+                    <h:commandLink>	
+                        <h:graphicImage value="#{pageContext.contextPath}/resources/images/xls.png"  /> 
+                        <p:dataExporter type="xls" target="tbl" fileName="sampleSheet" encoding="ISO-8859-1" />
+                    </h:commandLink>
+                 
+                 <h:commandLink>	
+                        <h:graphicImage value="#{pageContext.contextPath}/resources/images/pdf.png" /> 
+                        <p:dataExporter type="pdf" target="tbl" fileName="sampleSheet" encoding="ISO-8859-1" />
+                    </h:commandLink>
+                
+               
+                 <h:commandLink>	
+                        <h:graphicImage value="#{pageContext.contextPath}/resources/images/xmll.png" /> 
+                        <p:dataExporter type="xml" target="tbl" fileName="sampleSheet" encoding="ISO-8859-1" />
+                    </h:commandLink> 
+                </h:panelGrid>
+                
+                                      
+               
+                <br />
+                <br />
+              </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

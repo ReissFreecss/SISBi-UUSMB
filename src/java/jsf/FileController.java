@@ -313,7 +313,6 @@ public class FileController implements Serializable {
         listPlatform.add("HiSeq X ");
         listPlatform.add("NovaSeq 6000");
         listPlatform.add("NovaSeq XPLUS");
-        
 
         listPlatform.add("Oxford Nanopore - NextSeq500");
         listPlatform.add("Oxford Nanopore - MiSeq");
@@ -418,7 +417,7 @@ public class FileController implements Serializable {
         int col260230 = 14;                                      //14
         int colRendimientoIllumina = 15;                         //15
         int colRendimientoOxford = 16;                           //16
-        */
+         */
         //Variables que representan el tipo de análisis
         /*
         int colLimpiezaCalidad = 17;                             //17
@@ -474,29 +473,36 @@ public class FileController implements Serializable {
         //Variable para omitir validacion de rendimiento
         //boolean saveDataIllumina = false;
         //boolean saveDataOxford = false;
-        
         // 24/abr/2025 Carlos Perez Calderon
-        // Nos aseguramos de convertir el numero a String
-        
-        
-        //  08/ene/2025     Juan Antonio Villalba Luna
-        //  Array asociativo aplicado como diccionario y validar 
-        //  tipo de aplicacion
+        /*/ Nos aseguramos de convertir el numero a String
+        String itemAppType = "";    //  inicializamos por si no entra en el switch    
         Map<String, String> appType = new HashMap<String, String>();
-        appType.put("1", "Genómica");
-        appType.put("2", "Metagenómica");
-        appType.put("3", "Amplicón 16S");
-        appType.put("4", "Amplicón ITS");
-        appType.put("5", "Amplicón 18S");
-        appType.put("6", "Amplicón CO1");
-        appType.put("7", "Amplicón trnL");
-        appType.put("8", "Chip seq");
-        appType.put("9", "RNAseq");
-        appType.put("10", "mRNA");
-        appType.put("11", "RNA viral");
-        appType.put("12", "smallRNA");
+        appType.put("A1", "DNA - Genómico");
+        appType.put("A2", "DNA - Plasmídico");
+        appType.put("A3", "DNA - Mitocondrial");
+        appType.put("A4", "DNA - ChipSeq");
+        appType.put("A5", "DNA - Viral MOPOX");
 
-        String itemAppType = "";    //  inicializamos por si no entra en el switch      
+        appType.put("B1", "RNA - Viral SARS-CoV-2");
+        appType.put("B2", "RNA - Viral Dengue");
+        appType.put("B3", "RNAseq");
+        appType.put("B4", "smallRNA");
+
+        appType.put("C1", "Amplicones - 16S V3");
+        appType.put("C2", "Amplicones - 16S V4");
+        appType.put("C3", "Amplicones - 16S FULL");
+        appType.put("C4", "Amplicones - ITS1");
+        appType.put("C5", "Amplicones - ITS V318S–28SD3");
+        appType.put("C6", "Amplicones - trnL");
+        appType.put("C7", "Amplicones - CO1");
+        appType.put("C8", "Amplicones - 18S");
+        appType.put("C9", "Amplicones - 28S");
+        appType.put("C10", "Amplicones - 12S");
+        appType.put("C11", "Amplicones - 16S V3-V4 e ITS1");
+        appType.put("C12", "Amplicones - 16S V1-V9 e ITS");
+        appType.put("C13", "Amplicones - Amplicon MCR");
+
+        appType.put("D1", "Otros - 4Cseq");*/
 
         try {
 
@@ -535,6 +541,34 @@ public class FileController implements Serializable {
 
                     List<String> parameters = new ArrayList<>();
 
+                    // Obtener valor actual de la columna "Nombre de muestra"
+                    Cell cellActual = row.getCell(colNombreMuestra);
+                    String valorActual = (cellActual == null || cellActual.toString().trim().isEmpty()) ? ""
+                            : cellActual.toString().trim();
+
+                    // Obtener la fila siguiente
+                    Row nextRow = sheet.getRow(row.getRowNum() + 1);
+                    String valorSiguiente = "";
+                    if (nextRow != null) {
+                        Cell cellSiguiente = nextRow.getCell(colNombreMuestra);
+                        valorSiguiente = (cellSiguiente == null || cellSiguiente.toString().trim().isEmpty()) ? ""
+                                : cellSiguiente.toString().trim();
+                    }
+
+                    // Obtener la fila dos posiciones adelante
+                    Row nextNextRow = sheet.getRow(row.getRowNum() + 2);
+                    String valorSiguiente2 = "";
+                    if (nextNextRow != null) {
+                        Cell cellSiguiente2 = nextNextRow.getCell(colNombreMuestra);
+                        valorSiguiente2 = (cellSiguiente2 == null || cellSiguiente2.toString().trim().isEmpty()) ? ""
+                                : cellSiguiente2.toString().trim();
+                    }
+
+                    // Si los tres valores están vacíos, detener la lectura
+                    if (valorActual.isEmpty() && valorSiguiente.isEmpty() && valorSiguiente2.isEmpty()) {
+                        break;
+                    }
+
                     for (int cn = 0; cn <= row.getRowNum(); cn++) {
 
                         Cell cell = row.getCell(cn, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
@@ -559,11 +593,7 @@ public class FileController implements Serializable {
                         }
 
                     }
-                    //Parando la validación cuando el row sea vacío
-                    if (parameters.get(colNumeroMuestra) == "") {
-                        break;
-                    }
-                    
+
                     //cachamos la opcion del usuario 
                     String opciontamseq = parameters.get(colTamanioSecuencia).toLowerCase().trim();
                     String itemsSequenceSize = parameters.get(colTamanioSecuencia).trim(); //inicializamos por si no entra en el switch
@@ -612,31 +642,17 @@ public class FileController implements Serializable {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
                         messageDialog = " El nombre del tubo es obligatorio en la fila: " + countRowValidation + " del archivo";
-                        messageDialog2 = "No se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
+                        messageDialog2 = "Debe empezar con un caracter, no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre del tubo";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
-                    //Validamos que contenga caracteres correctos
-                    /*
-                        08/ene/2025  Juan Antonio Viallalba Luna
-                    
-                        TODO:   Reestructurar validacion negando el matches
-                                if (!itemNameTube.matches("[0-9a-zA-Z_]+")) {                    
-                                    RequestContext cont = RequestContext.getCurrentInstance();
-                                    cont.execute("PF('statusDialogUploadFile').hide();");
-                                    messageDialog = "Se encontraron caracteres no válidos en el nombre del tubo:  " + itemNameTube + "   En la fila: " + countRowValidation + " del archivo";
-                                    messageDialog2 = "El nombre del tubo debe iniciar con una letra,no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
-                                    cont.execute("PF('dialogDetailError').show();");
-                                    return;
-                                }
-                        
-                     */
+
                     if (itemNameTube.matches("[0-9a-zA-Z_]+")) {
                     } else {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
                         messageDialog = "Se encontraron caracteres no válidos en el nombre del tubo:  " + itemNameTube + "   En la fila: " + countRowValidation + " del archivo";
-                        messageDialog2 = "El nombre del tubo debe iniciar con una letra,no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
+                        messageDialog2 = "Debe empezar con un caracter, no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre del tubo";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
@@ -658,7 +674,7 @@ public class FileController implements Serializable {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
                         messageDialog = " El nombre de la muestra es obligatorio en la fila: " + countRowValidation + " del archivo";
-                        messageDialog2 = "No se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
+                        messageDialog2 = "Debe empezar con un caracter, no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
@@ -667,7 +683,7 @@ public class FileController implements Serializable {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
                         messageDialog = "Se encontraron caracteres no válidos en el nombre de la muestra:  " + itemNameSample + "   En la fila: " + countRowValidation + " del archivo";
-                        messageDialog2 = "No se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra o nombre del tubo";
+                        messageDialog2 = "Debe empezar con un caracter, no se aceptan acentos, guiones medio ni caracteres especiales dentro del nombre de la muestra";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
@@ -675,11 +691,11 @@ public class FileController implements Serializable {
                     if (samplesName.indexOf(itemNameSample) >= 0) {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
-                        messageDialog = "Se repite el nombre de la muestra:  " + itemNameSample + "   En la fila: " + countRowValidation + " del archivo";
+                        messageDialog = "Se repite el nombre de la muestra:  " + itemNameSample + "  En la fila: " + countRowValidation + " del archivo";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
-                    samplesName.add(itemNameTube);
+                    samplesName.add(itemNameSample);
 
                     //Validamos plataforma
                     //cachamos la opcion del usuario 
@@ -730,8 +746,8 @@ public class FileController implements Serializable {
                                 itemPlatform = "NextSeq 2000";
                                 System.out.println("Selecciono NextSeq 2000");
                                 break;
-                            case "na":
-                                itemPlatform = "NA";
+                            case "n":
+                                itemPlatform = "OTRA";
                                 break;
                             /*case "j":
                                itemPlatform="Oxford Nanopore - NovaSeq"; 
@@ -743,7 +759,8 @@ public class FileController implements Serializable {
                         }
                         System.out.println("la plataforma dentro del swtich paso a: " + itemPlatform);
                     } else {
-                        itemPlatform = " -es vacia-";
+                        itemPlatform = "NA"; // Para celdas vacías
+                        System.out.println("No se seleccionó plataforma, asignando valor por defecto: " + itemPlatform);
                     }
 
                     //  System.out.println("comparamos la variable platform : "+itemPlatform +" vs la lista dela bd");
@@ -761,12 +778,24 @@ public class FileController implements Serializable {
                     }
 
                     // Carlos - Validamos que se seleccione DNA o RNA
-                    String sType = parameters.get(colTipo).trim();
-                    if (!sType.equals("DNA") && !sType.equals("RNA")) {
+                    String sType = parameters.get(colTipo).toUpperCase().trim();
+
+                    //Validamos que sea obligatorio
+                    if (sType.equals("")) {
                         RequestContext cont = RequestContext.getCurrentInstance();
                         cont.execute("PF('statusDialogUploadFile').hide();");
-                        messageDialog = "Se requiere tipo de material genético válido (DNA o RNA): " + sType
-                                + " en la fila: " + countRowValidation + " del archivo";
+                        messageDialog = " El material genetico es obligatorio en la fila: " + countRowValidation + " del archivo";
+                        messageDialog2 = "Material genético válido: DNA, ADN, RNA o ARN.";
+                        cont.execute("PF('dialogDetailError').show();");
+                        return;
+                    }
+                    if (!sType.equals("DNA") && !sType.equals("RNA")
+                            && !sType.equals("ADN") && !sType.equals("ARN")) {
+                        RequestContext cont = RequestContext.getCurrentInstance();
+                        cont.execute("PF('statusDialogUploadFile').hide();");
+                        messageDialog = "Se requiere un tipo de material genético válido: DNA, ADN, RNA o ARN." + "\n"
+                                + "En la fila: " + countRowValidation + " Escribió: " + sType;
+                        //messageDialog2 ="En la fila: " + countRowValidation + " Escribio: " + sType + "\n";
                         cont.execute("PF('dialogDetailError').show();");
                         return;
                     }
@@ -902,56 +931,46 @@ public class FileController implements Serializable {
                                 return;
                             }
                         }
-                        
 
                         //Si se aplicará las operaciones al momento de registrar en la BD
                         //saveDataOxford = true;
                     }
 
-                    /*
-                        08/ene/2025     Juan Antonio Villalba Luna
-                        Verificando que la opcion indicada para el tipo de aplicacion este entre A y L
-                     */
-                    String opcionAppType = parameters.get(colAppType).trim().replace(".0", "");
+                    String AppType = parameters.get(colAppType).trim().replace(".0", "").toUpperCase();
 
-                    // si la celda no es vacia comparmoa los valores
-                    if (!opcionAppType.equals("")) {
-                        //  FIX:    10/ene/2025 Juan Antonio  
-                        //  Regex ^([1-9]|1[012])$ Numero entre 1 y 12
-                        //  opcionAppType = opcionAppType.replaceAll("[^a-zA-Z]", "").toUpperCase();
-                        //  Se verifica que el valor obtenido del archivo de excel se una valor numero entre 1 y 12
+                    /*¨*if (!AppType.isEmpty()) {
 
-                        if (!opcionAppType.matches("^([1-9]|1[012])$")) {
-                            RequestContext cont = RequestContext.getCurrentInstance();
-                            cont.execute("PF('statusDialogUploadFile').hide();");
-                            messageDialog = "Tipo de aplicacion ";
-                            messageDialog2 = "La opcion para el tipo de aplicacion en la fila " + (countRowValidation) + " no esta en entre 1 y 12";
-                            cont.execute("PF('dialogDetailError').show();");
-                            return;
+                        // Separar por comas en caso de combinaciones
+                        String[] codigos = AppType.split("\\s*,\\s*");
+                        List<String> appLabels = new ArrayList<>();
+
+                        boolean todosCodigosValidos = true;
+
+                        for (String cod : codigos) {
+                            if (appType.containsKey(cod)) {
+                                appLabels.add(appType.get(cod));
+                            } else {
+                                todosCodigosValidos = false;
+                                break;
+                            }
                         }
-                        
-                        //  Verificando que el valor numerico tecleado en el archivo de excel se encuentre en el rango de indices del diccionario
-                        if (appType.get(opcionAppType).equals("")) {
-                            RequestContext cont = RequestContext.getCurrentInstance();
-                            cont.execute("PF('statusDialogUploadFile').hide();");
-                            messageDialog = "Tipo de aplicacion ";
-                            messageDialog2 = "La opcion para el tipo de aplicacion no esta en la lista de opciones definidas hasta el dia de hoy";
-                            cont.execute("PF('dialogDetailError').show();");
-                            return;
+
+                        if (todosCodigosValidos) {
+                            // Si todos los códigos son válidos → concatenar nombres  asignar
+                            if (currentSample == null) {
+                                currentSample = new Sample();
+                            }
+                            itemAppType = String.join(", ", appLabels);
+                            currentSample.setApp_type(AppType);
+                        } else {
+                            if (currentSample == null) {
+                                currentSample = new Sample();
+                            }
+                            // Si no son códigos válidos → se toma como texto libre
+                            currentSample.setApp_type(AppType);
                         }
-                        
-                        
-                        // 24/abr/2025 Carlos Perez Calderon codigo de prueba para corroborar que esta cachando correctamente 
-                        /* Obtenemos nuestro nombre de APP de acuerdo a nuestro hashmap para mandarlo a guardar en BD 
-                        itemAppType = appType.get(String.format("%s", opcionAppType));
-                        
-                        RequestContext cont = RequestContext.getCurrentInstance();
-                        cont.execute("PF('statusDialogUploadFile').hide();"); 
-                        messageDialog = "Tipo de aplicacion ";
-                        messageDialog2 = "La opcion para el tipo de aplicacion en la fila " + (countRowValidation)  +" es: " + itemAppType;
-                        cont.execute("PF('dialogDetailError').show();");
-                        currentSample.setApp_type(itemAppType);*/
-                    }
+
+                    }*/
 
                 } //fin del primer if
             } //fin del for
@@ -963,7 +982,34 @@ public class FileController implements Serializable {
                 count++;
                 if (count >= rowStartExcel) {
 
+                    //Lista de parametros a evaluar
                     List<String> parameters = new ArrayList<>();
+
+                    // Obtener valor actual de la columna Nombre de muestra para la condicion de paro
+                    Cell cellActual = row.getCell(colNombreMuestra);
+                    String valorActual = (cellActual == null || cellActual.toString().trim().isEmpty()) ? "" : cellActual.toString().trim();
+
+                    // Evaluamos la fila siguiente
+                    Row nextRow = sheet.getRow(row.getRowNum() + 1);
+                    String valorSiguiente = "";
+                    if (nextRow != null) {
+                        Cell cellSiguiente = nextRow.getCell(colNombreMuestra);
+                        valorSiguiente = (cellSiguiente == null || cellSiguiente.toString().trim().isEmpty()) ? "" : cellSiguiente.toString().trim();
+                    }
+
+                    // Evaluamos dos posiciones adelante
+                    Row nextNextRow = sheet.getRow(row.getRowNum() + 2);
+                    String valorSiguiente2 = "";
+                    if (nextNextRow != null) {
+                        Cell cellSiguiente2 = nextNextRow.getCell(colNombreMuestra);
+                        valorSiguiente2 = (cellSiguiente2 == null || cellSiguiente2.toString().trim().isEmpty()) ? "" : cellSiguiente2.toString().trim();
+                    }
+
+                    // Si los tres valores estan vacios detiene la lectura 
+                    if (valorActual.isEmpty() && valorSiguiente.isEmpty() && valorSiguiente2.isEmpty()) {
+                        break;
+                    }
+
                     for (int cn = 0; cn <= row.getRowNum(); cn++) {
 
                         Cell cell = row.getCell(cn, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
@@ -986,10 +1032,6 @@ public class FileController implements Serializable {
                     }
 
                     //Parando la iteración cuando la columna de "Número de muestra" es vacío
-                    if (parameters.get(0) == "-------") {
-                        break;
-                    }
-
                     //Aqui debemos asignar el valor después de haber pasado el filtro
                     String sExpectedPerformance = "";
 
@@ -1246,8 +1288,8 @@ public class FileController implements Serializable {
                             case "m":
                                 itemPlatform_insert = "NextSeq 2000";
                                 break;
-                            case "na":
-                                itemPlatform_insert = "NA";
+                            case "n":
+                                itemPlatform_insert = "OTRA";
                                 break;
                             /*case "j":
                                itemPlatform="Oxford Nanopore - NovaSeq"; 
@@ -1276,12 +1318,11 @@ public class FileController implements Serializable {
                     //tamañogenoma
                     String sCont = parameters.get(colFuenteContaminacion).trim();
                     String metdeliv = parameters.get(colMetodoEntrega);  //new preform
-                    String Aptype = appType.get(String.format("%s", parameters.get(colAppType).trim().replaceAll("\\.0", "")));  // 240425CPC Registramos el tipo de aplicacion por el numero
-                    //String Aptype = parameters.get(colAppType).trim();  // 240425CPC Comento la linea para registrar los tipos de aplicacion por numero en preforma
+                    String Aptype = parameters.get(colAppType).trim();  // 240425CPC Comento la linea para registrar los tipos de aplicacion por numero en preforma
                     String kit_lib = parameters.get(colkitLib).trim();  //new preform
                     String tag_lib = parameters.get(coltagLib).trim();  //new preform
                     //String sPlataform = parameters.get(colPlataforma).trim();
-                    //String sReadSize = parameters.get(colTamanioSecuencia).trim().replaceAll("[ p|b]b$", "");
+                    //String sReadSize = parameters.get(colTamanioSecuencia).trim();
                     //rendimientos illumina y oxford se asiganan antes 
                     //analisi bioinfo se hace la final se crean las ligas
                     String sComments = parameters.get(colObservaciones).trim();
@@ -1526,69 +1567,6 @@ public class FileController implements Serializable {
 
                         System.out.println("Muestra creada");
 
-                        //   inicio creacion de link bioinformatic_analisis linabat
-                        /*
-
-                            List<String> analysis = new ArrayList<>();
-
-                            List<BioinformaticAnalysis> root = bioFac.findAll();
-                            List<BioinformaticAnalysis> listB = new ArrayList<>();
-
-                            if (!parameters.get(colLimpiezaCalidad).equals("-------")) {
-                                analysis.add(LIMPIEZA_POR_CALIDAD);
-                            }
-                            if (!parameters.get(colLimpiezaAdaptador).equals("-------")) {
-                                analysis.add(LIMPIEZA_DE_ADAPTADOR);
-                            }
-                            if (!parameters.get(colAlineamientoVSGenoma).equals("-------")) {
-                                analysis.add(ALINEAMIENTO_VS_GENOMA);
-                            }
-                            if (!parameters.get(colLimpiezaGenoma).equals("-------")) {
-                                analysis.add(LIMPIEZA_DE_GENOMA_CONTAMINANTE);
-                            }
-                            
-                            if (!parameters.get(colAnalisisExpresionDiferencial).equals("-------")) {
-                                analysis.add(ANALISIS_EXPRESION_DIFERENCIAL);
-                            }
-                            if (!parameters.get(colEnsambleNovo).equals("-------")) {
-                                analysis.add(ENSAMBLADO_DE_NOVO);
-                            }
-                            if (!parameters.get(colResecuenciacionGenomas).equals("-------")) {
-                                analysis.add(RESECUENCIACION_DE_GENOMAS);
-                            }
-                            if (!parameters.get(colVariantesGeneticas).equals("-------")) {
-                                analysis.add(VARIANTES_GENETICAS);
-                            }
-                            if (!parameters.get(colMetagenomas).equals("-------")) {
-                                analysis.add(METAGENOMAS);
-                            }
-                            if (!parameters.get(colNingunAnalisis).equals("-------")) {
-                                analysis.add(NINGUN_ANALISIS);
-                            }
-
-                            for (String an : analysis) {
-                                for (BioinformaticAnalysis bioin : root) {
-                                    if (an.equals(bioin.getAnalysisName())) {
-                                        listB.add(bioin);
-                                    }
-                                }
-                            }
-
-                            for (BioinformaticAnalysis bioan : listB) {
-                                currentBioanSamLink = new BioinformaticAnalysisSampleLink();
-                                currentBioanSamLink.setBioinformaticAnalysisSampleLinkPK(new jpa.entities.BioinformaticAnalysisSampleLinkPK());
-                                currentBioanSamLink.getBioinformaticAnalysisSampleLinkPK().setIdSample(currentSample.getIdSample());
-                                currentBioanSamLink.getBioinformaticAnalysisSampleLinkPK().setIdAnalysis(bioan.getIdAnalysis());
-
-                                bioAnSamLiFac.create(currentBioanSamLink);
-                                JsfUtil.addSuccessMessage("Creado el link de analisis");
-
-                            }
-                         */
-                        //fin link analysiss biouinfo linabat
-                        //creacion de links leslie nueva preforma
-                        //Validamos la columna de abioinformatico de muestra                      
-                        // del analisis
                         String sAB = parameters.get(colABioinfo).trim();
 
                         //System.out.println("muestro la variable sAB: "+sAB);
@@ -1743,7 +1721,8 @@ public class FileController implements Serializable {
             context.getExternalContext().redirect("AltaExitosa.xhtml");
 
         } catch (Exception e) {
-            System.out.println("Ocurrió un error en: " + e.getMessage());
+            System.out.println("Ocurrió un error en: " + e.toString());
+            e.printStackTrace(); // <-- Esto imprime el stack trace completo en consola
             RequestContext cont = RequestContext.getCurrentInstance();
             cont.execute("PF('statusDialogUploadFile').hide();");
             JsfUtil.addErrorMessage("Error al cargar el archivo, por favor revise su contenido");

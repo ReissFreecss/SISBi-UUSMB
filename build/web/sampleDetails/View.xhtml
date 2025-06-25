@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewSampleDetailsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_userName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.userName}" title="#{bundle.ViewSampleDetailsTitle_userName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_firstName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.firstName}" title="#{bundle.ViewSampleDetailsTitle_firstName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_PLastName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.PLastName}" title="#{bundle.ViewSampleDetailsTitle_PLastName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_MLastName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.MLastName}" title="#{bundle.ViewSampleDetailsTitle_MLastName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_email}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.email}" title="#{bundle.ViewSampleDetailsTitle_email}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_dependencyName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.dependencyName}" title="#{bundle.ViewSampleDetailsTitle_dependencyName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_role}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.role}" title="#{bundle.ViewSampleDetailsTitle_role}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_idProject}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.idProject}" title="#{bundle.ViewSampleDetailsTitle_idProject}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_projectName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.projectName}" title="#{bundle.ViewSampleDetailsTitle_projectName}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_projectDescription}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.projectDescription}" title="#{bundle.ViewSampleDetailsTitle_projectDescription}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_requestDate}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.requestDate}" title="#{bundle.ViewSampleDetailsTitle_requestDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_status}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.status}" title="#{bundle.ViewSampleDetailsTitle_status}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_quotationNumber}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.quotationNumber}" title="#{bundle.ViewSampleDetailsTitle_quotationNumber}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_billNumber}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.billNumber}" title="#{bundle.ViewSampleDetailsTitle_billNumber}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_comments}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.comments}" title="#{bundle.ViewSampleDetailsTitle_comments}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_idSample}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.idSample}" title="#{bundle.ViewSampleDetailsTitle_idSample}"/>
+                    <h:outputText value="#{bundle.ViewSampleDetailsLabel_sampleName}"/>
+                    <h:outputText value="#{sampleDetailsController.selected.sampleName}" title="#{bundle.ViewSampleDetailsTitle_sampleName}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{sampleDetailsController.destroyAndView}" value="#{bundle.ViewSampleDetailsDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewSampleDetailsEditLink}"/>
+                <br />
+                <h:commandLink action="#{sampleDetailsController.prepareCreate}" value="#{bundle.ViewSampleDetailsCreateLink}" />
+                <br />
+                <h:commandLink action="#{sampleDetailsController.prepareList}" value="#{bundle.ViewSampleDetailsShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewSampleDetailsIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

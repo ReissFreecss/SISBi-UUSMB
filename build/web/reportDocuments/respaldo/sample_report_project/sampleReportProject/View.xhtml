@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_idSampleReportProject}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.idSampleReportProject}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_idSampleReportProject}"/>
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_statusPrevious}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.statusPrevious}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_statusPrevious}"/>
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_statusCurrent}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.statusCurrent}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_statusCurrent}"/>
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_dateUpgrade}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.dateUpgrade}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_dateUpgrade}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_idReportProject}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.idReportProject}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_idReportProject}"/>
+                    <h:outputText value="#{bundleSampleReportProject.ViewSampleReportProjectLabel_idSample}"/>
+                    <h:outputText value="#{sampleReportProjectController.selected.idSample}" title="#{bundleSampleReportProject.ViewSampleReportProjectTitle_idSample}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{sampleReportProjectController.destroyAndView}" value="#{bundleSampleReportProject.ViewSampleReportProjectDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundleSampleReportProject.ViewSampleReportProjectEditLink}"/>
+                <br />
+                <h:commandLink action="#{sampleReportProjectController.prepareCreate}" value="#{bundleSampleReportProject.ViewSampleReportProjectCreateLink}" />
+                <br />
+                <h:commandLink action="#{sampleReportProjectController.prepareList}" value="#{bundleSampleReportProject.ViewSampleReportProjectShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundleSampleReportProject.ViewSampleReportProjectIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

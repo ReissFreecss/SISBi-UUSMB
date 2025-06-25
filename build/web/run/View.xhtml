@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewRunTitle}"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewRunLabel_idRun}"/>
+                    <h:outputText value="#{runController.selected.idRun}" title="#{bundle.ViewRunTitle_idRun}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_runType}"/>
+                    <h:outputText value="#{runController.selected.runType}" title="#{bundle.ViewRunTitle_runType}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_runStartday}"/>
+                    <h:outputText value="#{runController.selected.runStartday}" title="#{bundle.ViewRunTitle_runStartday}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewRunLabel_runFinishday}"/>
+                    <h:outputText value="#{runController.selected.runFinishday}" title="#{bundle.ViewRunTitle_runFinishday}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewRunLabel_status}"/>
+                    <h:outputText value="#{runController.selected.status}" title="#{bundle.ViewRunTitle_status}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_runName}"/>
+                    <h:outputText value="#{runController.selected.runName}" title="#{bundle.ViewRunTitle_runName}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_workSubdirectory}"/>
+                    <h:outputText value="#{runController.selected.workSubdirectory}" title="#{bundle.ViewRunTitle_workSubdirectory}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_sampleSheetName}"/>
+                    <h:outputText value="#{runController.selected.sampleSheetName}" title="#{bundle.ViewRunTitle_sampleSheetName}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_cycles}"/>
+                    <h:outputText value="#{runController.selected.cycles}" title="#{bundle.ViewRunTitle_cycles}"/>
+                    <h:outputText value="#{bundle.ViewRunLabel_performance}"/>
+                    <h:outputText value="#{runController.selected.performance}" title="#{bundle.ViewRunTitle_performance}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{runController.destroyAndView}" value="#{bundle.ViewRunDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewRunEditLink}"/>
+                <br />
+                <h:commandLink action="#{runController.prepareCreate}" value="#{bundle.ViewRunCreateLink}" />
+                <br />
+                <h:commandLink action="#{runController.prepareList}" value="#{bundle.ViewRunShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewRunIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

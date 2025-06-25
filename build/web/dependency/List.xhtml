@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListDependencyTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+        <h:form styleClass="jsfcrud_list_form">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:outputText escape="false" value="#{bundle.ListDependencyEmpty}" rendered="#{dependencyController.items.rowCount == 0}"/>
+            <h:panelGroup rendered="#{dependencyController.items.rowCount > 0}">
+                <h:outputText value="#{dependencyController.pagination.pageFirstItem + 1}..#{dependencyController.pagination.pageLastItem + 1}/#{dependencyController.pagination.itemsCount}"/>&nbsp;
+                <h:commandLink action="#{dependencyController.previous}" value="#{bundle.Previous} #{dependencyController.pagination.pageSize}" rendered="#{dependencyController.pagination.hasPreviousPage}"/>&nbsp;
+                <h:commandLink action="#{dependencyController.next}" value="#{bundle.Next} #{dependencyController.pagination.pageSize}" rendered="#{dependencyController.pagination.hasNextPage}"/>&nbsp;
+                <h:dataTable value="#{dependencyController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_idDependency}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idDependency}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_street}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.street}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_location}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.location}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_postalCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.postalCode}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_type}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.type}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_dependencyName}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dependencyName}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_institution}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.institution}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_acronym}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.acronym}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListDependencyTitle_idCity}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idCity}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="&nbsp;"/>
+                        </f:facet>
+                        <h:commandLink action="#{dependencyController.prepareView}" value="#{bundle.ListDependencyViewLink}"/>
+                        <h:outputText value=" "/>
+                        <h:commandLink action="#{dependencyController.prepareEdit}" value="#{bundle.ListDependencyEditLink}"/>
+                        <h:outputText value=" "/>
+                        <h:commandLink action="#{dependencyController.destroy}" value="#{bundle.ListDependencyDestroyLink}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:panelGroup>
+            <br />
+            <h:commandLink action="#{dependencyController.prepareCreate}" value="#{bundle.ListDependencyCreateLink}"/>
+            <br />
+            <br />
+            <h:link outcome="/index" value="#{bundle.ListDependencyIndexLink}"/>
+        </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

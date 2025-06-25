@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Bibliotecas para una corrida"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <style type="text/css">
+
+
+
+            </style>
+            <h:form id="form" styleClass="jsfcrud_list_form">
+
+
+                <p:growl id="msgs" showDetail="true"  sticky="true"/>
+                <p:outputLabel  value="Búsqueda " style="font-size: large" />
+                <br/>
+                <br/>
+                <p:panelGrid id ="criteria" columns="7"  layout="grid">
+                    <p:outputLabel  value="Búsqueda por rango de ID: "  />
+                    <p:inputText  value="#{libraryController.range}" size="30" placeholder="Ej:1-10,15,20,25" >
+                        <p:ajax event="click" update=":form:criteria"  immediate="true" resetValues="true"/>
+                    </p:inputText> 
+
+                    <p:outputLabel  value="Proyectos: " for="pj" />
+
+                    <p:selectCheckboxMenu id="pj" value="#{libraryController.projs}" label="Cities" style="min-width: 15rem"
+                                          multiple="true" filter="true" filterMatchMode="contains" panelStyle="width: 30rem" scrollHeight="250"  >
+
+                        <f:selectItems value="#{libraryController.projects}"/>
+                        <p:ajax event="change" update=":form:criteria"  immediate="true" resetValues="true"/>
+                    </p:selectCheckboxMenu>
+                    <p:outputLabel  value="Usuario: " for="user" />
+
+                    <p:selectCheckboxMenu id="user"  value="#{libraryController.usersList}" label="Cities" style="min-width: 15rem"
+                                          multiple="true" filter="true" filterMatchMode="contains" panelStyle="width: 30rem" scrollHeight="250" >
+
+                        <f:selectItems value="#{usersController.us()}"/>
+                        <p:ajax event="change" update=":form:criteria"  immediate="true" resetValues="true"/>
+                    </p:selectCheckboxMenu><br/>
+
+                    <p:panelGrid  columns="2"  layout="grid">
+                        <p:commandButton icon="ui-icon-search" value="Buscar"  update="form: tbl"/>
+
+                        <p:commandButton icon="ui-icon-closethick" value="Limpiar búsqueda" update="form: criteria: tbl" immediate="true" resetValues="true" action="#{libraryController.reset()}" styleClass="ui-button-outlined ui-button-secondary">
+                            <p:resetInput target="form: criteria" class="" />
+                        </p:commandButton>
+
+
+                    </p:panelGrid>
+                </p:panelGrid>
+
+                <p:dataTable id="tbl" value="#{libraryController.libsRun}" var="item"  widgetVar="table"
+                             style="border:solid 1px; border-color: transparent" scrollable="true" scrollHeight="350"  
+                             resizableColumns="true"    emptyMessage="No se encontraron librerias con los criterios de búsqueda especificados"
+                             selection="#{libraryController.libraryTable}" rowKey="#{item.idLibrary}">
+                    <f:facet name="header">
+                        Bibliotecas
+                    </f:facet>
+
+                    <f:facet name="footer">
+
+                        <p:commandButton  process="tbl"  id="createBiblo" icon="ui-icon-clipboard"  value="Crear corrida" action="#{libraryController.checkSelectedRunLibraries()}" update="form:msgs, form:modulDialog">
+                        
+                        </p:commandButton>
+                    </f:facet>
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column headerText="Id muestra" width="130" >
+                        <h:outputText value="#{libraryController.getIdSample(item)}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Id biblioteca" width="110" >
+                        <h:outputText value="#{item.idLibrary}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Nombre biblioteca" width="300" >
+                        <h:outputText value="#{item.libraryName}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Nombre Muestra" width="250" >
+                        <c:set var="string2" value="${item.libraryName.split('_', 3)}" />
+                        <h:outputText value="#{string2[2]}"/>
+                    </p:column>
+                   
+
+                    <p:column headerText="Proyecto" width="300" >
+                        <h:outputText value="#{libraryController.getProjectLibrary(item)}"/>
+                    </p:column>
+
+                    <p:column headerText="Tag 1" width="200">
+                        <h:outputText value="#{item.idBarcode1.indexName}-#{item.idBarcode1.basei7}"/>
+                    </p:column>
+
+                    <p:column headerText="Tag 2" width="200">
+                        <h:outputText value="#{runController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
+                    </p:column>
+
+                    <p:column headerText="Plataforma" width="120"  sortBy="#{item.plataformLinkKit.plataform.plataformName}">
+                        <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
+                    </p:column>
+
+                    <p:column headerText="Kit" width="120">
+                        <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{item.preparationDate}" width="150" >
+                        <f:facet name="header" >
+                            <h:outputText value="Fecha de preparación"/>
+                        </f:facet>
+                        <h:outputText value="#{item.preparationDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Concentración nM" width="150">
+                        <h:outputText value="#{item.nanomolarConcentration}">
+                            <f:convertNumber  maxFractionDigits="2" />
+                                </h:outputText>
+                    </p:column>
+                    
+
+
+                </p:dataTable>
+
+                <p:dialog header="Generar corrida" widgetVar="DialogCreateRun" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+
+                    <!-- leslie para agregar id -->
+                    <h:panelGrid columns="1" id="plataforma">
+                        <f:facet name="header">
+                          Plataforma de secuenciación
+                        </f:facet>
+                        
+                        <p:outputLabel value="Seleccione la plataforma de secuenciación" for="plat_type" title=""  />
+                        <p:selectOneRadio id="plat_type" value="#{libraryController.plat_sequencing}" required="true" requiredMessage="Seleccione la plataforma sobre la cual va secuenciar"  >
+                                        <f:selectItem itemLabel="iSeq" itemValue="6" />
+                                        <f:selectItem itemLabel="NextSeq" itemValue="1" />
+                                        <f:selectItem itemLabel="MiSeq" itemValue="3" />
+                                        <f:selectItem itemLabel="HiSeq" itemValue="2" />
+                                        <f:selectItem itemLabel="NovaSeq XPLUS" itemValue="4" />
+                                        <f:selectItem itemLabel="Oxford Nanopore" itemValue="5" />
+                                        <f:selectItem itemLabel="Nextseq 2000" itemValue="7" />
+                                        <f:selectItem itemLabel="Otro" itemValue="0" />
+                                        <p:ajax  event="valueChange" update="type_sec,info_miseq,info_nextseq,info_novaseq,info_iseq,info_minion,otro_sec" />
+                                    </p:selectOneRadio>   
+                        
+                    </h:panelGrid><!--leslie para agregra id-->
+                        
+                    <h:panelGrid  columns="1" id="type_sec">
+                        <h:panelGrid  columns="1"  id="info_miseq"  rendered="#{libraryController.plat_sequencing.equals('3')}">
+                            <!--      <p:outputLabel value="Nombre de la corrida*:"/>  
+                                  <p:inputText value="#{libraryController.runName}"/> -->
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_miseq" value="#{libraryController.scode}" >
+                                 <f:selectItem itemLabel="---" itemValue="---"  />       
+                                <f:selectItem itemLabel="Miseq Abalat" itemValue="M06162" />
+                                <f:selectItem itemLabel="Miseq ANALITEK" itemValue="M07079" /> 
+                                <f:selectItem itemLabel="Miseq IEcologia UNAM" itemValue="M07836" />                                         
+                                <f:selectItem itemLabel="Miseq RAI" itemValue="M02676" />
+                                <f:selectItem itemLabel="Miseq M03468" itemValue="M03468" />
+                                <f:selectItem itemLabel="Miseq-M03540" itemValue="M03540" />
+                                <f:selectItem itemLabel="Miseq-M06162" itemValue="M06162" />                               
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <h:panelGrid  columns="1"  id="info_nextseq"  rendered="#{libraryController.plat_sequencing.equals('1')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_nextseq" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />                           
+                                <f:selectItem itemLabel="NextSeq500 UUSMB EQ-001" itemValue="NS500502" />
+                                <f:selectItem itemLabel="NextSeq500 Lab Genos Médica" itemValue="NB502037" /> 
+                                <f:selectItem itemLabel="NextSeq500 INMEGEN" itemValue="NS500560" />   
+                                <!--<f:selectItem itemLabel="NextSeq2000 INMEGEN" itemValue="VH01014" />-->                               
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid  columns="1"  id="info_nextseq2000"  rendered="#{libraryController.plat_sequencing.equals('7')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_nextseq2000" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />  
+                                <f:selectItem itemLabel="NextSeq2000 INMEGEN" itemValue="VH01014" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid  columns="1"  id="info_hiseq"  rendered="#{libraryController.plat_sequencing.equals('2')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_hiseq" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />
+                                 <f:selectItem itemLabel="HiSeq LANGEBIO" itemValue="KHS0062" />  
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <h:panelGrid  columns="1"  id="info_novaseq"  rendered="#{libraryController.plat_sequencing.equals('4')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_novaseq" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />
+                                 <f:selectItem itemLabel="NovaSeq TecMonterrey" itemValue="A01314" /> 
+                                <f:selectItem itemLabel="NovaSeq X Psomagen" itemValue="LH00586" />  
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+
+                         <h:panelGrid  columns="1"  id="info_iseq"  rendered="#{libraryController.plat_sequencing.equals('6')}">
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_iseq" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />                           
+                                <f:selectItem itemLabel="iSeq UUSMB EQ-045" itemValue="FS10002358" />   
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+
+                         <h:panelGrid  columns="1"  id="info_minion"  rendered="#{libraryController.plat_sequencing.equals('5')}">                           
+                            <p:outputLabel value="Equipo/Secuenciador*:"/>
+                            <p:selectOneMenu   id="sec_minion" value="#{libraryController.scode}">
+                                 <f:selectItem itemLabel="---" itemValue="---" />                           
+                                <f:selectItem itemLabel="MinION UUSMB EQ-052" itemValue="MN18784" />
+                                <f:selectItem itemLabel="MinION UUSMB EQ-031" itemValue="MN22733" />
+                                <f:selectItem itemLabel="MinION UUSMB EQ-032" itemValue="MN22784" />
+                                <f:selectItem itemLabel="MinION UUSMB Mk1C" itemValue="MC-115680" /> 
+                                </p:selectOneMenu>                           
+                        </h:panelGrid>
+                        
+                        <h:panelGrid columns="1" id="otro_sec" rendered="#{libraryController.plat_sequencing.equals('0')}">                       
+                            <p:outputLabel value="Nombre del secuenciador/equipo:"  for="equipo"/>
+                            <p:inputText required="true" id="equipo" value="#{libraryController.scode}" placeholder="Ejemplo: NS500502">
+                            <p:keyFilter regEx="/[a-z0-9_]/i"/> 
+                            </p:inputText>
+                       </h:panelGrid>
+                        
+                    </h:panelGrid>
+                    
+                                                       
+                    <h:panelGrid columns="1" id="desc_run">
+                        <h:panelGrid  columns="1">
+                            <p:outputLabel for="popup1" value="Fecha de estimada de secuenciación*:" />
+                            <p:calendar id="popup1" value="#{libraryController.runDate}"  pattern="yyyy/MM/dd" />
+                            
+                            <p:outputLabel value="Descripción:"/> 
+                            <p:inputTextarea value="#{libraryController.description}"/><br/>
+                            
+                            <p:outputLabel value="Flowcell*:"/>
+                            <p:inputText value="#{libraryController.flowcell}" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <!--
+                    <h:panelGrid  columns="1"  id="info_gral"  rendered="{libraryController.platafrom.equals('1') or libraryController.platafrom.equals('2') or libraryController.platafrom.equals('3') or libraryController.platafrom.equals('4') or libraryController.platafrom.equals('6')}">
+                        
+                        <p:outputLabel value="Secuenciador*:"/>
+                        <p:selectOneMenu   id="secuenciador" value="{libraryController.scode}">
+                             <f:selectItem itemLabel="" itemValue="" />
+                            <f:selectItem itemLabel="MinION UUSMB EQ-052" itemValue="MN18784" />
+                            <f:selectItem itemLabel="MinION UUSMB EQ-031" itemValue="MN22733" />
+                            <f:selectItem itemLabel="MinION UUSMB EQ-032" itemValue="MN22784" />
+                            <f:selectItem itemLabel="MinION UUSMB Mk1C" itemValue="MC-115680" />
+                            <f:selectItem itemLabel="iSeq   UUSMB EQ-045" itemValue="FS10002358" />
+                            <f:selectItem itemLabel="NextSeq500 UUSMB EQ-001" itemValue="NS500502" />
+                            <f:selectItem itemLabel="NextSeq500 560" itemValue="NS500560" />
+                            <f:selectItem itemLabel="Miseq RAI" itemValue="M02676" />
+                            <f:selectItem itemLabel="Miseq M03468" itemValue="M03468" />
+                            <f:selectItem itemLabel="Miseq-M03540" itemValue="M03540" />
+                            <f:selectItem itemLabel="Miseq-M06162" itemValue="M06162" />
+                            <f:selectItem itemLabel="Miseq-M07836" itemValue="M07836" />
+                            <f:selectItem itemLabel="Miseq analitek" itemValue="M07079" />
+                            
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Numero de corrida*:"/>
+                        <p:inputText value="#{libraryController.corrida}">
+                            <p:keyFilter regEx="/[0-9]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Flowcell*:"/>
+                        <p:inputText value="#{libraryController.flowcell}" />
+            </h:panelGrid> -->
+                    
+                    <h:panelGrid  columns="1">
+                         <p:outputLabel value="Numero de corrida*:"/>
+                            <p:inputText value="#{libraryController.corrida}">
+                                <p:keyFilter regEx="/[0-9]/i" preventPaste="false"/>
+                            </p:inputText>
+                        <h:panelGrid columns="4">
+                            <h:outputLabel  value="Tipo de lectura*: " for="readType"  title="Rol que desempeña en el proyecto"/>
+                            <p:selectOneRadio  id="readType" value="#{libraryController.readType}"  >
+                                <f:selectItem itemLabel="Paired End" itemValue="Paired End" />
+                                <f:selectItem itemLabel="Single Read" itemValue="Single Read" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Rendimiento del kit*: " for="output"  title="Rendimiento del kit"/>
+                            <p:selectOneRadio  id="output" value="#{libraryController.kitPerformance}"  >
+                                <f:selectItem itemLabel="High" itemValue="High" />
+                                <f:selectItem itemLabel="Middle" itemValue="Middle" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </h:panelGrid><br/>
+
+                    <h:panelGrid  columns="1">                    
+                        <h:panelGrid columns="2" id="ciclos" >
+                            <p:outputLabel value="Ciclos de lectura 1*:"/>
+                            <p:inputText value="#{libraryController.run1}" size="10">
+                                <p:keyFilter regEx="/[0-9]/i" preventPaste="false"/>
+                            </p:inputText>
+                        </h:panelGrid><br/>
+                    </h:panelGrid><br/>
+
+                    <p:outputLabel value="Nota: los campos marcados con un * son obligatorios"  style="font-size:14px"/><br/><br/>
+                    <p:commandButton id="SampleSheet" icon="ui-icon-arrowthickstop-1-s"  value="Crear corrida" action="#{libraryController.createRun()}" update="outputMessage">
+
+                    </p:commandButton>
+                </p:dialog>
+
+                <p:dialog   header="Error al crear corrida" modal="true" style="font-size: large" widgetVar="dlgerror" minHeight="40" >
+                    <h:panelGrid columns="1" id="dlgerror" style="text-align: center">
+                        <p:outputLabel value="Se encontraron tags repetidos, por favor verifique e intente de nuevo." />
+
+                    </h:panelGrid>
+                </p:dialog>
+                
+                <p:dialog   header="Error al crear corrida" modal="true" style="font-size: large" widgetVar="dlgerror2" minHeight="40" >
+                    <h:panelGrid columns="1" id="dlgerror2" style="text-align: center">
+                        <p:outputLabel value="Se encontraron plataformas no compatibles." />
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="Error al crear corrida" modal="true" style="font-size: large" widgetVar="dlgerrorcsvrepetido" minHeight="60" >
+                    <h:panelGrid columns="1" id="dlgerrorcsvrepetido" style="text-align: center">
+                        <p:outputLabel id="outputMessage" value="#{libraryController.messageDialog}" />
+                    </h:panelGrid>
+                </p:dialog>
+
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                <p:dialog header="Cargando..." widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false">
+                    <div align="center">
+                        <p:outputLabel value="Espere un momento :)"></p:outputLabel><br></br><br></br>
+                        <p:graphicImage value="../resources/images/load4.gif" width="120" height="120"></p:graphicImage>
+                    </div>
+
+                </p:dialog>
+                
+                <p:dialog  id="modulDialog" header="Error al crear corrida" modal="true" style="font-size: large" widgetVar="modulDialog" minHeight="60" >
+                     <h:panelGrid columns="1" style="text-align: center">
+                         <p:outputLabel id="messageModulDialog" value="#{libraryController.messageDialog}" />
+                     </h:panelGrid>
+                 </p:dialog>
+
+            </h:form>
+
+
+        </ui:define>
+
+
+
+
+
+    </ui:composition>
+</html>

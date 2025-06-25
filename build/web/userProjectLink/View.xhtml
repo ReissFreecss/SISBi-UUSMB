@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewUserProjectLinkTitle}"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewUserProjectLinkLabel_note}"/>
+                    <h:outputText value="#{userProjectLinkController.selected.note}" title="#{bundle.ViewUserProjectLinkTitle_note}"/>
+                    <h:outputText value="#{bundle.ViewUserProjectLinkLabel_role}"/>
+                    <h:outputText value="#{userProjectLinkController.selected.role}" title="#{bundle.ViewUserProjectLinkTitle_role}"/>
+                    <h:outputText value="#{bundle.ViewUserProjectLinkLabel_project}"/>
+                    <h:outputText value="#{userProjectLinkController.selected.project}" title="#{bundle.ViewUserProjectLinkTitle_project}"/>
+                    <h:outputText value="#{bundle.ViewUserProjectLinkLabel_users}"/>
+                    <h:outputText value="#{userProjectLinkController.selected.users}" title="#{bundle.ViewUserProjectLinkTitle_users}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{userProjectLinkController.destroyAndView}" value="#{bundle.ViewUserProjectLinkDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewUserProjectLinkEditLink}"/>
+                <br />
+                <h:commandLink action="#{userProjectLinkController.prepareCreate}" value="#{bundle.ViewUserProjectLinkCreateLink}" />
+                <br />
+                <h:commandLink action="#{userProjectLinkController.prepareList}" value="#{bundle.ViewUserProjectLinkShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewUserProjectLinkIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

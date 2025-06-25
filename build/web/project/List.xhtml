@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui"
+     >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Mis Proyectos"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+            
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                 <h:panelGrid columns="2">   
+              
+                     <p:commandButton icon="ui-icon-circle-plus" action="#{projectController.redirectCreateProject()}" value="Crear nuevo proyecto">
+                     <f:actionListener binding="#{userProjectLinkController.resetInputEmail()}"/>
+                 </p:commandButton>
+                
+               
+                 </h:panelGrid>
+
+                
+                <p:dataTable id="tbl" value="#{projectController.items}" widgetVar="table" selectionMode="single" rowKey="#{item.idProject}" selection="#{projectController.selectedProject}"
+                             emptyMessage="No hay resultados" var="item" scrollable="true"  style="border:solid 1px"   reflow="true" resizableColumns="true" paginator="true" rowsPerPageTemplate="5,10,15,20,30">
+
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Búsqueda rápida:" />
+                            <!-- <p:inputText id="globalFilter" onkeyup="return event.keyCode === 13 ? ( event.target.value.length > 3 ? PF('table').filter() : false ) : false;" style="width:150px" placeholder="Buscar"/> -->
+                            <p:inputText id="globalFilter" onkeyup="return event.keyCode === 13 ? ( event.target.value.length > 3 ?  evento(event) : false ) : false;" style="width:150px; margin-right: 12px;" placeholder="Buscar"/>
+                            <p:commandButton id="btnLimpiar" type="button" icon="ui-icon-cancel" value="Limpiar" onclick="document.getElementById('form:tbl:globalFilter').value = ''; evento(event); document.getElementById('form:tbl:btnLimpiar').disabled=true;"/>
+                            <p style="font-size: 0.9em;">
+                                <h:outputText value="Presione la tecla de enter para iniciar la búsqueda rápida" />
+                            </p>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:ajax event="rowSelect"  listener="#{projectController.prepareUView()}"/>
+
+                    <p:column filterBy="#{item.idProject}"  width="320">
+
+                        <f:facet name="header" >
+                            <h:outputText value="Id del Proyecto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProject}"/>
+                    </p:column>
+                    <p:column filterBy="#{item.projectName}" width="200">
+
+                        <f:facet name="header" >
+                            <h:outputText value="Nombre del proyecto"/>
+                        </f:facet>
+                        <h:outputText value="#{item.projectName}"/>
+                    </p:column>
+
+                    <p:column width="200">
+                        <f:facet name="header" >
+                            <h:outputText value="Descripción"/>
+                        </f:facet>
+                        <h:outputText value="#{item.projectDescription}"/>
+                    </p:column>
+
+
+                    <p:column filterBy="#{item.requestDate}"  width="150">
+                        <f:facet name="header">
+                            <h:outputText value="Fecha de solicitud"/>
+                        </f:facet>
+                        <h:outputText value="#{item.requestDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                     <p:column width="150" filterBy="#{item.status}" filterMatchMode="equals" headerText="Estatus" exportable="false">
+                        <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('table').filter()">
+                                        <f:selectItem itemLabel="Ver todos" itemValue="" />
+                                        <f:selectItem itemLabel="En proceso" itemValue="En proceso" />
+                                        <f:selectItem itemLabel="Registrado" itemValue="Registrado" />
+                                        <f:selectItem itemLabel="Cancelado" itemValue="Cancelado" />
+                                         <f:selectItem itemLabel="Terminado" itemValue="Terminado" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+                    <p:column width="100">
+                        <f:facet name="header">
+                            <h:outputText value="Número de  &lt;br /&gt; Muestras" escape="false"/>
+                        </f:facet>
+                        <h:outputText value="#{sampleController.getNumberSamplesProj(item)}"/>
+                    </p:column>
+                     <p:column width="200" filterBy="#{sampleController.getNumberSamplesBioAnCon(item)}" filterMatchMode="equals" headerText="Analisis bioinformatico" exportable="false">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('table').filter()" style="width: 150px">
+                                        <f:selectItem itemLabel="Ver todos" itemValue="" />
+                                        <f:selectItem itemLabel="Con análisis bioinformático" itemValue="Con análisis bioinformático" />
+                                        <f:selectItem itemLabel="Sin analisis bioinformatico" itemValue="Sin analisis bioinformatico" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                        <h:outputText value="#{sampleController.getNumberSamplesBioAnCon(item)}"/>
+                    </p:column>
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <h:outputText value="Número de cotización"/>
+                        </f:facet>
+                        <h:outputText value="#{item.quotationNumber}"/>
+                    </p:column>
+                    <p:column width="150">
+                        <f:facet name="header">
+                            <h:outputText value="Número de factura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.billNumber}"/>
+                    </p:column>
+                   <!-- <p:column width="150">
+                        <f:facet name="header">
+                            <h:outputText value="&nbsp;"/>
+                        </f:facet>
+                        <h:outputText value=" "/>
+                        <p:commandButton icon="ui-icon-note" action="{projectController.prepareViewUser(item)}" value="Detalles" />
+                    </p:column>-->
+                    <f:facet name="footer">
+                        Número de proyectos #{projectController.items.size()} 
+                    </f:facet>
+
+                </p:dataTable>
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                <p:dialog header="Procesando" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" >
+                    <div class="p-text-center">
+                        <p:graphicImage value="../resources/images/load4.gif" width="120" height="120"></p:graphicImage>
+                    </div>
+                </p:dialog>
+             </h:form>
+            
+            <script>
+                document.getElementById("form").onkeypress = function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    if (key === 13) {
+                        e.preventDefault();
+                    }
+                };
+                
+                function evento(event) {
+                    event.preventDefault();
+                    document.getElementById('form:tbl:btnLimpiar').disabled=false;
+                    PF('table').filter();
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+
+</html>

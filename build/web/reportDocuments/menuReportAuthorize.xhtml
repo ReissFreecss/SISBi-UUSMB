@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Autorizar Proyecto"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToAuthorizeReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <p:messages closable="true" showDetail="true"/>
+            </h:panelGroup>
+            <p:dataTable id="tblReportProjectStatus" value="" var="" 
+                                 style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                                 emptyMessage="Ups hubo un error, consulte al programador" 
+                                 >
+                <f:facet name="header">
+                    Detalles del Reporte
+                </f:facet>
+                <p:column headerText="ID Proyecto">
+                    <p:outputLabel value="#{reportProjectController.varIdProject}"/>
+                </p:column>
+
+                <p:column headerText="Nombre de proyecto">
+                    <p:outputLabel value=" #{reportProjectController.selected.idProject.projectName}"/>
+                </p:column>
+
+                <p:column headerText="Tipo de Reporte">
+                    <p:outputLabel value="#{reportProjectController.varTypeReport}"/>
+                </p:column>
+                <p:column headerText="Metodología Aplicada">
+                    <p:outputLabel value="#{reportProjectController.selected.typeMethodology}"/>
+                </p:column>
+                <p:column headerText="Creado por:">
+                    <p:outputLabel value="#{reportProjectController.selected.idUser.firstName} #{reportProjectController.selected.idUser.PLastName} #{reportProjectController.selected.idUser.MLastName}"/>
+                </p:column>
+                <p:column headerText="Revisado por:">
+                    <p:outputLabel value="#{reportProjectController.selected.idUserRevise.firstName} #{reportProjectController.selected.idUserRevise.PLastName} #{reportProjectController.selected.idUserRevise.MLastName}"/>
+                </p:column>
+                <p:column headerText="Autorizado por:">
+                    <p:outputLabel value="#{reportProjectController.selected.idUserAuthorize.firstName} #{reportProjectController.selected.idUserAuthorize.PLastName} #{reportProjectController.selected.idUserAuthorize.MLastName}"/>
+                </p:column>
+                <p:column headerText="Estatus:">
+                    <p:outputLabel value="#{reportProjectController.selected.status}"/>
+                </p:column>
+            </p:dataTable>
+            <h:form id="formMenuReport">
+                <h:outputText rendered="#{reportProjectController.validateMenuReportImageSign()=='true'}" value="Para poder firmar, quitar firma o descargar necesitas cargar tu imagen de firma en la sección de roles" />
+                <div class="card">
+                    <div class="ui-g center-gridp">
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Firmar" action="#{reportProjectController.finishAuthorize()}" disabled="#{reportProjectController.validateBtnFirmarAutorizar()}" update="tblReportProjectStatus formMenuReport formSendEmail formUploadWord"/>
+                        </div>
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Quitar Firma" action="#{reportProjectController.unfinishAuthorize()}" disabled="#{reportProjectController.validateBtnQuitarFirmaAutorizar()}" update="tblReportProjectStatus formMenuReport formSendEmail formUploadWord"/>
+                        </div>
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Ir al proyecto" action="#{projectController.prepareUView()}" update="formMenuReport formSendEmail" />
+                        </div>
+                      </div>
+            </div>
+            </h:form>
+            <h:form id="formUploadWord" enctype="multipart/form-data" class="inFontSize" onsubmit="location.reload();">
+                <p:growl id="messages" showDetail="true" />
+                <p:dataTable id="tableImageSing" value="" var=""
+                             style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                             emptyMessage="Ups hubo un error, consulte al programador" 
+                             >
+                    <f:facet name="header">
+                        Subir archivo Word
+                    </f:facet>
+                    <p:column headerText="Subir Archivo Word">
+                        <p:growl id="messages" showDetail="true" />
+                        <p:fileUpload fileUploadListener="#{reportProjectController.uploadFileAuthorize}"   mode="advanced" dragDropSupport="false" 
+                                      invalidFileMessage="Archivo inválido, se requiere un archivo .doc" label="Cargar archivo" auto="true"
+                                      fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="formUploadWord :formMenuReport tblReportProjectStatus :formSendEmail" 
+                                      allowTypes="/(\.|\/)(docx|pdf)$/"  disabled="#{reportProjectController.validateBtnUpload('authorize')}"/><br/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar docx actualizado" action="#{reportProjectController.downloadFile('authorize')}" rendered="#{reportProjectController.selected.pathauthorize!=null}" update="tblReportProjectStatus formMenuReport" ajax="false"/>
+                        <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar PDF" action="#{reportProjectController.downloadFile('authorize_pdf')}" disabled="#{reportProjectController.validateBtnDescargarAutorizar()}" rendered="#{reportProjectController.selected.pathauthorize!=null and reportProjectController.selected.pathauthorizePDF_exists}" update="tblReportProjectStatus formMenuReport" ajax="false"/>
+                        <p:commandButton action="#{reportProjectController.deleteUploadWordAuthorize()}" update="tblReportProjectStatus formMenuReport" icon="ui-icon-trash" value="Eliminar" disabled="#{reportProjectController.validateBtnEliminarPDFAutorizar()}" rendered="#{reportProjectController.selected.pathauthorize!=null}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form id="formSendEmail" enctype="multipart/form-data" class="inFontSize" onsubmit="location.reload();" >
+                <p:growl id="messages" showDetail="true" />
+                <p:dataTable id="tableSendEmail" value="" var=""
+                             style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                             emptyMessage="Ups hubo un error, consulte al programador" 
+                             >
+                    <f:facet name="header">
+                        Envío de correo a Colaboradores y Responsables
+                    </f:facet>
+                    <p:column headerText="Mensaje">
+                        <h:outputLabel value="Asunto:"/>
+                        <p:inputText class="insize6" value="#{reportProjectController.subjetFinal}" disabled="#{reportProjectController.validateBtnEnviarEmail('Autorizado')}" rendered="#{reportProjectController.selected.status=='Autorizado' or reportProjectController.selected.status=='Autorizacion' or reportProjectController.selected.status=='Entregado'}"/>
+                        <h:outputLabel value="Mensaje:"/><br></br>
+                        <p:inputTextarea value="#{reportProjectController.messageFinal}" rows="5" cols="75" disabled="#{reportProjectController.validateBtnEnviarEmail('Autorizado')}" rendered="#{reportProjectController.selected.status=='Autorizado' or reportProjectController.selected.status=='Autorizacion' or reportProjectController.selected.status=='Entregado'}"></p:inputTextarea>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandButton action="#{reportProjectController.sendEmailResponsablesColaboradores()}" disabled="#{reportProjectController.validateBtnEnviarEmail('Autorizado')}" update="formSendEmail :formUploadWord :formMenuReport :tblReportProjectStatus" icon="ui-icon-mail-closed" value="Enviar" rendered="#{reportProjectController.selected.status=='Autorizado' or reportProjectController.selected.status=='Autorizacion' or reportProjectController.selected.status=='Entregado'}"/>
+                        <p:commandButton action="#{reportProjectController.backMakeChangesAuthorize()}" icon="ui-icon-arrowreturn-1-w" value="Realizar cambios"  update="formSendEmail :formUploadWord :formMenuReport :tblReportProjectStatus" rendered="#{reportProjectController.selected.status=='Entregado'}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

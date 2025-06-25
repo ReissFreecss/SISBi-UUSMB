@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateSampleDetailsTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_userName}" for="userName" />
+                    <h:inputText id="userName" value="#{sampleDetailsController.selected.userName}" title="#{bundle.CreateSampleDetailsTitle_userName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_firstName}" for="firstName" />
+                    <h:inputText id="firstName" value="#{sampleDetailsController.selected.firstName}" title="#{bundle.CreateSampleDetailsTitle_firstName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_PLastName}" for="PLastName" />
+                    <h:inputText id="PLastName" value="#{sampleDetailsController.selected.PLastName}" title="#{bundle.CreateSampleDetailsTitle_PLastName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_MLastName}" for="MLastName" />
+                    <h:inputText id="MLastName" value="#{sampleDetailsController.selected.MLastName}" title="#{bundle.CreateSampleDetailsTitle_MLastName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_email}" for="email" />
+                    <h:inputText id="email" value="#{sampleDetailsController.selected.email}" title="#{bundle.CreateSampleDetailsTitle_email}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_dependencyName}" for="dependencyName" />
+                    <h:inputText id="dependencyName" value="#{sampleDetailsController.selected.dependencyName}" title="#{bundle.CreateSampleDetailsTitle_dependencyName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_role}" for="role" />
+                    <h:inputText id="role" value="#{sampleDetailsController.selected.role}" title="#{bundle.CreateSampleDetailsTitle_role}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_idProject}" for="idProject" />
+                    <h:inputText id="idProject" value="#{sampleDetailsController.selected.idProject}" title="#{bundle.CreateSampleDetailsTitle_idProject}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_projectName}" for="projectName" />
+                    <h:inputText id="projectName" value="#{sampleDetailsController.selected.projectName}" title="#{bundle.CreateSampleDetailsTitle_projectName}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_projectDescription}" for="projectDescription" />
+                    <h:inputText id="projectDescription" value="#{sampleDetailsController.selected.projectDescription}" title="#{bundle.CreateSampleDetailsTitle_projectDescription}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_requestDate}" for="requestDate" />
+                    <h:inputText id="requestDate" value="#{sampleDetailsController.selected.requestDate}" title="#{bundle.CreateSampleDetailsTitle_requestDate}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_status}" for="status" />
+                    <h:inputText id="status" value="#{sampleDetailsController.selected.status}" title="#{bundle.CreateSampleDetailsTitle_status}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_quotationNumber}" for="quotationNumber" />
+                    <h:inputText id="quotationNumber" value="#{sampleDetailsController.selected.quotationNumber}" title="#{bundle.CreateSampleDetailsTitle_quotationNumber}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_billNumber}" for="billNumber" />
+                    <h:inputText id="billNumber" value="#{sampleDetailsController.selected.billNumber}" title="#{bundle.CreateSampleDetailsTitle_billNumber}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_comments}" for="comments" />
+                    <h:inputText id="comments" value="#{sampleDetailsController.selected.comments}" title="#{bundle.CreateSampleDetailsTitle_comments}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_idSample}" for="idSample" />
+                    <h:inputText id="idSample" value="#{sampleDetailsController.selected.idSample}" title="#{bundle.CreateSampleDetailsTitle_idSample}" />
+                    <h:outputLabel value="#{bundle.CreateSampleDetailsLabel_sampleName}" for="sampleName" />
+                    <h:inputText id="sampleName" value="#{sampleDetailsController.selected.sampleName}" title="#{bundle.CreateSampleDetailsTitle_sampleName}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{sampleDetailsController.create}" value="#{bundle.CreateSampleDetailsSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{sampleDetailsController.prepareList}" value="#{bundle.CreateSampleDetailsShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateSampleDetailsIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

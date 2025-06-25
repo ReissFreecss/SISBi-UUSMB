@@ -27,10 +27,10 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import java.util.List;
-import java.util.Locale;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -55,7 +55,6 @@ import jpa.session.CommentsFacade;
 import jpa.session.CotizacionFacade;
 import jpa.session.ProjectFacade;
 import jpa.session.ProyCotizaFacPagoLinkFacade;
-import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.json.JSONObject;
 
@@ -487,7 +486,7 @@ public class UserProjectLinkController implements Serializable {
                 apellido += string;
             }
 
-            String uName = processUName(currentUser1.getFirstName().substring(0, 1).toUpperCase() + apellido.substring(0, 1).toUpperCase() + apellido.toLowerCase().substring(1, apellido.length()));
+            String uName = processUName(currentUser1.getFirstName().substring(0, 1).toUpperCase() + apellido.substring(0, 1).toUpperCase() + apellido.toLowerCase().substring(1, apellido.length()).trim());
 
             List<Users> same = ejbUsr.findAll();
 
@@ -807,16 +806,6 @@ public class UserProjectLinkController implements Serializable {
 
     }
 
-    public void subsNumber(ActionEvent e) {
-        numberCol--;
-        if (numberCol <= 0) {
-            checkSubs = true;
-        } else {
-            checkAdd = false;
-        }
-
-    }
-
     int managers = 0;
     List<Boolean> ltsCheck = java.util.Arrays.asList(false, false, false, false, false, false);
 
@@ -829,6 +818,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(0, checkMan);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManager1() {
@@ -840,6 +830,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(1, checkMan1);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManager2() {
@@ -851,6 +842,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(2, checkMan2);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManager3() {
@@ -862,6 +854,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(3, checkMan3);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManager4() {
@@ -873,6 +866,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(4, checkMan4);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManager5() {
@@ -884,6 +878,7 @@ public class UserProjectLinkController implements Serializable {
         }
         ltsCheck.set(5, checkMan5);
         checkManager();
+        actualizarEstadoBoton();
     }
 
     public void existManagerB1() {
@@ -956,6 +951,222 @@ public class UserProjectLinkController implements Serializable {
         }
 
         renderButton();
+    }
+
+    private boolean validarUnicoResponsable() {
+        int responsables = 0;
+
+        if ("Responsable".equals(current.getRole())) {
+            responsables++;
+        }
+        if (col1 != null && "Responsable".equals(col1.getRole())) {
+            responsables++;
+        }
+        if (col2 != null && "Responsable".equals(col2.getRole())) {
+            responsables++;
+        }
+        if (col3 != null && "Responsable".equals(col3.getRole())) {
+            responsables++;
+        }
+        if (col4 != null && "Responsable".equals(col4.getRole())) {
+            responsables++;
+        }
+        if (col5 != null && "Responsable".equals(col5.getRole())) {
+            responsables++;
+        }
+
+        return responsables <= 1;
+    }
+
+    public void actualizarEstadoBoton() {
+        boolean[] checkCImage = {checkCImage1, checkCImage2, checkCImage3, checkCImage4, checkCImage5};
+        boolean[] esResponsable = {checkMan1, checkMan2, checkMan3, checkMan4, checkMan5};
+
+        if ("Responsable".equals(current.getRole())) {
+            habilitarBtnGuardar = true;
+            return;
+        }
+
+        // El botón se habilita si hay al menos un responsable con correo verificado
+        for (int i = 0; i < checkCImage.length; i++) {
+            if (esResponsable[i] && checkCImage[i]) {
+                habilitarBtnGuardar = true;
+                return;
+            }
+        }
+        habilitarBtnGuardar = false;
+    }
+
+    private boolean habilitarBtnGuardar = false;
+
+    public boolean isHabilitarBtnGuardar() {
+        return habilitarBtnGuardar;
+    }
+
+    public boolean validarCorreosProyecto() {
+        boolean todosValidos = true;
+        String[] correos = {email1, email2, email3, email4, email5};
+        boolean[] checkCImage = {checkCImage1, checkCImage2, checkCImage3, checkCImage4, checkCImage5};
+        boolean[] checkUImage = {checkUImage1, checkUImage2, checkUImage3, checkUImage4, checkUImage5};
+
+        // Aquí asumo que tienes estas variables que indican si el colaborador es responsable
+        boolean[] esResponsable = {checkMan1, checkMan2, checkMan3, checkMan4, checkMan5};
+
+        for (int i = 0; i < correos.length; i++) {
+            String correo = correos[i] == null ? "" : correos[i].trim().toLowerCase();
+
+            if (correo.isEmpty()) {
+                // Si el campo está vacío, se considera válido (no obligatorio)
+                checkCImage[i] = false;
+                checkUImage[i] = true;
+                continue;
+            }
+
+            // En caso de no estar validado (No en BD) se lanza ala alerta
+            List<Users> u = ejbUsr.findUserByEmail(correo);
+            if (u.isEmpty()) {
+                todosValidos = false;
+                checkCImage[i] = false;
+                checkUImage[i] = true;
+                JsfUtil.addErrorMessage("CORREO NO VERIFICADO: El colaborador #" + (i + 1) + " con correo `"
+                        + correo + "` no está registrado.");
+            } else {
+                checkCImage[i] = true;
+                checkUImage[i] = false;
+                JsfUtil.addSuccessMessage("CORREO VERIFICADO: El colaborador #" + (i + 1)
+                        + " con correo `" + correo + "` ya está registrado.");
+            }
+        }
+
+        // Actualizar flags individuales si se usan en la vista
+        checkCImage1 = checkCImage[0];
+        checkUImage1 = checkUImage[0];
+        checkCImage2 = checkCImage[1];
+        checkUImage2 = checkUImage[1];
+        checkCImage3 = checkCImage[2];
+        checkUImage3 = checkUImage[2];
+        checkCImage4 = checkCImage[3];
+        checkUImage4 = checkUImage[3];
+        checkCImage5 = checkCImage[4];
+        checkUImage5 = checkUImage[4];
+
+        // Aquí chequeo que haya al menos un responsable con correo válido
+        boolean responsableConCorreoValido = false;
+
+        if ("Responsable".equals(current.getRole())) {
+            responsableConCorreoValido = true;
+        } else {
+            for (int i = 0; i < esResponsable.length; i++) {
+                if (esResponsable[i] && checkCImage[i]) {
+                    responsableConCorreoValido = true;
+                    break;
+                }
+            }
+        }
+
+        // Aquí deberías actualizar la habilitación del botón según esa condición
+        habilitarBtnGuardar = responsableConCorreoValido;
+
+        checkManager();
+        renderButton();
+
+        return todosValidos;
+    }
+
+    public void resetEstado() {
+        email1 = email2 = email3 = email4 = email5 = null;
+        existCheck = false;
+
+        col1 = col2 = col3 = col4 = col5 = null;
+
+        checkCImage1 = checkCImage2 = checkCImage3 = checkCImage4 = checkCImage5 = false;
+        checkUImage1 = checkUImage2 = checkUImage3 = checkUImage4 = checkUImage5 = false;
+
+        checkMan1 = checkMan2 = checkMan3 = checkMan4 = checkMan5 = false;
+
+        habilitarBtnGuardar = false;
+        managers = 0;
+
+        comment = "";
+
+        ltsCheck = new ArrayList<>(Arrays.asList(false, false, false, false, false, false));
+        numberCol = 0;
+        checkAdd = false;
+        checkSubs = true;
+    }
+
+    public void subsNumber(ActionEvent e) {
+        if (numberCol > 0) {
+            int colAEliminar = numberCol;
+            numberCol--; // Decrementa
+            resetCol(colAEliminar);
+            renderCol(); // Actualiza la vista
+            actualizarEstadoBoton(); // Evalúa el botón de guardar
+
+            // ✅ Corrige el estado del botón "+"
+            if (numberCol < 5) {
+                checkAdd = false; // <- REACTIVA el botón "+"
+            }
+
+            if (numberCol <= 0) {
+                checkSubs = true; // Esto puede controlar el botón "-" si tienes uno
+            }
+        }
+    }
+
+    public void resetCol(int i) {
+        switch (i) {
+            case 1:
+                email1 = null;
+                col1 = null;
+                checkCImage1 = false;
+                checkUImage1 = false;
+                checkMan1 = false;
+                if (ltsCheck.size() >= 1) {
+                    ltsCheck.set(0, false); // ✅ índice 0
+                }
+                break;
+            case 2:
+                email2 = null;
+                col2 = null;
+                checkCImage2 = false;
+                checkUImage2 = false;
+                checkMan2 = false;
+                if (ltsCheck.size() >= 2) {
+                    ltsCheck.set(1, false); // ✅ índice 1
+                }
+                break;
+            case 3:
+                email3 = null;
+                col3 = null;
+                checkCImage3 = false;
+                checkUImage3 = false;
+                checkMan3 = false;
+                if (ltsCheck.size() >= 3) {
+                    ltsCheck.set(2, false); // ✅ índice 2
+                }
+                break;
+            case 4:
+                email4 = null;
+                col4 = null;
+                checkCImage4 = false;
+                checkUImage4 = false;
+                checkMan4 = false;
+                if (ltsCheck.size() >= 4) {
+                    ltsCheck.set(3, false); // ✅ índice 3
+                }
+                break;
+            case 5:
+                email5 = null;
+                col5 = null;
+                checkCImage5 = false;
+                checkUImage5 = false;
+                checkMan5 = false;
+                if (ltsCheck.size() >= 5) {
+                    ltsCheck.set(4, false); // ✅ índice 4
+                }
+                break;
+        }
     }
 
     public void renderButton() {
@@ -1047,35 +1258,37 @@ public class UserProjectLinkController implements Serializable {
 
     }
 
-    public void renderCol() {
-
+    public void renderCol() {// <--- Mas
         switch (numberCol) {
             case 1:
                 checkCol1 = true;
                 checkCol2 = false;
-                reset2();
+                resetCol(2);
                 checkCol3 = false;
+                resetCol(3);
                 checkCol4 = false;
+                resetCol(4);
                 checkCol5 = false;
-                checkManager();
+                resetCol(5);
                 break;
             case 2:
                 checkCol1 = true;
                 checkCol2 = true;
                 checkCol3 = false;
-                reset3();
+                resetCol(3);
                 checkCol4 = false;
+                resetCol(4);
                 checkCol5 = false;
-                checkManager();
+                resetCol(5);
                 break;
             case 3:
                 checkCol1 = true;
                 checkCol2 = true;
                 checkCol3 = true;
                 checkCol4 = false;
-                reset4();
+                resetCol(4);
                 checkCol5 = false;
-                checkManager();
+                resetCol(5);
                 break;
             case 4:
                 checkCol1 = true;
@@ -1083,8 +1296,7 @@ public class UserProjectLinkController implements Serializable {
                 checkCol3 = true;
                 checkCol4 = true;
                 checkCol5 = false;
-                reset5();
-                checkManager();
+                resetCol(5);
                 break;
             case 5:
                 checkCol1 = true;
@@ -1092,18 +1304,20 @@ public class UserProjectLinkController implements Serializable {
                 checkCol3 = true;
                 checkCol4 = true;
                 checkCol5 = true;
-                checkManager();
                 break;
             case 0:
                 checkCol1 = false;
-                reset1();
-                checkManager();
-
+                resetCol(1);
+                resetCol(2);
+                resetCol(3);
+                resetCol(4);
+                resetCol(5);
                 break;
             default:
                 break;
         }
 
+        checkManager(); // Siempre mantener esta llamada
     }
 
     public int getNumberCol() {
@@ -1204,6 +1418,7 @@ public class UserProjectLinkController implements Serializable {
         if (col2 == null) {
             col2 = new UserProjectLink();
             col2.setUserProjectLinkPK(new jpa.entities.UserProjectLinkPK());
+            col2.setRole("Colaborador");
             selectedItemIndex = -1;
         }
         return col2;
@@ -1213,6 +1428,7 @@ public class UserProjectLinkController implements Serializable {
         if (col3 == null) {
             col3 = new UserProjectLink();
             col3.setUserProjectLinkPK(new jpa.entities.UserProjectLinkPK());
+            col3.setRole("Colaborador");
             selectedItemIndex = -1;
         }
         return col3;
@@ -1222,6 +1438,7 @@ public class UserProjectLinkController implements Serializable {
         if (col4 == null) {
             col4 = new UserProjectLink();
             col4.setUserProjectLinkPK(new jpa.entities.UserProjectLinkPK());
+            col4.setRole("Colaborador");
             selectedItemIndex = -1;
         }
         return col4;
@@ -1231,6 +1448,7 @@ public class UserProjectLinkController implements Serializable {
         if (col5 == null) {
             col5 = new UserProjectLink();
             col5.setUserProjectLinkPK(new jpa.entities.UserProjectLinkPK());
+            col5.setRole("Colaborador");
             selectedItemIndex = -1;
         }
         return col5;
@@ -1279,12 +1497,13 @@ public class UserProjectLinkController implements Serializable {
 
     public void exist1() {
         if (email1 != null) {
-            List<Users> u = ejbUsr.findUserByEmail(email1.toLowerCase());
+            List<Users> u = ejbUsr.findUserByEmail(email1.toLowerCase().trim());
 
             if (email1.isEmpty() | email1.equals("")) {//1
                 existCheck = false;
                 checkCImage1 = false;
                 checkUImage1 = false;
+
                 //JsfUtil.addErrorMessage("CORREO NO VERIFICADO"+"\n"+"El primer colaborador o responsable no esta registrado en nuestro sistema.");
             } else {
                 if (u.isEmpty()) {//2
@@ -1314,8 +1533,8 @@ public class UserProjectLinkController implements Serializable {
 
     public void exist2() {
         List<Users> u;
-        if (email3 != null) {
-            u = ejbUsr.findUserByEmail(email2.toLowerCase());
+        if (email2 != null) {
+            u = ejbUsr.findUserByEmail(email2.toLowerCase().trim());
 
             if (email2.isEmpty() | email2.equals("")) {//1
 
@@ -1348,7 +1567,7 @@ public class UserProjectLinkController implements Serializable {
     public void exist3() {
         List<Users> u;
         if (email3 != null) {
-            u = ejbUsr.findUserByEmail(email3.toLowerCase());
+            u = ejbUsr.findUserByEmail(email3.toLowerCase().trim());
 
             if (email3.isEmpty() | email3.equals("")) {//1
 
@@ -1382,7 +1601,7 @@ public class UserProjectLinkController implements Serializable {
     public void exist4() {
         List<Users> u;
         if (email4 != null) {
-            u = ejbUsr.findUserByEmail(email4.toLowerCase());
+            u = ejbUsr.findUserByEmail(email4.toLowerCase().trim());
 
             if (email4.isEmpty() | email4.equals("")) {//1
 
@@ -1415,7 +1634,7 @@ public class UserProjectLinkController implements Serializable {
     public void exist5() {
         List<Users> u;
         if (email5 != null) {
-            u = ejbUsr.findUserByEmail(email5.toLowerCase());
+            u = ejbUsr.findUserByEmail(email5.toLowerCase().trim());
 
             if (email5.isEmpty() | email5.equals("")) {//1
 
@@ -1461,17 +1680,16 @@ public class UserProjectLinkController implements Serializable {
                 //col1.getRole()        
             }
         }*/ //chido
-        
-                 
+
         String manager = null;
-         FacesContext context = FacesContext.getCurrentInstance();
-         Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
+        FacesContext context = FacesContext.getCurrentInstance();
+        Users us = (Users) context.getExternalContext().getSessionMap().get("usuario");
         Project pj = (Project) context.getExternalContext().getSessionMap().get("project");
         //Users us = context.getExternalContext().getSessionMap().get("usuario");
         //Project pj = context.getExternalContext().getSessionMap().get("project");
-        
+
         List<UserProjectLink> upl = new ArrayList<UserProjectLink>();
-         List<Users> u = new ArrayList<Users>();
+        List<Users> u = new ArrayList<Users>();
         upl.add(this.current);
         u.add(us);
         String correo1 = "";
@@ -1519,20 +1737,18 @@ public class UserProjectLinkController implements Serializable {
             try {
                 if (upl.get(i).getRole().equals("Responsable")) {
                     ++numManagers;
-                    if (numManagers==1){
-                    manager = u.get(i).getUserName();
+                    if (numManagers == 1) {
+                        manager = u.get(i).getUserName();
                     }
                     break;
                 }
-            }
-            catch (Exception e) {
-                 RequestContext RC = RequestContext.getCurrentInstance();
+            } catch (Exception e) {
+                RequestContext RC = RequestContext.getCurrentInstance();
                 RC.execute("PF('AdvDialog').show();");
             }
         }
-        
-             //inicio del chido
-        
+
+        //inicio del chido
         if (managers <= 0) {
             JsfUtil.addErrorMessage("Por favor agregue al menos un Responsable al proyecto");
             return false;
@@ -1579,6 +1795,12 @@ public class UserProjectLinkController implements Serializable {
                     FacesContext context = FacesContext.getCurrentInstance();
                     Project pj = (Project) context.getExternalContext().getSessionMap().get("project");
 
+                    // 🔴 Validación antes de crear usuarios
+                    if (!validarUnicoResponsable()) {
+                        JsfUtil.addErrorMessage("Por favor agregue solo un responsable por proyecto.");
+                        return; 
+                    }
+
                     if (pj != null) {
                         createRes();
 
@@ -1618,6 +1840,7 @@ public class UserProjectLinkController implements Serializable {
                         }
 
                         initialize();
+                        resetEstado();
                         FacesContext.getCurrentInstance().getExternalContext().redirect("AltaExitosa.xhtml");
                     }
                 } catch (IOException ex) {
@@ -1789,7 +2012,7 @@ public class UserProjectLinkController implements Serializable {
             }
             getFacade().create(col2);
 
-           ec.sendProject2UserEmail(email2, col2.getRole());
+            ec.sendProject2UserEmail(email2, col2.getRole());
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(e);
 
@@ -1822,7 +2045,7 @@ public class UserProjectLinkController implements Serializable {
             }
             getFacade().create(col3);
 
-           ec.sendProject2UserEmail(email3, col3.getRole());
+            ec.sendProject2UserEmail(email3, col3.getRole());
         } catch (ArrayIndexOutOfBoundsException | EJBException e) {
             System.out.println(e);
 
@@ -1855,7 +2078,7 @@ public class UserProjectLinkController implements Serializable {
 
             getFacade().create(col4);
 
-                  ec.sendProject2UserEmail(email4, col4.getRole());
+            ec.sendProject2UserEmail(email4, col4.getRole());
         } catch (ArrayIndexOutOfBoundsException | EJBException e) {
             System.out.println(e);
 
@@ -1887,7 +2110,7 @@ public class UserProjectLinkController implements Serializable {
             }
             getFacade().create(col5);
 
-              ec.sendProject2UserEmail(email5, col5.getRole());
+            ec.sendProject2UserEmail(email5, col5.getRole());
         } catch (ArrayIndexOutOfBoundsException | EJBException e) {
             System.out.println(e);
 
@@ -2048,32 +2271,31 @@ public class UserProjectLinkController implements Serializable {
         }
     }
 
-//limpiar campos de email al registrar un proyecto
-public void resetInputEmail(){
-    numberCol = 0;
-    if (numberCol <= 0) {
+    //limpiar campos de email al registrar un proyecto
+    public void resetInputEmail() {
+        numberCol = 0;
+        if (numberCol <= 0) {
             checkSubs = true;
         } else {
             checkAdd = false;
         }
-    email1 = null;
-    email2 = null;
-    email3 = null;
-    email4 = null;
-    email5 = null;
-    comment = null;
-    current = null;
-    checkCol1 = false;
-    checkCol2 = false;
-    checkCol3 = false;
-    checkCol4 = false;
-    checkCol5 = false;
-    
-    checkUImage1 = false;
-    checkCImage1 = false;
-    checkUImage2 = false;
-    checkCImage2 = false;
-    checkTerms = false;
-}
+        email1 = null;
+        email2 = null;
+        email3 = null;
+        email4 = null;
+        email5 = null;
+        comment = null;
+        current = null;
+        checkCol1 = false;
+        checkCol2 = false;
+        checkCol3 = false;
+        checkCol4 = false;
+        checkCol5 = false;
 
+        checkUImage1 = false;
+        checkCImage1 = false;
+        checkUImage2 = false;
+        checkCImage2 = false;
+        checkTerms = false;
+    }
 }

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <h:head>
+        <div align="left">
+
+            <img src="../resources/images/usmb.png" ></img>
+        </div>
+        <div align="right">
+            <p:outputLabel value="" style="color: white; font-size:20px;"/>
+            <h:outputLink value= "http://www.uusmb.unam.mx/Manual_de_usuario.pdf"  target="_blank" style="color: white; font-weight:bold  " >Manual de usuario</h:outputLink>
+        </div>
+
+        <title>Registro de usuario</title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+    </h:head>
+
+    <h:body>
+
+
+        <h2 align='center'>Registro de nuevo usuario</h2>
+
+        <p:button icon="ui-icon-circle-arrow-w" outcome="/index" value="Volver" />
+
+        <br />
+        <br />
+        <h:panelGroup id="messagePanel" layout="block">
+            <p:messages id="messages"  showDetail="false" autoUpdate="true" />
+        </h:panelGroup>
+
+        <h:form id="form">
+            <p:panelGrid id="principal" columns="2" style="align-content:  center" layout="grid">
+                <f:facet name="header">
+                    Datos Generales
+                </f:facet>
+                <h:panelGrid id="dependency" columns="2">
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="Correo Electronico: " for="email" />
+                        <p:inputText id="email"  value="#{usersController.selected.email}"  required="true" 
+                                     requiredMessage="El campo Correo electronico es obligatorio" disabled="#{usersController.verifiedEmail==false}">
+                            <!--leslie original<p:keyFilter regEx="/[a-z0-9ñ_\.\-@]/i" preventPaste="false"/>-->
+                            <p:keyFilter inputRegEx="/[a-z0-9ñ_\.\-@]/i" preventPaste="false"/>
+                        </p:inputText> <p:commandButton  icon="ui-icon-disk" action="#{usersController.verifyEmail()}" value="verificar correo" update="form" disabled="#{usersController.verifiedEmail==false}"/>
+                    </h:panelGrid><br/><br/><br/>
+                    <p:outputLabel value="Nombre(s):" for="firstName" />
+                    <p:inputText id="firstName" value="#{usersController.selected.firstName}" title="Nombre del usuario" disabled="#{usersController.verifiedEmail}" required="true" requiredMessage="El campo Nombre es obligatorio">
+                        <p:keyFilter regEx="/[a-z ]/i" preventPaste="false"/>
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:inputText>
+
+                    <p:outputLabel value="Apellido Paterno: *"  />
+                    <p:inputText id="plastName" value="#{usersController.selected.PLastName}" title="Apellido(s) del usuario" disabled="#{usersController.verifiedEmail}" required="true" requiredMessage="El campo Apellido es obligatorio">
+                        <p:keyFilter regEx="/[a-z ]/i" preventPaste="false"/>
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:inputText>
+
+                    <p:outputLabel value="Apellido Materno: "  />
+                    <p:inputText id="mlastName" value="#{usersController.selected.MLastName}" title="Apellido(s) del usuario" disabled="#{usersController.verifiedEmail}">
+                        <p:keyFilter regEx="/[a-z ]/i" preventPaste="false"/>
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:inputText>
+
+                    <p:outputLabel value="Número de Teléfono: *" for="phoneNumber"  />
+                    <p:inputMask id="phoneNumber" value="#{usersController.selected.phoneNumber}" mask="999-999-9999? ext-99999" disabled="#{usersController.verifiedEmail}">
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:inputMask>
+
+                    <p:outputLabel value="Contraseña: *" />
+                    <p:password id="pwd1" match="pwd2" validatorMessage="Las contraseñas no coinciden" value="#{usersController.selected.password}"  required="true" 
+                                requiredMessage="El campo Contraseña es obligatorio"
+                                feedback="true" disabled="#{usersController.verifiedEmail}"
+                                promptLabel="Introduzca nueva contraseña" weakLabel="Debil"
+                                goodLabel="Mediana" strongLabel="Alta">
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:password>
+
+                    <p:outputLabel value="Confirme contraseña:" for="pwd2" />
+                    <p:password id="pwd2" value="#{usersController.selected.password}"  required="true" requiredMessage="Confime contraseña" disabled="#{usersController.verifiedEmail}"
+                                >
+                        <p:ajax  event="blur" listener="#{usersController.asignarValorCampos}"/>
+                    </p:password>
+
+
+
+                </h:panelGrid>
+
+
+                <h:panelGrid id="contactData" columns="2">
+
+                    <p:outputLabel value="Dependencia y/o departamento del usuario:" for="idDependency" />
+                    <p:selectOneMenu id="idDependency" value="#{usersController.selected.idDependency}" 
+                                     title="Dependencia del usuario" style="width:300px" 
+                                     disabled="#{usersController.verifiedEmail}"
+                                     effect="fade" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemValue="-----" itemLabel="-----" />
+                        <f:selectItems value="#{dependencyController.getAllDependency()}" 
+                                       var="itemD" itemLabel="#{itemD.dependencyName}" 
+                                       itemValue="#{itemD}"/>
+                        <p:ajax event="valueChange" update="contactData"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="¿La dependencia y/o departamento no está en la lista? " 
+                                   for="createDependency" />
+
+                    <p:button icon="ui-icon-circle-plus" id="createDependency" 
+                              outcome="/dependency/Create" value="Registra tu Dependencia" 
+                              disabled="#{usersController.verifiedEmail}" />
+
+                    <p:outputLabel value="Departamento:" for="department" />
+                    <p:inputText id="department" value="#{usersController.selected.department}" 
+                                 title="Departamento donde radica" 
+                                 disabled="#{usersController.verifiedEmail}">
+                        <p:keyFilter regEx="/[a-z0-9_ñ ]/i" preventPaste="false"/>
+                    </p:inputText>
+                </h:panelGrid>
+            </p:panelGrid>
+            <br />
+
+            <!--Carlos: Aceptacion de terminos y condiciones:-->
+            <h:panelGrid columns="1" style="text-align: center;">
+                <h:panelGroup layout="block" style="display: flex; align-items: center; gap: 8px;">
+                    <p:selectBooleanCheckbox id="terms2" value="#{usersController.termsAndConditions2Agreed}" 
+                                             required="true" requiredMessage="Debe aceptar los términos y condiciones del registro de usuario y servicio." 
+                                             disabled="#{usersController.verifiedEmail}">
+                        <p:ajax update="saveButton" process="@this" />
+                    </p:selectBooleanCheckbox>
+                    <h:outputLink value="https://docs.google.com/document/d/13y2f53h-gqNjbMMIG9DniM7EgULq4nr8/edit" target="_blank">
+                        <h:outputText value="Acepto los términos y condiciones del registro de usuario y servicio" />
+                    </h:outputLink>
+                </h:panelGroup>
+
+            </h:panelGrid>
+            <br />
+            <h:panelGrid style="text-align: center">
+                <p:commandButton id="saveButton" icon="ui-icon-disk" action="#{usersController.create}"  
+                                 value="Guardar nuevo" update="form" 
+                                 disabled="#{!(usersController.termsAndConditions2Agreed)}">
+                    <p:confirm header="Aviso Usuario" 
+                               message="¿Esta seguro que los datos que proporcionaste son correctos? De ser asi precione aceptar para registrarse"
+                               icon="ui-icon-alert"/>
+                </p:commandButton><br/>
+
+                <p:outputLabel>Aviso de privacidad</p:outputLabel>
+                <p:outputLabel>El LNATCG, a través de la UUSMB, es el responsable del tratamiento de los datos personales que nos proporcione, &#10; los cuales serán protegidos conforme a lo dispuesto por la Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados y demás normatividad que resulte aplicable.</p:outputLabel>
+            </h:panelGrid>
+
+
+
+
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            <p:dialog header="Advertencia" widgetVar="warnDialog" modal="true"  resizable="false" draggable="false">
+                <p:outputPanel id="terms" style="text-align:center;">
+                    <h:panelGrid columns="1" >
+                        <p:outputLabel  value="ESTIMADO USUARIO: " style="font-size: large; font-family:'politica'" />
+                        <p:outputLabel  value="El correo que proporcionó ya esta registrado en una cuenta de este sistema" style="font-size: large; font-family:'politica'" /><br/>
+                        <p:outputLabel  value="Si desea recuperar su contraseña por favor presione el boton 'Recuperar contraseña'" style="font-size: large; font-family:'politica'" /><br/>
+                        <p:commandButton value="Recuperar contraseña" action="#{usersController.restorePass()}"/>
+                    </h:panelGrid>
+
+                </p:outputPanel>
+            </p:dialog> 
+            <p:dialog header="Información importante" widgetVar="passDialog" modal="true"  resizable="false" draggable="false">
+                <p:outputPanel  style="text-align:center;">
+                    <h:panelGrid columns="1" >
+                        <p:outputLabel  value="Contraseña actualizada satisfactoriamente: " style="font-size: large; font-family:'politica'" />
+                        <p:outputLabel  value="Se le ha enviado un correo electronico a la direccion proporcionada con la nueva contraseña." style="font-size: large; font-family:'politica'" /><br/>
+                        <p:outputLabel  value="Puede cambiar la contraseña cuando desee en la sección 'Mi Perfil'" style="font-size: large; font-family:'politica'" /><br/>
+
+
+                        <p:button outcome="/index" value="Aceptar" />
+
+                    </h:panelGrid>
+
+                </p:outputPanel>
+            </p:dialog> 
+            <p:dialog id="modularDialog" header="Mensaje" widgetVar="modularDialog" modal="true" style="font-size: large; text-align: center; font-size: 13px" >
+
+                <h:panelGrid columns="1" >
+                    <br></br>
+                    <p:outputLabel value="La dependencia es obligatoria"/>
+                    <br></br>
+
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+
+
+</html>

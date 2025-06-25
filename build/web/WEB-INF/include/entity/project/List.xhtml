@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ProjectListForm">
+
+        <p:panel header="#{myBundle.ListProjectTitle}">
+            <p:contextMenu id="ProjectDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('ProjectListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('ProjectListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('ProjectListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('ProjectListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.ProjectMenuItem_sampleCollection}" icon="ui-icon-search"  action="#{projectController.navigateSampleCollection}" disabled="#{projectController.isSampleCollectionEmpty}" ajax="false"/>  
+                <p:menuitem value="#{myBundle.ProjectMenuItem_userProjectLinkCollection}" icon="ui-icon-search"  action="#{projectController.navigateUserProjectLinkCollection}" disabled="#{projectController.isUserProjectLinkCollectionEmpty}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{projectController.items}"
+                         lazy="false"
+                         rowKey="#{item.idProject}"
+                         var="item"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{projectController.selected}"
+                         filteredValue="#{projectController.filteredItems}">
+                <!--
+                         To enable Lazy Loading, please copy/replace the following lines above,
+                         and be sure to replace the word HASH with the # symbol:
+                
+                         value="HASH{projectController.lazyItems}"
+                         lazy="true"
+                         rowKey="HASH{item.idProject}"  <<< Remove this line
+                -->
+
+
+                <p:ajax event="rowSelect"   update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:ProjectDataTableContextMenu"/>
+                <p:ajax event="rowUnselect" update="@form:createButton,@form:viewButton,@form:editButton,@form:deleteButton,@form:ProjectDataTableContextMenu"/>
+                <p:ajax event="contextMenu" update="@form:createButton @form:viewButton @form:editButton @form:deleteButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ProjectListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.idProject}" filterBy="#{item.idProject}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_idProject}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idProject}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.projectName}" filterBy="#{item.projectName}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_projectName}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.projectName}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.projectDescription}" filterBy="#{item.projectDescription}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_projectDescription}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.projectDescription}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.requestDate}" filterBy="#{item.requestDate}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_requestDate}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.requestDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column sortBy="#{item.status}" filterBy="#{item.status}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_status}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.status}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.quotationNumber}" filterBy="#{item.quotationNumber}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProjectTitle_quotationNumber}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.quotationNumber}"/>
+                </p:column>
+
+                <ui:remove>
+                    <p:column sortBy="#{item.billNumber}" filterBy="#{item.billNumber}">
+                        <f:facet name="header">
+                            <h:outputText value="#{myBundle.ListProjectTitle_billNumber}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.billNumber}"/>
+                    </p:column>
+                </ui:remove>
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{projectController.prepareCreate}" update=":ProjectCreateForm" oncomplete="PF('ProjectCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":ProjectViewForm" oncomplete="PF('ProjectViewDialog').show()" disabled="#{empty projectController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ProjectEditForm" oncomplete="PF('ProjectEditDialog').show()" disabled="#{empty projectController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{projectController.delete}" update=":growl,datalist" disabled="#{empty projectController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/WEB-INF/include/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

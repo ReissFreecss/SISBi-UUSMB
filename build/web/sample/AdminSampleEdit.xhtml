@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Editar Muestra"></h:outputText>
+         
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                
+            </h:panelGroup>
+            <h:form>
+                  <br />
+                
+                <p:commandButton icon="ui-icon-circle-arrow-w" action="#{sampleController.prepareList}" value="Volver" immediate="true"/>
+                <br />
+                <br />
+                <h:panelGrid columns="2">
+                   
+                    <p:outputLabel value="Nombre de la muestra:" for="sampleName" />
+                    <p:inputText id="sampleName" value="#{sampleController.selected.sampleName}" title="#{bundle.EditSampleTitle_sampleName}" required="true" requiredMessage="#{bundle.EditSampleRequiredMessage_sampleName}"/>
+                   
+                    <p:outputLabel value="Etiqueta del tubo:" for="tube" />
+                    <p:inputText id="tube" value="#{sampleController.selected.idTube}" title="#{bundle.EditSampleTitle_sampleName}" required="true" requiredMessage="#{bundle.EditSampleRequiredMessage_sampleName}"/>
+                   
+                    <p:outputLabel value="Cantidad de muestra:" for="sampleQuantity" />
+                    <p:inputText id="sampleQuantity" value="#{sampleController.selected.sampleQuantity}" title="#{bundle.EditSampleTitle_sampleQuantity}" />
+                    
+                    <p:outputLabel value="Calidad de muestra:" for="sampleQuality" />
+                 <p:selectOneMenu id="sampleQuality" value="#{sampleController.selected.sampleQuality}" style="width:125px">
+                        <f:selectItem itemLabel="Aun no determinada" itemValue="Aun no determinada" />
+                        <f:selectItem itemLabel="Buena" itemValue="Buena" />
+                        <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente degradada" />
+                        <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                    </p:selectOneMenu>
+                   
+                    <p:outputLabel value="Estado de la muestra:" for="status" />
+                    <p:selectOneMenu id="status" value="#{sampleController.selected.status}" style="width:125px">
+                        <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+                        <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
+                        <f:selectItem itemLabel="Peparada en biblioteca" itemValue="Preparada" />
+                        <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                        <f:selectItem itemLabel="Entregada" itemValue="Entregada" />
+                    </p:selectOneMenu>
+                   
+                    <p:outputLabel value="Comentarios:" for="comments" />
+                    <p:inputTextarea id="comments" value="#{sampleController.selected.comments}" title="#{bundle.EditSampleTitle_comments}" />
+                    
+                    <p:outputLabel value="Fecha de recepcion:" for="reception" />
+                    <p:calendar id="reception" value="#{sampleController.selected.receptionDate}" title="Fecha que en la que se recibio la muestra" />
+                    
+                    <p:outputLabel value="Fecha de entrega:" for="delivery" />
+                    <p:calendar id="delivery" value="#{sampleController.selected.deliveryDate}" title="Fecha que en la que se recibio la muestra" />
+                    
+                    
+                    <p:outputLabel value="Tipo:" for="type" />
+                      <p:selectOneRadio id="type" value="#{sampleController.selected.type}"  required="true" requiredMessage="#{bundle.CreateSampleRequiredMessage_type}">
+                        <f:selectItem itemLabel="DNA" itemValue="DNA"/>
+                        <f:selectItem itemLabel="RNA" itemValue="RNA"/>
+                        <f:selectItem itemLabel="smallRNA" itemValue="smallRNA"/>
+                    </p:selectOneRadio>
+                   
+                    <p:outputLabel value="Rendimiento esperado:" for="expected" />
+                    <p:inputText id="expected" value="#{sampleController.selected.expectedPerformance}" title="#{bundle.EditSampleTitle_sampleQuantity}" />
+                    
+                    <p:outputLabel value="Rendimiento real:" for="real" />
+                    <p:inputText id="real" value="#{sampleController.selected.realPerformance}" title="#{bundle.EditSampleTitle_sampleQuantity}" />
+                     
+                </h:panelGrid>
+                <br />
+                <br />
+                <p:commandButton icon="ui-icon-disk" action="#{sampleController.update()}" value="Actualizar"/>
+                <br />
+              
+              </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,1871 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Detalles del proyecto"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+            <f:event type="preRenderView" listener="#{sampleController.updateListSample()}"></f:event>
+
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" life="10000"/>
+                <!-- aqui inicia  el form de solictar corizacion -->
+
+                <!--
+                <p:confirmDialog  id="quot" global="false" showEffect="fade" hideEffect="fade" visible="{projectController.checkQuatationProj()}" message="Estimado usuario  de acuerdo a nuestros Registros este proyecto aun no cuenta con una cotizacion registrada" >
+                    <h:panelGrid columns="1" id="cotizacion">
+                        <p:outputLabel for="quot" value="Cuenta con una cotización?"/>
+                        <p:selectOneRadio value="{projectController.cot}" >
+                            <f:selectItem itemLabel="si" itemValue="true"/>
+                            <f:selectItem itemLabel="no" itemValue="false"/>
+                            <p:ajax  event="click" update="cotizacion" />
+                        </p:selectOneRadio>
+
+                        <p:commandButton id="solicitud" rendered="{projectController.cot eq false}" value="Solicitar cotización"  icon="ui-icon-mail-closed" action="{projectController.updateQuotationProject()}" update="form"/>
+                        <h:panelGrid columns="1" id="NoCot" rendered="{projectController.cot}">
+                            <p:outputLabel value="No. cotización:" for="conta" />
+                            <p:inputText value="{projectController.quot}"  
+                                         id="conta" maxlength="10" placeholder="ejemplo: 2019-0000"/>
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" action="{projectController.ExecCommand()}" update="msgs"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:confirmDialog> 
+                
+                -->
+                <!-- aqui termina -->
+
+
+                <p:dialog header="Registrar cotización" widgetVar="dlgNewQuot">
+
+                    <p:outputLabel value="Suba su cotización en formato PDF:"/>
+
+                    <p:fileUpload fileUploadListener="#{filesProController.uploadFile}"   mode="advanced" dragDropSupport="false" 
+                                  invalidFileMessage="Archivo inválido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+                                  fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+                                  auto="true" allowTypes="/(\.|\/)(pdf|jpeg|jpg|png)$/"  /><br/>
+
+                    <h:panelGrid columns="1">
+
+                        <p:outputLabel value="Descripción y/o comentarios adicionales:" for="comentQuot"/>
+                        <p:inputTextarea id="comentQuot" value="#{filesProController.comment}" placeholder="Describa su documento aquí..." style="width: 800px"  />
+
+                    </h:panelGrid>
+
+                    <br/>  
+
+                    <p:commandButton value="Guardar" icon="ui-icon-disk" action="#{filesProController.CreateQuotFile()}" update="msgs">
+
+                    </p:commandButton>
+                </p:dialog>
+
+
+                <p:dialog header="Subir Comprobante de pago" widgetVar="DlgVoucher">
+
+                    <p:fileUpload fileUploadListener="#{filesProController.uploadFile}"   mode="advanced" dragDropSupport="false" 
+
+                                  invalidFileMessage="Archivo inválido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+
+                                  fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+
+                                  auto="true" allowTypes="/(\.|\/)(pdf|jpeg|jpg|png)$/"  /><br/>
+
+                    <p:outputLabel style="color:black; font-size: 18px;font-weight: bold" value="Agregue como comprobante de pago:" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos IBT: Oficio de transferencia o captura de pantalla de SIBIOTEC" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Internos UNAM: Póliza de transferencia" /><br/>
+                    <p:outputLabel style="color:gray; font-size: 15px;font-weight: bold" value="■ Externos: Comprobante de depósito bancario o pdf de la transferencia electrónica del banco" /><br/><br/>
+
+                    <h:panelGrid columns="1">
+
+                        <p:outputLabel value="Descripción y/o comentarios adicionales:" for="coment"/>
+
+                        <p:inputTextarea id="coment" value="#{filesProController.comment}" placeholder="Describa su documento aquí..." style="width: 800px"  />
+
+                    </h:panelGrid>
+
+                    <br/>
+
+                    <p:commandButton value="Guardar" icon="ui-icon-disk" action="#{filesProController.createVoucherFile()}" update=":form:msgs"/>
+
+                </p:dialog>
+
+                <p:dialog  header="Comentarios acerca del proyecto" widgetVar="CommentsDialog" modal="true" responsive="true" height="500">
+                    <p:panelGrid columns="1" >
+                        <p:dataTable id="TableComments"  value="#{commentsController.items}" scrollable="true" selection="#{commentsController.commentsTable}" rowKey="#{item.idComment}" scrollHeight="400" var="item"   style="border:solid 1px; border-color: #e0cfc2; border-radius: 15px;" reflow="true" 
+                                     emptyMessage="No se han hecho comentarios en éste proyecto" editable="true" editMode="cell" disabledTextSelection="false">
+
+                            <f:facet name="header">
+                                Comentarios acerca del proyecto 
+
+                            </f:facet>
+                            <p:ajax event="cellEdit" listener="#{commentsController.updateComment()}" update=":form:TableComment"/>
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center" visible="#{commentsController.checkUser()}"/>
+
+                            <p:column width="100">
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha"/>
+                                </f:facet>
+                                <h:outputText value="#{item.commentDate}">
+                                    <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="100">
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre de usuario"/>
+                                </f:facet>
+                                <h:outputText value="#{item.userName}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Comentario"/>
+                                </f:facet>
+                                <p:cellEditor >
+                                    <f:facet name="output"><h:outputText value="#{item.comment}"/></f:facet>
+                                    <f:facet name="input"><p:inputTextarea value="#{commentsController.comment}" rendered="#{commentsController.checkUser()}"/></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+                            <f:facet name="footer">
+
+                                <p:commandButton    oncomplete="PF('CommentDialog').show()"  value="Agregar comentario"></p:commandButton>                 
+
+
+
+
+
+
+                            </f:facet>
+                        </p:dataTable>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+                <h:panelGrid columns="2">
+
+                    <p:commandButton icon="ui-icon-pencil"  disabled="#{projectController.selectedProject.status == 'Terminado' or projectController.selectedProject.status == 'Cancelado'}"  action="#{projectController.prepareEdit()}" value="Editar el proyecto">                  
+                        <!-- leslie: agregue el bloqueo del boton cuando el status del proyecto este terminaod o sea cancelado-->
+                        <f:actionListener binding="#{sampleController.getPrevURL()}"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-pencil" action="#{reportProjectController.redirectRepoProject(projectController.selectedProject.idProject)}" value="Generar Reporte Bioinfo" disabled="#{reportProjectController.actBotonReporte(sampleController, projectController.selectedProject.idProject)}" rendered="#{commentsController.checkUser()}"/>
+
+
+                </h:panelGrid>
+                <br />
+                <p:panelGrid columns="2" layout="grid"  >
+                    <p:panelGrid columns="2" >
+                        <f:facet name="header">
+                            Datos Generales
+                        </f:facet>
+
+
+                        <p:outputLabel value="ID del proyecto:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.idProject}" />
+
+                        <p:outputLabel value="Nombre del proyecto:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.projectName}" />
+
+                        <p:outputLabel value="Descripción:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.projectDescription}" />
+
+
+                        <p:outputLabel value="Fecha de solicitud:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.requestDate}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </p:outputLabel>
+
+                        <p:outputLabel value="Análisis bioinformático:"/>
+                        <p:outputPanel style="display: flex; justify-content: space-between; align-items: center">
+                            <h:outputText value="#{(sampleController.getNumberSamplesBioAn(projectController.selectedProject)>0)?'Si':'No'}"/>
+
+                            <p:commandButton value="Cancelar análisis bioinformático" oncomplete="PF('dialogConfirmationCancelAB').show()" rendered="#{sampleController.getNumberSamplesBioAn(projectController.selectedProject)>0}"/>
+                            <p:commandButton value="Solicitar análisis bioinformático" rendered="#{0==sampleController.getNumberSamplesBioAn(projectController.selectedProject)}"  action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
+                                <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
+                            </p:commandButton>
+                        </p:outputPanel>
+
+                        <p:outputLabel value="Cambiar estatus:" rendered="#{sampleController.canEdit()}" />
+                        <h:panelGrid columns="2" width="500px" rendered="#{sampleController.canEdit()}" >
+
+                            <!--Termina proyecto-->
+                            <!--<p:commandButton rendered="{sampleController.canEdit()}" disabled="{projectController.selectedProject.status == 'Terminado' or projectController.selectedProject.status == 'Cancelado'}"  id="editStatusT" action="{projectController.updateStatus2(1)}" value="Terminar proyecto">
+                                         <p:confirm header="Terminar Proyecto" 
+                                           message="¿Esta seguro que desea terminar el proyecto?" icon="ui-icon-alert" />
+                            </p:commandButton> -->
+
+                            <!--leslie-->
+                            <p:commandButton id="btnprojectClose" rendered="#{sampleController.canEdit()}" disabled="#{projectController.selectedProject.status=='Terminado' or projectController.selectedProject.status=='Cancelado'}"  oncomplete="PF('DialogCloseProy').show()" value="Terminar proyecto" icon="ui-icon-clipboard" />
+
+                            <!-- fin leslie -->
+
+
+                            <p:confirmDialog header="Terminar el proyecto" widgetVar="termProjDialog" >
+                                <p:outputPanel id="termAcept" style="text-align:center;">                                                      
+                                    <h:panelGrid columns="1">  
+                                        <p:outputLabel style="color:darkslateblue; font-size: 12px;font-weight: bold" value="■ El estatus de las muestras" /><br/>
+                                        <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
+                                        <p:commandButton value="Aceptar" action="{projectController.prepareProjectList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
+
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:confirmDialog>
+                            <!--fin Termina proyecto-->
+
+                            <!--cancela proyecto-->
+                            <p:commandButton rendered="#{sampleController.canEdit()}" disabled="#{projectController.renderCancelProject() or projectController.selectedProject.status == 'Cancelado'
+                                                         or projectController.selectedProject.status == 'Terminado' }" id="editStatusC" action="#{projectController.updateStatus2(2)}" value="Cancelar proyecto">
+                                <p:confirm header="Cancelar Proyecto" 
+                                           message="¿Esta seguro que desea cancelar el proyecto?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:confirmDialog header="Cancelar el proyecto" widgetVar="cancelProjDialog" >
+                                <p:outputPanel id="cancelAcept" style="text-align:center;"> 
+                                    <h:panelGrid columns="1">  
+
+                                        <p:commandButton value="Aceptar" action="#{projectController.prepareProjectList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:confirmDialog>
+                            <!--- fin cancelar proyecto-->
+                            <!--leslie 07 mayo Abre proyecto-->
+                            <p:commandButton rendered="#{sampleController.canEdit()}" disabled="#{projectController.selectedProject.status == 'Registrado' or projectController.selectedProject.status == 'En proceso'}"  id="editStatusOp" action="#{projectController.updateStatus2(3)}" value="Abrir proyecto">
+                                <p:confirm header="Reabrir Proyecto" 
+                                           message="¿Esta seguro que desea reabrir el proyecto?" icon="ui-icon-alert" />
+                            </p:commandButton>                             
+                            <p:confirmDialog header="Reabrir el proyecto" widgetVar="openProjDialog" >
+                                <p:outputPanel id="OpenAcept" style="text-align:center;">                                                      
+                                    <h:panelGrid columns="1">  
+                                        <p:outputLabel style="color:darkslateblue; font-size: 12px;font-weight: bold" value="■ El estatus de las muestras" /><br/>
+                                        <h:outputText escape="false" value="■ Si tiquiera." /><br/> 
+                                        <p:commandButton value="Aceptar" action="#{projectController.prepareProjectList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
+
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:confirmDialog>
+                            <!--fin reabre proyectoleslie-->
+                        </h:panelGrid>
+                        <!--fin hgrid cambia esttaus-->
+                        <p:outputLabel value="" rendered="#{sampleController.canEdit()}" />
+                        <p:outputLabel value="Estatus" rendered="#{sampleController.canEdit()}" />
+                        <p:outputLabel value="#{projectController.selectedProject.status}" />                       
+                        <!--<p:outputLabel for="popup" value="fecha de entrega:" />
+                            <p:calendar id="popup" value="{projectController.date2}"  pattern="yyyy/MM/dd"   requiredMessage="El campo fecha de entrega es obligatorio"/>-->
+                        <p:outputLabel value=""  />
+                        <p:outputLabel value="Método de entrega:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.deliveryMethod}" />
+                        <p:outputLabel value="Entrega de resultados:"/>
+                        <h:outputLink id="saltoresultado" value="ViewProject.xhtml#anclaresultado" onclick="PF('accordionArchivosAsociados').unselect(-1); PF('accordionMuestrasAsociadas').unselect(-1); PF('accordionBibliotecasAsociadas').unselect(-1);">
+                            <h:outputText value="Ver resultados" style="color: blue; text-decoration: underline" />
+                        </h:outputLink>
+                        <p:outputLabel value="Método de pago:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.type_project}" />
+
+                        <p:outputLabel value="Estatus cotización:"/>
+                        <p:outputLabel value="#{projectController.selectedProject.quotationNumber}" />
+
+
+                        <h:panelGrid columns="2">
+                            <p:commandButton  oncomplete="PF('dlgNewQuot').show()" icon="ui-icon-plusthick"  value="Registrar cotización"/>
+
+                        </h:panelGrid>			
+
+
+                        <a style="font-size: 14px" href="#{filesProController.verCotizacion()}" target="_blank">Ver última cotización</a>
+
+
+                        <h:panelGrid columns="2">
+
+                            <p:commandButton oncomplete="PF('DlgVoucher').show()" icon="ui-icon-arrowthickstop-1-n"  value="Subir comprobante de pago"/>
+
+                        </h:panelGrid>
+
+
+
+                        <a style="font-size: 14px" href="#{filesProController.verComprobante()}" target="_blank">Ver último comprobante</a>
+
+                    </p:panelGrid>
+
+
+
+
+
+
+                    <p:panelGrid columns="1" >
+                        <p:dataTable id="TableComment"  value="#{commentsController.items}" scrollable="true" 
+                                     selection="#{commentsController.commentsTable}" rowKey="#{item.idComment}" scrollHeight="125" var="item"  
+                                     style="border:solid 1px; border-color: #e0cfc2; border-radius: 15px;" reflow="true" 
+                                     emptyMessage="No se han hecho comentarios en este proyecto" editable="true">
+
+                            <f:facet name="header">
+                                Comentarios acerca del proyecto
+                                <p:commandButton    oncomplete="PF('CommentsDialog').show()"  icon="ui-icon-zoomin" />
+                            </f:facet>
+                            <p:ajax event="rowEdit" listener="#{commentsController.updateComment()}" update=":form:TableComment"/>
+                            <p:ajax event="rowEditCancel" listener="#{commentsController.calcelUpdateComment()}" update=":form:TableComment"/>
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center" visible="#{commentsController.checkUser()}">
+                            </p:column>
+                            <p:column width="10" style="width:35px">
+                                <p:commandButton  id="btnEditComment" icon="ui-icon-pencil" actionListener="#{commentsController.prepareEditComment(item)}" disabled="#{commentsController.canEditComment(item.userName)}" update=":form:opEditComment"  oncomplete="PF('EditCommentDialog').show()"  ></p:commandButton> 
+                            </p:column>
+                            <p:column width="40" sortBy="#{item.commentDate}">
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha"/>
+                                </f:facet>
+                                <h:outputText value="#{item.commentDate}">
+                                    <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="40">
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre de usuario"/>
+                                </f:facet>
+                                <h:outputText value="#{item.userName}"/>
+                            </p:column>
+
+                            <p:column width="150">
+                                <f:facet name="header">
+                                    <h:outputText value="Comentario"/>
+                                </f:facet>
+                                <p:cellEditor >
+                                    <f:facet name="output"><h:outputText value="#{item.comment}"/></f:facet>
+                                    <f:facet name="input"><p:inputTextarea disabled="#{commentsController.canEditComment(item.userName)}" value="#{commentsController.comment}" rendered="#{commentsController.checkUserComment(item.comment)}"/></f:facet>
+
+                                </p:cellEditor>
+                            </p:column>
+
+                            <f:facet name="footer">
+
+                                <p:commandButton  id="createComment" actionListener="#{commentsController.calcelUpdateComment()}"  update=":form:CommentDetail"  oncomplete="PF('CommentDialog').show()"  value="Agregar comentario"></p:commandButton>                 
+
+
+                            </f:facet>
+                        </p:dataTable>
+                        <p:panelGrid columns="2" >
+                      <!--<p:selectOneMenu id="opt" value="#{projectController.opt}" rendered="#{sampleController.canEdit()}">
+                         
+                            <f:selectItem itemLabel="Solicitar cotización para recepción de muestra"  itemValue="1" />
+                            <f:selectItem itemLabel="Solicitar cotizacion para preparación de muestras" itemValue="2" />
+                            <f:selectItem itemLabel="Solicitar comprobante de pago para la entrega"  itemValue="3" />
+                            <f:selectItem itemLabel="Solicitar comprobante de pago de análisis bioinformático"  itemValue="4" />
+                      </p:selectOneMenu>-->
+
+                            <p:commandButton id="email" rendered="#{sampleController.canEdit()}" icon="ui-icon-mail-closed" oncomplete="PF('correoDialog').show()" value="Enviar Correo" action="#{commentsController.sendComments()}" >
+
+                                <p:confirm header="Mandar email" message="¿Esta seguro que desea mandar el aviso a los inovolucrados en el proyecto?" icon="ui-icon-alert" />
+
+                            </p:commandButton> 
+
+                        </p:panelGrid>
+
+
+                        <p:panelGrid columns="1" >
+                            <p:dataTable value="#{commentsController.getCommentsBAProject()}" var="commentBA" scrollable="true" scrollHeight="125" reflow="true" emptyMessage="No se han hecho comentarios sobre análisis bioinformático">
+                                <f:facet name="header">
+                                    Comentarios sobre análisis bioinformático
+                                </f:facet>
+
+                                <p:column width="10" style="width:35px">
+                                    <p:commandButton  id="btnEditCommentBA" icon="ui-icon-pencil" action="#{commentsController.prepareEditCommentBA(commentBA)}" disabled="#{commentsController.canEditComment(commentBA.userName)}" update=":form:opEditCommentBA"  oncomplete="PF('EditCommentBADialog').show()"  ></p:commandButton> 
+                                </p:column>
+
+                                <p:column width="40">
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha"/>
+                                    </f:facet>
+                                    <h:outputText value="#{commentBA.commentDate}">
+                                        <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column width="40">
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre de usuario"/>
+                                    </f:facet>
+                                    <h:outputText value="#{commentBA.userName}"/>
+                                </p:column>
+
+                                <p:column width="150">
+                                    <f:facet name="header">
+                                        <h:outputText value="Comentario"/>
+                                    </f:facet>
+                                    <h:outputText value="#{commentBA.comment}" />
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton  id="createCommentBA" update=":form:CommentBADetail" actionListener="#{commentsController.prepareCreateCommentBA()}" oncomplete="PF('CommentBADialog').show()"  value="Agregar comentario sobre análisis bioinformático"></p:commandButton>                 
+                                </f:facet>
+                            </p:dataTable>
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="1" layout="grid">
+
+                            <f:facet name="header">
+
+                                Detalles pago
+
+                            </f:facet>
+
+                            <f:facet name="footer">
+
+
+
+                            </f:facet>
+
+                            <p:dataTable id="TablePayment"  value="#{projectController.findPayment()}" scrollable="true"  
+
+                                         scrollHeight="130" var="pay"  style="border:solid 1px;  border-color: transparent"
+
+                                         reflow="true" emptyMessage="No hay pagos registrados en este proyecto">
+
+
+
+                                <p:column width="80">
+
+                                    <f:facet name="header">
+
+                                        <h:outputText value="Fecha"/>
+
+                                    </f:facet>
+
+                                    <h:outputText value="#{pay.pagoFecha}">
+
+                                        <f:convertDateTime pattern="dd/MMM/yy" />
+
+                                    </h:outputText>
+
+                                </p:column>
+
+
+
+                                <p:column width="60">
+
+                                    <f:facet name="header">
+
+                                        <h:outputText value="Póliza"/>
+
+                                    </f:facet>
+
+                                    <h:outputText value="#{pay.poliza}"/>
+
+
+
+                                </p:column>
+
+
+
+                                <p:column width="70">
+
+                                    <f:facet name="header">
+
+                                        <h:outputText value="Referencia"/>
+
+                                    </f:facet>
+
+                                    <h:outputText value="#{pay.referen}"/>
+
+                                </p:column>
+
+
+
+                                <p:column width="100">
+
+                                    <f:facet name="header">
+
+                                        <h:outputText value="Observaciones"/>
+
+                                    </f:facet>
+
+                                    <h:outputText value="#{pay.observaciones}"/>
+
+                                </p:column>
+
+
+
+                                <p:column width="100">
+
+                                    <f:facet name="header">
+
+                                        <h:outputText value="Monto"/>
+
+                                    </f:facet>
+
+                                    <h:outputText value="#{pay.monto}"/>
+
+                                </p:column>
+
+
+
+                                <p:column>
+
+                                    <f:facet name="header">
+
+                                        <p:outputLabel value="Archivo:"/>
+
+                                    </f:facet>
+
+
+
+                                    <p:commandLink id="dialog" oncomplete="PF('fileViewDialog').show()" value="Ver Archivo" >
+
+                                        <p:ajax event="click" update="form" listener="#{pay.url_voucher}" />
+
+                                    </p:commandLink>
+
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:panelGrid>
+                    </p:panelGrid>
+
+
+                </p:panelGrid>
+                <p:dialog header="Correo Enviado" widgetVar="correoDialog" modal="true"  resizable="false" draggable="false">
+                    <p:outputPanel id="terms" style="text-align:center;">
+                        <h:panelGrid columns="1" >
+                            <p:outputLabel  value="El correo ha sido " style="font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="enviado satisfactoriamente" style="font-size: large; font-family:'politica'" />
+                            <p:commandButton value="OK" onclick="PF('correoDialog').hide();" style="font-size: large; "/>
+
+                        </h:panelGrid>
+
+                    </p:outputPanel>
+                </p:dialog> 
+                <p:dialog header="Agregar comentario" widgetVar="CommentDialog" modal="true" resizable="true" width="500" height="320" >
+                    <p:outputPanel id="CommentDetail" style="text-align:center;">
+                        <h:panelGrid columns="1" width="470">                       
+                            <p:inputTextarea  value="#{commentsController.comment}" autoResize="false" style="height:260px; width:450px"/>
+                            <p:commandButton id="createCommen" action="#{commentsController.redirectView(projectController.selectedProject)}" icon="ui-icon-disk" value="Guardar"/> 
+                        </h:panelGrid>            
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Editar comentario" widgetVar="EditCommentDialog" modal="true" resizable="true" width="500" height="320" >
+                    <p:outputPanel id="opEditComment" style="text-align:center;">
+                        <h:panelGrid  columns="1" width="470">                       
+                            <p:inputTextarea id="taComment" value="#{commentsController.veditComment}" autoResize="false" style="height:260px; width:450px"/>
+                            <p:commandButton id="editCommen" action="#{commentsController.editComment()}" icon="ui-icon-disk" value="Actualizar"/> 
+                        </h:panelGrid>            
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Agregar comentario sobre análisis bioinformático" widgetVar="CommentBADialog" modal="true" resizable="true" width="500" height="320" >
+                    <p:outputPanel id="CommentBADetail" style="text-align:center;">
+                        <h:panelGrid columns="1" width="470">                       
+                            <p:inputTextarea  value="#{commentsController.commentBA}" autoResize="false" style="height:260px; width:450px"/>
+                            <p:commandButton action="#{commentsController.createCommentBA()}" icon="ui-icon-disk" value="Guardar"/> 
+                        </h:panelGrid>            
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Editar comentario sobre análisis bioinformático" widgetVar="EditCommentBADialog" modal="true" resizable="true" width="500" height="320" >
+                    <p:outputPanel id="opEditCommentBA" style="text-align:center;">
+                        <h:panelGrid  columns="1" width="470">                       
+                            <p:inputTextarea value="#{commentsController.commentEditBA}" autoResize="false" style="height:260px; width:450px"/>
+                            <p:commandButton action="#{commentsController.editCommentBA()}" icon="ui-icon-disk" value="Actualizar"/> 
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <br />
+                <p:dataTable value="#{userRoleController.mylistUsersProject()}" var="itemUP" style="border:solid 1px;  border-color: transparent"  
+                             reflow="true" resizableColumns="true" disabledTextSelection="false">
+
+
+                    <f:facet name="header">
+                        Colaboradores en el proyecto
+                    </f:facet>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombre de usuario"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.userName}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombre"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.firstName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellido Paterno"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.PLastName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellido Materno"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.MLastName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Email"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.email}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Teléfono"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.phoneNumber}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dependencia"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.dependencyName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Rol del usuario en el proyecto"/>
+                        </f:facet>
+                        <h:outputText value="#{itemUP.role}"/>
+                    </p:column>
+
+
+                </p:dataTable>
+
+
+
+
+
+                <br />
+                <p:accordionPanel widgetVar="accordionArchivosAsociados">
+                    <p:tab title="Archivos asociados al proyecto" titleStyle="font-size: large;font-family: 'politica'" >
+                        <h:panelGrid columns="1" cellpadding="0">
+                            <p:outputLabel value="Suba algún archivo referente a su proyecto en formato .pdf (cotizaciones, gel de agarosa, comprobantes de pago, etc)"  style="font-size: medium"  />
+                            <p:dataTable id="FilesTable" value="#{filesProController.items}" var="item" emptyMessage="Aún no se agregan archivos al proyecto" style="border:solid 1px;  border-color: transparent; font-family: 'politica'; font-size: large;"  reflow="true">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nombre del archivo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.fileName}"/>
+                                </p:column>
+                                <p:column width="150">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Nombre de usuario quien subió el archivo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.uploader}"/>
+                                </p:column>
+                                <p:column width="150">
+                                    <f:facet name="header">
+                                        <h:outputText value="Fecha en la que se subió"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.fileDate}">
+                                        <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column width="150">
+                                    <f:facet name="header">
+                                        <h:outputText value="Tipo de archivo"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.fileType}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Comentario"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.comment}"/>
+                                </p:column>
+                                <p:column width="150">
+                                    <f:facet name="header">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                    <a href="#{filesProController.getLinkCompleteFile(item.path)}" target="_blank">Ver archivo</a>
+                                </p:column>
+                                <p:column>
+
+                                    <p:commandButton value="Eliminar archivo" icon="ui-icon-circle-close" widgetVar="DeleteFileDialog" action="#{filesProController.deleteFile(item.idFile)}" update="FilesTable">
+                                        <p:confirm header="Eliminar archivo" 
+                                                   message="¿Esta seguro que desea Eliminar éste archivo?" icon="ui-icon-alert" >
+
+                                        </p:confirm>
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <p:dialog header="Info." widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="40" style="font-family: 'politica'; font-size: large">
+                                <h:outputText value="El archivo ha sido borrado." />
+                            </p:dialog>
+                            <p:dialog header="Info." widgetVar="dlg4" showEffect="explode" hideEffect="bounce" height="40" style="font-family: 'politica'; font-size: large">
+                                <h:outputText value="Ocurrio un error, intentelo mas tarde" />
+                            </p:dialog>
+                            <br/>
+                            <p:commandButton value="Nuevo Archivo" oncomplete="PF('fileDialog').show()"  style="font-family: 'politica'; font-size: large"/>
+                        </h:panelGrid>
+                    </p:tab>
+
+                    <br/>
+                </p:accordionPanel> 
+                <br />
+                <p:dialog header="Agregar archivo al proyecto" widgetVar="fileDialog" modal="true" resizable="false">
+
+                    <p:outputLabel value="Suba algún archivo referente a su proyecto en formato .pdf, .jpg o .png (cotizaciones, gel de agarosa, comprobantes de pago, etc)"  style="font-size: medium"  />
+
+
+                    <h:panelGrid columns="1">
+
+                        <p:fileUpload fileUploadListener="#{filesProController.uploadFile}"  mode="advanced" dragDropSupport="false" 
+                                      invalidFileMessage="Archivo inválido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+                                      fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+                                      auto="true"   />
+                        <p:growl id="messages" showDetail="true" />
+                        <p:outputLabel value="Tipo de documento:" for="tipo"/>
+                        <p:selectOneRadio id="tipo" value="#{filesProController.upladed.fileType}" >
+                            <f:selectItem itemLabel="Cotización" itemValue="Cotizacion" />
+                            <f:selectItem itemLabel="Comprobante de pago" itemValue="Pago" />
+                            <f:selectItem itemLabel="Otro" itemValue="Otro" />
+                        </p:selectOneRadio>
+
+                        <p:outputLabel value="Descripción y/o comentarios adicionales:" for="comentario"/>
+                        <p:inputTextarea id="comentario" value="#{filesProController.upladed.comment}" placeholder="Describa su documento aqui..." style="width: 800px"  />
+
+                    </h:panelGrid>
+
+                    <p:outputPanel id="fileDetail" style="text-align:center;">
+
+                        <p:commandButton  id="createFile" ajax="true"  actionListener="#{filesProController.create()}" update="form" value="Agregar archivo"></p:commandButton>  
+
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Documento #{filesProController.selected.getFileName()}" widgetVar="fileViewDialog" modal="true" resizable="false">
+
+
+                    <object type="application/pdf" data="#{filesProController.selected.getPath()}" width="700px" height="500px">
+                        El navegador no puede mostrar el archivo, <a href="#{filesProController.selected.getPath()}">click aqui</a> para descargar el archivo.
+                    </object>
+
+                </p:dialog>
+
+                <p:accordionPanel widgetVar="accordionMuestrasAsociadas">
+                    <p:tab title="Muestras asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" > 
+                        <p:dataTable id="tbl" value="#{sampleController.listSample}" var="item"  widgetVar="table" emptyMessage="No hay muestras registradas en este proyecto" 
+                                     style="border:solid 1px;  border-color: transparent" scrollable="#{sampleController.itemsProj.size()>14}" scrollHeight="350" resizableColumns="true" 
+                                     rowKey="#{item.idSample}" selection="#{sampleController.sampleTable}"  editable="true" editMode="cell"
+                                     disabledTextSelection="false">
+                            <f:facet name="header">
+
+                                <p:outputPanel>
+                                    <p:spacer width="400" height="10"/>
+                                    <h:outputText value="Búsqueda rápida:" />
+                                    <p:inputText id="globalFilter" onkeyup="PF('table').filter()" style="width:150px" placeholder="Buscar"/>
+                                    <p:spacer width="300" height="10"/>
+                                    <p:commandButton  value="Actualizar muestras" icon="ui-icon-refresh" oncomplete="PF('UpdateSamDialog').show()"/>
+                                </p:outputPanel>
+
+                            </f:facet>
+                            <p:ajax event="cellEdit" listener="#{sampleController.updateManySamplesView()}" update=":form"  />
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="5" style="border-color: transparent">
+
+                                    <p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="#{projectController.redirectSampleList()}" disabled="#{projectController.checkEstatusProj()}">
+                                        <f:actionListener binding="#{sampleController.resetSelectionSampleTable()}"/>
+                                    </p:commandButton>
+
+                                    <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Genera QC Mat.Genético" action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'docx')}" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" ajax="false"/>
+                                    Total de muestras: #{sampleController.itemsProj.size()}
+                                    <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Subir QC Mat.Genético" oncomplete="PF('SampleQCDialog').show()" disabled="#{projectController.checkEstatusProj()}" rendered="#{sampleController.canEdit()}" />
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Registrar muestra(s) para este proyecto" action="#{sampleController.redirectCreateSample()}" disabled="#{projectController.checkEstatusProj()}">
+                                        <f:actionListener binding="#{commentsController.cleanStringComment()}"/>
+                                    </p:commandButton>
+
+                                </h:panelGrid>
+
+                            </f:facet>
+
+                            <p:column  width="100" filterBy="#{item.idSample}" filterMatchMode="contains">
+
+                                <f:facet name="header">
+                                    <p:outputLabel value="ID de la muestra"/>
+                                </f:facet>
+                                <h:outputText value="#{item.idSample}"
+                                              style="#{commentsController.hasCommentsByType(item) ? 'color: white; background-color: blue;' : ''}" />
+                            </p:column>
+
+                            <p:column  width="200" filterMatchMode="contains" filterBy="#{item.sampleName}" >
+
+
+                                <f:facet name="header">
+                                    <p:outputLabel value="Nombre de la muestra"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sampleName}"/>
+                            </p:column>
+
+
+                            <p:column width="150" filterMatchMode="contains" filterBy="#{item.idTube}" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Etiqueta del tubo" />
+                                </f:facet>
+                                <h:outputText value="#{item.idTube}"/>
+                            </p:column>
+
+                            <p:column width="95" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Tipo de muestra"/>
+                                </f:facet>
+                                <h:outputText value="#{item.type}"/>
+                            </p:column>
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Depleción rRNA?" />
+                                </f:facet>
+                                <h:outputText value="#{item.deplesion}"/>
+                            </p:column>
+
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header"> 
+                                    <p:outputLabel value="¿Sólo extracción?" />
+                                </f:facet>
+                                <h:outputText value="#{item.just_genextrac}"/>
+                            </p:column>
+
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Sólo Análisis Cal.?" />
+                                </f:facet>  
+                                <h:outputText value="#{item.just_qanalysis}"/>
+                            </p:column>
+
+                            <p:column width="140" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Sólo Const. biblioteca?" />
+                                </f:facet>
+                                <h:outputText value="#{item.just_lib}"/>
+                            </p:column>
+
+                            <p:column width="130" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Sólo secuenciación?" />
+                                </f:facet>
+                                <h:outputText value="#{item.just_seq}"/>
+                            </p:column>
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel  value="¿Requiere extrac genética?" />
+                                </f:facet>
+                                <h:outputText value="#{item.geneticExtraction}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Requiere cons.biblioteca?" />
+                                </f:facet>
+                                <h:outputText value="#{item.build_lib}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="¿Requiere secuenciación?" />
+                                </f:facet>
+                                <h:outputText value="#{item.do_seq}"/>
+                            </p:column>
+
+                            <p:column width="115" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Tipo de organismo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.organism_type}"/>
+                            </p:column>  
+
+
+                            <p:column width="130" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Organismo fuente"/>
+                                </f:facet>
+                                <h:outputText value="#{item.organismName}"/>
+                            </p:column>
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Organismo de referencia"/>
+                                </f:facet>
+                                <h:outputText value="#{item.referenceName}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Posible contaminante"/>
+                                </f:facet>
+                                <h:outputText value="#{item.contaminantName}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Descripción"/>
+                                </f:facet>
+                                <h:outputText value="#{item.description}"/>
+                            </p:column>
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Cantidad de muestra (ng)"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sampleQuantity}"/>
+                            </p:column>
+                            <p:column width="100" exportable="false"> 
+                                <f:facet name="header">
+                                    <p:outputLabel value="Volumen (μL)"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sampleVolume}"/>
+                            </p:column>
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+
+                                    <p:outputLabel value="Concentración UUSMB (ng/μL)"/>
+                                </f:facet>
+                                <h:outputText value="#{item.labConcen}"/>
+                            </p:column>
+                            <p:column width="150" exportable="false"> 
+                                <f:facet name="header">
+                                    <p:outputLabel value="Volumen UUSMB (μL)"/>
+                                </f:facet>
+                                <h:outputText value="#{item.labVolume}"/>
+                            </p:column>
+
+
+                            <p:column width="140" exportable="false"> 
+                                <f:facet name="header">
+                                    <p:outputLabel value="Concentración total(ng)"/>
+                                </f:facet>
+
+                                <h:outputText value="#{(item.labVolume * item.labConcen)}" >
+                                    <f:convertNumber minFractionDigits="2" />
+                                </h:outputText>
+
+
+                            </p:column>
+
+
+                            <p:column width="150" filterBy="#{item.sampleQuality}" filterMatchMode="equals" headerText="Calidad" exportable="false">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('table').filter()">
+                                        <f:selectItem itemLabel="Todos" itemValue="" />
+                                        <f:selectItem itemLabel="Aún no determinada" itemValue="Aun no determinada" />
+                                        <f:selectItem itemLabel="Buena/Aceptable" itemValue="Buena/Aceptable" />
+                                        <f:selectItem itemLabel="Buena/Poco volumen" itemValue="Buena/Poco volumen" />
+                                        <f:selectItem itemLabel="Baja concentración" itemValue="Baja concentración" />
+                                        <f:selectItem itemLabel="Parcialmente Degradada" itemValue="Parcialmente Degradada" />
+                                        <f:selectItem itemLabel="Degradada" itemValue="Degradada" />
+                                        <f:selectItem itemLabel="Sin material genético" itemValue="Sin material genético" />
+                                        <f:selectItem itemLabel="No aplica" itemValue="No aplica" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{item.sampleQuality}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <h:outputLink id="content" value="#">
+                                        <p:commandButton value="Estatus"  onclick="PF('DescriptionStat').show();"/>
+                                    </h:outputLink>
+                                    <p:dialog header="Descripción de los estatus de las muestras" widgetVar="DescriptionStat" showEffect="explode" closable="true" width="1100" height="500" position="center">
+
+                                        <p:panelGrid columns="2" >
+                                            <f:facet name="header">
+                                                <p:outputLabel value="Descripción de estatus"/>
+                                            </f:facet>
+                                            <p:column width="10">
+                                                <p:outputLabel value="Registrada" style="text-align: center"/>  
+                                            </p:column>
+                                            <p:outputLabel value="La muestra ha sido registrada en el sistema." /> 
+
+
+                                            <p:outputLabel value="Recibida" style="text-align: center"/>  
+                                            <p:outputLabel value="La unidad recibió la muestra." />  
+
+                                            <p:outputLabel value="Entrega solo extración de material genético" style="text-align: center"/>  
+                                            <p:outputLabel value="Se entrego al usuario solo la extraccion" />  
+
+                                            <p:outputLabel value="Entrega solo análisis de calidad" style="text-align: center"/>  
+                                            <p:outputLabel value="Se entrego al usuario solo el analisis de calidad" />  
+
+
+                                            <p:outputLabel value="En análisis de calidad" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra está siendo analizada en cuanto a calidad" />  
+                                                <p:outputLabel value="y concentración total del material genético." />  
+                                            </h:panelGrid>
+
+
+                                            <p:outputLabel value="En espera de instrucciones del usuario" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra está en espera, mientras el usuario comunica si desea continuar" />  
+                                                <p:outputLabel value="realizará remplazo o rechazará las muestras para su procesamiento." />  
+                                            </h:panelGrid>
+
+                                            <!--
+                                            En espera de instrucciones por parte del usuario
+                                            
+                                            La muestra está en espera, mientras el usuario comunica si desea continuar, realizara remplazo o rechazará las muestras para su procesamiento.
+                                            -->
+                                            <!--
+                                            <p:outputLabel value="Calidad Aceptada" style="text-align: center"/>
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra cumple con los requerimientos de concentración" style="text-align: center"/>
+                                                <p:outputLabel value="y relaciones de absorbancia." style="text-align: center"/>
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Calidad Rechazada" style="text-align: center"/>
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra no cumple con los requerimientos de concentración" style="text-align: center"/>
+                                                <p:outputLabel value="y/o relaciones de absorbancia" style="text-align: center"/>
+                                            </h:panelGrid>-->
+
+                                            <p:outputLabel value="En construcción de biblioteca" style="text-align: center"/>  
+                                            <p:outputLabel value="La muestra está siendo procesada para su secuenciación." />  
+
+                                            <p:outputLabel value="Entrega solo const. biblioteca" style="text-align: center"/>
+                                            <p:outputLabel value="Se entrego al usuario solo la construccion de biblioteca " style="text-align: center"/>
+
+                                            <p:outputLabel value="Biblioteca entregada" style="text-align: center"/>
+                                            <h:panelGrid columns="1" style="padding-left: 0px" styleClass="innerpanelgrid">
+                                                <p:outputLabel value="La biblioteca correspondiente a la muestra ha sido construida " style="text-align: center"/> 
+                                                <p:outputLabel value="y entregada al usuario" style="text-align: center"/> 
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Construcción ineficiente" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px" >
+                                                <p:outputLabel value="Hubo problemas con la preparación de la biblioteca." />   
+                                                <p:outputLabel value="Para más información póngase en contacto con la UUSMB." />  
+                                            </h:panelGrid>
+
+                                            <p:outputLabel value="En espera de secuenciación" style="text-align: center"/>  
+                                            <p:outputLabel value="La muestra está en fila para ser secuenciada." />  
+
+                                            <p:outputLabel value="Secuenciándose" style="text-align: center"/>
+                                            <p:outputLabel value="La muestra se encuentra en el procesó de secuenciación " style="text-align: center"/>
+
+                                            <p:outputLabel value="Secuenciada" style="text-align: center"/>  
+                                            <p:outputLabel value="La muestra ha sido secuenciada y se logró el rendimiento solicitado." />  
+
+                                            <p:outputLabel value="Para resecuenciar" style="text-align: center" /> 
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra fue secuenciada pero no alcanzó el rendimiento " />  
+                                                <p:outputLabel value="esperado, por lo que se volverá a secuenciar." />  
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Rechazada (forsake)" style="text-align: center"/>
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="Muestra dada de baja a petición del usuario ya sea por duplicidad en" />
+                                                <p:outputLabel value="el registro o para no realizar el servicio ya que no cumple las condiciones de calidad." />  
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Basecalling Y QC en proceso" style="text-align: center"/>
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="El proceso de secuenciación ha concluido y se esta llevando a cabo" style="text-align: center"/>
+                                                <p:outputLabel value="los análisis de calidad de las secuencias." style="text-align: center"/>
+                                            </h:panelGrid>
+                                            <p:outputLabel value="Basecalling y QC terminado" style="text-align: center"/> 
+                                            <p:outputLabel value="El llamado de bases y análisis de calidad ha concluido" style="text-align: center"/> 
+
+                                            <p:outputLabel value="Entregado fastq" style="text-align: center"/>  
+                                            <p:outputLabel value="Los archivos fastq fueron entregados al usuario." />  
+
+                                            <p:outputLabel value="En Análisis Bioinformático" style="text-align: center"/>  
+                                            <p:outputLabel value="Los datos fastq se encuentran en proceso de análisis." />  
+
+                                            <p:outputLabel value="Análisis Bioinformático Entregado" style="text-align: center"/>  
+                                            <p:outputLabel value="El análisis bioinformático fue entregado con éxito." />  
+
+                                        </p:panelGrid>
+
+                                    </p:dialog>
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{item.status}"/></f:facet>
+                                    <f:facet name="input"><p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{sampleController.samStat}" style="width:125px">
+                                            <f:selectItem itemLabel="---" itemValue="---" />
+                                            <f:selectItem itemLabel="Recibida" itemValue="Recibida" />                                           
+                                            <f:selectItem itemLabel="Entrega solo extración de material genético" itemValue="Entrega solo extraccion" />
+                                            <f:selectItem itemLabel="Entrega solo análisis de calidad" itemValue="Entrega solo analisis de calidad" />
+                                            <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
+                                            <f:selectItem itemLabel="En espera de instrucciones del usuario" itemValue="En espera de instrucciones del usuario" />
+                                            <f:selectItem itemLabel="En construcción de biblioteca" itemValue="En construccion de biblioteca" />
+                                            <f:selectItem itemLabel="Entrega solo const. biblioteca" itemValue="Entrega solo const. biblioteca" />
+                                            <f:selectItem itemLabel="Biblioteca entregada" itemValue="Biblioteca entregada" />
+                                            <f:selectItem itemLabel="Construcción ineficiente" itemValue="Construccion ineficiente" />
+                                            <f:selectItem itemLabel="En espera para secuenciación" itemValue="En espera para secuenciacion" />
+                                            <f:selectItem itemLabel="Secuenciándose" itemValue="Secuenciandose" />
+                                            <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                            <f:selectItem itemLabel="Basecalling y QC en proceso" itemValue="Basecalling y QC en proceso" />
+                                            <f:selectItem itemLabel="Basecalling y QC terminado" itemValue="Basecalling y QC terminado" />
+                                            <f:selectItem itemLabel="Para resecuenciar" itemValue="Para resecuenciar" />
+                                            <f:selectItem itemLabel="Rechazada (Forsake)" itemValue="Rechazada (Forsake)" />
+                                            <f:selectItem itemLabel="Entregado fastq" itemValue="Entregado fastq" />
+                                            <f:selectItem itemLabel="En Análisis Bioinformático" itemValue="En Analisis Bioinformatico" />
+                                            <f:selectItem itemLabel="Análisis Bioinformático Entregado" itemValue="Analisis Bioinformatico Entregado" />                                      
+
+                                        </p:selectOneMenu></f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <h:outputLink id="content2" value="#">
+                                        <h:outputText value="Aceptacion" style="color: blue; text-decoration: underline" />
+                                    </h:outputLink>
+                                    <p:tooltip id="toolTipContent2" for="content2"  position="bottom">
+                                        <p:panelGrid columns="2" >
+                                            <f:facet name="header">
+                                                <p:outputLabel value="Descripción"/>
+                                            </f:facet>
+                                            <p:outputLabel value="Aceptada" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra cuenta con una concentración y volumen adecuados" />  
+                                                <p:outputLabel value="por lo que se procedera a su secuenciación." />                                       
+                                            </h:panelGrid>
+
+                                            <p:outputLabel value="Condicionada" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="Aunque la muestra cuenta con un grado de degradación o con poco volumen," />  
+                                                <p:outputLabel value="el usuario accedió a que se procediera con la secuenciación." />                                       
+                                            </h:panelGrid>
+
+                                            <p:outputLabel value="Rechazada" style="text-align: center"/>  
+                                            <h:panelGrid columns="1" style="padding-left: 0px">
+                                                <p:outputLabel value="La muestra cuenta con un grado de degradación o con poco volumen" />  
+                                                <p:outputLabel value="y el usuario no esta de acuerdo con que se lleve a cabo la secuenciación." />                                       
+                                            </h:panelGrid>
+
+                                        </p:panelGrid>
+                                    </p:tooltip>
+                                </f:facet>
+                                <h:outputText value="#{item.aceptation}"/>
+                            </p:column>
+
+
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Medio de entrega"/>
+                                </f:facet>
+                                <h:outputText value="#{item.delivery}"/>
+                            </p:column>
+
+                            <p:column width="130" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Tipo de aplicación"/>
+                                </f:facet>
+                                <h:outputText value="#{item.app_type}"/>
+                            </p:column>  
+
+                            <p:column width="160" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Plataforma(s)"/>
+                                </f:facet>
+                                <h:outputText value="#{item.samplePlataform}"/>
+                            </p:column>
+
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Illumina: Rendimiento solicitado en millones de lecturas"/>
+                                </f:facet>
+                                <h:outputText value="#{item.expectedPerformance}"/>
+                            </p:column>
+
+                            <p:column width="150" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Oxford: Rendimiento solicitado en millones de bases"/>
+                                </f:facet>
+                                <h:outputText value="#{item.expectedPerformanceOxford}"/>
+                            </p:column>
+
+
+                            <!--  
+                            <p:column width="150" exportable="false">
+                                      <f:facet name="header">
+                                          <p:outputLabel value="Tamaño de inserto"/>
+                                      </f:facet>
+                                      <h:outputText value="{item.insertSize}"/>
+                                  </p:column>
+                            -->
+
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Tamaño de lectura"/>
+                                </f:facet>
+                                <h:outputText value="#{item.readSize}"/>
+                            </p:column>
+
+
+
+                            <p:column width="120" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Fecha de recepción"/>
+                                </f:facet>
+                                <h:outputText value="#{item.receptionDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+
+                            </p:column>
+                            <p:column width="120" exportable="false">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Fecha de entrega"/>
+                                </f:facet>
+                                <h:outputText value="#{item.deliveryDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+
+                            </p:column>
+
+
+                            <p:column width="110" exportable="false">
+                                <f:facet name="header">
+                                    <h:outputText value="&nbsp;"/>
+                                </f:facet>
+                                <h:outputText value=" "/>
+                                <p:commandButton id="dialog" oncomplete="PF('sampleDialog').show()" value="Más info" update="form" icon="ui-icon-note" >
+
+                                    <p:ajax listener="#{genomeSampleController.asignaMuestra(item)}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:tab>  
+                </p:accordionPanel>
+                <br />
+
+                <p:accordionPanel widgetVar="accordionBibliotecasAsociadas">
+                    <p:tab title="Bibliotecas asociadas al proyecto" titleStyle="font-size: large;font-family: 'politica'" >   
+                        <!--quite estas opciones del datatbale paginator="true" rows="20" para que fuera el scrollbar -->
+                        <p:dataTable id="tblLibs"  value="#{libraryController.getLibsByProject()}" var="item" reflow="true"  sortMode="multiple"
+                                     style="border:solid 1px;  border-color: transparent" scrollable="#{libraryController.getLibsByProject().size()>14}" scrollHeight="350" resizableColumns="true" 
+                                     selection="#{libraryController.selectedLibraries}" rowKey="#{item.idLibrary}" >
+                            <f:facet name="header">
+
+                                Bibliotecas
+
+                            </f:facet>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="1" style="border-color: transparent">
+                                    Total de bibliotecas #{libraryController.getLibsByProject().size()}
+                                    <br/> El simbolo � en la Columna Concent.Nanomolar aparece cuando no se han registrado valores en las concentraciones. 
+                                    <br/> Una vez registrado la concent. Qubit y el tamaño de la biblioteca se hará el cálculo correspondiente
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" style="border-color: transparent">
+                                    <!--<p:commandButton icon="ui-icon-pencil" value="Ver más opciones" action="{projectController.redirectLibList()}" disabled="{projectController.checkEstatusProj()}"></p:commandButton>-->
+                                    <p:commandButton rendered="#{sampleController.canEdit()}" id="libdialog" oncomplete="PF('libDialog').show()" value="Actualizar varias bibliotecas" update="form" icon="ui-icon-note" disabled="#{projectController.checkEstatusProj()}"/>
+                                </h:panelGrid>
+                            </f:facet>
+
+
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center" exportable="false"/>
+
+                            <p:column width="100" headerText="Id muestra" exportable="false">
+                                <h:outputText value="#{libraryController.getIdSample(item)}"/>                                                                 
+                            </p:column> 
+
+                            <p:column headerText="Id biblioteca" width="110" >
+
+                                <h:outputText value="#{item.idLibrary}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre de biblioteca" width="250" >   
+                                <h:outputText value="#{libraryController.deleteUserFromNameSample(item.libraryName)}"/>   
+                            </p:column>
+
+                            <p:column width="150" headerText="Plataforma" exportable="false">
+
+                                <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
+                            </p:column>
+
+
+                            <p:column width="150" headerText="Kit" exportable="false">
+
+                                <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
+                            </p:column>                           
+
+
+                            <p:column width="150" headerText="Tag 1">
+
+                                <h:outputText value="#{item.idBarcode1.indexName}-#{item.idBarcode1.basei7}"/>
+                            </p:column>
+
+                            <p:column width="150" headerText="Tag 2">
+
+                                <h:outputText value="#{libraryController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
+
+                            </p:column>
+
+                            <p:column width="130" headerText="Tamaño biblioteca" exportable="false">
+
+                                <h:outputText value="#{item.librarySize}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Concent. por qPCR">
+
+                                <h:outputText value="#{item.qpcrConcentration}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Concent. por Qubit">
+
+                                <h:outputText value="#{item.qubitConcentration}"/>
+                            </p:column>
+                            <p:column width="130" headerText="Concent. Nanomolar">
+
+                                <h:outputText value="#{(item.qubitConcentration/(660* item.librarySize))*1000000}">
+                                    <f:convertNumber  maxFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+
+                            <!--   <p:column width="75" headerText="Concent. Nanomolar" exportable="false">
+                               
+
+                                <h:outputText value="{item.nanomolarConcentration}"/>
+                            </p:column>-->
+
+                            <p:column width="110" headerText="Estatus" exportable="false">
+
+                                <h:outputText value="#{item.preparationStatus}"/>
+                            </p:column>
+                            <p:column width="110" headerText="Fecha Construcción" exportable="false" >
+
+                                <h:outputText value="#{item.preparationDate}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="150" headerText="Usuario quien registro" >
+
+                                <h:outputText value="#{item.userName}">
+
+                                </h:outputText>
+                            </p:column>
+
+
+
+
+                        </p:dataTable>
+                        <p:dialog id="UpdateSamples" widgetVar="UpdateSamDialog" modal="true" resizable="false" header="Editar muestras por rango" >
+                            <h:outputText value="muestras"/>
+                            <p:inputText  value="#{sampleController.edit}" size="30" placeholder="Ej:1-10,15,20,25"/> 
+                            <br/>
+                            <h:panelGrid columns="2" >
+                                <p:outputLabel rendered="#{sampleController.canEdit()}" value="Estatus de la muestra:" for="status" />
+                                <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="status" value="#{sampleController.samStat}" style="width:125px">
+                                    <f:selectItem itemLabel="---" itemValue="---" />
+                                    <f:selectItem itemLabel="Recibida" itemValue="Recibida" />
+                                    <f:selectItem itemLabel="En análisis de calidad" itemValue="En analisis de calidad" />
+                                    <f:selectItem itemLabel="En espera de instrucciones del usuario" itemValue="En espera de instrucciones del usuario" />
+                                    <f:selectItem itemLabel="En construcción de biblioteca" itemValue="En construccion de biblioteca" />
+                                    <f:selectItem itemLabel="Construcción ineficiente" itemValue="Construccion ineficiente" />
+                                    <f:selectItem itemLabel="En espera para secuenciación" itemValue="En espera para secuenciacion" />
+                                    <f:selectItem itemLabel="Secuenciada" itemValue="Secuenciada" />
+                                    <f:selectItem itemLabel="Para resecuenciar" itemValue="Para resecuenciar" />
+                                    <f:selectItem itemLabel="Rechazada (Forsake)" itemValue="Rechazada (Forsake)" />
+                                    <f:selectItem itemLabel="Entregado fastq" itemValue="Entregado fastq" />
+                                    <f:selectItem itemLabel="En Análisis Bioinformático" itemValue="En Analisis Bioinformatico" />
+                                    <f:selectItem itemLabel="Análisis Bioinformático Entregado" itemValue="Analisis Bioinformatico Entregado" />
+
+                                </p:selectOneMenu>
+
+                                <p:outputLabel rendered="#{sampleController.canEdit()}" value="Aceptacion de la muestra:" for="status" />
+                                <p:selectOneMenu rendered="#{sampleController.canEdit()}" id="acept" value="#{sampleController.acept}" style="width:125px">
+                                    <f:selectItem itemLabel="---" itemValue="---" />
+                                    <f:selectItem itemLabel="Aceptada" itemValue="Aceptada" />
+                                    <f:selectItem itemLabel="Condicionada" itemValue="Condicionada" />
+                                    <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <p:commandButton value="Actualizar" icon="ui-icon-disk" action="#{sampleController.updateSampleByRange()}" update="form"/>
+                        </p:dialog>
+
+
+                    </p:tab>  
+                </p:accordionPanel>
+
+                <p> </p>
+
+
+                <p:accordionPanel  id="accordionResults">
+                    <p:tab id="tabEntregaResultados" title="Entrega de reportes de resultados" titleStyle="font-size: large;font-family: 'politica'">
+                        <p:dataTable id="results" value="#{projectController.findRunbyProject()}" var="run"  
+                                     style="border:solid 1px;  border-color: transparent" scrollHeight="350" resizableColumns="true" 
+                                     rowKey="#{run}"  selection="#{projectController.runs}"
+                                     disabledTextSelection="false" emptyMessage="Aun no hay entrega de resultados asociados a este proyecto.">
+                            <p:ajax event="rowSelect" update="runsFooter" />
+                            <p:ajax event="rowUnselect" update="runsFooter" />
+                            <f:facet name="header"> Reportes de resultados </f:facet>
+                            <f:facet name="footer">
+
+                                <h:panelGrid columns="3" style="border-color: transparent">
+                                    <p:commandButton icon="ui-icon-circle-plus" id="runsFooter" ajax="false" action="#{reportProjectController.createReportWordFastQC(sampleController, projectController, reportProjectController)}" value="Genera reporte secuenciación" rendered="#{sampleController.canEdit()}" disabled="#{projectController.runsEmpty}"/>
+                                    <p:commandButton icon="ui-icon-circle-plus" oncomplete="PF('FastQCDialog').show()" value="Subir reporte de secuenciación" disabled="#{reportProjectController.validateBtnRegistrarReporteFastQC(projectController)}" rendered="#{sampleController.canEdit()}"/>
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Actualizar"  action="#{projectController.actualizar()}"  rendered="#{sampleController.canEdit()}" ajax="true" update="form:accordionResults:results"/>
+                                    <!--<p:commandButton icon="ui-icon-circle-plus" value="Subir reporte bioinformático"  oncomplete="PF('BRDialog').show()"  rendered="#{sampleController.canEdit()}"/> -->
+                                </h:panelGrid>
+
+                            </f:facet>
+
+                            <p:column selectionMode="multiple" style="width:7px;text-align:center"/>
+                            <p:column width="45" headerText="Corrida" >
+                                <h:outputText value="#{run}" />
+                            </p:column>
+                            <!-- leslie: comente esto porque no es necesario ver la biblioteca asociada
+                        <p:column width="75" headerText="Bibliotecas Asociadas" >
+                            <p:commandButton value="Bibliotecas" icon="ui-icon-disk" oncomplete="PF('LibsDialog').show()" action="#{libraryController.setRunNameSelected(run)}" update="form:Librerias"/>
+                            
+                        </p:column>-->
+
+                            <p:column width="60" headerText="Reporte de calidad de las muestras" >
+
+                                <p:commandButton icon="ui-icon-circle-plus"
+                                                 value="Ver calidad de las muestras"
+                                                 action="#{reportProjectController.createReportWordSampleQC(sampleController, projectController.selectedProject, 'pdf')}"
+                                                 ajax="false"
+                                                 disabled="#{!reportProjectController.reportProjectControllerEx(sampleController)}" />
+
+                            </p:column>
+                            <p:column width="90" headerText="Reporte de calidad de secuenciación" >
+
+                                <p:commandButton icon="ui-icon-circle-plus" value="Ver reporte de secuenciación" action="#{reportProjectController.verReportPDFFastQC(projectController.selectedProject, run)}" disabled="#{reportProjectController.validateBtnReportPDFFastQC(projectController.selectedProject, run)}" ajax="false"/>
+                                <p:button icon="ui-icon-circle-plus" value="Ver FastQC.html" href="#{libraryController.getQualityReportLink0(run)}" disabled="#{String.valueOf(libraryController.qualityReportByRunName(runName).isEmpty())}"/>
+
+
+                            </p:column>
+
+                            <!-- Leslie comienza comment07/08/24
+                         <p:column width="95" headerText="Descarga de reportes bioinformáticos" > -->
+                            <!---<p:commandButton icon="ui-icon-circle-plus" value="Descarga último an." ajax="false" action="{reportProjectController.downloadReportsFinal(projectController.selectedProject.idProject, run)}" rendered="{reportProjectController.renderedBtnDescargarReporteFinal(projectController.selectedProject.idProject, run)}"/>-->
+                          <!--  <p:commandButton icon="ui-icon-circle-plus" value="Ver análisis bioinformáticos"  oncomplete="PF('viewBRDialog').show()" disabled="#{reportProjectController.validateBtnLista(projectController.selectedProject.idProject, run)}" rendered="#{sampleController.canEdit()}"/>
+                            <p:dialog header="Reporte(s) Bioinformático(s)" widgetVar="viewBRDialog" modal="true" resizable="false">
+                                <p:dataTable id="BioInfoReports" value="#{reportProjectController.list_ReportProject(projectController.selectedProject.idProject, run)}" var="Br" style="border:solid 1px;  border-color: transparent"  resizableColumns="true"
+                                                 reflow="true" emptyMessage="">
+
+                                    <p:column width="45" headerText="Propietario" >
+                                        <h:outputText value="#{Br.idUser.fullName}" />
+                                    </p:column>
+                                    <p:column width="80" headerText="Path Work/Liga de descarga" >
+                                        <h:outputLink value="#{Br.linkauthorizePDF}" target="_blank" >
+                                            <h:outputText value="#{Br.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
+                                        </h:outputLink>
+
+                                    </p:column>
+                                    <p:column width="50" headerText="Fecha de creación" >
+                                        <h:outputText value="#{Br.dateCreate}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column width="65" headerText="Descripción" >
+                                        <h:outputText value="#{Br.name}" />
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:dialog>
+                        </p:column>-->
+
+                        </p:dataTable>
+
+
+
+
+                        <p></p>
+
+                        <!-- Leslie inicio reportes sin corridas -->                                           
+                        <p:dataTable id="tbinfo" value="#{reportProjectController.ReportsProjectByIdProject(projectController.selectedProject.idProject)}" var="TBinfo"  
+                                     style="border:solid 1px;  border-color: transparent" scrollHeight="350" resizableColumns="true" 
+                                     disabledTextSelection="false" emptyMessage="Aun no hay entrega de resultados asociados a este proyecto.">
+                            <f:facet name="header"> Reportes bioinformaticos  </f:facet>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="3" style="border-color: transparent">
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Subir reporte bioinformático al proyecto"  oncomplete="PF('BRDialog').show()"  rendered="#{sampleController.canEdit()}"/>
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Actualizar"  action="#{projectController.actualizar()}"  rendered="#{sampleController.canEdit()}" ajax="true" update="form:accordionResults:results"/>
+                                </h:panelGrid>
+                            </f:facet>                                                                 
+                            <p:column width="15" headerText="Fecha de creación" >
+                                <h:outputText value="#{TBinfo.dateCreate}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="40" headerText="Creador del reporte" >
+                                <h:outputText value="#{TBinfo.idUser.fullName}" />
+                            </p:column>
+                            <p:column width="45" headerText="Descripción" >
+                                <h:outputText value="#{TBinfo.name}" />
+                            </p:column>
+                            <p:column width="130" headerText="Liga del reporte " >
+                                <h:outputLink value="#{TBinfo.linkauthorizePDF}" target="_blank" >
+                                    <h:outputText value="#{TBinfo.pathauthorizePDF}" style="font-size: 12px; text-align: right" />
+                                </h:outputLink>
+                            </p:column>
+
+                        </p:dataTable>
+                        <!-- Fin reportes sin corridas-->
+
+                    </p:tab>   
+
+                </p:accordionPanel>
+                <!-- leslie aqui redirecciona ancla-->
+                <p id="anclaresultado">.</p>
+
+
+                <p:dialog id="viewQRDialog" header="Reporte(s) de calidad" widgetVar="viewQRDialog" modal="true" resizable="false">
+                    <p:dataTable id="QualityReports" value="#{libraryController.qualityReportByRunName()}" var="Qr" style="border:solid 1px;  border-color: transparent"  
+                                 reflow="true" emptyMessage="">
+
+                        <p:column width="120" headerText="Link reporte de calidad" >
+                            <h:outputLink value="#{Qr.urlQualityReport}" target="_blank">
+                                <h:outputText value="#{Qr.urlQualityReport}" style="size:1px" />
+                            </h:outputLink>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:dialog>
+
+
+
+                <p:dialog id="Librerias" header="Bibliotecas" widgetVar="LibsDialog" modal="true" resizable="false">
+                    <p:dataTable id="libs" value="#{libraryController.librariesByRunName()}" var="libs"   
+                                 style="border:solid 1px;  border-color: transparent" scrollHeight="350" resizableColumns="true"  
+                                 disabledTextSelection="false" emptyMessage="">
+                        <p:column width="75" headerText="Nombre de biblioteca" >
+                            <h:outputText value="#{libs.libraryName}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:dialog>
+
+                <p:dialog header="Registro reporte(s) de calidad" widgetVar="QualityDialog" modal="true" resizable="false">
+
+                    <p:outputPanel  style="text-align:left;">
+                        <h:panelGrid columns="1">
+                            <p:outputLabel  value="Link reporte de calidad" />
+
+                            <p:inputText  value="#{projectController.url_Qr}" size="50" id="url" /> <br/>
+
+                            <p:commandButton   value="Guardar" action="#{projectController.createReport()}" icon="ui-icon-disk" update="accordionResults:results"/>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+
+                <p:dialog header="Registro reporte bioinformático y ligas de descarga" widgetVar="BRDialog" modal="true" resizable="false">
+                    <p:outputPanel  style="text-align:left;">
+                        <h:panelGrid columns="1">
+                            <!--p:outputLabel value="Path work/Liga de descarga" />
+                            <p:inputText  value="#{projectController.pathWork}" size="50" /> <br/-->
+                            <p:outputLabel value="Archivo pdf" />
+                            <p:fileUpload fileUploadListener="#{projectController.uploadFile}"  mode="advanced" dragDropSupport="false" 
+                                          invalidFileMessage="Archivo invalido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+                                          fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+                                          auto="true" allowTypes="/(\.|\/)(pdf|jpe?g|png)|$/"  />
+                            <h:outputLabel value="Análisis Bioinformático" /><br/>
+                            <p:selectOneMenu id="AnBioinfo" value="#{projectController.analysis}"
+                                             effect="fade"  filter="true">
+
+                                <f:selectItem itemLabel="#{reportProjectController.projects_label('Análisis de expresión diferencial', 6)}" itemValue="6" />
+                                <!--f:selectItem itemLabel="#{reportProjectController.projects_label('Resecuenciación de genomas', 7)}" itemValue="7" /-->
+                                <f:selectItem itemLabel="#{reportProjectController.projects_label('Variantes Genéticas', 8)}" itemValue="8" />
+                                <f:selectItem itemLabel="#{reportProjectController.projects_label('Metagenomas', 9)}" itemValue="9" />
+                                <f:selectItem itemLabel="#{reportProjectController.projects_label('Ensamblado de novo', 10)}" itemValue="10" />
+                                <f:selectItem itemLabel="#{reportProjectController.projects_label('Análisis de expresion diferencial y Ensamblado de transcriptoma', 18)}" itemValue="18" />
+                            </p:selectOneMenu><br/>
+                            <!--h:outputLabel value="Descripción" />
+                            <h:inputTextarea value="#{projectController.description}"/-->
+                            <br/>
+
+                            <p:commandButton icon="ui-icon-circle-plus" value="Guardar" action="#{reportProjectController.bionInfoRep(projectController)}"  update="accordionResults:results" oncomplete="PF('BRDialog').hide()"/>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+
+
+
+                <p:dialog header="Registro reporte FastQC" widgetVar="FastQCDialog" modal="true" resizable="false">
+                    <p:outputPanel  style="text-align:left;">
+                        <h:panelGrid columns="1">
+                            <p:outputLabel value="Archivo pdf" />
+                            <p:fileUpload fileUploadListener="#{projectController.uploadFastQC}"  mode="advanced" dragDropSupport="false" 
+                                          invalidFileMessage="Archivo invalido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+                                          fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+                                          auto="true" allowTypes="/(\.|\/)(pdf|jpe?g|png)|$/" oncomplete="PF('FastQCDialog').hide()" />
+
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Registro reporte QC de muestras" widgetVar="SampleQCDialog" modal="true" resizable="false">
+                    <p:outputPanel  style="text-align:left;">
+                        <h:panelGrid columns="1">
+                            <p:outputLabel value="Archivo pdf" />
+                            <p:fileUpload fileUploadListener="#{projectController.uploadSampleQC}"  mode="advanced" dragDropSupport="false" 
+                                          invalidFileMessage="Archivo invalido, se requiere un archivo .pdf, .jpg o .png" label="Cargar archivo"
+                                          fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="messages"
+                                          auto="true" allowTypes="/(\.|\/)(pdf|jpe?g|png)|$/" oncomplete="PF('SampleQCDialog').hide()" />
+
+                            <p:commandButton icon="ui-icon-circle-plus" value="Guardar" action="#{projectController.guardarFastQC()}"  update="accordionResults:results"/>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <p:dialog header="Opciones" widgetVar="sampleDialog" modal="true" resizable="false">
+                    <p:panelGrid id="detail" columns="1" >
+
+                        <p:dataTable value="#{bioinformaticAnalysisController.getBioAn()}" var="item5" style="border:solid 1px;  border-color: transparent"  
+                                     reflow="true" emptyMessage="No hay análisis bioinformáticos asociados a ésta muestra">
+
+                            <f:facet name="header">
+                                Análisis bioinformáticos solicitados
+                            </f:facet>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Análisis"/>
+                                </f:facet>
+                                <h:outputText value="#{item5.analysisName}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:panelGrid>
+                    <p:dataTable   value="#{commentsController.getSamplesItemsL()}" scrollable="true" scrollHeight="250" var="item6"  style="border:solid 1px; border-color: transparent" reflow="true" emptyMessage="No se han hecho comentarios a esta muestra">
+
+
+                        <f:facet name="header">
+                            Comentarios
+                        </f:facet>
+
+                        <p:column width="100" >
+                            <f:facet name="header">
+                                <h:outputText value="Fecha"/>
+                            </f:facet>
+                            <h:outputText value="#{item6.commentDate}">
+                                <f:convertDateTime pattern="dd/MMM/yy '-' hh:mm aa" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column width="100">
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                            <h:outputText value="#{item6.userName}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Comentario"/>
+                            </f:facet>
+                            <h:outputText value="#{item6.comment}"/>
+                        </p:column>
+
+
+
+
+
+                    </p:dataTable>
+
+
+                </p:dialog>
+
+
+
+                <p:dialog header="Actualizar bibliotecas" widgetVar="libDialog" modal="true" resizable="false">
+                    <h:panelGrid columns="1" rendered="false">
+
+                        <p:dataTable id="tblLibs2" value="#{libraryController.getSelectedLibraries()}" var="item" reflow="true" 
+                                     rowKey="#{item.idLibrary}" >
+                            <f:facet name="header">
+
+                                Bibliotecas
+
+                            </f:facet>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="1" style="border-color: transparent">
+                                    Total de bibliotecas #{libraryController.getSelectedLibraries().size()}
+                                    <p:commandButton id="libdialog" oncomplete="PF('libDialog').show()" value="Actualizar bibliotecas" update="form" icon="ui-icon-note" />
+                                </h:panelGrid>
+
+                            </f:facet>
+
+                            <p:column headerText="Id_biblioteca" width="300" sortBy="#{item.idLibrary}">
+
+                                <h:outputText value="#{item.idLibrary}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre" width="300" sortBy="#{item.libraryName}">
+
+                                <h:outputText value="#{item.libraryName}"/>
+                            </p:column>
+
+
+                            <p:column headerText="Concent.QPCr">
+
+                                <h:outputText value="#{item.qpcrConcentration}"/>
+                            </p:column>
+                            <p:column headerText="Concent. por Qubit">
+
+                                <h:outputText value="#{item.qubitConcentration}"/>
+                            </p:column>
+
+                            <p:column headerText="Tamaño de la biblioteca">
+                                <h:outputText value="#{item.librarySize}" />
+                            </p:column>
+
+
+                        </p:dataTable>
+
+
+
+
+
+
+                    </h:panelGrid>     
+                    <h:panelGrid columns="1">
+                        <p:outputLabel value="Por favor seleccione bibliotecas para actualizar" style="font-size: large; font-family:'politica'" rendered="#{libraryController.rederLibraryUpdate()}" />
+
+                        <p:outputLabel value="Número de bibliotecas seleccionadas: #{libraryController.selectedLibraries.size()}" style="font-size: large; font-family:'politica'" rendered="#{!libraryController.rederLibraryUpdate()}" />
+
+
+                        <p:outputLabel  value="Descarga el archivo csv para su llenado:"  style="font-size: large; font-family:'politica'" rendered="#{!libraryController.rederLibraryUpdate()}" />
+
+                        <h:commandLink  >
+                            <p:graphicImage library="images" name="csv.png" />
+                            <p:dataExporter type="csv" target="tblLibs2" fileName="libraries_concentration" />                
+                        </h:commandLink> 
+
+
+
+                        <p:fileUpload rendered="#{!libraryController.rederLibraryUpdate()}" fileUploadListener="#{libraryController.uploadFileLib}"  mode="advanced" dragDropSupport="false" 
+                                      invalidFileMessage="Archivo inválido, se requiere un archivo .csv" label="Cargar archivo .csv" 
+                                      auto="true" allowTypes="/(\.|\/)(csv)$/"  />
+
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="ERROR" widgetVar="libErrorDialog" modal="true" resizable="false">
+
+                    <p:outputPanel id="LibErr" style="text-align:center;"> 
+                        <h:panelGrid columns="1">   
+                            <p:outputLabel  value="ERROR AL SUBIR EL ARCHIVO"  style="font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="El archivo subido tiene alguno de los siguientes problemas:"  style="font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="-El número de bibliotecas en el archivo no coincide con las seleccionadas"  style="color: red; font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="-El valor de alguna de las concentraciones (qPCR o Qubit) no es numérico"  style="color: red; font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="-Alguna biblioteca en el archivo no coincide con las bibliotecas a editar"  style="color: red; font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="-Alguna biblioteca en el archivo está repetida"  style="color: red; font-size: large; font-family:'politica'" />
+                            <p:outputLabel  value="Por favor revise el archivo e intentelo de nuevo"  style="font-size: large; font-family:'politica'" />
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Actualización exitosa" widgetVar="libAceptDialog" modal="true" resizable="false">
+
+                    <p:outputPanel id="LibAcep" style="text-align:center;"> 
+                        <h:panelGrid columns="1">  
+                            <div align="center">
+
+                                <img src="../resources/images/ok.png"></img>
+
+                                <p:outputLabel  value="LAS BIBLIOTECAS HAN SIDO ACTUALIZADAS EXITOSAMENTE"  style="font-size: large; font-family:'politica'" />
+
+                                <p:commandButton id="aceptEditLibs" action="#{projectController.redirectSimpleViewProject()}"  value="Aceptar"/> 
+
+                            </div>
+
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                <p:dialog header="Cargando..." widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false">
+                    <div align="center">
+                        <p:outputLabel value="Espere un momento :)"></p:outputLabel><br></br><br></br>
+                        <p:graphicImage value="../resources/images/load4.gif" width="120" height="120"></p:graphicImage>
+                    </div>
+
+                </p:dialog>
+
+
+                <!-- delivery date -->
+                <p:dialog id="DialogCloseProy" header="Entrega de resultados" widgetVar="DialogCloseProy" modal="true" showEffect="fade" hideEffect="fade" resizable="false"  responsive="true" width="400">
+                    <h:panelGrid columns="3">
+
+                        <p:outputLabel for="popup" value="Fecha de entrega resultados:" />
+                        <p:calendar id="popup" value="#{projectController.date2}"  pattern="yyyy/MM/dd"   requiredMessage="El campo fecha de entrega es obligatorio"/>
+
+                    </h:panelGrid><br/>
+                    <p:commandButton  value="Terminar proyecto" icon="ui-icon-disk" action="#{projectController.updateStatus2(1)}" />
+                </p:dialog>
+                <!-- fin-->
+
+
+
+                <p:dialog header="Confirmación" widgetVar="dialogConfirmationCancelAB" modal="true" resizable="false">
+                    <p:outputLabel  value="¿Desea cancelar el análisis bioinformático?"  style="font-size: large; font-family:'politica'" />
+                    <br></br><br></br>
+                    <p:outputPanel style="display: flex; justify-content: space-around; align-items: center"> 
+                        <p:commandButton  action="#{sampleController.cancelBioinformaticAnalysis()}"  value="Si"/> 
+                        <p:commandButton  action="#{libraryController.redirectToProj()}"  value="No"/> 
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Actualización exitosa" widgetVar="dialogCancelAB" modal="true" resizable="false" closable="false">
+                    <p:outputPanel style="text-align:center;"> 
+                        <h:panelGrid columns="1">  
+                            <div align="center">
+                                <img src="../resources/images/ok.png"></img>
+                                <p:outputLabel  value="Se canceló el análisis bioinformático exitosamente"  style="font-size: large; font-family:'politica'" />
+                                <p:commandButton  action="#{libraryController.redirectToProj()}"  value="Aceptar"/> 
+                            </div>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Error detectado" widgetVar="dialogErrorL" modal="true" resizable="false" closable="false">
+                    <p:outputPanel style="text-align:center;"> 
+                        <h:panelGrid columns="1">  
+                            <div align="center">
+                                <p:outputLabel  value="Error al realizar el proceso"  style="font-size: large; font-family:'politica'" />
+                                <p:outputLabel  value="Póngase en contacto con el mantenimiento"  style="font-size: large; font-family:'politica'" />
+                                <p:commandButton  action="#{libraryController.redirectToProj()}"  value="Aceptar"/> 
+                            </div>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

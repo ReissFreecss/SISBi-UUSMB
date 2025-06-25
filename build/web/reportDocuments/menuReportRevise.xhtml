@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Revisar Proyecto"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToReviseReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <p:messages closable="true" showDetail="true"/>
+            </h:panelGroup>
+            <p:dataTable id="tblReportProjectStatus" value="" var="" 
+                                 style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                                 emptyMessage="Ups hubo un error, consulte al programador"
+                                 >
+                <f:facet name="header">
+                    Detalles del Reporte
+                </f:facet>
+                <p:column headerText="ID Proyecto">
+                    <p:outputLabel value="#{reportProjectController.varIdProject}"/>
+                </p:column>
+
+                <p:column headerText="Nombre de proyecto">
+                    <p:outputLabel value=" #{reportProjectController.selected.idProject.projectName}"/>
+                </p:column>
+
+                <p:column headerText="Tipo de Reporte">
+                    <p:outputLabel value="#{reportProjectController.varTypeReport}"/>
+                </p:column>
+                <p:column headerText="Metodología Aplicada">
+                    <p:outputLabel value="#{reportProjectController.selected.typeMethodology}"/>
+                </p:column>
+                <p:column headerText="Creado por:">
+                    <p:outputLabel value="#{reportProjectController.selected.idUser.firstName} #{reportProjectController.selected.idUser.PLastName} #{reportProjectController.selected.idUser.MLastName}"/>
+                </p:column>
+                <p:column headerText="Revisor:">
+                    <p:outputLabel value="#{reportProjectController.selected.idUserRevise.firstName} #{reportProjectController.selected.idUserRevise.PLastName} #{reportProjectController.selected.idUserRevise.MLastName}"/>
+                </p:column>
+                <p:column headerText="Estatus:">
+                    <p:outputLabel value="#{reportProjectController.selected.status}"/>
+                </p:column>
+            </p:dataTable>
+            <h:form id="formMenuReport">
+                <h:outputText rendered="#{reportProjectController.validateMenuReportImageSign()=='true'}" value="Para poder firmar, quitar firma o descargar word necesitas cargar tu imagen de firma en la sección de roles" />
+                <div class="card">
+                    <div class="ui-g center-gridp">
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Firmar" action="#{reportProjectController.finishRevise()}" disabled="#{reportProjectController.validateBtnFirmarRevisar()}" update="tblReportProjectStatus formMenuReport formSendEmail formUploadWord"/>
+                        </div>
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Quitar Firma" action="#{reportProjectController.unfinishRevise()}" disabled="#{reportProjectController.validateBtnQuitarFirmaRevisar()}" update="tblReportProjectStatus formMenuReport formSendEmail formUploadWord"/>
+                        </div>
+                        <div class="ui-g-2">
+                            <p:commandButton class="boton-s1" value="Ir al proyecto" action="#{projectController.prepareUView()}" update="formMenuReport formSendEmail" />
+                        </div>
+                   
+                        
+                        
+                        <!--leslie 08 mayo-->
+                            <p:commandButton class="boton-s1"  disabled="#{reportProjectController.selected.status== 'Elaboracion'}"   action="#{reportProjectController.changeStat()}" value="Actualizar status para correción" >
+                                         <p:confirm header="Corrección del reporte bioinformático" 
+                                           message="El estatus del reporte cambiará a -Elaboracion- y se enviara un correo al Elaborador. ¿Esta seguro que desea actualizar el reporte bioinformático?" icon="ui-icon-alert" />
+                            </p:commandButton> 
+                            <p:confirmDialog header="correción del reporte bioinformático" widgetVar="ElabRepoProjDialog" >
+                                <p:outputPanel id="termAcept" style="text-align:center;">                                                      
+                                    <h:panelGrid columns="1">  
+                                        
+                                        <p:commandButton value="Aceptar" action="#{reportProjectController.prepareList()}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />         
+
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:confirmDialog>
+                             <!--fin leslie-->
+                    </div>
+            </div>
+            </h:form>
+            <h:form id="formUploadWord" enctype="multipart/form-data" class="inFontSize" onsubmit="location.reload();">
+                <p:growl id="messages" showDetail="true" />
+                <p:dataTable id="tableImageSing" value="" var=""
+                             style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                             emptyMessage="Ups hubo un error, consulte al programador" 
+                             >
+                    <f:facet name="header">
+                        Subir archivo Word modificado
+                    </f:facet>
+                    <p:column headerText="Subir Archivo Word DOCX">
+                        <p:growl id="messages" showDetail="true" />
+                        <p:fileUpload fileUploadListener="#{reportProjectController.uploadFileRevise}"   mode="advanced" dragDropSupport="false" 
+                                      invalidFileMessage="Archivo invalido, se requiere un archivo .docx" label="Cargar archivo" auto="true"
+                                      fileLimit="1" fileLimitMessage="Solo se puede cargar un archivo" update="formUploadWord tblReportProjectStatus :formMenuReport"
+                                      allowTypes="/(\.|\/)(docx)$/"  disabled="#{reportProjectController.validateBtnUpload('revise')}"/><br/>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        <p:commandButton action="#{reportProjectController.deleteUploadWordRevise()}" disabled="#{reportProjectController.validateBtnEliminarWordRevise()}" update="formUploadWord" icon="ui-icon-trash" value="Eliminar" rendered="#{reportProjectController.selected.pathrevise!=null}"/>
+                        <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Reporte Actualizado" action="#{reportProjectController.downloadFileUpdated()}" rendered="#{reportProjectController.selected.pathrevise!=null}" update="formUploadWord" ajax="false"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form id="formSendEmail" enctype="multipart/form-data" class="inFontSize" onsubmit="location.reload();" >
+                <p:growl id="messages" showDetail="true" />
+                <p:dataTable id="tableSendEmail" value="" var=""
+                             style="border:solid 4px; border-color: transparent" paginator="true" paginatorAlwaysVisible="false" rows="10" reflow="true" 
+                             emptyMessage="Ups hubo un error, consulte al programador" 
+                             >
+                    <f:facet name="header">
+                        Envío de correo a Colaboradores y Responsables
+                    </f:facet>
+                    <p:column headerText="Mensaje">
+                        <h:outputLabel value="Asunto:"/>
+                        <p:inputText class="insize6" value="#{reportProjectController.subjetFinal}" disabled="#{reportProjectController.validateBtnEnviarEmail('Revisado')}"/>
+                        <h:outputLabel value="Mensaje:"/><br></br>
+                        <p:inputTextarea value="#{reportProjectController.messageFinal}" rows="5" cols="75" disabled="#{reportProjectController.validateBtnEnviarEmail('Revisado')}"></p:inputTextarea>
+                    </p:column>
+                    <p:column headerText="Opciones">
+                        El autorizador actual es: #{reportProjectController.selected.idUserAuthorize.fullName}<br/>      
+                        Asignar autorizador:<h:selectOneMenu value="#{reportProjectController.selected.idUserAuthorize}" title="Autorizador" required="true">
+                            <f:selectItems value="#{reportProjectController.usersAuthorize}" var="user" itemLabel="#{user.fullName}"/>
+                        </h:selectOneMenu><br/>
+                        Una vez hecho clic en enviar o en 'cambiar autorizador', se actualizará el autorizador asignado al reporte.<br/>
+                        <p:commandButton action="#{reportProjectController.sendEmailResponsablesColaboradoresYAutorizador()}" disabled="#{reportProjectController.validateBtnEnviarEmail('Revisado')}" update="tblReportProjectStatus formMenuReport" icon="ui-icon-mail-closed" value="Enviar"/>
+                        <!--p:commandButton action="#{reportProjectController.btnCambiarRevisorOAutorizador('autorizador')}" icon="ui-icon-arrowreturn-1-w" value="Cambiar autorizador"  update="formSendEmail :formUploadWord :formMenuReport"/-->
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

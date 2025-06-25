@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" >
+    <h:head>
+        <div align="left">
+
+            <img src="../resources/images/usmb.png" ></img>
+        </div>
+        <title>Registro de dependencia</title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+    </h:head>
+
+    <body>
+        <h2>Registro de nueva dependencia</h2>
+        <h:panelGroup id="messagePanel" layout="block">
+            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+        </h:panelGroup>
+        <h:form>
+
+            <h:panelGrid columns="2" >
+
+                <p:button icon="ui-icon-circle-arrow-w" outcome="#{dependencyController.redirectDependency()}" value="Seguir creando usuario" />
+
+                <p:button icon="ui-icon-home" outcome="/index" value="Volver al inicio"  />
+
+
+            </h:panelGrid>
+            <br/>
+
+            <p:messages id="messages"  showDetail="false" autoUpdate="true" />
+            <p:panelGrid columns="2" layout="grid">
+                <f:facet name="header">
+                    Datos Generales
+                </f:facet>
+                <h:panelGrid id="InsitutionData" columns="2">
+
+                    <p:outputLabel value="Institución:" for="institution" />
+                    <p:autoComplete id="institution" value="#{dependencyController.selected.institution}" 
+                                    title="Nombre completo de la institución" required="true" 
+                                    requiredMessage="El nombre de la institución es obligatorio"
+                                    completeMethod="#{dependencyController.completeInstitution}"
+                                    minQueryLength="2" maxResults="5" var="inst" itemLabel="#{inst}" itemValue="#{inst}"
+                                    forceSelection="false">
+
+                        <p:ajax event="blur" listener="#{dependencyController.validateInstitution}" update="messages" />
+                        <p:ajax event="itemSelect" listener="#{dependencyController.onInstitutionSelect}" update="messages" />
+                    </p:autoComplete>
+
+                    <p:outputLabel value="Siglas de la institución:" for="acronym" />
+                    <p:inputText id="acronym" value="#{dependencyController.selected.acronym}" title="Siglas o acrónimo de la institución" >
+
+                    </p:inputText>
+
+
+                    <p:outputLabel value="Nombre de la Dependencia:" for="dependencyName" />
+                    <p:autoComplete id="dependencyName" value="#{dependencyController.selected.dependencyName}" 
+                                    title="Dependencia de la institución donde radica el usuario" 
+                                    required="true" requiredMessage="El nombre de la dependencia es obligatorio"
+                                    completeMethod="#{dependencyController.completeDependencyName}"
+                                    minQueryLength="2" var="dep" itemLabel="#{dep}" itemValue="#{dep}"
+                                    maxResults="5" forceSelection="false">
+
+                        <p:ajax event="blur" listener="#{dependencyController.validateDependencyName}" update="messages" />
+                    </p:autoComplete>
+
+                    <p:outputLabel value="Calle y número:" for="street" />
+                    <p:inputText id="street" value="#{dependencyController.selected.street}" title="Direccion con Calle, Colonia, y Numero de la dependencia" required="true" requiredMessage="La calle y número son obligatorios">
+
+                    </p:inputText>
+                </h:panelGrid>
+                <h:panelGrid id="directoryData" columns="2">
+
+                    <p:outputLabel value="Municipio o Delegación:" for="location" />
+                    <p:inputText id="location" value="#{dependencyController.selected.location}" title="Municipio o Delegación de la dependencia" >
+
+                    </p:inputText>
+
+                    <p:outputLabel value="Código Postal:" for="postalCode" />
+                    <p:inputText id="postalCode" value="#{dependencyController.selected.postalCode}" title="Código postal de la dependencia" required="true" requiredMessage="El codigo postal es obligatorio">
+                        <p:keyFilter regEx="/[0-9]/i"/>
+                    </p:inputText>
+
+                    <p:outputLabel value="Estado:" for="idCity"/>
+                    <p:selectOneMenu id="idCity" value="#{dependencyController.selected.idCity}" title="Seleccione una entidad federativa..." required="true" requiredMessage="Seleccione una entidad federativa"
+                                     effect="fade"  filter="true" filterMatchMode="startsWith">
+                        <f:selectItems value="#{cityController.itemsAvailableSelectOne}"/>
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+                <h:panelGrid id="typeIns" columns="1">
+                    <p:outputLabel value="Tipo de institución:" for="type" />
+                    <p:selectOneRadio id="type" value="#{dependencyController.selected.type}" required="true" requiredMessage="Selecione un tipo de dependencia">
+                        <f:selectItem itemLabel="Académico o sin fines de lucro" itemValue="Academico o sin fines de lucro" />
+                        <f:selectItem itemLabel="Sector Privado o industria" itemValue="Sector Privado o industria" />
+                    </p:selectOneRadio>
+                </h:panelGrid>
+
+            </p:panelGrid>
+            <br />
+            <p:dialog header="Información" widgetVar="CreateDialog" modal="true"  resizable="false" draggable="false">
+                <p:outputPanel  style="text-align:center;">
+                    <h:panelGrid columns="1" >
+                        <p:outputLabel  value="La dependencia ha sido" style="font-size: large; font-family:'politica'" />
+                        <p:outputLabel  value="registrada con exito." style="font-size: large; font-family:'politica'" />
+                        <p:commandButton value="OK" action="#{sampleController.continueCreateUser()}" onclick="PF('InfoDialog').hide();" style="font-size: large; "/>
+
+                    </h:panelGrid>
+
+                </p:outputPanel>
+            </p:dialog>
+
+
+
+            <p:commandButton icon="ui-icon-disk" actionListener="#{dependencyController.CreateDependency()}" value="Guardar Dependencia" />
+            <p:dialog header="Información" widgetVar="repeatDialog" modal="true"  resizable="false" draggable="false">
+                <p:outputPanel  style="text-align:center;">
+                    <h:panelGrid columns="1" >
+                        <p:outputLabel  value="La instutición ya esta registrada, por favor verifique la información" style="font-size: large; font-family:'politica'" />
+
+                        <p:commandButton value="OK"  onclick="PF('repeatDialog').hide();" style="font-size: large; "/>
+
+                    </h:panelGrid>
+
+                </p:outputPanel>
+            </p:dialog>
+            <br />
+        </h:form>
+
+    </body>
+
+</html>

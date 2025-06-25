@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewPlataformTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewPlataformLabel_idPlataform}"/>
+                    <h:outputText value="#{plataformController.selected.idPlataform}" title="#{bundle.ViewPlataformTitle_idPlataform}"/>
+                    <h:outputText value="#{bundle.ViewPlataformLabel_plataformName}"/>
+                    <h:outputText value="#{plataformController.selected.plataformName}" title="#{bundle.ViewPlataformTitle_plataformName}"/>
+                    <h:outputText value="#{bundle.ViewPlataformLabel_note}"/>
+                    <h:outputText value="#{plataformController.selected.note}" title="#{bundle.ViewPlataformTitle_note}"/>
+                    <h:outputText value="#{bundle.ViewPlataformLabel_location}"/>
+                    <h:outputText value="#{plataformController.selected.location}" title="#{bundle.ViewPlataformTitle_location}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{plataformController.destroyAndView}" value="#{bundle.ViewPlataformDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewPlataformEditLink}"/>
+                <br />
+                <h:commandLink action="#{plataformController.prepareCreate}" value="#{bundle.ViewPlataformCreateLink}" />
+                <br />
+                <h:commandLink action="#{plataformController.prepareList}" value="#{bundle.ViewPlataformShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewPlataformIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

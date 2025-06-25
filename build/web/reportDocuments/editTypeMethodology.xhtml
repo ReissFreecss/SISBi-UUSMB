@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        
+        <ui:define name="title">
+            <h:outputText value="Seleccionar tipo de metodología"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdminToCreateReport()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <p:messages closable="true" showDetail="true"/>
+            </h:panelGroup>
+            <h:form id="formTypeMethodology">
+                <div class="card">
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+                        <div class="ui-g center-gridp">
+                            <div class="ui-g-2 bg-c1">
+                                <p:commandButton class="boton-s1" value="Metodología Amplicones 16SoITS"  action="#{reportProjectController.editTypeMethodology('Amplicones 16SoITS')}" update="formTypeMethodology" />
+                            </div>
+                            <div class="ui-g-2 bg-c1">
+                                <p:commandButton class="boton-s1" value="Metodología DNA" action="#{reportProjectController.editTypeMethodology('DNA')}" update="formTypeMethodology"/>
+                            </div>
+                            <div class="ui-g-2 bg-c1">
+                                <p:commandButton class="boton-s1" value="Metodología RNAseq Bac" action="#{reportProjectController.editTypeMethodology('RNAseq Bac')}"  update="formTypeMethodology"/>
+                            </div>
+                            <div class="ui-g-2 bg-c1">
+                                <p:commandButton class="boton-s1" value="Metodología RNAseq Euc" action="#{reportProjectController.editTypeMethodology('RNAseq Euc')}" update="formTypeMethodology"/>
+                            </div>
+                        </div>
+                </div>
+            </h:form>
+            
+            <h:form >
+                <div class="container-btn-report ui-g end-gridp btn-form">
+                    <div class="ui-g-2">
+                        <p:commandButton icon="ui-icon-closethick" value="Cancelar" action="#{reportProjectController.redirectMenuReportCreate}"  />
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

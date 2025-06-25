@@ -1171,7 +1171,7 @@ public class ProjectController implements Serializable {
 
     public void create() {
         System.out.println(checkTerms);
-
+        
         try {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 

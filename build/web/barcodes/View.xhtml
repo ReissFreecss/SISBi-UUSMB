@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewBarcodesTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewBarcodesLabel_idIndex}"/>
+                    <h:outputText value="#{barcodesController.selected.idIndex}" title="#{bundle.ViewBarcodesTitle_idIndex}"/>
+                    <h:outputText value="#{bundle.ViewBarcodesLabel_sequence}"/>
+                    <h:outputText value="#{barcodesController.selected.sequence}" title="#{bundle.ViewBarcodesTitle_sequence}"/>
+                    <h:outputText value="#{bundle.ViewBarcodesLabel_idKit}"/>
+                    <h:outputText value="#{barcodesController.selected.idKit}" title="#{bundle.ViewBarcodesTitle_idKit}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{barcodesController.destroyAndView}" value="#{bundle.ViewBarcodesDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewBarcodesEditLink}"/>
+                <br />
+                <h:commandLink action="#{barcodesController.prepareCreate}" value="#{bundle.ViewBarcodesCreateLink}" />
+                <br />
+                <h:commandLink action="#{barcodesController.prepareList}" value="#{bundle.ViewBarcodesShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewBarcodesIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

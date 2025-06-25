@@ -307,7 +307,7 @@ public class UsersController implements Serializable {
     public void verifyEmail() {
 
         if (current.getEmail() != null) {
-            List<Users> usE = ejbFacade.findUserByEmail(current.getEmail().toLowerCase());
+            List<Users> usE = ejbFacade.findUserByEmail(current.getEmail().toLowerCase().trim());
 
             if (usE.isEmpty()) {
                 verifiedEmail = false;
@@ -317,7 +317,7 @@ public class UsersController implements Serializable {
 
                 for (Users em : usE) {
                     System.out.println("Entra al for");
-                    if (em.getEmail().toLowerCase().equals(current.getEmail().toLowerCase())) {
+                    if (em.getEmail().toLowerCase().equals(current.getEmail().toLowerCase().trim())) {
 
                         RequestContext rc = RequestContext.getCurrentInstance();
                         rc.execute("PF('warnDialog').show();");

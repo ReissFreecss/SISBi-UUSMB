@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateBarcodesTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateBarcodesLabel_idIndex}" for="idIndex" />
+                    <h:inputText id="idIndex" value="#{barcodesController.selected.idIndex}" title="#{bundle.CreateBarcodesTitle_idIndex}" required="true" requiredMessage="#{bundle.CreateBarcodesRequiredMessage_idIndex}"/>
+                    <h:outputLabel value="#{bundle.CreateBarcodesLabel_sequence}" for="sequence" />
+                    <h:inputText id="sequence" value="#{barcodesController.selected.sequence}" title="#{bundle.CreateBarcodesTitle_sequence}" required="true" requiredMessage="#{bundle.CreateBarcodesRequiredMessage_sequence}"/>
+                    <h:outputLabel value="#{bundle.CreateBarcodesLabel_idKit}" for="idKit" />
+                    <h:selectOneMenu id="idKit" value="#{barcodesController.selected.idKit}" title="#{bundle.CreateBarcodesTitle_idKit}" required="true" requiredMessage="#{bundle.CreateBarcodesRequiredMessage_idKit}">
+                        <f:selectItems value="#{kitController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{barcodesController.create}" value="#{bundle.CreateBarcodesSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{barcodesController.prepareList}" value="#{bundle.CreateBarcodesShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateBarcodesIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

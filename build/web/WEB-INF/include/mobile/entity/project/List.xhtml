@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="ProjectListPage">
+        <pm:header title="#{myBundle.ListProjectTitle}">
+            <h:form>
+                <p:commandButton id="backButton"   styleClass="ui-btn-left  ui-btn-inline" icon="ui-icon-arrow-l" value="#{myBundle.Back}" action="#{mobilePageController.navigateBackInHistory('/mobile/index')}"/>
+                <p:commandButton id="createButton" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus"    value="#{myBundle.Create}" update=":ProjectCreatePage:ProjectCreateForm" actionListener="#{projectController.prepareCreate}" action="#{mobilePageController.navigateWithHistory('pm:ProjectCreatePage')}">
+                    <f:actionListener binding="#{currentPageListener}"/>
+                </p:commandButton>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="ProjectListForm">
+
+                <p:dataTable id="datalist"
+                             value="#{projectController.items}"
+                             var="item"
+                             rowKey="#{item.idProject}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             selectionMode="single"
+                             selection="#{projectController.selected}"
+                             reflow="true">
+
+                    <p:ajax event="rowSelect"   update="@form:editButton,@form:deleteButton,@form:navigationMenuButton,@form:navigationMenuPanel"/>
+                    <p:ajax event="rowUnselect" update="@form:editButton,@form:deleteButton,@form:navigationMenuButton,@form:navigationMenuPanel"/>
+                    <p:ajax event="swipeleft"   oncomplete="document.getElementById('ProjectListPage:ProjectListForm:deleteButton').click();"/>
+                    <p:ajax event="tap"         oncomplete="document.getElementById('ProjectListPage:ProjectListForm:editButton').click();"/>
+                    <p:ajax event="taphold"     oncomplete="document.getElementById('ProjectListPage:ProjectListForm:navigationMenuButton').click();"/>
+
+                    <p:column sortBy="#{item.idProject}" filterBy="#{item.idProject}" headerText="#{myBundle.ListProjectTitle_idProject}">
+                        <h:outputText value="#{item.idProject}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.projectName}" filterBy="#{item.projectName}" headerText="#{myBundle.ListProjectTitle_projectName}">
+                        <h:outputText value="#{item.projectName}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.projectDescription}" filterBy="#{item.projectDescription}" headerText="#{myBundle.ListProjectTitle_projectDescription}">
+                        <h:outputText value="#{item.projectDescription}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.requestDate}" filterBy="#{item.requestDate}" headerText="#{myBundle.ListProjectTitle_requestDate}">
+                        <h:outputText value="#{item.requestDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.status}" filterBy="#{item.status}" headerText="#{myBundle.ListProjectTitle_status}">
+                        <h:outputText value="#{item.status}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.quotationNumber}" filterBy="#{item.quotationNumber}" headerText="#{myBundle.ListProjectTitle_quotationNumber}">
+                        <h:outputText value="#{item.quotationNumber}"/>
+                    </p:column>
+
+                    <ui:remove>
+                        <p:column sortBy="#{item.billNumber}" filterBy="#{item.billNumber}" headerText="#{myBundle.ListProjectTitle_billNumber}">
+                            <h:outputText value="#{item.billNumber}"/>
+                        </p:column>
+                    </ui:remove>>
+                </p:dataTable>
+                <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ProjectEditPage:ProjectEditForm" disabled="#{empty projectController.selected}" actionListener="#{mobilePageController.currentPageListener}" action="#{mobilePageController.navigateWithHistory('pm:ProjectEditPage')}"/>
+                <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{projectController.delete}" update=":growl,datalist" disabled="#{empty projectController.selected}">
+                    <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+                </p:commandButton>
+                <p:commandButton id="navigationMenuButton" style="visibility: hidden;" value="#{myBundle.Menu}" disabled="#{empty projectController.selected}"/>
+
+                <p:overlayPanel id="navigationMenuPanel" for="navigationMenuButton" at="right" showEffect="overlay">
+                    <h2>#{myBundle.ProjectHeading} #{myBundle.Menu}</h2>
+                    <p:menu>
+                        <p:menuitem value="#{myBundle.ProjectMenuItem_sampleCollection}" icon="ui-icon-search"  action="#{mobilePageController.navigateWithHistory}" disabled="#{empty projectController.selected.sampleCollection}" ajax="false">
+                            <f:actionListener binding="#{currentPageActionListener}"/>
+                            <f:setPropertyActionListener target="#{mobilePageController.nextPage}" value="#{projectController.navigateSampleCollection()}"/>
+                        </p:menuitem>  
+                        <p:menuitem value="#{myBundle.ProjectMenuItem_userProjectLinkCollection}" icon="ui-icon-search"  action="#{mobilePageController.navigateWithHistory}" disabled="#{empty projectController.selected.userProjectLinkCollection}" ajax="false">
+                            <f:actionListener binding="#{currentPageActionListener}"/>
+                            <f:setPropertyActionListener target="#{mobilePageController.nextPage}" value="#{projectController.navigateUserProjectLinkCollection()}"/>
+                        </p:menuitem>  
+                    </p:menu>
+                </p:overlayPanel>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditCountryTitle}"></h:outputText>
+
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditCountryLabel_idCountry}" for="idCountry" />
+                    <h:inputText id="idCountry" value="#{countryController.selected.idCountry}" title="#{bundle.EditCountryTitle_idCountry}" required="true" requiredMessage="#{bundle.EditCountryRequiredMessage_idCountry}"/>
+                    <h:outputLabel value="#{bundle.EditCountryLabel_countryName}" for="countryName" />
+                    <h:inputText id="countryName" value="#{countryController.selected.countryName}" title="#{bundle.EditCountryTitle_countryName}" required="true" requiredMessage="#{bundle.EditCountryRequiredMessage_countryName}"/>
+                </h:panelGrid>
+                <h:commandLink action="#{countryController.update}" value="#{bundle.EditCountrySaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditCountryViewLink}"/>
+                <br />
+                <h:commandLink action="#{countryController.prepareList}" value="#{bundle.EditCountryShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditCountryIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

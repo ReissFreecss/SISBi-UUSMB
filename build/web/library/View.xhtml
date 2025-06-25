@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewLibraryTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewLibraryLabel_idLibrary}"/>
+                    <h:outputText value="#{libraryController.selected.idLibrary}" title="#{bundle.ViewLibraryTitle_idLibrary}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_libraryName}"/>
+                    <h:outputText value="#{libraryController.selected.libraryName}" title="#{bundle.ViewLibraryTitle_libraryName}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_preparationStatus}"/>
+                    <h:outputText value="#{libraryController.selected.preparationStatus}" title="#{bundle.ViewLibraryTitle_preparationStatus}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_preparationDate}"/>
+                    <h:outputText value="#{libraryController.selected.preparationDate}" title="#{bundle.ViewLibraryTitle_preparationDate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_idBarcode2}"/>
+                    <h:outputText value="#{libraryController.selected.idBarcode2}" title="#{bundle.ViewLibraryTitle_idBarcode2}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_idBarcode1}"/>
+                    <h:outputText value="#{libraryController.selected.idBarcode1}" title="#{bundle.ViewLibraryTitle_idBarcode1}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_idRecipe}"/>
+                    <h:outputText value="#{libraryController.selected.idRecipe}" title="#{bundle.ViewLibraryTitle_idRecipe}"/>
+                    <h:outputText value="#{bundle.ViewLibraryLabel_idSample}"/>
+                    <h:outputText value="#{libraryController.selected.idSample}" title="#{bundle.ViewLibraryTitle_idSample}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{libraryController.destroyAndView}" value="#{bundle.ViewLibraryDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewLibraryEditLink}"/>
+                <br />
+                <h:commandLink action="#{libraryController.prepareCreate}" value="#{bundle.ViewLibraryCreateLink}" />
+                <br />
+                <h:commandLink action="#{libraryController.prepareList}" value="#{bundle.ViewLibraryShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewLibraryIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+           
+        <ui:define name="title">
+      
+            <h:outputText value="Mi perfil"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+                    <style type="text/css">
+     .value {
+        font-weight: bold;
+    }
+     
+    .ui-carousel {
+        margin-bottom: 100px;
+    }
+    #outer {
+  display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+ 
+</style>
+            <h:form styleClass="jsfcrud_list_form">
+              
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+             
+                <p:button icon="ui-icon-circle-arrow-w" outcome="#{plantillaController.redirectProyect()}" value="Volver"/>
+             <br />
+                <br />
+                <h:outputText escape="false" value="#{bundle.ListUsersEmpty}" rendered="#{usersController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{usersController.items.rowCount > 0}">
+                    <div id="outer"> 
+                    <p:carousel value="#{usersController.items}" headerText="Mi perfil"  var="item" 
+                     itemStyle="height:350px;text-align:left" 
+                     numVisible="1" easing="easeOutBounce" style="width:400px" circular="false">
+        <h:panelGrid columns="2" style="width:100%" columnClasses="label,value">
+           <f:facet name="header" >
+               <p:graphicImage  url="../resources/images/user-male-circle.png" style="display: block; margin: 0px auto;"/> 
+            </f:facet>
+ 
+            <h:outputText value="Nombre(s):" />
+            <h:outputText value="#{item.firstName}" />
+ 
+            <h:outputText value="Apellido Paterno:" />
+            <h:outputText value="#{item.PLastName}" />
+ 
+            <h:outputText value="Apellido Materno:" />
+            <h:outputText value="#{item.MLastName}" />
+ 
+            <h:outputText value="Usuario:" />
+            <h:outputText value="#{item.userName}" />
+            
+            <h:outputText value="Telefono:" />
+            <h:outputText value="#{item.phoneNumber}" />
+            
+            <h:outputText value="Correo electrónico:" />
+            <h:outputText value="#{item.email}" />
+            
+            <h:outputText value="Departamento:" />
+            <h:outputText value="#{item.department}" />
+            
+            <h:outputText value="Fecha de registro:" />
+            <h:outputText value="#{item.registrationDate}">
+            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+            </h:outputText>
+            
+            <h:outputText value="     "/>
+            <p:commandButton icon="ui-icon-pencil" action="#{usersController.prepareEdit}" value="Editar"/>
+            <h:outputText value="     "/>
+        </h:panelGrid>
+    </p:carousel>
+        </div>
+                    
+                </h:panelGroup>
+                <br />
+                
+               
+            </h:form>
+        </ui:define>
+            
+    </ui:composition>
+
+</html>

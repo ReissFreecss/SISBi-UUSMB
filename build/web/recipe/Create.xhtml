@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateRecipeTitle}"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateRecipeLabel_idRecipe}" for="idRecipe" />
+                    <h:inputText id="idRecipe" value="#{recipeController.selected.idRecipe}" title="#{bundle.CreateRecipeTitle_idRecipe}" required="true" requiredMessage="#{bundle.CreateRecipeRequiredMessage_idRecipe}"/>
+                    <h:outputLabel value="#{bundle.CreateRecipeLabel_insertSize}" for="insertSize" />
+                    <h:inputText id="insertSize" value="#{recipeController.selected.insertSize}" title="#{bundle.CreateRecipeTitle_insertSize}" required="true" requiredMessage="#{bundle.CreateRecipeRequiredMessage_insertSize}"/>
+                    <h:outputLabel value="#{bundle.CreateRecipeLabel_readType}" for="readType" />
+                    <h:inputText id="readType" value="#{recipeController.selected.readType}" title="#{bundle.CreateRecipeTitle_readType}" required="true" requiredMessage="#{bundle.CreateRecipeRequiredMessage_readType}"/>
+                    <h:outputLabel value="#{bundle.CreateRecipeLabel_idKit}" for="idKit" />
+                    <h:selectOneMenu id="idKit" value="#{recipeController.selected.idKit}" title="#{bundle.CreateRecipeTitle_idKit}" required="true" requiredMessage="#{bundle.CreateRecipeRequiredMessage_idKit}">
+                        <f:selectItems value="#{kitController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateRecipeLabel_idPlataform}" for="idPlataform" />
+                    <h:selectOneMenu id="idPlataform" value="#{recipeController.selected.idPlataform}" title="#{bundle.CreateRecipeTitle_idPlataform}" required="true" requiredMessage="#{bundle.CreateRecipeRequiredMessage_idPlataform}">
+                        <f:selectItems value="#{plataformController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{recipeController.create}" value="#{bundle.CreateRecipeSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{recipeController.prepareList}" value="#{bundle.CreateRecipeShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateRecipeIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

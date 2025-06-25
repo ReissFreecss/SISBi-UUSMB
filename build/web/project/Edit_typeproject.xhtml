@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Editar proyecto"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+               <!-- <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>-->
+                 <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event>
+            </h:panelGroup>
+            <h:form id="form">
+                 <p:growl id="growl" showDetail="false" sticky="false"   />
+               <p:commandButton icon="ui-icon-arrowreturnthick-1-w"   value="Volver" action="#{sampleController.getURLPreviousPage()}"/>
+                <br />
+                <br />
+                <p:panelGrid columns="2" layout="grid">
+                    <f:facet name="header">
+                       Datos generales
+                    </f:facet>
+                <h:panelGrid columns="2">
+                    
+                    <p:outputLabel value="Nombre del proyecto:" for="projectName" />
+                 
+                    <p:inputText id="projectName" value="#{projectController.selectedProject.projectName}" title="Nombre del proyecto" required="true" requiredMessage="#{bundle.EditProjectRequiredMessage_projectName}">
+                        <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                  
+                   
+
+                    <p:outputLabel value="Descripcion:" for="projectDescription" />
+                    <p:inputTextarea id="projectDescription" value="#{projectController.selectedProject.projectDescription}" title="Detalles del proyecto" />
+
+                      <h:outputLabel  value="Método de entrega de los resultados: " for="method"  />
+                    
+                    <p:selectOneMenu  id="method" value="#{projectController.selectedProject.deliveryMethod}"  >
+                        <f:selectItem itemLabel="------" itemValue="" />
+                        <f:selectItem itemLabel="Dispositivo de almacenamiento proporcionado por el usuario" itemValue="Dispositivo de almacenamiento proporcionado por el usuario" />
+                        <f:selectItem itemLabel="Acceder a una pagina de descarga" itemValue="Acceder a una pagina de descarga" />
+                        <f:selectItem itemLabel="Traslado a un servidor en el que la UUSMB tenga acceso" itemValue="Traslado a un servidor en el que la UUSMB tenga acceso" />
+                        <f:selectItem itemLabel="Entrega de Bibliotecas" itemValue="Entrega de Bibliotecas" />
+                        <f:selectItem itemLabel="DNA extraído" itemValue="DNA extraído" /> 
+                                          
+                    </p:selectOneMenu>
+                  
+                    <!--03 Mayo 2024 leslie <p:outputLabel value="Cancelar proyecto" for="status" />
+                    <p:selectOneRadio id="status" value="{projectController.selectedProject.status}">
+                        <f:selectItem itemLabel="Si" itemValue="Cancelado" />
+                        <f:selectItem itemLabel="No" />
+                    </p:selectOneRadio>                                     
+                      </h:panelGrid>-->
+                    <!--aqui termina panel grid datis generales  -->
+                      
+                      
+                <h:panelGrid  rendered="#{sampleController.canEdit()}"><!-- grid para hacer tipo de proyecto-->
+                    <!-- leslie 24 nov 2023   --> 
+                      <h:outputLabel  value="Método de pago: " for="typeproj"  />
+                    
+                    <p:selectOneMenu  id="typeproj" value="#{projectController.selectedProject.type_project}"  >
+                        <f:selectItem itemLabel="------" itemValue="" />
+                        <f:selectItem itemLabel="Pago efectivo" itemValue="Pago efectivo" />
+                        <f:selectItem itemLabel="Pago insumo" itemValue="Pago insumo" />
+                        <f:selectItem itemLabel="Investigación y desarrollo" itemValue="Investigacion y desarrollo" />  
+                        <f:selectItem itemLabel="Colaboración" itemValue="Colaboracion" />
+                    </p:selectOneMenu>                                           
+                       <!--fin leslie  -->                                                                  
+                </h:panelGrid><!-- fin grid tipo d eproyecto-->
+                
+                               
+                <!-- 03 mayo 2024 cambio de estatus-->
+                 <h:panelGrid  rendered="#{sampleController.canEdit()}">
+                       <p:selectOneMenu  id="status_admin" value="#{projectController.selectedProject.status}"  >
+                        <f:selectItem itemLabel="------" itemValue="" />
+                        <f:selectItem itemLabel="Registrado" itemValue="Registrado" />
+                        <f:selectItem itemLabel="En proceso" itemValue="En proceso" />
+                        <f:selectItem itemLabel="Terminado" itemValue="Terminado" />  
+                        <f:selectItem itemLabel="Cancelado" itemValue="Cancelado" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                       <!-- fin cambio status-->
+                    
+                
+                </p:panelGrid>
+                   <p:panel id="panelCol" style="background: none; border: none; ">
+                    <h:panelGrid id="gridButton" columns="3">
+
+                        <p:outputLabel value="Agregue colaboradores (máximo 5)" style="color: #ffffff" />   
+                        <p:commandButton value="+" action="#{userProjectLinkController.renderCol()}" actionListener="#{userProjectLinkController.addNumber(e)}" 
+                                         update="form" disabled="#{userProjectLinkController.checkAdd}"/>
+                        <p:commandButton value="-"  action="#{userProjectLinkController.renderCol()}" actionListener="#{userProjectLinkController.subsNumber(e)}" 
+                                         update="form" disabled="#{userProjectLinkController.checkSubs}" immediate="true" >
+                            <p:resetInput target="grid" />
+
+                        </p:commandButton>
+
+                    </h:panelGrid>
+
+                    <h:panelGrid id="grid" rendered="#{userProjectLinkController.checkCol1}"  columns="6">
+                        <f:event type="preRenderView" listener="#{userProjectLinkController.exist1()}"></f:event> 
+                        <h:outputText value="Email de usuario:"  style="color: #ffffff" />
+
+                        <p:inputText id="col1"  value="#{userProjectLinkController.email1}"> 
+                            <p:ajax  event="blur"  listener="#{userProjectLinkController.exist1()}"  />
+                        </p:inputText>  
+                        <p:commandButton action="#{userProjectLinkController.exist1()}" update="form" value="Verificar correo" />
+                        <p:graphicImage id="check1" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage1}"/>
+
+                        <p:graphicImage id="check2" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage1}"/>
+
+                     
+
+                    </h:panelGrid>
+                    <p:panelGrid columns="2" rendered="#{userProjectLinkController.checkUImage1}" id="users1">
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                        <p:selectOneMenu id="idDependency" value="#{userProjectLinkController.selectedUser1.idDependency}" title="Dependencia del usuario" style="width:300px"
+                                         effect="fade"  filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="¿La dependencia no esta en la lista?" for="createDependency"/>
+                        <p:button icon="ui-icon-circle-plus" id="createDependency" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+
+
+                        <p:outputLabel value="Nombre(s):" for="firstName" />
+                        <p:inputText id="firstName" value="#{userProjectLinkController.selectedUser1.firstName}" title="Nombre del usuario" required="true" requiredMessage="El campo Nombre es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Paterno: *"  />
+                        <p:inputText id="plastName" value="#{userProjectLinkController.selectedUser1.PLastName}" title="Apellido(s) del usuario" required="true" requiredMessage="El campo Apellido es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Materno: "  />
+                        <p:inputText id="mlastName" value="#{userProjectLinkController.selectedUser1.MLastName}" title="Apellido(s) del usuario">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Número de Teléfono: *" for="phoneNumber" />
+                        <p:inputMask id="phoneNumber" value="#{userProjectLinkController.selectedUser1.phoneNumber}" mask="999-999-9999? ext-99999" />
+
+
+
+                        <p:outputLabel value="Departamento:" for="department" />
+                        <p:inputText id="department" value="#{userProjectLinkController.selectedUser1.department}" title="Departamento donde radica" >
+                            <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton   icon="ui-icon-disk" actionListener= "#{userProjectLinkController.createUser1()}" value="Guardar Usuario"  update="form">
+                            <p:confirm header="Guardar Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta? Precione 'Aceptar' 
+                                       para guardar los cambios. Precione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" />
+
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:column/>
+
+
+                    </p:panelGrid>
+
+
+                    <h:panelGrid id="grid2" rendered="#{userProjectLinkController.checkCol2}"  columns="6">
+                        <f:event type="preRenderView" listener="#{userProjectLinkController.exist2()}"></f:event> 
+
+                        <h:outputText value="Email de usuario:"  style="color: #ffffff" />
+
+                        <p:inputText id="col2" value="#{userProjectLinkController.email2}">
+
+                            <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist2()}"  />
+
+                        </p:inputText> 
+                        <p:commandButton action="#{userProjectLinkController.exist2()}" update="form" value="Verificar correo" />
+                        <p:graphicImage id="check12" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage2}"/>
+                        <p:graphicImage id="check22" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage2}"/>
+
+                      
+
+                    </h:panelGrid>
+                    <p:panelGrid columns="2" rendered="#{userProjectLinkController.checkUImage2}" id="users2">
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                        <p:selectOneMenu id="idDependency2" value="#{userProjectLinkController.selectedUser2.idDependency}" title="Dependencia del usuario" style="width:300px"
+                                         effect="fade"  filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="¿La dependencia no esta en la lista?" for="createDependency"/>
+                        <p:button icon="ui-icon-circle-plus" id="createDependency2" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+
+
+                        <p:outputLabel value="Nombre(s):" for="firstName" />
+                        <p:inputText id="firstName2" value="#{userProjectLinkController.selectedUser2.firstName}" title="Nombre del usuario" required="true" requiredMessage="El campo Nombre es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Paterno: *"  />
+                        <p:inputText id="plastName2" value="#{userProjectLinkController.selectedUser2.PLastName}" title="Apellido(s) del usuario" required="true" requiredMessage="El campo Apellido es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Materno: "  />
+                        <p:inputText id="mlastName2" value="#{userProjectLinkController.selectedUser2.MLastName}" title="Apellido(s) del usuario">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Número de Teléfono: *" for="phoneNumber" />
+                        <p:inputMask id="phoneNumber2" value="#{userProjectLinkController.selectedUser2.phoneNumber}" mask="999-999-9999? ext-99999" />
+
+
+
+                        <p:outputLabel value="Departamento:" for="department" />
+                        <p:inputText id="department2" value="#{userProjectLinkController.selectedUser2.department}" title="Departamento donde radica" >
+                            <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton   icon="ui-icon-disk" actionListener= "#{userProjectLinkController.createUser2()}" value="Guardar Usuario" >
+                            <p:confirm header="Gurdando Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta? Precione 'Aceptar' 
+                                       para guardar los cambios. Precione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" />
+
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:column/>
+
+
+                    </p:panelGrid>
+
+
+
+                    <h:panelGrid id="grid3" rendered="#{userProjectLinkController.checkCol3}"  columns="6">
+                        <f:event type="preRenderView" listener="#{userProjectLinkController.exist3()}"></f:event> 
+
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+
+                        <p:inputText id="col3" value="#{userProjectLinkController.email3}">
+                            <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist3()}"  />
+
+                        </p:inputText>             
+                        <p:commandButton action="#{userProjectLinkController.exist3()}" update="form" value="Verificar correo" />
+                        <p:graphicImage id="check13" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage3}"/>
+                        <p:graphicImage id="check23" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage3}"/>
+                        
+                        
+
+
+                    </h:panelGrid>
+
+                    <p:panelGrid columns="2" rendered="#{userProjectLinkController.checkUImage3}" id="users3">
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                        <p:selectOneMenu id="idDependency3" value="#{userProjectLinkController.selectedUser3.idDependency}" title="Dependencia del usuario" style="width:300px"
+                                         effect="fade"  filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="¿La dependencia no esta en la lista?" for="createDependency"/>
+                        <p:button icon="ui-icon-circle-plus" id="createDependency3" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+
+
+                        <p:outputLabel value="Nombre(s):" for="firstName" />
+                        <p:inputText id="firstName3" value="#{userProjectLinkController.selectedUser3.firstName}" title="Nombre del usuario" required="true" requiredMessage="El campo Nombre es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Paterno: *"  />
+                        <p:inputText id="plastName3" value="#{userProjectLinkController.selectedUser3.PLastName}" title="Apellido(s) del usuario" required="true" requiredMessage="El campo Apellido es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Materno: "  />
+                        <p:inputText id="mlastName3" value="#{userProjectLinkController.selectedUser3.MLastName}" title="Apellido(s) del usuario">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Número de Teléfono: *" for="phoneNumber" />
+                        <p:inputMask id="phoneNumber3" value="#{userProjectLinkController.selectedUser3.phoneNumber}" mask="999-999-9999? ext-99999" />
+
+
+
+                        <p:outputLabel value="Departamento:" for="department" />
+                        <p:inputText id="department3" value="#{userProjectLinkController.selectedUser3.department}" title="Departamento donde radica" >
+                            <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton   icon="ui-icon-disk" actionListener= "#{userProjectLinkController.createUser3()}" value="Guardar Usuario" >
+                            <p:confirm header="Gurdando Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta? Precione 'Aceptar' 
+                                       para guardar los cambios. Precione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" />
+
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:column/>
+
+
+                    </p:panelGrid>
+
+
+                    <h:panelGrid id="grid4" rendered="#{userProjectLinkController.checkCol4}"  columns="6">
+                        <f:event type="preRenderView" listener="#{userProjectLinkController.exist4()}"></f:event> 
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+
+                        <p:inputText id="col4" value="#{userProjectLinkController.email4}">
+                            <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist4()}"  />
+                        </p:inputText>
+                        <p:commandButton action="#{userProjectLinkController.exist4()}" update="form" value="Verificar correo" />
+                        <p:graphicImage id="check14" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage4}"/>
+                        <p:graphicImage id="check24" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage4}"/>
+                        
+                         
+                      
+
+                    </h:panelGrid>
+                    <p:panelGrid columns="2" rendered="#{userProjectLinkController.checkUImage4}" id="users4">
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                        <p:selectOneMenu id="idDependency4" value="#{userProjectLinkController.selectedUser4.idDependency}" title="Dependencia del usuario" style="width:300px"
+                                         effect="fade"  filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="¿La dependencia no esta en la lista?" for="createDependency"/>
+                        <p:button icon="ui-icon-circle-plus" id="createDependency4" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+
+
+                        <p:outputLabel value="Nombre(s):" for="firstName" />
+                        <p:inputText id="firstName4" value="#{userProjectLinkController.selectedUser4.firstName}" title="Nombre del usuario" required="true" requiredMessage="El campo Nombre es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Paterno: *"  />
+                        <p:inputText id="plastName4" value="#{userProjectLinkController.selectedUser4.PLastName}" title="Apellido(s) del usuario" required="true" requiredMessage="El campo Apellido es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Materno: "  />
+                        <p:inputText id="mlastName4" value="#{userProjectLinkController.selectedUser4.MLastName}" title="Apellido(s) del usuario">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Número de Teléfono: *" for="phoneNumber" />
+                        <p:inputMask id="phoneNumber4" value="#{userProjectLinkController.selectedUser4.phoneNumber}" mask="999-999-9999? ext-99999" />
+
+
+
+                        <p:outputLabel value="Departamento:" for="department" />
+                        <p:inputText id="department4" value="#{userProjectLinkController.selectedUser4.department}" title="Departamento donde radica" >
+                            <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton   icon="ui-icon-disk" actionListener= "#{userProjectLinkController.createUser4()}" value="Guardar Usuario" >
+                            <p:confirm header="Gurdando Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta? Precione 'Aceptar' 
+                                       para guardar los cambios. Precione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" />
+
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:column/>
+
+
+                    </p:panelGrid>
+
+
+
+
+                    <h:panelGrid id="grid5" rendered="#{userProjectLinkController.checkCol5}"  columns="6">
+                        <f:event type="preRenderView" listener="#{userProjectLinkController.exist5()}"></f:event> 
+                        <p:outputLabel value="Email de usuario:"  style="color: #ffffff"/>
+
+                        <p:inputText id="col5" value="#{userProjectLinkController.email5}">
+                            <p:ajax  event="blur" update="form" listener="#{userProjectLinkController.exist5()}"  />
+                        </p:inputText>    
+                        <p:commandButton action="#{userProjectLinkController.exist5()}" update="form" value="Verificar correo" />
+                        <p:graphicImage id="check15" url="../resources/images/check.png" width="20" rendered="#{userProjectLinkController.checkCImage5}"/>
+                        <p:graphicImage id="check25" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage5}"/>
+                        
+                       
+                        
+                    
+
+                    </h:panelGrid>
+                    <p:panelGrid columns="2" rendered="#{userProjectLinkController.checkUImage5}" id="users5">
+                        <p:column/>
+                        <p:column/>
+
+                        <p:outputLabel value="Dependencia del usuario:" for="idDependency" />
+                        <p:selectOneMenu id="idDependency5" value="#{userProjectLinkController.selectedUser5.idDependency}" title="Dependencia del usuario" style="width:300px"
+                                         effect="fade"  filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{dependencyController.itemsAvailableSelectOne}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="¿La dependencia no esta en la lista?" for="createDependency"/>
+                        <p:button icon="ui-icon-circle-plus" id="createDependency5" outcome="/dependency/Create" value="Registra tu Dependencia"/>
+
+
+                        <p:outputLabel value="Nombre(s):" for="firstName" />
+                        <p:inputText id="firstName5" value="#{userProjectLinkController.selectedUser5.firstName}" title="Nombre del usuario" required="true" requiredMessage="El campo Nombre es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Paterno: *"  />
+                        <p:inputText id="plastName5" value="#{userProjectLinkController.selectedUser5.PLastName}" title="Apellido(s) del usuario" required="true" requiredMessage="El campo Apellido es obligatorio">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Apellido Materno: "  />
+                        <p:inputText id="mlastName5" value="#{userProjectLinkController.selectedUser5.MLastName}" title="Apellido(s) del usuario">
+                            <p:keyFilter regEx="/[a-z_ ñ]/i" preventPaste="false"/>
+                        </p:inputText>
+
+
+                        <p:outputLabel value="Número de Teléfono: *" for="phoneNumber" />
+                        <p:inputMask id="phoneNumber5" value="#{userProjectLinkController.selectedUser5.phoneNumber}" mask="999-999-9999? ext-99999" />
+
+
+
+                        <p:outputLabel value="Departamento:" for="department" />
+                        <p:inputText id="department5" value="#{userProjectLinkController.selectedUser5.department}" title="Departamento donde radica" >
+                            <p:keyFilter regEx="/[a-z0-9_ ]/i" preventPaste="false"/>
+                        </p:inputText>
+                        <p:column/>
+                        <p:column/>
+                        <p:column/>
+                        <p:commandButton   icon="ui-icon-disk" actionListener= "#{userProjectLinkController.createUser5()}" value="Guardar Usuario" >
+                            <p:confirm header="Gurdando Usuario" message="¿Esta seguro que la informacion proporcionada es la correcta? Precione 'Aceptar' 
+                                       para guardar los cambios. Precione 'Cancelar' para segir editando los campos" icon="ui-icon-alert" />
+
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Aceptar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton  value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:column/>
+
+
+                    </p:panelGrid>
+
+
+
+                </p:panel>
+                    <p:dialog header="Información" widgetVar="InfoDialog" modal="true"  resizable="false" draggable="false">
+                       <p:outputPanel  style="text-align:center;">
+                       <h:panelGrid columns="1" >
+                          <p:outputLabel  value="Responsable o colaborador del proyecto " style="font-size: large; font-family:'politica'" />
+                          <p:outputLabel  value="ha sido registrado con exito." style="font-size: large; font-family:'politica'" />
+                          <p:commandButton value="OK" onclick="PF('InfoDialog').hide();" style="font-size: large; " update="form"/>
+                          
+                        </h:panelGrid>
+                            
+                              </p:outputPanel>
+                    </p:dialog>
+                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                     <p:dialog header="Procesando" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" >
+                        <div class="p-text-center">
+                         <i class="pi pi-spinner loading-icon" aria-hidden="true"></i>
+                         </div>
+                    </p:dialog>
+
+                <p:commandButton icon="ui-icon-disk" id="create"  action="#{userProjectLinkController.editColaborators()}" actionListener="#{projectController.update}" value="Guardar cambios" disabled="#{userProjectLinkController.checkUImage1 || userProjectLinkController.checkUImage2 || userProjectLinkController.checkUImage3 || userProjectLinkController.checkUImage4 || userProjectLinkController.checkUImage5}"/>
+                <br />
+                <br />
+              <p:outputLabel id="text" value="#{userProjectLinkController.existTxt}"  style="color: red; background-color: #ffffff"/>
+
+                 <br />
+                <br />
+                <p:dataTable value="#{userRoleController.items}" var="item" style="border:solid 1px" >
+                        
+                     <f:facet name="header">
+                            Colaboradores en el proyecto
+                        </f:facet>
+                    <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.firstName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Paterno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.PLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Apellido Materno"/>
+                            </f:facet>
+                            <h:outputText value="#{item.MLastName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nombre de usuario"/>
+                            </f:facet>
+                            <h:outputText value="#{item.userName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Dependencia"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dependencyName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Rol del usuario en el proyecto"/>
+                            </f:facet>
+                            <h:outputText value="#{item.role}"/>
+                        </p:column>
+                      
+                    
+                    </p:dataTable>
+                 <br />
+                <br />
+                
+                
+              </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

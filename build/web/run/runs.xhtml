@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Corridas"></h:outputText>
+            <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:form id="form" styleClass="jsfcrud_list_form">
+                <p:growl id="msgs" showDetail="true" life="10000"/>
+                <p:commandButton action="#{libraryController.reset()}" icon="ui-icon-plusthick" value="Crear corrida"/>
+                <p:dataTable id="tbl" value="#{runController.runs}" var="items"  
+                                  style="border:solid 1px; border-color: transparent" scrollable="true" scrollHeight="350" resizableColumns="true"
+                                  selection="#{runController.runSelected}" rowKey="#{items.idRun}" selectionMode="single">
+                    <p:ajax event="rowSelect"  update="btnDialogEdit, btnQualityDialog, tbl"/>
+                        
+                                 
+                         <f:facet name="header">
+                                Corridas
+                        </f:facet>
+                         
+                    <f:facet name="footer"> 
+                        
+                        <h:panelGrid columns="2" style="border-color: transparent">
+                            <p:commandButton id="btnDialogEdit"  disabled="#{runController.validateBTNEditRun()}" action="#{runController.loadFieldEditRun()}" oncomplete="PF('DialogEditRun').show()" value="Editar corrida" icon="ui-icon-clipboard" update=":form:DialogEditRun" />
+                        <p:commandButton id="btnQualityDialog" icon="ui-icon-circle-plus" disabled="#{runController.validateBTNEditRun()}" oncomplete="PF('QualityDialog').show()" value="Registrar reporte(s) de calidad"/>
+                     
+                            </h:panelGrid>
+                    </f:facet>
+                    
+                     <p:column headerText="Id Corrida" width="100" >
+                         <h:outputText value="#{items.idRun}"/>
+                        </p:column>
+                    
+                         <p:column headerText="Nombre de la corrida" width="360" >
+                             <h:outputText value="#{items.runName}"/>
+                        </p:column>
+                                                                       
+                         <p:column headerText="Archivos CSV" width="90">
+                             <a style="font-size: 13px" href="#{libraryController.linkFileSampleSheet(items.sampleSheetName)}" target="_blank"> Ver archivo</a>
+                        </p:column>
+                                      
+                     
+                         <p:column headerText="Estatus" width="120">
+                             <h:outputText value="#{items.status}"/>
+                        </p:column>
+                    
+                      <p:column headerText="Tipo" width="90">
+                             <h:outputText value="#{items.runType}"/>
+                        </p:column>
+                         
+                         <p:column headerText="Rendimiento" width="90">
+                             <h:outputText value="#{items.performance}"/>
+                        </p:column>
+                         
+                           <p:column headerText="Subdirectorio de trabajo" width="200">
+                               <h:outputText value="#{items.workSubdirectory}"/>
+                        </p:column>
+                         
+                         <p:column sortBy="#{items.runStartday}" width="100" >
+                              <f:facet name="header" >
+                                <h:outputText value="Fecha inicial"/>
+                            </f:facet>
+                             <h:outputText value="#{items.runStartday}">
+                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                             </h:outputText>
+                        </p:column>
+                         
+                         <p:column sortBy="#{items.runFinishday}" width="100" >
+                              <f:facet name="header" >
+                                <h:outputText value="Fecha de termino"/>
+                            </f:facet>
+                             <h:outputText value="#{items.runFinishday}">
+                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                             </h:outputText>
+                        </p:column>
+                         
+                    <p:column id="columnLibraries" width="150" >
+                              <f:facet name="header" >
+                                <h:outputText value="Bibliotecas asociadas"/>
+                            </f:facet>
+                             <p:commandButton id="dialogDetails" oncomplete="PF('DialogRun').show()" value="Bibliotecas" icon="ui-icon-clipboard" disabled="#{runController.validateBTNLibraries(items)}" action="#{runController.getValue(items)}" update="form:tbl2">
+                                 <f:actionListener binding="#{libraryController.getRunName(items)}"/>
+                                 <f:actionListener binding="#{libraryController.resetListLibRun()}"/>
+                             </p:commandButton>
+                        </p:column>
+                         
+                          <p:column width="200" >
+                              <f:facet name="header" >
+                                <h:outputText value="Reporte Gral."/>
+                            </f:facet>
+                              <p:commandButton icon="ui-icon-circle-plus" value="Ver reporte(s) de calidad"  oncomplete="PF('viewQRDialog').show()" update="QualityReports" rendered="#{projectController.listQRGral(items).size()>0}" />
+                                 <p:dialog  id="QualityReports" header="reporte(s) calidad" widgetVar="viewQRDialog" modal="true" resizable="false">
+                                     <p:dataTable value="#{projectController.listQRGral(items)}" var="Qr" style="border:solid 1px;  border-color: transparent"  
+                                reflow="true" emptyMessage="">
+                             
+                            <p:column width="60" headerText="Link reporte de calidad" >
+                                <a href="#{projectController.formatLinkReport(Qr.urlQualityReport)}" target="_blank">#{Qr.urlQualityReport}</a>
+                                <!--   
+                                <h:outputLink value="#{Qr.urlQualityReport}" target="_blank">LINK</h:outputLink>
+                                -->
+                                
+                            </p:column>
+                                         <p:column width="60" headerText="Tipo" >
+                                
+                                             <h:outputText value="#{Qr.type}"/>
+                            </p:column>
+                   
+                   </p:dataTable>
+                </p:dialog>
+                              
+                             
+                        </p:column>
+                         
+                     </p:dataTable>
+                <p:dialog header="Bibliotecas" widgetVar="DialogRun" modal="true" showEffect="fade" hideEffect="fade" resizable="false"  responsive="true" width="1100">
+                    <p:dataTable id="tbl2" value="#{runController.librariesRun}" var="item"  widgetVar="table"
+                                 style="border:solid 1px; border-color: transparent" scrollable="true" scrollHeight="350" resizableColumns="true"   reflow="true"
+                                selection="#{libraryController.libRun}" rowKey="#{item.idLibrary}"
+                                 >
+                                 
+                         <f:facet name="header">
+                                Bibliotecas de la corrida
+                        </f:facet>
+                         
+                        <f:facet name="footer">
+                            <h:panelGrid columns="3">
+                            <p:commandButton    id="createBiblo" icon="ui-icon-clipboard"  value="Crear SampleSheet" action="#{libraryController.checkSelectedLibraries()}" update="form:SampleSheetCreate, form:modulDialog">
+                                <f:actionListener binding="#{libraryController.loadFieldGenerateRun(runController.runSelected)}"/>
+                           </p:commandButton>
+                                <p:commandButton    id="insert" icon="ui-icon-clipboard"  value="Agregar bilbiotecas" oncomplete="PF('dlgSearch').show()"  update="form:libs">
+                                    <f:actionListener binding="#{libraryController.resetValues()}"/>
+                                    
+                                </p:commandButton>
+                            <p:commandButton    id="delete" icon="ui-icon-clipboard"  value="Eliminar librerias" action="#{libraryController.DeleteLibraries()}"  update="tbl2">
+                            <p:confirm header="Eliminar librerias" 
+                                 message="¿Esta seguro que desea eliminar las muestras seleccionadas?" icon="ui-icon-alert" >
+                                 
+                             </p:confirm></p:commandButton>
+                             </h:panelGrid><br/>
+                            Numero de librerias asociadas a la corrida: #{runController.librariesRun.size()} 
+                        </f:facet>
+                       
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                         <!--leslie 28/>11/23-->
+                        <p:column headerText="Id sample" width="110" >
+                            <h:outputText value="#{libraryController.getIdSample(item)}"/>
+                        </p:column> <!-- fin -->
+                                                                      
+                        
+                        <p:column headerText="Id biblioteca" width="110" >
+                            <h:outputText value="#{item.idLibrary}"/>
+                        </p:column>
+                                                 
+                         <p:column headerText="Nombre biblioteca" width="300" >                            
+                             <h:outputText value="#{libraryController.deleteUserFromNameSample(item.libraryName)}"/>                            
+                        </p:column>
+                         <p:column headerText="Proyecto" width="300" >
+                             <h:outputText value="#{libraryController.getProjectLibrary(item)}"/>
+                        </p:column>
+                         
+                         <p:column headerText="Plataforma" width="220">
+                             <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
+                        </p:column>
+                         
+                         <p:column headerText="Kit" width="220">
+                             <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
+                        </p:column>
+                     
+                         <p:column headerText="Tag 1" width="120">
+                             <h:outputText value="#{item.idBarcode1.indexName}-#{item.idBarcode1.basei7}"/>
+                        </p:column>
+                         
+                         <p:column headerText="Tag 2" width="120">
+                             <h:outputText value="#{runController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
+                        </p:column>
+                         
+                        <p:column sortBy="#{item.preparationDate}" width="150" >
+                            <f:facet name="header" >
+                                <h:outputText value="Fecha de prep"/>
+                            </f:facet>
+                            <h:outputText value="#{item.preparationDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                     
+                     </p:dataTable>
+                </p:dialog>
+                
+                <p:dialog id="DialogEditRun" header="Editar corrida" widgetVar="DialogEditRun" modal="true" showEffect="fade" hideEffect="fade" resizable="false"  responsive="true" width="600">
+                    <h:panelGrid columns="2">
+                        
+                    <p:outputLabel  value="Nombre de la corrida:" /> 
+                    <p:inputText id="runsName" value="#{runController.runName}" style="width:200px"/>
+                        
+                    <p:outputLabel  value="Path de trabajo:"/> 
+                    <p:inputText id="workDirectory" value="#{runController.workDirectory}"/>
+                    
+                    <p:outputLabel value="Estatus:"/> 
+                    <p:selectOneMenu   id="estatus" value="#{runController.estatus}"><!--value="{runController.estatus}"-->
+                        <f:selectItem itemLabel="---" itemValue="---" />    
+                        <f:selectItem itemLabel="Running" itemValue="Running" />
+                        <f:selectItem itemLabel="Complete" itemValue="Complete" />
+                        <f:selectItem itemLabel="Failed" itemValue="Failed"/>                       
+                     </p:selectOneMenu>
+                    
+                     <p:outputLabel for="popup" value="Fecha de finalización*:" />
+                     <p:calendar id="popup" value="#{runController.finishDate}"  pattern="MM/dd/yyyy" />
+                     
+                    </h:panelGrid><br/>
+                    <p:commandButton  value="Guardar" icon="ui-icon-disk" action="#{runController.editRun()}" update="tbl, form:modulDialog, estatus, workDirectory, popup"/>
+                </p:dialog>
+                  
+                <p:dialog id="SampleSheetCreate" header="Generar Nuevo SampleSheet" widgetVar="DialogCreate" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    
+                    <h:panelGrid id="contentBtnFCSS"  columns="1">
+                           
+                        <p:outputLabel value="Descripción:"/> 
+                        <p:inputTextarea value="#{libraryController.description}"/><br/>
+                        
+                     
+                       <h:panelGrid columns="2" id="ciclos" >
+                           
+                           <p:outputLabel value="Ciclos de lectura 1*:" rendered="#{libraryController.checkPlataform()}"/>
+                           <p:inputText value="#{libraryController.run1}" size="10" rendered="#{libraryController.checkPlataform()}">
+                               <p:keyFilter regEx="/[0-9]/i" preventPaste="false"/>
+                           </p:inputText>
+                   </h:panelGrid><br/>
+                      
+                      </h:panelGrid><br/>
+                     
+                      <p:commandButton id="SampleSheet" icon=" ui-icon-arrowthickstop-1-s"  value="Generar SampleSheet" action="#{libraryController.createSampleSheet(2,null, runController.runSelected)}" update="form:modulDialog, form:outputMessage, form:tbl, contentBtnFCSS, :form:messageModulDialog">
+                      
+                      </p:commandButton>
+                  </p:dialog>
+                     
+                   
+                
+                <p:dialog id="libs" header="Agregar más bibliotecas a la corrida" modal="true" style="font-size: large" widgetVar="dlgSearch" height="600" width="1300" responsive="true">
+                    <p:outputLabel  value="Busqueda de bibliotecas" style="font-size: large" />
+                     <br/>
+                     <br/>
+                     <p:panelGrid id ="criteria" columns="7"  layout="grid">
+                         <p:outputLabel style="color:black; font-size: 14px;font-weight: bold"  value="Búsqueda por rango de ID: "  />
+                         <p:inputText  value="#{libraryController.range}" size="25" placeholder="Ej:1-10,15,20,25" disabled="#{libraryController.disabledBtn||libraryController.user.length()>0 || libraryController.projs.size()!=0}">
+
+                         </p:inputText> 
+
+                         <p:outputLabel style="color:black; font-size: 15px;font-weight: bold"  value="Proyectos: " for="pj" />
+
+                         <p:selectCheckboxMenu id="pj" value="#{libraryController.projs}" label="Cities" style="min-width: 15rem"
+                                               multiple="true" filter="true" filterMatchMode="contains" panelStyle="width: 30rem" scrollHeight="250"  disabled="#{libraryController.disabledBtn||libraryController.user.length()>0||libraryController.range!=null}">
+
+                             <f:selectItems value="#{libraryController.projects}"/>
+
+                         </p:selectCheckboxMenu>
+                         
+                         
+                         <p:outputLabel style="color:black; font-size: 15px;font-weight: bold"  value="Usuario: " for="user" />
+
+                    <p:selectCheckboxMenu id="user"  value="#{libraryController.usersList}" label="Cities" style="min-width: 15rem"
+                                          multiple="true" filter="true" filterMatchMode="contains" panelStyle="width: 30rem" scrollHeight="250" disabled="#{libraryController.disabledBtn||libraryController.projs.size()!=0||libraryController.range!=null}">
+
+                        <f:selectItems value="#{usersController.us()}"/>
+                        <p:ajax event="change" update=":form:criteria"  immediate="true" resetValues="true"/>
+                    </p:selectCheckboxMenu><br/>
+                         
+                         
+                         <p:panelGrid  columns="2"  layout="grid">
+                             <p:commandButton value="Buscar" action="#{libraryController.setDisabledBtn(true)}" update="criteria tbl3"/>
+
+                             <p:commandButton value="Limpiar" update="criteria tbl3" immediate="true" resetValues="true" action="#{libraryController.resetValues()}" styleClass="ui-button-outlined ui-button-secondary">
+                                 <p:resetInput target="criteria" class="" />
+                             </p:commandButton>
+
+
+                         </p:panelGrid>
+                     </p:panelGrid>
+                     
+                     <p:dataTable id="tbl3" value="#{libraryController.libsRun}" var="item"  widgetVar="tableSearch"
+                                  style="border:solid 1px;font-size: 12px; border-color: transparent" scrollable="true" scrollHeight="400"  resizableColumns="true"   reflow="true"
+                                  selection="#{runController.libraryTable}" rowKey="#{item.idLibrary}">
+                         <f:facet name="header">
+                                Bibliotecas
+                        </f:facet>
+                         
+                        <f:facet name="footer">
+                            <p:commandButton   id="insertLibs" icon="ui-icon-clipboard"  value="Agregar bibliotecas" action="#{runController.insertLibraries()}" update="form:tbl2, form:modulDialog, form:criteria, tbl3">
+                                <f:actionListener binding="#{libraryController.resetValues()}"/>
+                            
+                            </p:commandButton>
+                        </f:facet>
+                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                         
+                          <!--leslie 28/>11/23-->
+                        <p:column headerText="Id Muestra" width="70" >
+                            <h:outputText value="#{libraryController.getIdSample(item)}"/>
+                        </p:column> 
+                                                                          
+                         <p:column headerText="Id Biblioteca" width="80" >
+                             <h:outputText value="#{item.idLibrary}"/>
+                        </p:column>
+                         <!-- fin -->
+                         
+                         <p:column headerText="Nombre Biblioteca" width="200" >
+                             <h:outputText value="#{item.libraryName}"/>
+                        </p:column>
+
+                         <p:column headerText="Tag 1" width="150">
+                             <h:outputText value="#{item.idBarcode1.indexName}-#{item.idBarcode1.basei7}"/>
+                         </p:column>
+
+                         <p:column headerText="Tag 2" width="150">
+                             <h:outputText value="#{runController.getIndexBasei5View(item.idBarcode2, item.plataformLinkKit.plataform.plataformName)}"/>
+                         </p:column>
+
+                         <p:column headerText="Plataforma" width="120">
+                             <h:outputText value="#{item.plataformLinkKit.plataform.plataformName}"/>
+                        </p:column>
+                         
+                         <p:column headerText="Kit" width="120">
+                             <h:outputText value="#{item.plataformLinkKit.kit.kitName}"/>
+                        </p:column>
+                         
+                         <p:column sortBy="#{item.preparationDate}" width="100" >
+                              <f:facet name="header" >
+                                <h:outputText value="Fecha de preparación"/>
+                            </f:facet>
+                             <h:outputText value="#{item.preparationDate}">
+                              <f:convertDateTime pattern="dd/MM/yyyy" />
+                             </h:outputText>
+                        </p:column>                                              
+                         
+                         <p:column headerText="Tamaño biblioteca" width="120">
+                             <h:outputText value="#{item.librarySize}"/>
+                        </p:column>
+                         
+                         
+                         
+                         <f:facet name="footer">                           
+                             Número de bibliotecas encontradas: #{libraryController.libsRun.size()} 
+                        </f:facet>
+                         
+                         
+                     </p:dataTable>
+                </p:dialog>
+                <p:dialog header="AVISO" widgetVar="dlgInfoError" height="110" width="620" showEffect="explode" hideEffect="bounce" style=" top: auto" visible="#{projectController.selectedProject.quotationNumber.matches('.*Cotización enviada')}" >
+                    <h:outputText value="ERROR:" /> <br/><br/>
+                    <h:outputText value="Una de las bibliotecas seleccionadas ya ha sido agregada en esta corrida, por favor verifique nuevamente." /><br/><br/>
+                    
+                    <p:commandButton value="Aceptar"  onclick="PF('dlgInfoError').hide();"/>
+                </p:dialog>
+                <p:dialog header="AVISO" widgetVar="dlgInfoUpdate" height="110" width="620" showEffect="explode" hideEffect="bounce" style=" top: auto" visible="#{projectController.selectedProject.quotationNumber.matches('.*Cotización enviada')}" >
+                    <h:outputText value="Las muestras han sido modificadas correctamente" /> <br/><br/>
+                    
+                    
+                    <p:commandButton value="Aceptar"  onclick="PF('dlgInfoUpdate').hide();"/>
+                </p:dialog>
+                
+                   <p:dialog header="Registro reporte(s) de calidad" widgetVar="QualityDialog" modal="true" resizable="false">
+                              
+                    <p:outputPanel  style="text-align:left;">
+                        <h:panelGrid columns="1">
+                        <p:outputLabel  value="Link reporte de calidad" />
+                       
+                        <p:inputText  value="#{runController.url_Qr}" size="50" id="url" /> <br/>
+                   
+                   
+                           <p:commandButton   value="Guardar" action="#{runController.addLinkReportRun()}" icon="ui-icon-disk" update="tbl, form:modulDialog, url"/>
+                   </h:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+                <p:dialog header="Cargando..." widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false">
+                    <div align="center">
+                        <p:outputLabel value="Espere un momento :)"></p:outputLabel><br></br><br></br>
+                        <p:graphicImage value="../resources/images/load4.gif" width="120" height="120"></p:graphicImage>
+                    </div>
+
+                </p:dialog>
+                 
+                 <p:dialog header="Error al crear corrida" modal="true" style="font-size: large" widgetVar="dlgerrorcsvrepetido" minHeight="60" >
+                     <h:panelGrid columns="1" id="dlgerrorcsvrepetido" style="text-align: center">
+                         <p:outputLabel id="outputMessage" value="#{libraryController.messageDialog}" />
+                     </h:panelGrid>
+                 </p:dialog>
+                 
+                 <p:dialog  id="modulDialog" header="#{runController.titleDialog}" modal="true" style="font-size: large" widgetVar="modulDialog" minHeight="60" >
+                     <h:panelGrid columns="1" style="text-align: center">
+                         <p:outputLabel id="messageModulDialog" value="#{libraryController.messageDialog}" />
+                         <p:outputLabel id="messageModulDialog2" value="#{runController.messageDialog}" />
+                     </h:panelGrid>
+                 </p:dialog>
+                
+            </h:form>
+            
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditSampleGenomeLinkTitle}"></h:outputText>
+             <f:event type="preRenderView" listener="#{plantillaController.verificaAdmin()}"></f:event>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditSampleGenomeLinkLabel_sampleGenomeLinkPK_type}" for="sampleGenomeLinkPK_type" />
+                    <h:inputText id="sampleGenomeLinkPK_type" value="#{sampleGenomeLinkController.selected.sampleGenomeLinkPK.type}" title="#{bundle.EditSampleGenomeLinkTitle_sampleGenomeLinkPK_type}" required="true" requiredMessage="#{bundle.EditSampleGenomeLinkRequiredMessage_sampleGenomeLinkPK_type}"/>
+                    <h:outputLabel value="#{bundle.EditSampleGenomeLinkLabel_note}" for="note" />
+                    <h:inputText id="note" value="#{sampleGenomeLinkController.selected.note}" title="#{bundle.EditSampleGenomeLinkTitle_note}" />
+                    <h:outputLabel value="#{bundle.EditSampleGenomeLinkLabel_genome}" for="genome" />
+                    <h:selectOneMenu id="genome" value="#{sampleGenomeLinkController.selected.genome}" title="#{bundle.EditSampleGenomeLinkTitle_genome}" required="true" requiredMessage="#{bundle.EditSampleGenomeLinkRequiredMessage_genome}">
+                        <f:selectItems value="#{genomeController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditSampleGenomeLinkLabel_sample}" for="sample" />
+                    <h:selectOneMenu id="sample" value="#{sampleGenomeLinkController.selected.sample}" title="#{bundle.EditSampleGenomeLinkTitle_sample}" required="true" requiredMessage="#{bundle.EditSampleGenomeLinkRequiredMessage_sample}">
+                        <f:selectItems value="#{sampleController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{sampleGenomeLinkController.update}" value="#{bundle.EditSampleGenomeLinkSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditSampleGenomeLinkViewLink}"/>
+                <br />
+                <h:commandLink action="#{sampleGenomeLinkController.prepareList}" value="#{bundle.EditSampleGenomeLinkShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditSampleGenomeLinkIndexLink}" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

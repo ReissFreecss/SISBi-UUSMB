@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Detalles de la muestra #{sampleController.selectedSample.sampleName}"></h:outputText>
+          
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                
+                <p:panelGrid columns="2">
+                  
+                    <f:facet name="header">
+                        Información General
+                    </f:facet>
+                    
+                    <p:outputLabel value="Nombre de la muestra"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.sampleName}" title="#{bundle.ViewSampleTitle_sampleName}"/>
+                    
+                    <p:outputLabel value="Etiqueta del tubo:"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.idTube}" title="#{bundle.ViewSampleTitle_sampleQuality}"/>
+                    
+                    <p:outputLabel value="Cantidad de muestra"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.sampleQuantity}" title="#{bundle.ViewSampleTitle_sampleQuantity}"/>
+                    
+                    <p:outputLabel value="Calidad de muestra"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.sampleQuality}" title="#{bundle.ViewSampleTitle_sampleQuantity}"/>
+                   
+                    <p:outputLabel value="Estado de la muestra"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.status}" title="#{bundle.ViewSampleTitle_status}"/>
+                     
+                    <p:outputLabel value="Comentarios"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.comments}" title="#{bundle.ViewSampleTitle_comments}"/>
+                    
+                    <p:outputLabel value="Fecha de recepcion"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.receptionDate}" title="#{bundle.ViewSampleTitle_type}"/>
+                  
+                    <p:outputLabel value="Fecha de entrega"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.deliveryDate}" title="#{bundle.ViewSampleTitle_type}"/>
+                  
+                    <p:outputLabel value="Tipo"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.type}" title="#{bundle.ViewSampleTitle_type}"/>
+                  
+                    <p:outputLabel value="Rendimiento esperado"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.expectedPerformance}" title="#{bundle.ViewSampleTitle_type}"/>
+                  
+                    <p:outputLabel value="Rendimiento real"/>
+                    <p:outputLabel value="#{sampleController.selectedSample.realPerformance}" title="#{bundle.ViewSampleTitle_type}"/>
+                  
+                </p:panelGrid>
+                <br />
+                <h:commandLink action="#{sampleController.destroyAndView}" value="#{bundle.ViewSampleDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewSampleEditLink}"/>
+                <br />
+                <h:commandLink action="#{sampleController.prepareCreate}" value="#{bundle.ViewSampleCreateLink}" />
+                <br />
+                <h:commandLink action="#{sampleController.prepareList}" value="#{bundle.ViewSampleShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewSampleIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

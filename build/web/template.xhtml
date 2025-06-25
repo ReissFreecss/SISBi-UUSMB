@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+
+<!-- 
+En esta página es la plantilla para cada página del sistema, consta de la barra de menú que redirige a todas las paginas 
+a las que tiene acceso el usuario, dependiendo de que tipo de usuario sea seran las paginas que puede acceder.
+Lo anterior se logra con metodos en el controlador de la plantilla (plantillaController)
+!-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+ 
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="refresh" content="28800;url=http://www.uusmb.unam.mx/SISBI/uusmb/Principal/logout.xhtml" />
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="estilosReportes.css"/>
+        <link rel="icon" type="image/png" href="../resources/images/logoch.png" />
+
+        <h:form>
+            <p:growl id="messages"/>
+            
+   
+            <p:menubar id="tb" style="font-family: 'politica'" >
+                <p:menuitem style="padding: 1em .3em; font-family: 'politica'" >
+                    <h:link>
+                        <p:graphicImage library="images" name="new_logo.png" style="height:60px"  />
+                    </h:link>
+                  </p:menuitem>
+                  
+                <p:menuitem style="padding: 1em .3em; font-family: 'politica'" value="Inicio" action="#{plantillaController.redirectHome()}">
+                    <f:actionListener binding="#{usersController.cleanInputsFilterUsers()}"/>
+                    </p:menuitem>
+                
+                    <p:submenu label="Usuarios" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" style="padding: .6em .3em; font-family: 'politica'">              
+                      <p:menuitem value="Todos los usuarios" url="../users/ListAll.xhtml"/>
+                      <p:menuitem value="Cambiar tipo de usuario" url="../users/EditTypeUser.xhtml"  />
+                    </p:submenu>
+                    
+                    <p:submenu label="Proyectos" style="padding: .6em .3em; font-family: 'politica'" >
+                        <p:menuitem value="Nuevo proyecto" action="#{projectController.redirectCreateProject()}">
+                            <f:actionListener binding="#{userProjectLinkController.resetInputEmail()}"/>
+                        </p:menuitem>
+                        <p:menuitem value="Mis proyectos" disabled="#{projectController.items.size()==0}" url="../project/List.xhtml" title="#{projectController.haveProjects()}"/>
+                        <p:menuitem value="Todos los proyectos" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" url="../project/ListAllL.xhtml" title=""/>
+                        <p:menuitem value="Roles Reportes" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" url="../userRoleReport/List.xhtml" title=""/>
+                        <p:menuitem value="Reportes" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" url="../reportDocuments/ReportProjectStatus.xhtml"  title=""/>
+                    </p:submenu>
+
+                    
+                    
+                    <p:menuitem value="Muestras" style="padding: 1em .3em; font-family: 'politica'" url="../sample/AllSamples.xhtml"  rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" />
+    
+                    <p:submenu label="Bibliotecas" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" style="padding: .6em .3em; font-family: 'politica'">              
+                      <p:menuitem value="Todas las bibliotecas" url="../library/List.xhtml"  />
+                    </p:submenu>
+                    
+                  <p:submenu label="Corridas" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" style="padding: .6em .3em; font-family: 'politica'">              
+                      <p:menuitem value="Crear corrida" action="#{libraryController.reset()}"/>
+                      <p:menuitem value="Corridas" url="../run/runs.xhtml"  />
+                       
+                    </p:submenu>
+
+                    <p:submenu label="Ayuda"  style="padding: .6em .3em; font-family: 'politica'">
+                        <p:menuitem value="Preguntas frecuentes" url="../Principal/faq.xhtml"  />
+                    </p:submenu>
+                                                         
+                    
+                    <p:menuitem value="Calculadora" url="#{plantillaController.link()}" target="_blank" style="padding: 1em .3em; font-family: 'politica'" />
+                   
+                     <p:submenu label="TecLab" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}" style="padding: .6em .3em; font-family: 'politica'">              
+                      <p:menuitem value="Nueva plataforma" url="../plataform/Create.xhtml"/>
+                       <p:menuitem value="Nuevo kit" url="../kit/Create.xhtml"/>
+                    </p:submenu>
+
+                    <p:menuitem style="padding: 1em .3em; font-family: 'politica'" value="Contacto" url="../Principal/contacto.xhtml" />
+                    
+                    <p:submenu label="Documentos" style="padding: .6em .3em; font-family: 'politica'" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}">
+
+                        <p:menuitem value="Manual de calidad" url="https://docs.google.com/document/d/1a4AkGg1qDpvwIXPrgyziRHCRWqUoxuDf/edit" target="_blank" rendered="#{plantillaController.canView()}"  />
+
+                        <p:menuitem value="Matriz de riesgos" url="https://docs.google.com/spreadsheets/d/1rdAkihJFGrVnx3Y8HJt0U8G7F_6eMs9U/edit#gid=1912780022"  target="_blank" />
+
+                        <p:menuitem value="FODA" url="https://docs.google.com/document/d/1SNmwpjt3ihaO7CjXwa3S66x2N1kR-Yhv/edit"  target="_blank" />
+
+                        <p:menuitem value="Listado maestro" url="https://docs.google.com/spreadsheets/d/1v1REvVcB3SFny2zyxk2u0csge3sit6Kj/edit#gid=1569190333"  target="_blank" />
+			
+			<p:menuitem value="Términos y condiciones de cursos LNATCG" url="https://docs.google.com/document/d/1AnlEU0VCvLPXM3YONFrHAWAnT9O6mLkG/edit"  target="_blank" />
+                    
+			 <p:menuitem value="Términos y condiciones del registro de usuario y servicio" url="https://docs.google.com/document/d/13y2f53h-gqNjbMMIG9DniM7EgULq4nr8/edit"  target="_blank" />
+			</p:submenu>
+                    
+
+                    <f:facet name="options"  >
+
+                        <p:button icon="ui-icon-person" outcome="/users/List" value="Mi perfil" style="font-size: large;font-family: 'politica'"/>
+                        <p:commandButton  icon="ui-icon-power" actionListener="#{plantillaController.cerrarSesion()}" style="font-size: large;font-family: 'politica'" value="Cerrar sesión"  action="/index" >
+                            <p:confirm header="Cerrar sesión" message="¿Está seguro que desea cerrar su sesión?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog><br/>
+                        <p:commandButton icon="ui-icon-transferthick-e-w" action="#{plantillaController.changingView()}"  value="Cambiar vista" style="font-size: large;font-family: 'politica'" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==false}"/>
+                        <p:commandButton icon="ui-icon-transferthick-e-w" action="#{plantillaController.changingView2()}"  value="Cambiar vista" style="font-size: large;font-family: 'politica'" rendered="#{plantillaController.canView() &amp;&amp; plantillaController.changeView==true}"/>
+                    </f:facet>
+                </p:menubar>
+                  <p:sticky target="tb" />        
+        </h:form>
+
+    </h:head>
+
+    <h:body>
+
+
+
+        <h1>
+            <ui:insert name="title">Default Title</ui:insert>
+        </h1>
+        <p>
+            <ui:insert name="body">Default Body</ui:insert>
+            
+        </p>
+
+
+
+
+
+
+    </h:body>
+    
+  
+   
+
+</html>
