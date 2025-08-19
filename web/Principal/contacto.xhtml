@@ -4,71 +4,77 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-       xmlns:p="http://primefaces.org/ui"
-     >
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="Contacto"></h:outputText>
- <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}"></f:event> 
+            <h:outputText value="Contacto" />
+            <f:event type="preRenderView" listener="#{plantillaController.verificarSesion()}" />
         </ui:define>
+
+        <!-- Carlos 29 de julio: volvi a hacer la vista de contactos para que se viera mas legible -->
         <ui:define name="body">
             <h:form id="form">
-                
                 <div class="ui-g">
-                  <div class="ui-g-12 ui-md-4"> </div>
-                     <div class="ui-g-12 ui-md-4">
-                         <h:panelGrid columns="2" style="text-align: center;">
-                    <h:panelGrid>
-<h2>Páginas Web</h2>
-<p:outputLabel value="Unidad Universitaria de Secuenciación Masiva y Bioinformática"/>
- <h:outputLink value= "http://www.uusmb.unam.mx/" >http://www.uusmb.unam.mx/</h:outputLink>
- <p:outputLabel value="Laboratorio Nacional de Apoyo Tecnológico a las Ciencias Genómicas"/>
- <h:outputLink value= "http://lnatcg.unam.mx/" >http://lnatcg.unam.mx/</h:outputLink>
+                    <div class="ui-g-12 ui-md-2"></div>
+                    <div class="ui-g-12 ui-md-8">
 
+                        <p:panel header="Asistencia Técnica" styleClass="custom-panel">
+                            <p:outputLabel value="Para problemas o dudas relacionadas con SISBi, contáctenos vía correo electrónico en:" /><br/>
+                            <h:outputText escape="false" value="sisbi&#8203;support" style="font-weight:bold; font-size: 20px;" />
+                            <h:outputText escape="false" value="&#8203; @ibt.unam.mx" style="font-weight:bold; font-size: 20px;" /><br/><br/>
 
-<h2>Servicios:</h2>
-<p:outputLabel value="Para solicitudes o dudas con respecto a nuestros"/>
-<p:outputLabel value="servicios y/o cotizaciones hacerlo via electrónica:"/>
-<p:outputLabel value="uusmb @ibt.unam.mx"/>
+                            <p:outputLabel value="Para solicitudes o dudas con respecto a nuestros servicios y/o cotizaciones, contáctenos vía correo electrónico:" /><br/>
+                            <h:outputText escape="false" value="uus&#8203;mb" style="font-weight:bold; font-size: 20px;" />
+                            <h:outputText escape="false" value=" @ibt.unam.mx" style="font-weight:bold; font-size: 20px;" /><br/><br/>
 
-<h2>Cursos</h2>
+                        </p:panel><br/>
 
-<p:outputLabel value="Para todo lo relacionado a cursos póngase en contacto"/>
-<p:outputLabel value="vía electrónica al siguiente correo electrónico:"/>
-<p:outputLabel value="cursos_uusmb @ibt.unam.mx"/>
-<br/>
-    
-<p:outputLabel value="Si requiere otro tipo de información que no este disponible en nuestra página,"/>
-<p:outputLabel value="o alguna aclaración, puede contactarnos vía telefónica:" />
+                        <p:panel header="Páginas Web" styleClass="custom-panel">
+                            <p:outputLabel value="Unidad Universitaria de Secuenciación Masiva y Bioinformática" /><br/>
+                            <h:outputLink value="http://www.uusmb.unam.mx/" target="_blank">
+                                <h:outputText value="http://www.uusmb.unam.mx/" style="font-weight:bold;" />                            
+                            </h:outputLink><br/><br/>
+                            <p:outputLabel value="Laboratorio Nacional de Apoyo Tecnológico a las Ciencias Genómicas" /><br/>
+                            <h:outputLink value="http://lnatcg.unam.mx/" target="_blank">
+                                <h:outputText value="http://lnatcg.unam.mx/" style="font-weight:bold;" />                           
+                            </h:outputLink>
+                        </p:panel><br/>
 
-<h2>Oficina del jefe de la unidad:</h2>
-<p:outputLabel value="Desde la CDMX +52 (55) 56227864"/>
-<p:outputLabel value="Desde Cuernavaca +52 (777) 3291864"/>
-<p:outputLabel value="RED UNAM 27864"/>
+                        <p:panel header="Cursos" styleClass="custom-panel">
+                            <p:outputLabel value="Para todo lo relacionado a cursos, contáctenos vía correo electrónico:" /><br/>
+                            <h:outputText escape="false" value="cursos_uusmb&#8203;support" style="font-weight:bold; font-size: 20px;" />
+                            <h:outputText escape="false" value="&#8203;@ibt.unam.mx" style="font-weight:bold; font-size: 20px;" /><br/><br/>
+                        </p:panel><br/>
 
+                        <p:panel header="Información adicional" styleClass="custom-panel">
+                            <p:outputLabel value="Si requiere otro tipo de información no disponible en la página o aclaraciones, puede llamarnos:" /><br/><br/>
 
-<h2>Servicio de Secuenciación:</h2>
-<p:outputLabel value="Desde la CDMX +52 (55) 56227719"/>
-<p:outputLabel value="Desde Cuernavaca +52 (777) 3291719"/>
-<p:outputLabel value="RED UNAM 27719"/>
+                            <h3>Oficina del jefe de la unidad:</h3>
+                            <ul>
+                                <li>CDMX: +52 (55) 56227864</li>
+                                <li>Cuernavaca: +52 (777) 3291864</li>
+                                <li>RED UNAM: 27864</li>
+                            </ul>
 
+                            <h3>Servicio de Secuenciación:</h3>
+                            <ul>
+                                <li>CDMX: +52 (55) 56227719</li>
+                                <li>Cuernavaca: +52 (777) 3291719</li>
+                                <li>RED UNAM: 27719</li>
+                            </ul>
 
-<h2>Servicio de Bioinformática:</h2>
-<p:outputLabel value="Desde la CDMX +52 (55) 56227777 ext 38151"/>
-<p:outputLabel value="Desde Cuernavaca +52 (777) 3291777 ext 38151"/>
+                            <h3>Servicio de Bioinformática:</h3>
+                            <ul>
+                                <li>CDMX: +52 (55) 56227777 ext 38151</li>
+                                <li>Cuernavaca: +52 (777) 3291777 ext 38151</li>
+                            </ul>
+                        </p:panel><br/>
 
-                   </h:panelGrid>
-                   <h:panelGrid>
-                   </h:panelGrid>
-                    
-                </h:panelGrid>
-             </div>
-             <div class="ui-g-12 ui-md-4"> </div>      
-           </div>
-             </h:form>
+                    </div>
+                    <div class="ui-g-12 ui-md-2"></div>
+                </div>
+            </h:form>
         </ui:define>
     </ui:composition>
-
 </html>
-   

@@ -78,6 +78,7 @@ public class UsersController implements Serializable {
     public void setTermsAndConditions2Agreed(boolean termsAndConditions2Agreed) {
         this.termsAndConditions2Agreed = termsAndConditions2Agreed;
     }
+
     public String getSelectTypeUser() {
         return selectTypeUser;
     }
@@ -593,10 +594,16 @@ public class UsersController implements Serializable {
 
     @PostConstruct
     public void init() {
-
-        usuarios = new ArrayList<>();
-        usuarios = ejbFacade.findAllUsers();
-
+        try {
+            usuarios = new ArrayList<>();
+            if (ejbFacade == null) {
+                System.out.println("⚠️ ejbFacade es NULL en init()");
+            } else {
+                usuarios = ejbFacade.findAllUsers();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // O usa logger
+        }
     }
 
     public List<String> getImages() {

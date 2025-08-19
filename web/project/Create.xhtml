@@ -37,7 +37,9 @@
                         <p:selectOneRadio  id="role" value="#{userProjectLinkController.selected.role}" required="true" requiredMessage="Proporcione el rol que desempeña en el proyecto" >
                             <f:selectItem itemLabel="Responsable de pagar el proyecto" itemValue="Responsable" />
                             <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
-                            <p:ajax  event="valueChange" update=":form:create,:form:text,:form:mantext" listener="#{userProjectLinkController.existManager()}"  />
+                            <p:ajax  event="valueChange" 
+                                     update=":form:create,:form:text,:form:mantext" 
+                                     listener="#{userProjectLinkController.existManager()}"  />
                         </p:selectOneRadio>
 
                         <p:outputLabel value="Comentarios: " for="projectComments" />
@@ -96,7 +98,7 @@
                             <p:graphicImage id="check2" url="../resources/images/uncheck.png" width="25" rendered="#{userProjectLinkController.checkUImage1}"/>
 
                             <!-- Selector de rol: visible solo si el correo fue validado correctamente -->
-                            <h:panelGroup rendered="#{userProjectLinkController.checkCImage1}">
+                            <h:panelGroup rendered="#{userProjectLinkController.checkCImage1}">m
                                 <h:outputText value="Seleccione el rol del colaborador:" style="margin-top:10px; display:block"/>
 
                                 <p:selectOneRadio id="role1"
@@ -106,8 +108,9 @@
                                     <f:selectItem itemLabel="Responsable de pagar el proyecto" itemValue="Responsable" />
                                     <f:selectItem itemLabel="Colaborador" itemValue="Colaborador" />
                                     <p:ajax event="valueChange"
-                                            update=":form:RoleUser"
-                                        listener="#{userProjectLinkController.existManager1}" />
+                                            update=":form:create,:form:text,:form:mantext"
+                                            listener="#{userProjectLinkController.existManager1}" />
+
                                 </p:selectOneRadio>
 
 

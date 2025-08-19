@@ -2975,7 +2975,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
@@ -2985,7 +2985,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
@@ -2995,7 +2995,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación MiSeq de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un cartucho MiSeq v3. de 600 ciclos para una secuencia de 2x300 ciclos. Se utilizaron 0.6 ml de la solución con las bibliotecas a una concentración de 14 pM para cargar en el equipo de secuenciación");
@@ -3005,7 +3005,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
@@ -3015,17 +3015,17 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
                         break;
-
+                        
                     case "6":
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración necesaria para este tipo de biblioteca y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación iSeq100 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un cartucho iSeq100 de 300 ciclos para una secuencia de 2x150 ciclos. Se utilizaron 0.02 ml de la solución con las bibliotecas a una concentración pM específica para cada tipo de biblioteca para cargar en el equipo de secuenciación");
@@ -3035,7 +3035,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración de 4 nM y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq 500 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un NextSeq 500/550 High Output Kit v2.5 de 150 cycles para una secuencia de 2x75 ciclos. Se utilizaron 1.5 ml de la solución con las bibliotecas a una concentración de 1.8 pM para cargar en el equipo de secuenciación");
@@ -3045,7 +3045,7 @@ public class ReportProjectController implements Serializable {
                         ubicacionTexto.append("Las muestras fueron cuantificadas por qPCR, se normalizaron a una concentración necesaria para este tipo de biblioteca y se hizo una mezcla de todas las bibliotecas en una sola dilución para secuenciarse. La secuencia se realizó en un equipo de secuenciación NextSeq200 de la compañía Illumina, con el identificador ")
                                 .append(row.length > 0 && row[0] != null ? row[0] + ", en las instalaciones de " : "")
                                 .append(row.length > 1 && row[1] != null ? row[1] + ", ubicado en el municipio de " : "")
-                                .append(row.length > 4 && row[4] != null ? row[4] + ", de la " : "")
+                                .append(row.length > 4 && row[4] != null ? row[4] + ", " : "")
                                 .append(row.length > 5 && row[5] != null ? row[5] + ", " : "")
                                 .append(row.length > 6 && row[6] != null ? row[6] : "")
                                 .append(" utilizando un cartucho iSeq100 de 300 ciclos para una secuencia de 2x150 ciclos. Se utilizaron 0.024 ml de la solución con las bibliotecas a una concentración pM específica para cada tipo de biblioteca para cargar en el equipo de secuenciación");

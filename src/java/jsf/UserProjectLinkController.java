@@ -977,6 +977,12 @@ public class UserProjectLinkController implements Serializable {
 
         return responsables <= 1;
     }
+    
+    private boolean habilitarBtnGuardar = false;
+
+    public boolean isHabilitarBtnGuardar() {
+        return habilitarBtnGuardar;
+    }
 
     public void actualizarEstadoBoton() {
         boolean[] checkCImage = {checkCImage1, checkCImage2, checkCImage3, checkCImage4, checkCImage5};
@@ -995,12 +1001,6 @@ public class UserProjectLinkController implements Serializable {
             }
         }
         habilitarBtnGuardar = false;
-    }
-
-    private boolean habilitarBtnGuardar = false;
-
-    public boolean isHabilitarBtnGuardar() {
-        return habilitarBtnGuardar;
     }
 
     public boolean validarCorreosProyecto() {

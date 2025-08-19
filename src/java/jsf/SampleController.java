@@ -2189,7 +2189,7 @@ public class SampleController implements Serializable {
                             commentsSample.setCommentDate(timestamp);
                             commentFac.createComment(commentsSample);
                         } else {
-                            if (pos_stat_nuevo <= pos_stat_ant) {
+                            if ((pos_stat_nuevo <= pos_stat_ant) && !(statusAnt.equals("Entregado fastq") && samStat.equals("Para resecuenciar"))) {
                                 System.out.println("xX INTENTO CAMBIO DE ESTADO ANTERIOR O MISMO ESTATUS : No se va actualizar el estatus");
 
                                 RequestContext dialog_stat = RequestContext.getCurrentInstance();
@@ -2197,7 +2197,6 @@ public class SampleController implements Serializable {
                                 strMessage = "¡La muestra con ID " + sample.getIdSample() + " no se puede realizar el cambio de estatus a un paso anterior o el mismo estatus!";
                                 setMessageDialog(strMessage);
                                 dialog_stat.execute("PF('samplesStateBefore').show();");
-
                                 return;
 
                             } else {

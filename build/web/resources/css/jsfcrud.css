@@ -64,3 +64,10 @@ tr.jsfcrud_even_row {
     top: 50%;
 }
 
+.body-background {
+    background-image: url("../images/fondo.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+}

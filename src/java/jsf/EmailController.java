@@ -23,7 +23,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import javax.mail.internet.InternetAddress; 
 import javax.mail.internet.MimeMessage;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -51,22 +51,22 @@ public class EmailController {
     private static final String MANAGER6 = "alexsf@ibt.unam.mx"; //alejandro
     private static final String MANAGER7 = "lizeth.matias@ibt.unam.mx"; // liz
     private static final String MANAGER8 = "ilse.salinas@ibt.unam.mx";//ilse
-    private static final String MANAGER9 = "estefania.herrera@ibt.unam.mx "; //fani
+    private static final String MANAGER9 = "eymi.benitez@ibt.unam.mx"; //fani
 
-//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
     // Carlos Perez Calderon - 29-04-2025
     // Contraseñas actualizadas a versiones más seguras
-    // Evitando exponer directamente estas credenciales sensibles en el código fuente.
+    /*/ Evitando exponer directamente estas credenciales sensibles en el código fuente.
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "sisbi@ibt.unam.mx";
     private static final String USER = "sisbi@ibt.unam.mx";
     private static final String PASS = "whyn zcci kxbx lhpd";
 
-    /*/test
+    */
     private static final String HOST = "smtp.gmail.com";
     private static final String SENDER = "NoEnviar_sisbi@ibt.unam.mx";
     private static final String USER = "NoEnviar_sisbi@ibt.unam.mx";
-    private static final String PASS = "NoEnviar_whyn zcci kxbx lhpd";*/
+    private static final String PASS = "NoEnviar_whyn zcci kxbx lhpd";
     //private static final int PORT = 587;
     private final Properties properties = new Properties();
     private Session session;
